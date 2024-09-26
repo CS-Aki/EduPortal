@@ -1,11 +1,12 @@
 <?php
     include("connection.php");
     //TO BE ADDED FUNCTIONS
-    //Add Visibility to Posts (Visibility and Hidden state) DONE
-    //Add sorting by type when displaying posts, activities, and quizzes (like post of prof are all under Lessons tab) DONE
     //Error handlers
-    //Protection against SQL injection
-    //Add new Comment
+    //Protection against SQL injection, change mysqli to prepared statement, etc
+    //Number of views per post
+    //Button to see who viewed the post and those who has not view yet
+    
+
     // When clicking on a post, automatically get the id, prof name, content and comments
 
     //Insert into db the post of prof
