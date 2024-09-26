@@ -5,7 +5,7 @@
     //Protection against SQL injection, change mysqli to prepared statement, etc
     //Number of views per post
     //Button to see who viewed the post and those who has not view yet
-    
+    // s
 
     // When clicking on a post, automatically get the id, prof name, content and comments
 
