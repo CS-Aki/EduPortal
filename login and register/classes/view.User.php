@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-class View {
+class UserView {
     //Viewer will then arrange or design the presentation of data
     //Return to controller a presentable data for the user to view
     //If it receives an error signal from controller, render error then return to controller
@@ -8,4 +8,6 @@ class View {
         $temp = "<br>User: {$name}<br>";
         return $temp;
     }
+
+    
 }

@@ -1,12 +1,3 @@
-<?php
-    require_once("classes/connection.php");
-    require_once("classes/model.User.php");
-    require_once("classes/controller.User.php");
-    require_once("classes/view.User.php");
-    require_once("includes/login.inc.php");
-    require_once("includes/register.inc.php");
-?>
-
 <html>
 <head>
     <title>Login Form</title>
@@ -36,6 +27,10 @@
 
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
             <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" placeholder="Enter Fullname" class="form-control" />
+            </div>
+            <div class="form-group">
             <label for="email">Email</label>
             <input type="text" name="email" id="email" placeholder="Enter Email" class="form-control" />
             </div>
@@ -44,8 +39,12 @@
             <input type="password" name="password" id="pwd" placeholder="Enter Password" class="form-control"/>
             </div>
             <div class="form-group">
-            <input type="submit"  name="loginBtn" value="Login" class="btn btn-success form-control"/> <br><br>
-            <input type="submit" name="registerBtn" value="Register" class="btn btn-success form-control"/>
+            <label for="repeat_password">Repeat Password</label>
+            <input type="password" name="repeatPass" id="repeatPass" placeholder="Repeat Password" class="form-control"/>
+            </div>
+            <div class="form-group">
+            <input type="submit"  name="regBtn" value="Submit Registration" class="btn btn-success form-control"/> <br><br>
+            <input type="submit"  name="backBtn" value="Back to Login" class="btn btn-success form-control"/> <br><br>
             <hr>
             </div>
         </form>
@@ -56,3 +55,7 @@
 
 </body>
 </html>
+
+<?php
+  include("includes/register.inc.php");
+?>
