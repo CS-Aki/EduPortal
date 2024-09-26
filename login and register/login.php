@@ -1,8 +1,10 @@
 <?php 
-    require_once("../classes/connection.php");
-    require_once("../classes/model.php");
-    require_once("../classes/controller.php");
-    require_once("../classes/view.php");
+    require_once("classes/connection.php");
+    require_once("classes/model.php");
+    require_once("classes/controller.php");
+    require_once("classes/view.php");
+    require_once("includes/login.inc.php");
+    require_once("includes/register.inc.php");
 ?>
 
 <html>  
@@ -52,31 +54,6 @@
    </div>  
    </div>
   
-
 </body>  
 </html>
 
-
-<?php 
-         
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $controller = new Controller;
-        if(isset($_POST["loginBtn"])){
-            echo $controller->fetchUser();
-            $email = $_POST["email"];
-            $password = $_POST["password"];
-            echo "Login Button Clicked: " . $email;
-            
-        }
-
-        if(isset($_POST["registerBtn"])){
-            
-            $name = $_POST["name"];
-            $email = $_POST["email"];
-            $password = $_POST["password"];
-
-            echo "Register Button Clicked: " . $name;
-
-        }
-    }
-?>
