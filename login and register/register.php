@@ -1,6 +1,11 @@
 <?php
-  session_start();
-  include("includes/register.inc.php");
+  
+  require_once("classes/connection.php");
+  require_once("classes/model.User.php");
+  require_once("classes/controller.Register.php");
+  require_once("classes/view.User.php");
+  require_once("includes/register.inc.php");
+  if(session_id() === "") session_start();
 ?>
 
 <html>
@@ -33,7 +38,7 @@
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
             <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" name="name" id="name" placeholder="Enter Fullname" class="form-control" />
+            <input type="text" name="name" id="name" placeholder="Enter Full Name" class="form-control" />
             </div>
             <div class="form-group">
             <label for="email">Email</label>
@@ -53,12 +58,13 @@
             <hr>
             </div>
             <div class="form-group">
-            <label for="error"><?php if(isset($_SESSION["errorMsg"])) {
-                                          echo $_SESSION["errorMsg"];
-                                          unset($_SESSION["errorMsg"]);
-             }
-            
-            ?></label>
+              <label for="msg">
+                <?php if(isset($_SESSION["msg"])) {
+                                              echo $_SESSION["msg"];
+                                              unset($_SESSION["msg"]);
+                }
+                ?>
+              </label>
             </div>
         </form>
 

@@ -1,10 +1,11 @@
 <?php
     require_once("classes/connection.php");
     require_once("classes/model.User.php");
-    require_once("classes/controller.Register.php");
+    require_once("classes/controller.Login.php");
     require_once("classes/view.User.php");
     require_once("includes/login.inc.php");
     require_once("includes/register.inc.php");
+    if(session_id() === "") session_start();
 ?>
 
 <html>
@@ -34,7 +35,7 @@
     <h3 align="center">EduPortal Login</h3>
       <div class="box">
 
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <form action="login.php" method="POST">
             <div class="form-group">
             <label for="email">Email</label>
             <input type="text" name="email" id="email" placeholder="Enter Email" class="form-control" />
@@ -47,6 +48,14 @@
             <input type="submit"  name="loginBtn" value="Login" class="btn btn-success form-control"/> <br><br>
             <input type="submit" name="registerBtn" value="Register" class="btn btn-success form-control"/>
             <hr>
+            </div>
+            <div class="form-group">
+            <label for="error"><?php if(isset($_SESSION["msg"])) {
+                                          echo $_SESSION["msg"];
+                                          unset($_SESSION["msg"]);
+             }
+            
+            ?></label>
             </div>
         </form>
 

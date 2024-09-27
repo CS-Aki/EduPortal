@@ -9,7 +9,7 @@ class UserView {
         if($result == false){
             echo "Registration Failed";
         }else{
-            echo "Registration success";
+          //  echo "Registration success";
         }
     }
 

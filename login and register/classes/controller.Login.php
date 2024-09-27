@@ -6,26 +6,28 @@ class LoginController extends User{
     
     function __construct($email, $password){
         $this->email = $email;
-        $this->password = $password;
-
+        $this->password = $password;        
+        session_start();
     }
 
     public function loginUser(){
+      
         if($this->isEmptyInput() == true){
-            $_SESSION["errorMsg"] = "Please fill out all the necessary information";
+            $_SESSION["msg"] = "Please fill out all the necessary information";
           //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");      
             header("Location: login.php?error=emptyInput");
             exit();
         }
 
         if($this->invalidEmail() == true){
-            $_SESSION["errorMsg"] = "Invalid Email Format";
+            $_SESSION["msg"] = "Invalid Email Format";
             //echo $view->showRegistrationErrorMsg("Invalid Email Format");
             header("Location: login.php?error=invalidEmail");
             exit();
         }
 
-        
+        $this->isUserCredentialCorrect($this->email, $this->password);
+        $_SESSION["msg"] = "Logged In";
     }
 
     private function isEmptyInput(){

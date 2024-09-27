@@ -14,11 +14,6 @@ if(isset($_POST["regBtn"])){
   $password = $_POST["password"];
   $repeatPass = $_POST["repeatPass"];
 
-  include("classes/connection.php");
-  include("classes/model.User.php");
-  include("classes/controller.Register.php");
-  include("classes/view.User.php");
-
   $userController = new RegisterController($name, $email, $password, $repeatPass);
   $userController->registerUser();  
 }

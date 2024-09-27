@@ -6,10 +6,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         $email = $_POST["email"];
         $password = $_POST["password"];
 
-        include("classes/connection.php");
-        include("classes/model.User.php");
-        include("classes/controller.Login.php");
-        include("classes/view.User.php");
-
+        $loginController = new LoginController($email, $password);
+        $loginController->loginUser();
     }
 }
