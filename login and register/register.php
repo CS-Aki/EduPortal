@@ -1,3 +1,8 @@
+<?php
+  session_start();
+  include("includes/register.inc.php");
+?>
+
 <html>
 <head>
     <title>Login Form</title>
@@ -47,6 +52,14 @@
             <input type="submit"  name="backBtn" value="Back to Login" class="btn btn-success form-control"/> <br><br>
             <hr>
             </div>
+            <div class="form-group">
+            <label for="error"><?php if(isset($_SESSION["errorMsg"])) {
+                                          echo $_SESSION["errorMsg"];
+                                          unset($_SESSION["errorMsg"]);
+             }
+            
+            ?></label>
+            </div>
         </form>
 
     </div>
@@ -55,7 +68,3 @@
 
 </body>
 </html>
-
-<?php
-  include("includes/register.inc.php");
-?>

@@ -1,7 +1,7 @@
 <?php
     require_once("classes/connection.php");
     require_once("classes/model.User.php");
-    require_once("classes/controller.User.php");
+    require_once("classes/controller.Register.php");
     require_once("classes/view.User.php");
     require_once("includes/login.inc.php");
     require_once("includes/register.inc.php");
@@ -41,7 +41,7 @@
             </div>
             <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="pwd" placeholder="Enter Password" class="form-control"/>
+            <input type="password" name="password" id="password" placeholder="Enter Password" class="form-control"/>
             </div>
             <div class="form-group">
             <input type="submit"  name="loginBtn" value="Login" class="btn btn-success form-control"/> <br><br>

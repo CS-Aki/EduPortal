@@ -5,6 +5,9 @@ if(isset($_POST["registerBtn"]))
     header("Location: register.php");
 }
 
+// Register Button inside register.php
+// Gets the user input and instantiate the controller to pass in arguments
+
 if(isset($_POST["regBtn"])){
   $name = $_POST["name"];
   $email = $_POST["email"];
@@ -13,10 +16,11 @@ if(isset($_POST["regBtn"])){
 
   include("classes/connection.php");
   include("classes/model.User.php");
-  include("classes/controller.User.php");
+  include("classes/controller.Register.php");
+  include("classes/view.User.php");
 
-  $userController = new UserController($name, $email, $password, $repeatPass);
-  $userController->registerUser();
+  $userController = new RegisterController($name, $email, $password, $repeatPass);
+  $userController->registerUser();  
 }
 
 if(isset($_POST["backBtn"]))
