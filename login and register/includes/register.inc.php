@@ -1,4 +1,5 @@
 <?php
+if(session_id() === "") session_start();
 
 if(isset($_POST["registerBtn"]))
 {
@@ -15,11 +16,15 @@ if(isset($_POST["regBtn"])){
   $repeatPass = $_POST["repeatPass"];
 
   $userController = new RegisterController($name, $email, $password, $repeatPass);
-  $userController->registerUser();  
+  $userController->registerUser();
 }
 
 if(isset($_POST["backBtn"]))
 {
-      echo"test";
-      header("Location: login.php");
+  unset($_SESSION['google_email']);
+  unset($_SESSION['google_name']);
+  unset($_SESSION['passwordOnly']);
+
+  echo "back";
+  header("Location: login.php");
 }

@@ -20,12 +20,12 @@ class RegisterController extends User{
     // Registration of User
     // Handles error handling, communicates with model and view
     public function registerUser(){
-        
+
         $view = new UserView;
-        
+
         if($this->isEmptyInput() == true){
           $_SESSION["msg"] = "Please fill out all the necessary information";
-        //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");      
+        //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");
           header("Location: register.php?error=emptyInput");
           exit();
         }
@@ -62,6 +62,9 @@ class RegisterController extends User{
 
         $result = $this->insertUser($this->name, $this->email, $hashedPassword);
         $_SESSION["msg"] = "SUCCESSFULLY REGISTERED";
+        unset($_SESSION['google_email']);
+        unset($_SESSION['google_name']);
+        unset($_SESSION['passwordOnly']);
        // echo $view->showRegistrationMsg($result);
     }
 

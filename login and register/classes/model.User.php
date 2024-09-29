@@ -1,5 +1,5 @@
 <?php
-
+require_once("connection.php");
 class User extends DbConnection{
     // Function will take request from controller then interact with db
     // Return the result back to controller
@@ -12,10 +12,10 @@ class User extends DbConnection{
     protected function insertUser($name, $email, $password){
         $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`) VALUES (?, ? ,?, ?)";
         $stmt = $this->connect()->prepare($sql);
-        
+
         if($stmt->execute(array("Student", $name, $email, $password))){
             return true;
-        }else{        
+        }else{
             return false;
         }
     }
@@ -55,7 +55,7 @@ class User extends DbConnection{
             header("Location: login.php?error=wrongPassword");
             exit();
         }else if($checkPass == true){
-            
+
             $sql = "SELECT * from users WHERE email = ?";
             $stmt = $this->connect()->prepare($sql);
 
@@ -70,11 +70,7 @@ class User extends DbConnection{
                 exit();
             }
 
-            $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $_SESSION["user_id"] = $user[0]["user_id"];
-            $_SESSION["user_category"] = $user[0]["user_category"];
-            $_SESSION["email"] = $user[0]["email"];
-            $_SESSION["name"] = $user[0]["name"];
+            return $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
     }
