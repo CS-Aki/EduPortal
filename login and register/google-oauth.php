@@ -2,11 +2,12 @@
 // Initialize the session
 require_once("classes/controller.Gmail.php");
 require_once("classes/model.User.php");
+require_once("config/config.php");
 if(session_id() === "") session_start();
 // Update the following variables
-$google_oauth_client_id = '540713642986-l32rmek1aovj1337unqgo86m9knaslv0.apps.googleusercontent.com';
-$google_oauth_client_secret = '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';
-$google_oauth_redirect_uri = 'http://localhost/EduPortal/login%20and%20register/google-oauth.php';
+$google_oauth_client_id = GOOGLE_CLIENT_ID;
+$google_oauth_client_secret = GOOGLE_CLIENT_SECRET;
+$google_oauth_redirect_uri = GOOGLE_REDIRECT_URL;
 $google_oauth_version = 'v3';
 // If the captured code param exists and is valid
 if (isset($_GET['code']) && !empty($_GET['code'])) {
