@@ -30,8 +30,15 @@ class LoginController extends User{
         $_SESSION["msg"] = "Logged In";
         $_SESSION["user_id"] = $user[0]["user_id"];
         $_SESSION["user_category"] = $user[0]["user_category"];
-        $_SESSION["email"] = $user[0]["email"];
-        $_SESSION["name"] = $user[0]["name"];
+        // $_SESSION["email"] = $user[0]["email"];
+        // $_SESSION["name"] = $user[0]["name"];
+
+        $_SESSION['google_loggedin'] = true;
+        $_SESSION['google_email'] = $user[0]["email"];
+        $_SESSION['google_name'] = $user[0]["name"];;
+     //   $google_picture = $_SESSION['google_picture'];
+
+        header("Location: ../login and register/profile.php");
     }
 
     private function isEmptyInput(){

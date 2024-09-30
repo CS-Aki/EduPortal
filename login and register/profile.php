@@ -10,7 +10,7 @@ if (!isset($_SESSION['google_loggedin'])) {
 $google_loggedin = $_SESSION['google_loggedin'];
 $google_email = $_SESSION['google_email'];
 $google_name = $_SESSION['google_name'];
-$google_picture = $_SESSION['google_picture'];
+//$google_picture = $_SESSION['google_picture'];
 
 echo $google_name;
 
@@ -27,10 +27,10 @@ echo $google_name;
 	<body>
 
 		<div class="content home">
-
+<!-- 
 			<div class="profile-picture">
                 <img src="<?=$google_picture?>" alt="<?=$google_name?>" width="100" height="100">
-            </div>
+            </div> -->
 
             <div class="profile-details">
 

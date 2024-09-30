@@ -15,7 +15,15 @@
 </head>
 
 <style>
-
+* {
+  box-sizing: border-box;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+}
+body {
+  background-color: #ca6454;
+  margin: 0;
+}
  .box
  {
   width:100%;
@@ -32,7 +40,7 @@
 
     <div class="container">
     <div class="table-responsive">
-    <h3 align="center">EduPortal Login</h3>
+    <h3 align="center">EduPortal Registration</h3>
       <div class="box">
         <?php
            if(isset($_SESSION['passwordOnly'])){

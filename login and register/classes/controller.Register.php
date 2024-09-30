@@ -14,7 +14,7 @@ class RegisterController extends User{
         $this->email = $email;
         $this->password = $password;
         $this->repeatPass = $repeatPass;
-        session_start();
+        if(session_id() === "")session_start();
     }
 
     // Registration of User
