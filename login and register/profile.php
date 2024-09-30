@@ -12,7 +12,7 @@ $google_email = $_SESSION['google_email'];
 $google_name = $_SESSION['google_name'];
 //$google_picture = $_SESSION['google_picture'];
 
-echo $google_name;
+
 
 ?>
 
