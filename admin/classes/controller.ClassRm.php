@@ -15,6 +15,7 @@ class ClassRmController extends ClassRm{
         $this->classProf = $classProf;
         $this->status = $status;
         if(session_id() === "") session_start();
+        if(isset($_SESSION["msg"])) unset($_SESSION["msg"]);
     }
 
     public function addClass(){
@@ -49,6 +50,12 @@ class ClassRmController extends ClassRm{
         if($this->isEmptyStatus() == true){
             $_SESSION["msg"] = "Choose a status";
             header("Location: add-class.php?error=invalidStatusOption");
+            exit();
+        }
+
+        if($this->invalidScheduleDate() == true){
+            $_SESSION["msg"] = "Invalid Schedule Date";
+            header("Location: add-class.php?error=invalidScheduleDate");
             exit();
         }
         
@@ -111,6 +118,16 @@ class ClassRmController extends ClassRm{
     private function isEmptyStatus(){
         if($this->status == "blank"){
             return true;
+        }
+
+        return false;
+    }
+
+    private function invalidScheduleDate(){
+        if($this->classSchedule["startTimePeriod"] == $this->classSchedule["endTimePeriod"]){
+            if($this->classSchedule["endingHour"] <= $this->classSchedule["startingHour"] || $this->classSchedule["endingMin"] <= $this->classSchedule["startingMin"]){
+                return true;
+            }
         }
 
         return false;

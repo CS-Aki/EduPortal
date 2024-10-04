@@ -19,12 +19,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script defer src="scripts/retain-info.js"></script>
 </head>
 
 <body>
-    <form action="add-class.php" method="POST">
+    <form id="form" action="add-class.php" method="POST">
             <label>Class Name</label><br>
-            <input type="text" name="className" placeholder="Enter Class Name"><br><br>
+            <input type="text" name="className" placeholder="Enter Class Name" id="className"><br><br>
 
             <label>Class Schedule:</label><br>
             <label>Day</label>
@@ -113,14 +114,14 @@
                 <option value="Inactive">Inactive</option>
             </select><br><br>
 
-     
+
 
             <label>Class Instructor</label><br>
             <input type="text" name="classProf" placeholder="Assign Class Instructor"><br><br>
             <input type="submit" name="createClassBtn" value="Create New Class" class="btn"><br><br>
             <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
 
-            <label for="msg"><?php displaySessionMessage("msg", 1); ?></label>
+            <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
             <br><br>
             
     </form>

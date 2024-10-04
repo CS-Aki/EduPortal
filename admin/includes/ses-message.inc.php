@@ -8,11 +8,12 @@ function displaySessionMessage($session, $ch){
                 echo $_SESSION[$session];
                 unset($_SESSION[$session]);
                 break;
+
             }
         case 2:
             if(isset($_SESSION[$session])){
                 echo $_SESSION[$session];
-                break;
+                return '';
             }
             break;
     }
