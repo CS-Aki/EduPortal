@@ -4,9 +4,12 @@ if(isset($_POST['addClassBtn'])) header("Location: add-class.php");
 if(isset($_POST['createClassBtn'])){
     $classCode = generateClassCode();
     $className = $_POST["className"];
-    $classSchedule = $_POST["classSched"];
+    $status = $_POST["status"];
+    $classSchedule = array("day" => $_POST["daySched"], "startingHour" => $_POST["startingHourSched"], "startingMin" => $_POST["startingMinSched"], "startTimePeriod" => $_POST["startTimePeriod"],
+                           "endingHour" => $_POST["endingHourSched"], "endingMin" => $_POST["endingMinSched"], "endTimePeriod" => $_POST["endTimePeriod"]
+                     );
     $classProf = $_POST["classProf"];
-    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf);
+    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status);
   //  $adminController = new AdminController($classController);
   //  $adminController->callAddClass();
     $classController->addClass();
@@ -36,3 +39,4 @@ function generateClassCode(){
 
     return $classCodeHolder;
 }
+                   

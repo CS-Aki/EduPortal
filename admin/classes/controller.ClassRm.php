@@ -5,13 +5,15 @@ class ClassRmController extends ClassRm{
     private $className;
     private $classSchedule;
     private $classProf;
+    private $status;
 
-    function __construct($classCode, $className, $classSchedule, $classProf)
+    function __construct($classCode, $className, $classSchedule, $classProf, $status)
     {
         $this->classCode = $classCode;
         $this->className = $className;
         $this->classSchedule = $classSchedule;
         $this->classProf = $classProf;
+        $this->status = $status;
         if(session_id() === "") session_start();
     }
 
@@ -38,7 +40,22 @@ class ClassRmController extends ClassRm{
             exit();
         }
 
-        $result = $this->addNewClass($this->classCode, $this->className, $this->classSchedule, $this->classProf);
+        if($this->isEmptySched() == true){
+            $_SESSION["msg"] = "Invalid Schedule Input";
+            header("Location: add-class.php?error=invalidScheduleInput");
+            exit();
+        }
+
+        if($this->isEmptyStatus() == true){
+            $_SESSION["msg"] = "Choose a status";
+            header("Location: add-class.php?error=invalidStatusOption");
+            exit();
+        }
+        
+        // Add validator to compare to and from schedule, value should be greater than the TO schedule
+        $fullSched = "(" . $this->classSchedule["day"] . ") " . $this->classSchedule["startingHour"] . ":" . $this->classSchedule["startingMin"] . " " . $this->classSchedule["startTimePeriod"] . "-" . $this->classSchedule["endingHour"] . ":" . $this->classSchedule["endingMin"] . " " . $this->classSchedule["endTimePeriod"];
+
+        $result = $this->addNewClass($this->classCode, $this->className, $fullSched, $this->classProf, $this->status);
 
         if($result == true){
             $_SESSION["msg"] = "New Class Successfully Added";
@@ -80,5 +97,22 @@ class ClassRmController extends ClassRm{
         }else{
           return false;
         }
+    }
+
+    private function isEmptySched(){
+        foreach($this->classSchedule as $key => $value){
+            if($value == "blank"){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function isEmptyStatus(){
+        if($this->status == "blank"){
+            return true;
+        }
+
+        return false;
     }
 }

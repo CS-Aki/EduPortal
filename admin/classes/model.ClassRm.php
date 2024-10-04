@@ -2,11 +2,11 @@
 
 class ClassRm extends DbConnection{
 
-    protected function addNewClass($classCode, $className, $classSchedule, $classProf){
-        $sql = "INSERT INTO classes (`class_code`, `class_name`, `class_teacher`, `class_schedule`) VALUES (?, ? ,?, ?)";
+    protected function addNewClass($classCode, $className, $classSchedule, $classProf, $status){
+        $sql = "INSERT INTO classes (`class_code`, `class_name`, `class_teacher`, `class_schedule`, `class_status`) VALUES (?, ? ,?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if($stmt->execute(array($classCode, $className, $classProf, $classSchedule))){
+        if($stmt->execute(array($classCode, $className, $classProf, $classSchedule, $status))){
             return true;
         }else{
             return false;
