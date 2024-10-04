@@ -10,13 +10,14 @@ if(isset($_POST['createClassBtn'])){
   //  $adminController = new AdminController($classController);
   //  $adminController->callAddClass();
     $classController->addClass();
-    
+
 }
 
 if(isset($_POST['backBtn'])) {
+    unset($_SESSION["timer"]);
     header("Location: admin-dashboard.php");
 }
-    
+
 function generateClassCode(){
     $alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
     $classCodeHolder = "";
@@ -32,6 +33,6 @@ function generateClassCode(){
       }
       $classCodeHolder .= $alphabet[$randomize];
     }
-    
+
     return $classCodeHolder;
 }

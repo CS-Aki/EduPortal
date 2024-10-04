@@ -6,6 +6,7 @@
     require_once("includes/add.inc.php");
     require_once("includes/update.inc.php");
     require_once("includes/delete.inc.php");
+    require_once("includes/schedule.inc.php");
     if(session_id() === "") session_start();
 ?>
 
@@ -23,18 +24,28 @@
             <input type="text" name="className" placeholder="Enter Class Name"><br>
             <!-- Will change this into a checkbox to choose the day and time -->
             <label>Class Sched</label>
-            <input type="text" name="classSched" placeholder="Class Schedule"><br> 
+            <input type="text" name="classSched" placeholder="Class Schedule"><br>
             <label>Class Instructor</label>
             <input type="text" name="classProf" placeholder="Assign Class Instructor"><br>
             <input type="submit" name="createClassBtn" value="Create New Class" class="btn"><br>
             <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
-            
+            <input type="submit" name="increaseBtn" value="Increase" class="btn"><br>
+            <input type="submit" name="decreaseBtn" value="Decrease" class="btn"><br>
+            <input type="submit" name="resetBtn" value="Reset" class="btn"><br>
+
             <label for="msg"><?php if(isset($_SESSION["msg"])) {
                                           echo $_SESSION["msg"];
                                           unset($_SESSION["msg"]);
                                  }
                             ?>
             </label>
+            <br><br>
+            <label for="msg"><?php if(isset($_SESSION["timer"])) {
+                                          echo $_SESSION["timer"];
+                                 }
+                            ?>
+            </label>
+
     </form>
 </body>
 </html>

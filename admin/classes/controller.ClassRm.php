@@ -32,6 +32,12 @@ class ClassRmController extends ClassRm{
             $this->classCode = generateClassCode();
         }
 
+        if($this->isClassNameExist($this->className) == true){
+            $_SESSION["msg"] = "Class already exist";
+            header("Location: add-class.php?error=classAlreadyExist");
+            exit();
+        }
+
         $result = $this->addNewClass($this->classCode, $this->className, $this->classSchedule, $this->classProf);
 
         if($result == true){
@@ -47,7 +53,7 @@ class ClassRmController extends ClassRm{
         for($i = 1; $i <= 8; $i++){
           $randomCaps = rand(1, 100);
           $randomize = rand(0, strlen($alphabet) - 1);
-    
+
           if(!is_numeric($alphabet[$randomize])){
               if($randomCaps >= 50){
                   $classCodeHolder .= strtoupper($alphabet[$randomize]);
@@ -56,7 +62,7 @@ class ClassRmController extends ClassRm{
           }
           $classCodeHolder .= $alphabet[$randomize];
         }
-        
+
         return $classCodeHolder;
     }
 
@@ -69,19 +75,10 @@ class ClassRmController extends ClassRm{
     }
 
     private function invalidInput(){
-        if(!preg_match("/^[a-zA-Z ]*$/", $this->className)){
+        if(!preg_match("/^[a-zA-Z0-9 ]*$/", $this->className) || !preg_match("/^[a-zA-Z0-9 .]*$/", $this->classProf)){
           return true;
         }else{
           return false;
         }
-
-        if(!preg_match("/^[a-zA-Z ]*$/", $this->classProf)){
-            return true;
-        }else{
-            return false;
-        }
-
-      }
-
-
+    }
 }
