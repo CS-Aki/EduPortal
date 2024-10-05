@@ -4,10 +4,9 @@
     require_once("classes/controller.Admin.php");
     require_once("classes/controller.ClassRm.php");
     require_once("includes/add.inc.php");
-    require_once("includes/update.inc.php");
-    require_once("includes/delete.inc.php");
     require_once("includes/schedule.inc.php");
     require_once("includes/ses-message.inc.php");
+    require_once("includes/class-list.inc.php");
     if(session_id() === "") session_start();
 ?>
 
@@ -21,6 +20,22 @@
     <title>Document</title>
     <script defer src="scripts/retain-info.js"></script>
 </head>
+
+<style media="screen">
+body {
+background-color: #34495e;
+}
+
+#form label{
+    background-color: white;
+}
+
+.btn{
+    margin-top: 10px;
+}
+</style>
+
+
 
 <body>
     <form id="form" action="add-class.php" method="POST">
@@ -72,7 +87,7 @@
                 <option value="AM">AM</option>
                 <option value="PM">PM</option>
             </select>
-            
+
 
             <label>To</label>
             <select name="endingHourSched" id="endingHourSched">
@@ -123,9 +138,8 @@
 
             <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
             <br><br>
-            
+
     </form>
 
 </body>
 </html>
-

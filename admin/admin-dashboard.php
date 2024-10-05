@@ -5,7 +5,7 @@
     require_once("classes/controller.ClassRm.php");
     require_once("includes/add.inc.php");
     require_once("includes/update.inc.php");
-    require_once("includes/delete.inc.php");
+    require_once("includes/archive.inc.php");
     if(session_id() === "") session_start();
 ?>
 
@@ -18,6 +18,13 @@
 </head>
 
 <style>
+    body {
+    background-color: #34495e;
+    }
+
+    #form label{
+        background-color: white;
+    }
     .btn{
         margin-top: 10px;
     }
@@ -28,7 +35,7 @@
     <form action="admin-dashboard.php" method="POST">
         <input type="submit" name="addClassBtn" value="Add Class" class="btn"><br>
         <input type="submit" name="updateClassBtn" value="Update Class" class="btn"><br>
-        <input type="submit" name="deleteClassBtn" value="Delete Class" class="btn"><br>
+        <input type="submit" name="archiveClassBtn" value="Archive Class" class="btn"><br>
         <input type="submit" name="postAnnouncementBtn" value="Post Announcement" class="btn"><br>
         <input type="submit" name="facultyListBtn" value="Faculty List" class="btn"><br>
         <input type="submit" name="studentListBtn" value="Student List" class="btn"><br>

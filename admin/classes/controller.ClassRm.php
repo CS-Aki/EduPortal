@@ -58,7 +58,7 @@ class ClassRmController extends ClassRm{
             header("Location: add-class.php?error=invalidScheduleDate");
             exit();
         }
-        
+
         // Add validator to compare to and from schedule, value should be greater than the TO schedule
         $fullSched = "(" . $this->classSchedule["day"] . ") " . $this->classSchedule["startingHour"] . ":" . $this->classSchedule["startingMin"] . " " . $this->classSchedule["startTimePeriod"] . "-" . $this->classSchedule["endingHour"] . ":" . $this->classSchedule["endingMin"] . " " . $this->classSchedule["endTimePeriod"];
 
@@ -124,8 +124,12 @@ class ClassRmController extends ClassRm{
     }
 
     private function invalidScheduleDate(){
+      // echo $this->classSchedule["startTimePeriod"] . " " . $this->classSchedule["endTimePeriod"] . "<br>";
+      // echo $this->classSchedule["endingHour"] . " " . $this->classSchedule["startingHour"] . "<br>";
+      // echo $this->classSchedule["endingMin"] . " " . $this->classSchedule["startingMin"] . "<br>";
+
         if($this->classSchedule["startTimePeriod"] == $this->classSchedule["endTimePeriod"]){
-            if($this->classSchedule["endingHour"] <= $this->classSchedule["startingHour"] || $this->classSchedule["endingMin"] <= $this->classSchedule["startingMin"]){
+            if($this->classSchedule["endingHour"] <= $this->classSchedule["startingHour"] || $this->classSchedule["endingMin"] < $this->classSchedule["startingMin"]){
                 return true;
             }
         }
