@@ -1,6 +1,4 @@
 <?php
-if(isset($_POST['addClassBtn'])) header("Location: add-class.php");
-
 if(isset($_POST['createClassBtn'])){
     
     $classCode = generateClassCode();
@@ -10,13 +8,17 @@ if(isset($_POST['createClassBtn'])){
                            "endingHour" => $_POST["endingHourSched"], "endingMin" => $_POST["endingMinSched"], "endTimePeriod" => $_POST["endTimePeriod"]
                      );
     $classProf = $_POST["classProf"];
-    
-    // $_SESSION["data"] = array("classCode" => $classCode, "className" => $className, "status" => $status, "classSched" => $classSchedule, "classProf" => $classProf);
-    // echo json_encode($_SESSION["data"]);
-                     
+    $_SESSION["className"] = $className;
+    $_SESSION["classProf"] = $classProf;
+    $_SESSION['daySched'] = $classSchedule["day"];
+    $_SESSION['startingHourSched'] = $classSchedule["startingHour"];
+    $_SESSION['startingMinSched'] = $classSchedule["startingMin"];
+    $_SESSION['startTimePeriod'] = $classSchedule["startTimePeriod"];
+    $_SESSION['endingHourSched'] = $classSchedule["endingHour"];
+    $_SESSION['endingMinSched'] = $classSchedule["endingMin"];
+    $_SESSION['endTimePeriod'] = $classSchedule["endTimePeriod"];
+    $_SESSION['status'] = $status;
     $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status);
-//  $adminController = new AdminController($classController);
-//  $adminController->callAddClass();
     $classController->addClass();
 
 }

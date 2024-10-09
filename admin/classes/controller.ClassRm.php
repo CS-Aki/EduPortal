@@ -14,48 +14,54 @@ class ClassRmController extends ClassRm{
         $this->classSchedule = $classSchedule;
         $this->classProf = $classProf;
         $this->status = $status;
-        if(session_id() === "") session_start();
+     //   if(session_id() === "") session_start();
         if(isset($_SESSION["msg"])) unset($_SESSION["msg"]);
     }
 
     public function addClass(){
+        while($this->isClassCodeExist($this->classCode) == true){
+            $this->classCode = generateClassCode();
+        }
+
         if($this->isEmpty() == true){
             $_SESSION["msg"] = "Please fill out all the necessary information";
-            header("Location: add-class.php?error=emptyInput");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidInput");
+            header("Location: admin-dashboard.php?adminBtn=Add Class");
             exit();
         }
 
         if($this->invalidInput() == true){
             $_SESSION["msg"] = "Special Characters aren't allowed, please try again";
-            header("Location: add-class.php?error=invalidCharacterInput");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidCharacterInput");
+            header("Location: admin-dashboard.php?adminBtn=Add Class");
             exit();
-        }
-
-        while($this->isClassCodeExist($this->classCode) == true){
-            $this->classCode = generateClassCode();
         }
 
         if($this->isClassNameExist($this->className) == true){
             $_SESSION["msg"] = "Class already exist";
-            header("Location: add-class.php?error=classAlreadyExist");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=classAlreadyExist");
+            header("Location: admin-dashboard.php?adminBtn=Add Class");
             exit();
         }
 
         if($this->isEmptySched() == true){
             $_SESSION["msg"] = "Invalid Schedule Input";
-            header("Location: add-class.php?error=invalidScheduleInput");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleInput");   
+            header("Location: admin-dashboard.php?adminBtn=Add Class");      
             exit();
         }
 
         if($this->isEmptyStatus() == true){
             $_SESSION["msg"] = "Choose a status";
-            header("Location: add-class.php?error=invalidStatusOption");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidStatusOption");       
+            header("Location: admin-dashboard.php?adminBtn=Add Class");           
             exit();
         }
 
         if($this->invalidScheduleDate() == true){
             $_SESSION["msg"] = "Invalid Schedule Date";
-            header("Location: add-class.php?error=invalidScheduleDate");
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleDate"); 
+            header("Location: admin-dashboard.php?adminBtn=Add Class");
             exit();
         }
 
@@ -69,25 +75,6 @@ class ClassRmController extends ClassRm{
         }else{
             $_SESSION["msg"] = "Failed to Add New Class";
         }
-    }
-
-    private function generateClassCode(){
-        $alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-        $classCodeHolder = "";
-        for($i = 1; $i <= 8; $i++){
-          $randomCaps = rand(1, 100);
-          $randomize = rand(0, strlen($alphabet) - 1);
-
-          if(!is_numeric($alphabet[$randomize])){
-              if($randomCaps >= 50){
-                  $classCodeHolder .= strtoupper($alphabet[$randomize]);
-                  continue;
-              }
-          }
-          $classCodeHolder .= $alphabet[$randomize];
-        }
-
-        return $classCodeHolder;
     }
 
     private function isEmpty(){
@@ -136,4 +123,5 @@ class ClassRmController extends ClassRm{
 
         return false;
     }
+
 }

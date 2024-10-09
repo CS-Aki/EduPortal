@@ -1,11 +1,4 @@
 <?php
-    require_once("classes/connection.php");
-    require_once("classes/model.ClassRm.php");
-    require_once("classes/controller.Admin.php");
-    require_once("classes/controller.ClassRm.php");
-    require_once("includes/add.inc.php");
-    require_once("includes/update.inc.php");
-    require_once("includes/archive.inc.php");
     if(session_id() === "") session_start();
 ?>
 
@@ -31,16 +24,32 @@
 </style>
 
 <body>
-
-    <form action="admin-dashboard.php" method="POST">
-        <input type="submit" name="addClassBtn" value="Add Class" class="btn"><br>
-        <input type="submit" name="updateClassBtn" value="Update Class" class="btn"><br>
-        <input type="submit" name="archiveClassBtn" value="Archive Class" class="btn"><br>
-        <input type="submit" name="postAnnouncementBtn" value="Post Announcement" class="btn"><br>
-        <input type="submit" name="facultyListBtn" value="Faculty List" class="btn"><br>
-        <input type="submit" name="studentListBtn" value="Student List" class="btn"><br>
-        <input type="submit" name="classListBtn" value="Class List" class="btn"><br>
+    <form action="admin-dashboard.php" method="get">
+        <input type="submit" name="adminBtn" value="Add Class" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Update Class" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Archive Class" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Post Announcement" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Faculty List" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Student List" class="btn"><br>
+        <input type="submit" name="adminBtn" value="Class List" class="btn"><br>
     </form>
+    <br><br>
+
+    <div>
+    <?php 
+        if(isset($_GET["adminBtn"])){
+            switch($_GET["adminBtn"]){
+                case "Add Class": include("add-class.php"); break;
+                case "Update Class": include("includes/update.inc.php"); include("update-class.php"); break;
+                case "Archive Class": break;
+                case "Post Announcement": break;
+                case "Faculty List": break;
+                case "Student List": break;
+                case "Class List": break;
+            }
+         }
+    ?>
+    </div>
 
 </body>
 
