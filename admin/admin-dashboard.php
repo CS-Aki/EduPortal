@@ -36,11 +36,11 @@
     <br><br>
 
     <div>
-    <?php 
+    <?php
         if(isset($_GET["adminBtn"])){
             switch($_GET["adminBtn"]){
                 case "Add Class": include("add-class.php"); break;
-                case "Update Class": include("includes/update.inc.php"); include("update-class.php"); break;
+                case "Update Class": include("update-class.php"); break;
                 case "Archive Class": break;
                 case "Post Announcement": break;
                 case "Faculty List": break;

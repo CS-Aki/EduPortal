@@ -1,6 +1,6 @@
 <?php
 if(isset($_POST['createClassBtn'])){
-    
+
     $classCode = generateClassCode();
     $className = $_POST["className"];
     $status = $_POST["status"];
@@ -24,7 +24,6 @@ if(isset($_POST['createClassBtn'])){
 }
 
 if(isset($_POST['backBtn'])) {
-    unset($_SESSION["timer"]);
     header("Location: admin-dashboard.php");
 }
 
@@ -46,4 +45,3 @@ function generateClassCode(){
 
     return $classCodeHolder;
 }
-                   

@@ -3,22 +3,31 @@
     require_once("classes/model.ClassRm.php");
     require_once("classes/controller.Admin.php");
     require_once("classes/controller.ClassRm.php");
+    require_once("classes/controller.Lists.php");
     require_once("includes/add.inc.php");
     require_once("includes/schedule.inc.php");
     require_once("includes/ses-message.inc.php");
+    require_once("includes/update.inc.php");
     require_once("includes/class-list.inc.php");
-   // if(session_id() === "") session_start();
+    require_once("includes/paging.inc.php");
 
-    $className = isset($_SESSION["className"]) ? $_SESSION["className"] : "";
-    $daySched = isset($_SESSION['daySched']) ? $_SESSION['daySched'] : "";
-    $startingHourSched = isset($_SESSION['startingHourSched']) ? $_SESSION['startingHourSched'] : "";
-    $startingMinSched = isset($_SESSION['startingMinSched']) ? $_SESSION['startingMinSched'] : "";
-    $startTimePeriod = isset($_SESSION['startTimePeriod']) ? $_SESSION['startTimePeriod'] : "";
-    $endingHourSched = isset($_SESSION['endingHourSched']) ? $_SESSION['endingHourSched'] : "";
-    $endingMinSched = isset($_SESSION['endingMinSched']) ? $_SESSION['endingMinSched'] : "";
-    $endTimePeriod = isset($_SESSION['endTimePeriod']) ? $_SESSION['endTimePeriod'] : "";
-    $status = isset($_SESSION['status']) ? $_SESSION['status'] : "";
-    $classProf = isset($_SESSION['classProf']) ? $_SESSION['classProf'] : "";
+    if(session_id() === "") session_start();
+
+    if (isset($_GET["paging"]) && $_GET["paging"] == "prev") {
+         $_SESSION["className"] = $_GET["className"];
+    }
+
+      $className = isset($_SESSION["className"]) ? $_SESSION["className"] : "";
+      $daySched = isset($_SESSION["daySched"]) ? $_SESSION['daySched'] : "";
+      $startingHourSched = isset($_SESSION['startingHourSched']) ? $_SESSION['startingHourSched'] : "";
+      $startingMinSched = isset($_SESSION['startingMinSched']) ? $_SESSION['startingMinSched'] : "";
+      $startTimePeriod = isset($_SESSION['startTimePeriod']) ? $_SESSION['startTimePeriod'] : "";
+      $endingHourSched = isset($_SESSION['endingHourSched']) ? $_SESSION['endingHourSched'] : "";
+      $endingMinSched = isset($_SESSION['endingMinSched']) ? $_SESSION['endingMinSched'] : "";
+      $endTimePeriod = isset($_SESSION['endTimePeriod']) ? $_SESSION['endTimePeriod'] : "";
+      $status = isset($_SESSION['status']) ? $_SESSION['status'] : "";
+      $classProf = isset($_SESSION['classProf']) ? $_SESSION['classProf'] : "";
+
 
     ?>
 
@@ -45,10 +54,41 @@ background-color: #34495e;
 .btn{
     margin-top: 10px;
 }
+
+table{
+    margin-top: 50px;
+}
+
+table, th, td{
+    border: 2px solid black;
+    background-color:rgb(38, 39, 124);
+    text-align: center;
+}
+
+th, td{
+    background-color:rgb(104, 106, 214);
+    color: rgba(243, 243, 243, 0.993);
+    padding: 5px;
+}
+
+a{
+ display: inline-block;
+ text-decoration: none;
+ color: orange;
+ padding: 10px 20px;
+ border: thin solid #d4d4d4;
+ transition: all 0.3s;
+ font-size: 18px;
+}
+
+a.active{
+ background-color: #0d81cd;
+ color: #fff;
+}
 </style>
 
 <body>
-    <form id="form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . $_GET["adminBtn"];?>" method="POST">
+    <form id="form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);?>" method="POST">
             <label>Class Name</label><br>
             <input type="text" name="className" placeholder="Enter Class Name" id="className" value="<?php if(isset($_SESSION["className"])) echo $_SESSION["className"]; ?>"><br><br>
 
@@ -121,13 +161,48 @@ background-color: #34495e;
             <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
 
             <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
-            <br><br>
 
     </form>
+
+
+    <div class="result-container">
+      <table>
+        <tr>
+          <th>Class Code</th>
+          <th>Class Name</th>
+          <th>Class Instructor</th>
+          <th>Class Schedule</th>
+          <th>Class Status</th>
+          <th>Edit Button</th>
+        </tr>
+        <!-- Prints out the class data from the db -->
+        <?php
+            if($_SESSION["searchSwitch"] == "all"){
+              fetchAllClasses();
+            }else if($_SESSION["searchSwitch"] == "1"){
+              displayClassWithCode($_SESSION["user"]);
+            }else if($_SESSION["searchSwitch"] == "2"){
+              displayClassWithCName($_SESSION["user"]);
+            }else if($_SESSION["searchSwitch"] == "3"){
+              displayClassWithIns($_SESSION["user"]);
+            }
+        ?>
+      </table>
+    </div>
+
+
+    <?php
+      if (isset($_GET["className"])) {
+          $_SESSION["className"] = $_GET["className"];
+      }
+     ?>
+
+     <!-- Fix this button, it should retain the user input -->
+    <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev&className=".urlencode($_SESSION["className"]); ?>">Previous</a>
 
 </body>
 </html>
 
 <?php
-    session_unset();
+  //  session_unset();
 ?>

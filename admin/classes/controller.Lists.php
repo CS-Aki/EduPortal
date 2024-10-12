@@ -1,13 +1,14 @@
 <?php
 
 class ListController extends ClassRm{
+
       public function getAllClass(){
           $resultArr = $this->getClasses();
 
           if(count($resultArr) == 0 || count($resultArr) == null){
               $_SESSION["msg"] = "Error fetching class";
             //   header("Location: update-class.php?error=fetchingClassInDbError");
-                 header("Location: admin-dashboard.php?adminBtn=Update Class");
+              //   header("Location: admin-dashboard.php?adminBtn=Update Class");
 
               exit();
           }
@@ -55,6 +56,10 @@ class ListController extends ClassRm{
           }
 
           return $resultArr;
+      }
+
+      public function countClass(){
+          return $this->fetchTotalClass();
       }
 
 }

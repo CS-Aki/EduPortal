@@ -1,7 +1,6 @@
 <?php
+//if(session_id() === "") session_start();
 $_SESSION["searchSwitch"] = "all";
-$_SESSION["min"] = 1;
-$_SESSION["max"] = 5;
 
 if(isset($_POST['backBtn'])){
     unset($_SESSION["min"]);
@@ -9,4 +8,8 @@ if(isset($_POST['backBtn'])){
     unset($_SESSION["searchSwitch"]);
     header("Location: admin-dashboard.php");
     exit();
+}
+
+function updateButton(){
+  return "update btn clicked";
 }

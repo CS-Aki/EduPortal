@@ -38,7 +38,7 @@ class ClassRm extends DbConnection{
     }
 
     protected function getClasses(){
-      $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_num >= ? AND class_num <= ?";
+      $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_num > ? AND class_num <= ?";
       $stmt = $this->connect()->prepare($sql);
       $stmt->execute([$_SESSION["min"], $_SESSION["max"]]);
 
@@ -69,4 +69,11 @@ class ClassRm extends DbConnection{
       return $class = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    protected function fetchTotalClass(){
+        $sql = "SELECT COUNT('class_num') AS 'count' FROM `classes`";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+
+        return $total = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

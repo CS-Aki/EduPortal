@@ -8,7 +8,9 @@
     require_once("includes/class-list.inc.php");
     require_once("includes/search.inc.php");
     require_once("includes/ses-message.inc.php");
-   // if(session_id() === "") session_start();
+    require_once("includes/paging.inc.php");
+    echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
+
  ?>
 
 <!DOCTYPE html>
@@ -20,7 +22,7 @@
 
   <style media="screen">
       body {
-      background-color: #34495e;
+      background-color: #556;
       }
 
       #form label{
@@ -46,10 +48,26 @@
           color: rgba(243, 243, 243, 0.993);
           padding: 5px;
       }
+
+      a{
+       display: inline-block;
+       text-decoration: none;
+       color: orange;
+       padding: 10px 20px;
+       border: thin solid #d4d4d4;
+       transition: all 0.3s;
+       font-size: 18px;
+    }
+
+    a.active{
+       background-color: #0d81cd;
+       color: #fff;
+    }
+
   </style>
 
   <body>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . $_GET["adminBtn"];?>" method="POST">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);?>" method="POST">
         <label for="searchClassCode">Search Class</label>
         <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
         <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn"><br>
@@ -91,12 +109,36 @@
       </table>
     </div>
 
-    <form action="update-class.php" method="get">
-        <input type="submit" name="decreaseBtn" value="Previous">
-        <input type="submit" name="increaseBtn" value="Next">
-    </form>
+    <!-- FINDS THE NUMBER OF EDIT BUTTON CLICKED -->
+    <?php
+        $temp = 20;
+        $j = 0;
+        while($j < $temp){
+            if(isset($_POST[$j])){
+              echo $j + $_SESSION['min'];
+              break;
+            }
+          $j++;
+        }
+    ?>
 
+    <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev" . "=" . urlencode($_SESSION["counter"]); ?>">Previous</a>
+
+    <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=next" . "=" . urlencode($_SESSION["counter"]); ?>">Next</a>
 
   </body>
 
 </html>
+
+<?php
+//     if(session_id() === "") session_start();
+// if(isset($_GET["paging"]) && $_GET["paging"] <= 1){
+//   $_SESSION["min"] = 2;
+//   $_SESSION["max"] = 3;
+// }
+//
+// if(isset($_GET["paging"]) && $_GET["paging"] == 5){
+//
+// }
+
+?>

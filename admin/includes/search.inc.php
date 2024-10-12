@@ -1,6 +1,6 @@
 <?php
 $controller = new ListController();
-if(session_id() === "") session_start();
+
 if(isset($_POST["searchClassCodeBtn"])){
     $result = $controller->getClassFromCode();
     $_SESSION["searchSwitch"] = "1";
