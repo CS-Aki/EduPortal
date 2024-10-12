@@ -1,5 +1,4 @@
 <?php
-    if(session_id() === "") session_start();
     require_once("classes/connection.php");
     require_once("classes/model.ClassRm.php");
     require_once("classes/controller.Admin.php");
@@ -9,6 +8,7 @@
     require_once("includes/class-list.inc.php");
     require_once("includes/search.inc.php");
     require_once("includes/ses-message.inc.php");
+   // if(session_id() === "") session_start();
  ?>
 
 <!DOCTYPE html>
@@ -49,7 +49,7 @@
   </style>
 
   <body>
-    <form action="update-class.php" method="POST">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . $_GET["adminBtn"];?>" method="POST">
         <label for="searchClassCode">Search Class</label>
         <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
         <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn"><br>

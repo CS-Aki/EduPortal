@@ -6,7 +6,9 @@ class ListController extends ClassRm{
 
           if(count($resultArr) == 0 || count($resultArr) == null){
               $_SESSION["msg"] = "Error fetching class";
-              header("Location: update-class.php?error=fetchingClassInDbError");
+            //   header("Location: update-class.php?error=fetchingClassInDbError");
+                 header("Location: admin-dashboard.php?adminBtn=Update Class");
+
               exit();
           }
 
@@ -19,7 +21,8 @@ class ListController extends ClassRm{
 
           if(count($resultArr) == 0 || count($resultArr) == null){
               $_SESSION["msg"] = "Error fetching class";
-              header("Location: update-class.php?error=fetchingClassInDbError");
+            //   header("Location: update-class.php?error=fetchingClassInDbError");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
               exit();
           }
 
@@ -32,7 +35,8 @@ class ListController extends ClassRm{
 
           if(count($resultArr) == 0 || count($resultArr) == null){
               $_SESSION["msg"] = "Error fetching class";
-              header("Location: update-class.php?error=fetchingClassInDbError");
+            //   header("Location: update-class.php?error=fetchingClassInDbError");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
               exit();
           }
 
@@ -45,7 +49,8 @@ class ListController extends ClassRm{
 
           if(count($resultArr) == 0 || count($resultArr) == null){
               $_SESSION["msg"] = "Error fetching class";
-              header("Location: update-class.php?error=fetchingClassInDbError");
+            //   header("Location: update-class.php?error=fetchingClassInDbError");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
               exit();
           }
 
