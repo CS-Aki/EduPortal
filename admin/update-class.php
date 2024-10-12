@@ -51,7 +51,7 @@
   <body>
     <form action="update-class.php" method="POST">
         <label for="searchClassCode">Search Class</label>
-        <input type="text" name="searchClassCode" placeholder="Enter Class Code">
+        <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
         <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn"><br>
 
         <label for="searchClassBtn">Search Class</label>
@@ -91,7 +91,11 @@
       </table>
     </div>
 
-    <!-- <label><?php echo $_SESSION["searchSwitch"];?></label> -->
+    <form action="update-class.php" method="get">
+        <input type="submit" name="decreaseBtn" value="Previous">
+        <input type="submit" name="increaseBtn" value="Next">
+    </form>
+
 
   </body>
 
