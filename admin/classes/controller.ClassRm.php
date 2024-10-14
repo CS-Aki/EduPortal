@@ -72,6 +72,17 @@ class ClassRmController extends ClassRm{
 
         if($result == true){
             $_SESSION["msg"] = "New Class Successfully Added";
+            unset($_SESSION["msg"]);
+            unset($_SESSION["className"]);
+            unset($_SESSION["classProf"]);
+            unset($_SESSION['daySched']);
+            unset($_SESSION['startingHourSched']);
+            unset($_SESSION['startingMinSched']);
+            unset($_SESSION['startTimePeriod']);
+            unset($_SESSION['endingHourSched']);
+            unset($_SESSION['endingMinSched']);
+            unset($_SESSION['endTimePeriod']);
+            unset($_SESSION['status']); 
         }else{
             $_SESSION["msg"] = "Failed to Add New Class";
         }

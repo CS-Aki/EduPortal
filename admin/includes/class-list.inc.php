@@ -5,13 +5,11 @@ function fetchAllClasses(){
     $listOfClasses = $listController->getAllClass();
     $_SESSION["list"] = $listOfClasses;
     //Used for displaying list of classes from the database into the client
-
     if(isset($_GET["paging"])){
       $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
     }else{
       $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
     }
-
 
     echo"<form action='{$urlForm}' method=post>";
     for($i = 0; $i < count($listOfClasses); $i++){

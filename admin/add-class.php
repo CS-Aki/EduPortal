@@ -95,14 +95,14 @@ a.active{
             <label>Class Schedule:</label><br>
             <label>Day</label>
             <select name="daySched" id="daySched">
-            <option value="blank"></option>
-            <option value="Monday" <?php if ($daySched == "Monday") echo "selected"; ?>>Monday</option>
-            <option value="Tuesday" <?php if ($daySched == "Tuesday") echo "selected"; ?>>Tuesday</option>
-            <option value="Wednesday" <?php if ($daySched == "Wednesday") echo "selected"; ?>>Wednesday</option>
-            <option value="Thursday" <?php if ($daySched == "Thursday") echo "selected"; ?>>Thursday</option>
-            <option value="Friday" <?php if ($daySched == "Friday") echo "selected"; ?>>Friday</option>
-            <option value="Saturday" <?php if ($daySched == "Saturday") echo "selected"; ?>>Saturday</option>
-            <option value="Sunday" <?php if ($daySched == "Sunday") echo "selected"; ?>>Sunday</option>
+                <option value="blank"></option>
+                <option value="Monday" <?php if ($daySched == "Monday") echo "selected"; ?>>Monday</option>
+                <option value="Tuesday" <?php if ($daySched == "Tuesday") echo "selected"; ?>>Tuesday</option>
+                <option value="Wednesday" <?php if ($daySched == "Wednesday") echo "selected"; ?>>Wednesday</option>
+                <option value="Thursday" <?php if ($daySched == "Thursday") echo "selected"; ?>>Thursday</option>
+                <option value="Friday" <?php if ($daySched == "Friday") echo "selected"; ?>>Friday</option>
+                <option value="Saturday" <?php if ($daySched == "Saturday") echo "selected"; ?>>Saturday</option>
+                <option value="Sunday" <?php if ($daySched == "Sunday") echo "selected"; ?>>Sunday</option>
             </select>
 
             <label>From</label>
@@ -125,7 +125,6 @@ a.active{
                 <option value="AM" <?php if ($startTimePeriod == "AM") echo "selected"; ?>>AM</option>
                 <option value="PM" <?php if ($startTimePeriod == "PM") echo "selected"; ?>>PM</option>
             </select>
-
 
             <label>To</label>
             <select name="endingHourSched" id="endingHourSched">

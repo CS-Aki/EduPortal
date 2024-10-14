@@ -9,7 +9,7 @@
     require_once("includes/search.inc.php");
     require_once("includes/ses-message.inc.php");
     require_once("includes/paging.inc.php");
-    echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
+   // echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
 
  ?>
 
@@ -115,7 +115,9 @@
         $j = 0;
         while($j < $temp){
             if(isset($_POST[$j])){
-              echo $j + $_SESSION['min'];
+              $temp = $j;
+              $_SESSION['classNumber'] = $temp;
+              include("edit-pop.php");
               break;
             }
           $j++;
