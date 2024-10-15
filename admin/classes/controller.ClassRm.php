@@ -88,6 +88,59 @@ class ClassRmController extends ClassRm{
         }
     }
 
+    public function editClass(){
+        if($this->isEmpty() == true){
+            $_SESSION["msg"] = "Please fill out all the necessary information";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidInput");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
+        }
+
+        if($this->invalidInput() == true){
+            $_SESSION["msg"] = "Special Characters aren't allowed, please try again";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidCharacterInput");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
+        }
+
+        if($this->isClassNameExist($this->className) == true){
+            $_SESSION["msg"] = "Class already exist";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=classAlreadyExist");
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
+        }
+
+        if($this->isEmptySched() == true){
+            $_SESSION["msg"] = "Invalid Schedule Input";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleInput");   
+            header("Location: admin-dashboard.php?adminBtn=Update Class");      
+            exit();
+        }
+
+        if($this->isEmptyStatus() == true){
+            $_SESSION["msg"] = "Choose a status";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidStatusOption");       
+            header("Location: admin-dashboard.php?adminBtn=Update Class");           
+            exit();
+        }
+
+        if($this->invalidScheduleDate() == true){
+            $_SESSION["msg"] = "Invalid Schedule Date";
+            // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleDate"); 
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
+        }
+       // echo $this->className . "<br>" . $this->status;
+        $fullSched = "(" . $this->classSchedule["day"] . ") " . $this->classSchedule["startingHour"] . ":" . $this->classSchedule["startingMin"] . " " . $this->classSchedule["startTimePeriod"] . "-" . $this->classSchedule["endingHour"] . ":" . $this->classSchedule["endingMin"] . " " . $this->classSchedule["endTimePeriod"];
+
+        $result = $this->editClassInfo($this->classCode, $this->className, $fullSched, $this->classProf, $this->status);
+        if($result == true){
+            $_SESSION["msg"] = "Edit Successfully";
+        }else{
+            $_SESSION["msg"] = "Edit Failed";
+        }
+    }
+
     private function isEmpty(){
         if(empty($this->classCode) || empty($this->className) || empty($this->classSchedule) || empty($this->classProf)){
             return true;

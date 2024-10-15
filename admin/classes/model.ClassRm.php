@@ -76,4 +76,22 @@ class ClassRm extends DbConnection{
 
         return $total = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    protected function editClassInfo($classCode, $className, $classSchedule, $classProf, $status){
+     //   var_dump($classCode, $className, $classSchedule, $classProf, $status);
+        $sql = "UPDATE classes SET class_name = ?, class_teacher = ?, class_schedule = ?, class_status = ? WHERE class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if($stmt->execute(array($className, $classProf, $classSchedule, $status, $classCode))){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Log the error message
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 }

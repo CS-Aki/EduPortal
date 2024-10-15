@@ -90,6 +90,9 @@
 
           <label>Class Instructor</label><br>
           <input type="text" name="classProf" placeholder="Assign Class Instructor" value="<?php echo $_SESSION['list'][$class_num]['class_teacher']; ?>"><br><br>
+
+          <input type="submit" name="editClassBtn" value="SAVE EDIT" class="btn"><br><br>
+          <input type="submit" name="closeBtn" value="CLOSE EDIT TAB" class="btn"><br>
     </form>
 </body>
 </html>

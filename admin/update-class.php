@@ -4,7 +4,7 @@
     require_once("classes/controller.Admin.php");
     require_once("classes/controller.ClassRm.php");
     require_once("classes/controller.Lists.php");
-    require_once("includes/update.inc.php");
+    include("includes/update.inc.php");
     require_once("includes/class-list.inc.php");
     require_once("includes/search.inc.php");
     require_once("includes/ses-message.inc.php");
@@ -81,8 +81,9 @@
         <input type="submit" name="searchClassInsBtn" value="Search Class Instructor" class="btn"><br>
 
         <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
-        <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
     </form>
+
+    <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
 
     <div class="result-container">
       <table>
