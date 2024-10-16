@@ -1,35 +1,35 @@
 <?php
-    require_once("classes/connection.php");
-    require_once("classes/model.ClassRm.php");
-    require_once("classes/controller.Admin.php");
-    require_once("classes/controller.ClassRm.php");
-    require_once("classes/controller.Lists.php");
-    require_once("includes/add.inc.php");
-    require_once("includes/schedule.inc.php");
-    require_once("includes/ses-message.inc.php");
-    require_once("includes/update.inc.php");
-    require_once("includes/class-list.inc.php");
-    require_once("includes/paging.inc.php");
+require_once("classes/connection.php");
+require_once("classes/model.ClassRm.php");
+require_once("classes/controller.Admin.php");
+require_once("classes/controller.ClassRm.php");
+require_once("classes/controller.Lists.php");
+require_once("includes/add.inc.php");
+require_once("includes/schedule.inc.php");
+require_once("includes/ses-message.inc.php");
+require_once("includes/update.inc.php");
+require_once("includes/class-list.inc.php");
+require_once("includes/paging.inc.php");
 
-    if(session_id() === "") session_start();
+if (session_id() === "") session_start();
 
-    if (isset($_GET["paging"]) && $_GET["paging"] == "prev") {
-         $_SESSION["className"] = $_GET["className"];
-    }
+if (isset($_GET["paging"]) && $_GET["paging"] == "prev") {
+    $_SESSION["className"] = $_GET["className"];
+}
 
-      $className = isset($_SESSION["className"]) ? $_SESSION["className"] : "";
-      $daySched = isset($_SESSION["daySched"]) ? $_SESSION['daySched'] : "";
-      $startingHourSched = isset($_SESSION['startingHourSched']) ? $_SESSION['startingHourSched'] : "";
-      $startingMinSched = isset($_SESSION['startingMinSched']) ? $_SESSION['startingMinSched'] : "";
-      $startTimePeriod = isset($_SESSION['startTimePeriod']) ? $_SESSION['startTimePeriod'] : "";
-      $endingHourSched = isset($_SESSION['endingHourSched']) ? $_SESSION['endingHourSched'] : "";
-      $endingMinSched = isset($_SESSION['endingMinSched']) ? $_SESSION['endingMinSched'] : "";
-      $endTimePeriod = isset($_SESSION['endTimePeriod']) ? $_SESSION['endTimePeriod'] : "";
-      $status = isset($_SESSION['status']) ? $_SESSION['status'] : "";
-      $classProf = isset($_SESSION['classProf']) ? $_SESSION['classProf'] : "";
+$className = isset($_SESSION["className"]) ? $_SESSION["className"] : "";
+$daySched = isset($_SESSION["daySched"]) ? $_SESSION['daySched'] : "";
+$startingHourSched = isset($_SESSION['startingHourSched']) ? $_SESSION['startingHourSched'] : "";
+$startingMinSched = isset($_SESSION['startingMinSched']) ? $_SESSION['startingMinSched'] : "";
+$startTimePeriod = isset($_SESSION['startTimePeriod']) ? $_SESSION['startTimePeriod'] : "";
+$endingHourSched = isset($_SESSION['endingHourSched']) ? $_SESSION['endingHourSched'] : "";
+$endingMinSched = isset($_SESSION['endingMinSched']) ? $_SESSION['endingMinSched'] : "";
+$endTimePeriod = isset($_SESSION['endTimePeriod']) ? $_SESSION['endTimePeriod'] : "";
+$status = isset($_SESSION['status']) ? $_SESSION['status'] : "";
+$classProf = isset($_SESSION['classProf']) ? $_SESSION['classProf'] : "";
 
 
-    ?>
+?>
 
 <!DOCTYPE html>
 
@@ -43,165 +43,134 @@
 </head>
 
 <style media="screen">
-body {
-background-color: #34495e;
-}
+    body {
+        background-color: #557;
+    }
 
-#form label{
-    background-color: white;
-}
+    #form label {
+        background-color: white;
+    }
 
-.btn{
-    margin-top: 10px;
-}
+    .btn {
+        margin-top: 10px;
+    }
 
-table{
-    margin-top: 50px;
-}
+    table {
+        margin-top: 50px;
+    }
 
-table, th, td{
-    border: 2px solid black;
-    background-color:rgb(38, 39, 124);
-    text-align: center;
-}
+    table,
+    th,
+    td {
+        border: 2px solid black;
+        background-color: rgb(38, 39, 124);
+        text-align: center;
+    }
 
-th, td{
-    background-color:rgb(104, 106, 214);
-    color: rgba(243, 243, 243, 0.993);
-    padding: 5px;
-}
+    th,
+    td {
+        background-color: rgb(104, 106, 214);
+        color: rgba(243, 243, 243, 0.993);
+        padding: 5px;
+    }
 
-a{
- display: inline-block;
- text-decoration: none;
- color: orange;
- padding: 10px 20px;
- border: thin solid #d4d4d4;
- transition: all 0.3s;
- font-size: 18px;
-}
+    a {
+        display: inline-block;
+        text-decoration: none;
+        color: orange;
+        padding: 10px 20px;
+        border: thin solid #d4d4d4;
+        transition: all 0.3s;
+        font-size: 18px;
+    }
 
-a.active{
- background-color: #0d81cd;
- color: #fff;
-}
+    a.active {
+        background-color: #0d81cd;
+        color: #fff;
+    }
 </style>
 
 <body>
-    <form id="form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);?>" method="POST">
-            <label>Class Name</label><br>
-            <input type="text" name="className" placeholder="Enter Class Name" id="className" value="<?php if(isset($_SESSION["className"])) echo $_SESSION["className"]; ?>"><br><br>
+    <form id="form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
+        <label>Class Name</label><br>
+        <input type="text" name="className" placeholder="Enter Class Name" id="className" value="<?php if (isset($_SESSION["className"])) echo $_SESSION["className"]; ?>"><br><br>
 
-            <label>Class Schedule:</label><br>
-            <label>Day</label>
-            <select name="daySched" id="daySched">
-                <option value="blank"></option>
-                <option value="Monday" <?php if ($daySched == "Monday") echo "selected"; ?>>Monday</option>
-                <option value="Tuesday" <?php if ($daySched == "Tuesday") echo "selected"; ?>>Tuesday</option>
-                <option value="Wednesday" <?php if ($daySched == "Wednesday") echo "selected"; ?>>Wednesday</option>
-                <option value="Thursday" <?php if ($daySched == "Thursday") echo "selected"; ?>>Thursday</option>
-                <option value="Friday" <?php if ($daySched == "Friday") echo "selected"; ?>>Friday</option>
-                <option value="Saturday" <?php if ($daySched == "Saturday") echo "selected"; ?>>Saturday</option>
-                <option value="Sunday" <?php if ($daySched == "Sunday") echo "selected"; ?>>Sunday</option>
-            </select>
+        <label>Class Schedule:</label><br>
+        <label>Day</label>
+        <select name="daySched" id="daySched">
+            <option value="blank"></option>
+            <option value="Monday" <?php if ($daySched == "Monday") echo "selected"; ?>>Monday</option>
+            <option value="Tuesday" <?php if ($daySched == "Tuesday") echo "selected"; ?>>Tuesday</option>
+            <option value="Wednesday" <?php if ($daySched == "Wednesday") echo "selected"; ?>>Wednesday</option>
+            <option value="Thursday" <?php if ($daySched == "Thursday") echo "selected"; ?>>Thursday</option>
+            <option value="Friday" <?php if ($daySched == "Friday") echo "selected"; ?>>Friday</option>
+            <option value="Saturday" <?php if ($daySched == "Saturday") echo "selected"; ?>>Saturday</option>
+            <option value="Sunday" <?php if ($daySched == "Sunday") echo "selected"; ?>>Sunday</option>
+        </select>
 
-            <label>From</label>
-            <select name="startingHourSched" id="startingHourSched">
-                <option value="blank"></option>
-                <?php for ($i = 1; $i <= 12; $i++): ?>
-                   <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($startingHourSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
+        <label>From</label>
+        <select name="startingHourSched" id="startingHourSched">
+            <option value="blank"></option>
+            <?php for ($i = 1; $i <= 12; $i++): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($startingHourSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+            <?php endfor; ?>
+        </select>
 
-            <select name="startingMinSched" id="startingMinSched">
-                <option value="blank"> </option>
-                <?php for ($i = 0; $i < 60; $i += 10): ?>
-                    <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($startingMinSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
+        <select name="startingMinSched" id="startingMinSched">
+            <option value="blank"> </option>
+            <?php for ($i = 0; $i < 60; $i += 10): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($startingMinSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+            <?php endfor; ?>
+        </select>
 
-            <select name="startTimePeriod" id="timePeriod">
-                <option value="blank"> </option>
-                <option value="AM" <?php if ($startTimePeriod == "AM") echo "selected"; ?>>AM</option>
-                <option value="PM" <?php if ($startTimePeriod == "PM") echo "selected"; ?>>PM</option>
-            </select>
+        <select name="startTimePeriod" id="timePeriod">
+            <option value="blank"> </option>
+            <option value="AM" <?php if ($startTimePeriod == "AM") echo "selected"; ?>>AM</option>
+            <option value="PM" <?php if ($startTimePeriod == "PM") echo "selected"; ?>>PM</option>
+        </select>
 
-            <label>To</label>
-            <select name="endingHourSched" id="endingHourSched">
-                <option value="blank"> </option>
-                <?php for ($i = 1; $i <= 12; $i++): ?>
-                    <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($endingHourSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
+        <label>To</label>
+        <select name="endingHourSched" id="endingHourSched">
+            <option value="blank"> </option>
+            <?php for ($i = 1; $i <= 12; $i++): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($endingHourSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+            <?php endfor; ?>
+        </select>
 
-            <select name="endingMinSched" id="endingMinSched">
-                <option value="blank"> </option>
-                <?php for ($i = 0; $i < 60; $i += 10): ?>
-                    <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($endingMinSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
+        <select name="endingMinSched" id="endingMinSched">
+            <option value="blank"> </option>
+            <?php for ($i = 0; $i < 60; $i += 10): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>" <?php if ($endingMinSched == str_pad($i, 2, "0", STR_PAD_LEFT)) echo "selected"; ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+            <?php endfor; ?>
+        </select>
 
-            <select name="endTimePeriod" id="timePeriod">
-                <option value="blank"> </option>
-                <option value="AM" <?php if ($endTimePeriod == "AM") echo "selected"; ?>>AM</option>
-                <option value="PM" <?php if ($endTimePeriod == "PM") echo "selected"; ?>>PM</option>
-            </select><br><br>
+        <select name="endTimePeriod" id="timePeriod">
+            <option value="blank"> </option>
+            <option value="AM" <?php if ($endTimePeriod == "AM") echo "selected"; ?>>AM</option>
+            <option value="PM" <?php if ($endTimePeriod == "PM") echo "selected"; ?>>PM</option>
+        </select><br><br>
 
-            <label>Class Status</label>
-            <select name="status" id="status">
-                <option value="blank"> </option>
-                <option value="Active" <?php if ($status == "Active") echo "selected"; ?>>Active</option>
-                <option value="Inactive" <?php if ($status == "Inactive") echo "selected"; ?>>Inactive</option>
-            </select><br><br>
+        <label>Class Status</label>
+        <select name="status" id="status">
+            <option value="blank"> </option>
+            <option value="Active" <?php if ($status == "Active") echo "selected"; ?>>Active</option>
+            <option value="Inactive" <?php if ($status == "Inactive") echo "selected"; ?>>Inactive</option>
+        </select><br><br>
 
-            <label>Class Instructor</label><br>
-            <input type="text" name="classProf" placeholder="Assign Class Instructor" value="<?php if(isset($_SESSION["classProf"])) echo $_SESSION["classProf"]; ?>"><br><br>
-            <input type="submit" name="createClassBtn" value="Create New Class" class="btn"><br><br>
-            <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
+        <label>Class Instructor</label><br>
+        <input type="text" name="classProf" placeholder="Assign Class Instructor" value="<?php if (isset($_SESSION["classProf"])) echo $_SESSION["classProf"]; ?>"><br><br>
+        <input type="submit" name="createClassBtn" value="Create New Class" class="btn"><br><br>
+        <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
 
-            <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
+        <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
 
     </form>
 
 
-    <div class="result-container">
-      <table>
-        <tr>
-          <th>Class Code</th>
-          <th>Class Name</th>
-          <th>Class Instructor</th>
-          <th>Class Schedule</th>
-          <th>Class Status</th>
-          <th>Edit Button</th>
-        </tr>
-        <!-- Prints out the class data from the db -->
-        <?php
-            if($_SESSION["searchSwitch"] == "all"){
-              fetchAllClasses();
-            }else if($_SESSION["searchSwitch"] == "1"){
-              displayClassWithCode($_SESSION["user"]);
-            }else if($_SESSION["searchSwitch"] == "2"){
-              displayClassWithCName($_SESSION["user"]);
-            }else if($_SESSION["searchSwitch"] == "3"){
-              displayClassWithIns($_SESSION["user"]);
-            }
-        ?>
-      </table>
-    </div>
-
-
-    <?php
-      if (isset($_GET["className"])) {
-          $_SESSION["className"] = $_GET["className"];
-      }
-     ?>
-
-     <!-- Fix this button, it should retain the user input -->
-    <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev&className=".urlencode($_SESSION["className"]); ?>">Previous</a>
-
 </body>
+
 </html>
 
 <?php
-  //  session_unset();
+//  session_unset();
 ?>

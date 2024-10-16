@@ -24,44 +24,18 @@ if (isset($_GET["paging"]) && $_GET["paging"] == "prev" . "=" . urlencode($_SESS
 // Increment min and max when 'Next' is clicked
 if (isset($_GET["paging"]) && $_GET["paging"] == "next" . "=" . urlencode($_SESSION["counter"])) {
 
-        $_SESSION["min"] += 5;
-        $_SESSION["max"] += 5;
-        $_SESSION["counter"] += 1;
-      //  echo "This is the counter " . $_SESSION["counter"];   
+    $_SESSION["min"] += 5;
+    $_SESSION["max"] += 5;
+    $_SESSION["counter"] += 1;
+    // echo "This is the counter " . $_SESSION["counter"];   
 
-        $temp = round($total[0]['count'] / 5) + 1;
+    $temp = round($total[0]['count'] / 5);
+    //  echo "<br>This is the temp " . $temp . "<br>";   
+    if ($_SESSION["counter"] > $temp) {
+        $_SESSION["min"] -= 5;
+        $_SESSION["max"] -= 5;
+        $_SESSION["counter"] -= 1;
+        return;
+    }
 
-        if($_SESSION["counter"] > $temp){
-            $_SESSION["min"] -= 5;
-            $_SESSION["max"] -= 5;
-            $_SESSION["counter"] -= 1;
-            return;
-        }
-
-        // if($_SESSION["max"] > $total[0]['count']){
-        //     $_SESSION["min"] -= 5;
-        //     $_SESSION["max"] -= 5;
-        //     $_SESSION["counter"] -= 1;
-        //     if($total[0]['count'] % 5 != 0){
-        //         $_SESSION["min"] += 5;
-        //         $_SESSION["counter"] += 1;
-        //         $_SESSION["max"] = $total[0]['count'];
-        //     }
-        // }
-        
-        
-
-}
-
-if (isset($_GET["className"])) {
- //$_SESSION["className"] = $_GET["className"];
- // $_SESSION["daySched"] = $_GET["daySched"];
- // $_SESSION["startingHourSched"] = $_GET["startingHourSched"];
- // $_SESSION["startingMinSched"] = $_GET["startingMinSched"];
- // $_SESSION["startTimePeriod"] = $_GET["startTimePeriod"];
- // $_SESSION["endingHourSched"] = $_GET["endingHourSched"];
- // $_SESSION["endingMinSched"] = $_GET["endingMinSched"];
- // $_SESSION["endTimePeriod"] = $_GET["endTimePeriod"];
- // $_SESSION["status"] = $_GET["status"];
- // $_SESSION["classProf"] = $_GET["classProf"];
 }

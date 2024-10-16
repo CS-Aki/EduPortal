@@ -1,58 +1,136 @@
 <?php
 
-function fetchAllClasses(){
-    $listController = new ListController();
-    $listOfClasses = $listController->getAllClass();
-    $_SESSION["list"] = $listOfClasses;
-    //Used for displaying list of classes from the database into the client
-    if(isset($_GET["paging"])){
-      $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
-    }else{
-      $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
-    }
+function fetchAllClasses()
+{
+  $listController = new ListController();
+  $listOfClasses = $listController->getAllClass();
+  $_SESSION["list"] = $listOfClasses;
 
-    echo"<form action='{$urlForm}' method=post>";
-    for($i = 0; $i < count($listOfClasses); $i++){
-        echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
-        echo "<td>". $listOfClasses[$i]["class_name"] . "</td>";
-        echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
-        echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
-        echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
-        // Button will display same thing as add classes features
-        echo "<td><input type='submit' name='{$i}' value='Edit'></td></tr>";
-    }
-      echo"</form>";
-}
+  //Used for displaying list of classes from the database into the client
+  if (isset($_GET["paging"])) {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+  } else {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+  }
 
-function displayClassWithCode($result){
-      echo "<tr><td>" . $result[0]["class_code"] . "</td>";
-      echo "<td>". $result[0]["class_name"] . "</td>";
-      echo "<td>" . $result[0]["class_teacher"] . "</td>";
-      echo "<td>" . $result[0]["class_schedule"] . "</td>";
-      echo "<td>" . $result[0]["class_status"] . "</td>";
+  if ($_GET['adminBtn'] == "Class List") {
+    echo "<form id='editForm' action='{$urlForm}' method=post>";
+    for ($i = 0; $i < count($listOfClasses); $i++) {
+      echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_name"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
       // Button will display same thing as add classes features
-      echo "<td><button>Edit</button></td></tr>";
+    }
+    echo "</form>";
+  } else {
+    echo "<form id='editForm' action='{$urlForm}' method=post>";
+    for ($i = 0; $i < count($listOfClasses); $i++) {
+      echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_name"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
+      // Button will display same thing as add classes features
+      echo "<td><input type='submit' name='{$i}' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#editClass' value='Edit'></td></tr>";
+    }
+    echo "</form>";
+  }
 }
 
-function displayClassWithCName($result){
+function displayClassWithCode($result)
+{
+
+  if (isset($_GET["paging"])) {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+  } else {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+  }
+
+  if ($_GET['adminBtn'] == "Class List") {
+    echo "<form action='{$urlForm}' method=post>";
     echo "<tr><td>" . $result[0]["class_code"] . "</td>";
-    echo "<td>". $result[0]["class_name"] . "</td>";
+    echo "<td>" . $result[0]["class_name"] . "</td>";
     echo "<td>" . $result[0]["class_teacher"] . "</td>";
     echo "<td>" . $result[0]["class_schedule"] . "</td>";
     echo "<td>" . $result[0]["class_status"] . "</td>";
     // Button will display same thing as add classes features
-    echo "<td><button>Edit</button></td></tr>";
+    echo "</form>";
+  } else {
+    echo "<form action='{$urlForm}' method=post>";
+    echo "<tr><td>" . $result[0]["class_code"] . "</td>";
+    echo "<td>" . $result[0]["class_name"] . "</td>";
+    echo "<td>" . $result[0]["class_teacher"] . "</td>";
+    echo "<td>" . $result[0]["class_schedule"] . "</td>";
+    echo "<td>" . $result[0]["class_status"] . "</td>";
+    // Button will display same thing as add classes features
+    echo "<td><input type='submit' name='1' value='Edit'></td></tr>";
+    echo "</form>";
+  }
 }
 
-function displayClassWithIns($result){
-    for($i = 0; $i < count($result); $i++){
+function displayClassWithCName($result)
+{
+
+  if (isset($_GET["paging"])) {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+  } else {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+  }
+
+  if ($_GET['adminBtn'] == "Class List") {
+    echo "<form action='{$urlForm}' method=post>";
+    echo "<tr><td>" . $result[0]["class_code"] . "</td>";
+    echo "<td>" . $result[0]["class_name"] . "</td>";
+    echo "<td>" . $result[0]["class_teacher"] . "</td>";
+    echo "<td>" . $result[0]["class_schedule"] . "</td>";
+    echo "<td>" . $result[0]["class_status"] . "</td>";
+    // Button will display same thing as add classes features
+    echo "</form>";
+  } else {
+    echo "<form action='{$urlForm}' method=post>";
+    echo "<tr><td>" . $result[0]["class_code"] . "</td>";
+    echo "<td>" . $result[0]["class_name"] . "</td>";
+    echo "<td>" . $result[0]["class_teacher"] . "</td>";
+    echo "<td>" . $result[0]["class_schedule"] . "</td>";
+    echo "<td>" . $result[0]["class_status"] . "</td>";
+    // Button will display same thing as add classes features
+    echo "<td><input type='submit' name='1' value='Edit'></td></tr>";
+    echo "</form>";
+  }
+}
+
+function displayClassWithIns($result)
+{
+  if (isset($_GET["paging"])) {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+  } else {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+  }
+
+  if ($_GET['adminBtn'] == "Class List") {
+    echo "<form action='{$urlForm}' method=post>";
+    for ($i = 0; $i < count($result); $i++) {
       echo "<tr><td>" . $result[$i]["class_code"] . "</td>";
-      echo "<td>". $result[$i]["class_name"] . "</td>";
+      echo "<td>" . $result[$i]["class_name"] . "</td>";
       echo "<td>" . $result[$i]["class_teacher"] . "</td>";
       echo "<td>" . $result[$i]["class_schedule"] . "</td>";
       echo "<td>" . $result[$i]["class_status"] . "</td>";
       // Button will display same thing as add classes features
-      echo "<td><button>Edit</button></td></tr>";
     }
+    echo "</form>";
+  } else {
+    echo "<form action='{$urlForm}' method=post>";
+    for ($i = 0; $i < count($result); $i++) {
+      echo "<tr><td>" . $result[$i]["class_code"] . "</td>";
+      echo "<td>" . $result[$i]["class_name"] . "</td>";
+      echo "<td>" . $result[$i]["class_teacher"] . "</td>";
+      echo "<td>" . $result[$i]["class_schedule"] . "</td>";
+      echo "<td>" . $result[$i]["class_status"] . "</td>";
+      // Button will display same thing as add classes features
+      echo "<td><input type='submit' name='{$i}' value='Edit'></td></tr>";
+    }
+    echo "</form>";
+  }
 }
-?>

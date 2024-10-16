@@ -1,65 +1,82 @@
 <?php
 
-class ListController extends ClassRm{
+class ListController extends ClassRm
+{
+    public function getAllClass()
+    {
+        $resultArr = $this->getClasses();
 
-      public function getAllClass(){
-          $resultArr = $this->getClasses();
-
-          if(count($resultArr) == 0 || count($resultArr) == null){
-              $_SESSION["msg"] = "Error fetching class";
+        if (count($resultArr) == 0 || count($resultArr) == null) {
+            $_SESSION["msg"] = "NO RECORD FOUND";
             //   header("Location: update-class.php?error=fetchingClassInDbError");
-              //   header("Location: admin-dashboard.php?adminBtn=Update Class");
+            //   header("Location: admin-dashboard.php?adminBtn=Update Class");
 
-              exit();
-          }
+            exit();
+        }
 
-          return $resultArr;
-      }
+        return $resultArr;
+    }
 
-      public function getClassFromCode(){
-          $classCode = $_POST["searchClassCode"];
-          $resultArr = $this->fetchClassFromCode($classCode);
+    public function getClassFromCode()
+    {
+        $classCode = $_POST["searchClassCode"];
+        $resultArr = $this->fetchClassFromCode($classCode);
 
-          if(count($resultArr) == 0 || count($resultArr) == null){
-              $_SESSION["msg"] = "Error fetching class";
+        if (count($resultArr) == 0 || count($resultArr) == null) {
+            $_SESSION["msg"] = "No Record Found";
+            if ($_GET['adminBtn'] == "Class List") {
+                header("Location: admin-dashboard.php?adminBtn=Class List");
+            }else{
+                header("Location: admin-dashboard.php?adminBtn=Update Class");
+            }
             //   header("Location: update-class.php?error=fetchingClassInDbError");
-            header("Location: admin-dashboard.php?adminBtn=Update Class");
-              exit();
-          }
+            
+            exit();
+        }
 
-          return $resultArr;
-      }
+        return $resultArr;
+    }
 
-      public function getClassFromCName(){
-          $className = $_POST["searchClass"];
-          $resultArr = $this->fetchClassFromCName($className);
+    public function getClassFromCName()
+    {
+        $className = $_POST["searchClass"];
+        $resultArr = $this->fetchClassFromCName($className);
 
-          if(count($resultArr) == 0 || count($resultArr) == null){
-              $_SESSION["msg"] = "Error fetching class";
-            //   header("Location: update-class.php?error=fetchingClassInDbError");
-            header("Location: admin-dashboard.php?adminBtn=Update Class");
-              exit();
-          }
+        if (count($resultArr) == 0 || count($resultArr) == null) {
+            $_SESSION["msg"] = "NO RECORD FOUND";
+            if ($_GET['adminBtn'] == "Class List") {
+                header("Location: admin-dashboard.php?adminBtn=Class List");
+            }else{
+                header("Location: admin-dashboard.php?adminBtn=Update Class");
+            }
+            exit();
+        }
 
-          return $resultArr;
-      }
+        return $resultArr;
+    }
 
-      public function getClassFromIns(){
-          $classIns = $_POST["searchClassIns"];
-          $resultArr = $this->fetchClassFromIns($classIns);
+    public function getClassFromIns()
+    {
+        $classIns = $_POST["searchClassIns"];
+        $resultArr = $this->fetchClassFromIns($classIns);
 
-          if(count($resultArr) == 0 || count($resultArr) == null){
-              $_SESSION["msg"] = "Error fetching class";
-            //   header("Location: update-class.php?error=fetchingClassInDbError");
-            header("Location: admin-dashboard.php?adminBtn=Update Class");
-              exit();
-          }
+        if (count($resultArr) == 0 || count($resultArr) == null) {
+            $_SESSION["msg"] = "NO RECORD FOUND";
+            if ($_GET['adminBtn'] == "Class List") {
+                header("Location: admin-dashboard.php?adminBtn=Class List");
+            }else{
+                header("Location: admin-dashboard.php?adminBtn=Update Class");
+            }
+            exit();
+        }
 
-          return $resultArr;
-      }
+        return $resultArr;
+    }
 
-      public function countClass(){
-          return $this->fetchTotalClass();
-      }
+    public function countClass()
+    {
+        return $this->fetchTotalClass();
+    }
+
 
 }
