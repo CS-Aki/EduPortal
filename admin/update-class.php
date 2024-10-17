@@ -4,25 +4,17 @@ require_once("classes/model.ClassRm.php");
 require_once("classes/controller.Admin.php");
 require_once("classes/controller.ClassRm.php");
 require_once("classes/controller.Lists.php");
-include("includes/update.inc.php");
+require_once("includes/update.inc.php");
 require_once("includes/class-list.inc.php");
 require_once("includes/search.inc.php");
 require_once("includes/ses-message.inc.php");
 require_once("includes/paging.inc.php");
+// require_once("includes/edit-init.inc.php");
 // echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
 
 // // echo $_SESSION['classNumber'];
 
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8">
-  <title></title>
-</head>
 
 <style media="screen">
   body {
@@ -72,95 +64,204 @@ require_once("includes/paging.inc.php");
   }
 </style>
 
-<body>
+<?php
+if (isset($_GET["paging"])) {
+  $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+} else {
+  $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+}
 
-  <!-- FINDS THE NUMBER OF EDIT BUTTON CLICKED -->
-  <?php
-  $temp = 20;
-  $j = 0;
-  // echo "test";
+?>
 
-  while ($j < $temp) {
-    if (isset($_POST[$j])) {
-      $temp = $j;
-      $_SESSION['classNumber'] = $temp;
-    //  echo $_SESSION['classNumber'];
-      $_SESSION['show_modal'] = true;
-      echo $_SESSION['show_modal'];
-      // include("edit-pop.php");
-      include("includes/edit-init.inc.php");
-     // header("Location: " . $_SERVER['PHP_SELF'] . "?adminBtn=" . urlencode($_GET["adminBtn"]));
-      break;
-    }
-    $j++;
-  }
-  ?>
+<!-- Edit Modal -->
+<div class="modal fade" id="editClassModal" tabindex="-1" aria-labelledby="editClassModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editClassModalLabel">Edit Class Form</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-  <!-- PHP file for the modal elements -->
-  <?php include("modal.php"); ?>
+      <form action="<?php echo $urlForm; ?>" method="post">
 
-  <!-- Checks if an edit button is already clicked then display the modal pop up -->
-  <script>
-   
-    <?php if (isset($_SESSION['show_modal']) && $_SESSION['show_modal'] === true): ?>
-      <?php ?>
-    
-      var myModal = new bootstrap.Modal(document.getElementById('editClass'), {});
-      console.log("JavaScript is working!");
-      myModal.show();
-      
-      <?php unset($_SESSION['show_modal']); ?>
-    <?php endif; ?>
-  </script>
+        <div class="modal-body">
+           <input type="text" name="classNum" id="class_num" hidden>
+          <div class="form-group">
+            <label>Class Code</label><br>
+            <input type="text" name="class_code" id="classCode" class="form-control" disabled>
+          </div>
 
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
-    <label for="searchClassCode">Search Class</label>
-    <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
-    <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn">
+          <div class="form-group">
+            <label>Class Name</label><br>
+            <input type="text" name="className" placeholder="Enter Class Name" id="className" class="form-control">
+          </div>
 
-    <label for="searchClassBtn">Search Class</label>
-    <input type="text" name="searchClass" placeholder="Enter Class">
-    <input type="submit" name="searchClassBtn" value="Search Class Name" class="btn">
+          <label>Class Schedule:</label>
+          <div class="form-group mb-3">
+            <br>
+            <label>Day</label>
+            <select name="daySched" id="daySched">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
 
-    <label for="searchClassInsBtn">Search Class</label>
-    <input type="text" name="searchClassIns" placeholder="Enter Class Instructor">
-    <input type="submit" name="searchClassInsBtn" value="Search Class Instructor" class="btn">
+            <label>From</label>
+            <select name="startingHourSched" id="startingHourSched">
+              <?php for ($i = 1; $i <= 12; $i++): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>"><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+              <?php endfor; ?>
+            </select>
 
-    <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
-  </form>
+            <select name="startingMinSched" id="startingMinSched">
+              <?php for ($i = 0; $i < 60; $i += 10): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>"><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+              <?php endfor; ?>
+            </select>
 
-  <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
+            <select name="startTimePeriod" id="startTimePeriod">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
 
-  <div class="result-container">
-    <table>
-      <tr>
-        <th>Class Code</th>
-        <th>Class Name</th>
-        <th>Class Instructor</th>
-        <th>Class Schedule</th>
-        <th>Class Status</th>
-        <th>Edit Button</th>
-      </tr>
-      <!-- Prints out the class data from the db -->
-      <?php
-      if ($_SESSION["searchSwitch"] == "all") {
-        fetchAllClasses1();
-      } else if ($_SESSION["searchSwitch"] == "1") {
-        displayClassWithCode($_SESSION["user"]);
-      } else if ($_SESSION["searchSwitch"] == "2") {
-        displayClassWithCName($_SESSION["user"]);
-      } else if ($_SESSION["searchSwitch"] == "3") {
-        displayClassWithIns($_SESSION["user"]);
-      }
-      ?>
-    </table>
+            <label>To</label>
+            <select name="endingHourSched" id="endingHourSched">
+              <?php for ($i = 1; $i <= 12; $i++): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>"><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+              <?php endfor; ?>
+            </select>
+
+            <select name="endingMinSched" id="endingMinSched">
+              <?php for ($i = 0; $i < 60; $i += 10): ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?>"><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></option>
+              <?php endfor; ?>
+            </select>
+
+            <select name="endTimePeriod" id="endTimePeriod">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>Class Status</label>
+            <select name="status" id="status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select><br><br>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>Class Instructor</label><br>
+            <input type="text" name="classProf" placeholder="Assign Class Instructor" id="classInstructor"><br><br>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="editClassBtn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
   </div>
+</div>
 
-  <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev" . "=" . urlencode($_SESSION["counter"]); ?>">Previous</a>
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
+  <label for="searchClassCode">Search Class</label>
+  <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
+  <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn">
 
-  <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=next" . "=" . urlencode($_SESSION["counter"]); ?>">Next</a>
+  <label for="searchClassBtn">Search Class</label>
+  <input type="text" name="searchClass" placeholder="Enter Class">
+  <input type="submit" name="searchClassBtn" value="Search Class Name" class="btn">
+
+  <label for="searchClassInsBtn">Search Class</label>
+  <input type="text" name="searchClassIns" placeholder="Enter Class Instructor">
+  <input type="submit" name="searchClassInsBtn" value="Search Class Instructor" class="btn">
+
+  <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
+</form>
+
+<label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
+
+<div class="result-container">
+  <table>
+    <tr>
+      <th>Class Code</th>
+      <th>Class Name</th>
+      <th>Class Instructor</th>
+      <th>Class Schedule</th>
+      <th>Class Status</th>
+      <th>Edit Button</th>
+    </tr>
+    <!-- Prints out the class data from the db -->
+    <?php
+    if ($_SESSION["searchSwitch"] == "all") {
+      fetchAllClasses1();
+    } else if ($_SESSION["searchSwitch"] == "1") {
+      displayClassWithCode($_SESSION["user"]);
+    } else if ($_SESSION["searchSwitch"] == "2") {
+      displayClassWithCName($_SESSION["user"]);
+    } else if ($_SESSION["searchSwitch"] == "3") {
+      displayClassWithIns($_SESSION["user"]);
+    }
+    ?>
+  </table>
+</div>
+
+<a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev" . "=" . urlencode($_SESSION["counter"]); ?>">Previous</a>
+
+<a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=next" . "=" . urlencode($_SESSION["counter"]); ?>">Next</a>
 
 
-</body>
+<script>
+  $(document).ready(function() {
 
-</html>
+    $('.edit_data').click(function(e) {
+      e.preventDefault();
+      var class_code = $(this).closest('tr').find('.class_code').text();
+      // var btn_num = $(this).closest('tr').find('.btn_num').text();
+     
+      $.ajax({
+        method: "POST",
+        url: "update-class.php",
+        data: {
+          'click_edit_btn': true,
+          'class_code': class_code,
+          // 'btn_num' : btn_num,
+        },
+
+        success: function(response) {
+
+          $.each(response, function(key, value) {
+            $('#class_num').val(value['class_num']);
+            $('#classCode').val(value['class_code']);
+            $('#className').val(value['class_name']);
+            $('#daySched').val(value['daySched']);
+            $('#startingHourSched').val(value['startingHour']);
+            $('#startingMinSched').val(value['startingMin']);
+            $('#startTimePeriod').val(value['startTimePeriod']);
+            $('#endingHourSched').val(value['endingHour']);
+            $('#endingMinSched').val(value['endingMin']);
+            $('#endTimePeriod').val(value['endTimePeriod']);
+            $('#status').val(value['class_status']); 
+            $('#classInstructor').val(value['class_teacher']);
+
+          });
+
+          //   // Parse the JSON response
+          console.log(response);
+          // //  $('.edit_class_data').html(response);
+          $('#editClassModal').modal('show');
+        }
+      });
+
+    });
+
+  });
+</script>

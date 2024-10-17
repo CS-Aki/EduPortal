@@ -1,64 +1,45 @@
 <?php
-$sched = $_SESSION['list'][$_SESSION['classNumber']]['class_schedule'];
-$daySched = "";
-$startingHour = "";
-$startingMin = "";
-$startingPeriod = "";
-$endingHour = "";
-$endingMin = "";
-$endingPeriod = "";
 
-$len = mb_strlen($sched);
-
-echo "<br>";
-$last = strpos($sched, ")");
-$divider = strpos($sched, ":");
-$timeDivider = strpos($sched, "-");
-$startOfEnd = false;
-// echo "The divider " . $divider;
-//   echo $last;
-$sHourValid = true;
-$sMinValid = true;
-$eHourValid = true;
-$eMinValid = true;
-
-for ($i = 1; $i < $len; $i++) {
-    if ($i < $last) $daySched .= mb_substr($sched, $i, 1);
-
-    if ($i == $divider) $sHourValid = false;
-
-    if ($i > $last + 1 && $sHourValid) $startingHour .= mb_substr($sched, $i, 1);
-    // echo (mb_substr($sched, $i, 1) . " ");
-
-    if (mb_substr($sched, $i, 1) == "P" || mb_substr($sched, $i, 1) == "A") $sMinValid = false;
-
-    if ($i > $divider && $sMinValid == true) $startingMin .= mb_substr($sched, $i, 1);
-
-    if ($sMinValid == false && $i < $timeDivider) $startingPeriod .= mb_substr($sched, $i, 1);
-
-    if (mb_substr($sched, $i, 1) == "-") {
-        $startOfEnd = true;
-        continue;
+function getScheduleData() {
+    $sched = $_SESSION['list'][0]['class_schedule'];
+   
+    // echo var_dump($sched);
+    
+    // Initialize variables for schedule details
+    $daySched = "";
+    $startingHour = "";
+    $startingMin = "";
+    $startingPeriod = "";
+    $endingHour = "";
+    $endingMin = "";
+    $endingPeriod = "";
+    
+    // Use regex to extract day, start time, and end time from the schedule
+    $pattern = "/\((.*?)\)\s(\d{1,2}):(\d{2})\s([AP]M)-(\d{1,2}):(\d{2})\s([AP]M)/";
+    
+    // Example: "(Thursday) 10:00 AM-04:00 PM"
+    if (preg_match($pattern, $sched, $matches)) {
+        $daySched = $matches[1];         // 'Thursday'
+        $startingHour = $matches[2];     // '10'
+        $startingMin = $matches[3];      // '00'
+        $startingPeriod = $matches[4];   // 'AM'
+        $endingHour = $matches[5];       // '04'
+        $endingMin = $matches[6];        // '00'
+        $endingPeriod = $matches[7];     // 'PM'
     }
-
-    if ($startOfEnd == true) {
-        if (mb_substr($sched, $i, 1) != ":" && $eHourValid == true) $endingHour .= mb_substr($sched, $i, 1);
-
-        if (mb_substr($sched, $i, 1) == ":" && $eHourValid == true) $eHourValid = false;
-
-        if (mb_substr($sched, $i, 1) == "P" || mb_substr($sched, $i, 1) == "A") $eMinValid = false;
-
-        if ($eHourValid == false && mb_substr($sched, $i, 1) != ":" && $eMinValid == true) $endingMin .= mb_substr($sched, $i, 1);
-
-        if ($eMinValid == false) $endingPeriod .= mb_substr($sched, $i, 1);
-    }
+    
+    // Output extracted values
+    // echo "Day: $daySched\n";
+    // echo "Start Time: $startingHour:$startingMin $startingPeriod\n";
+    // echo "End Time: $endingHour:$endingMin $endingPeriod\n";
+    
+    return array(
+        "daySched" => $daySched,
+        "startingHour" => $startingHour,
+        "startingMin" => $startingMin,
+        "startTimePeriod" => $startingPeriod,
+        "endingHour" => $endingHour,
+        "endingMin" =>  $endingMin,
+        "endTimePeriod" => $endingPeriod
+    );
 }
-
-
-// echo "The Day " . $day;
-// echo "<br>The starting hour " . $startingHour;
-// echo "<br>The starting min " . $startingMin;
-// echo "<br>The starting period " . $startingPeriod;
-// echo "<br>The ending hour " . $endingHour;
-// echo "<br>The ending min " . $endingMin;
-// echo "<br>The ending period " . $endingPeriod;

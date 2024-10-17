@@ -66,15 +66,15 @@ function fetchAllClasses1()
   } else {
 
     for ($i = 0; $i < count($listOfClasses); $i++) {
-      echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
-      echo "<td>" . $listOfClasses[$i]["class_name"] . "</td>";
-      echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
-      echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
-      echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
+      echo "<tr><td class='class_code'>" . $listOfClasses[$i]["class_code"] . "</td>";
+      // echo "<tr><td class='btn_num'>" . $i . "</td>";
+      echo "<td class='class_name'>" . $listOfClasses[$i]["class_name"] . "</td>";
+      echo "<td class='class_teacher'>" . $listOfClasses[$i]["class_teacher"] . "</td>";
+      echo "<td class='class_schedule'>" . $listOfClasses[$i]["class_schedule"] . "</td>";
+      echo "<td class_status>" . $listOfClasses[$i]["class_status"] . "</td>";
       // Button will display same thing as add classes features
-      echo "<td><a href='' class='btn btn-success btn-sm'>Edit</a></td></tr>";
+      echo "<td><a href='#' class='btn btn-success btn-sm edit_data'>Edit</a></td></tr>";
     }
-
   }
 }
 
@@ -172,4 +172,31 @@ function displayClassWithIns($result)
     }
     echo "</form>";
   }
+}
+
+
+if (isset($_POST['click_edit_btn'])) {
+ 
+  $classCode = $_POST['class_code'];
+  $listController = new ListController();
+  $listOfClasses = $listController->getClassFromCode();
+  $_SESSION["list"] = $listOfClasses;
+//  echo $listOfClasses[0]["class_num"];
+  //$_SESSION['classNumber'] = 1;
+  $sched = $listController->getSched();
+ 
+  $listOfClasses[0]["daySched"] = $sched["daySched"];
+  $listOfClasses[0]["startingHour"] = $sched["startingHour"];
+  $listOfClasses[0]["startingMin"] = $sched["startingMin"];
+  $listOfClasses[0]["startTimePeriod"] = $sched["startTimePeriod"];
+  $listOfClasses[0]["endingHour"] = $sched["endingHour"];
+  $listOfClasses[0]["endingMin"] = $sched["endingMin"];
+  $listOfClasses[0]["endTimePeriod"] = $sched["endTimePeriod"];
+
+  $_SESSION["list"] = $listOfClasses;
+  
+  header('content-type: application/json');
+  echo json_encode($listOfClasses);
+
+  exit();
 }

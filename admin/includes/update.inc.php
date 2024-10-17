@@ -13,13 +13,12 @@ if (isset($_POST['backBtn'])) {
     exit();
 }
 
-
 if (isset($_POST["editClassBtn"])) {
-    $classCode = $_SESSION['list'][$_SESSION['classNumber']]['class_code'];
-    // $className = $_SESSION['list'][$_SESSION['classNumber']]['class_name'];
-    // $classSched = $_SESSION['list'][$_SESSION['classNumber']]['class_schedule'];
-    // $classProf = $_SESSION['list'][$_SESSION['classNumber']]['class_teacher'];
-    // $status = $_SESSION['list'][$_SESSION['classNumber']]['class_status'];
+    $num = $_POST['classNum'];
+    $classCode = $_SESSION['list'][$num -  $_SESSION["min"] - 1]['class_code'];
+    // echo  $_SESSION['list'][$num -  $_SESSION["min"] - 1]['class_code'];
+    $_SESSION['num'] = $num -  $_SESSION["min"] - 1;
+    // echo $classCode;
 
     $className = $_POST["className"];
     $classSchedule = array(

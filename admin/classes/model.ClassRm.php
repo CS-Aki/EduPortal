@@ -55,7 +55,7 @@ class ClassRm extends DbConnection
 
     protected function fetchClassFromCode($classCode)
     {
-        $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_code = ?";
+        $sql = "SELECT class_num, class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_code = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$classCode]);
 

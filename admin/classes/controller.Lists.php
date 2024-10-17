@@ -19,7 +19,7 @@ class ListController extends ClassRm
 
     public function getClassFromCode()
     {
-        $classCode = $_POST["searchClassCode"];
+        $classCode = $_POST["class_code"];
         $resultArr = $this->fetchClassFromCode($classCode);
 
         if (count($resultArr) == 0 || count($resultArr) == null) {
@@ -76,6 +76,11 @@ class ListController extends ClassRm
     public function countClass()
     {
         return $this->fetchTotalClass();
+    }
+
+    public function getSched(){
+        include("../admin/includes/edit-init.inc.php");
+        return getScheduleData();
     }
 
 
