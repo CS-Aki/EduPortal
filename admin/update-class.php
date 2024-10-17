@@ -84,9 +84,12 @@ require_once("includes/paging.inc.php");
     if (isset($_POST[$j])) {
       $temp = $j;
       $_SESSION['classNumber'] = $temp;
-      // echo $_SESSION['classNumber'];
+    //  echo $_SESSION['classNumber'];
       $_SESSION['show_modal'] = true;
+      echo $_SESSION['show_modal'];
+      // include("edit-pop.php");
       include("includes/edit-init.inc.php");
+     // header("Location: " . $_SERVER['PHP_SELF'] . "?adminBtn=" . urlencode($_GET["adminBtn"]));
       break;
     }
     $j++;
@@ -98,11 +101,14 @@ require_once("includes/paging.inc.php");
 
   <!-- Checks if an edit button is already clicked then display the modal pop up -->
   <script>
+   
     <?php if (isset($_SESSION['show_modal']) && $_SESSION['show_modal'] === true): ?>
       <?php ?>
+    
       var myModal = new bootstrap.Modal(document.getElementById('editClass'), {});
+      console.log("JavaScript is working!");
       myModal.show();
-
+      
       <?php unset($_SESSION['show_modal']); ?>
     <?php endif; ?>
   </script>
@@ -138,7 +144,7 @@ require_once("includes/paging.inc.php");
       <!-- Prints out the class data from the db -->
       <?php
       if ($_SESSION["searchSwitch"] == "all") {
-        fetchAllClasses();
+        fetchAllClasses1();
       } else if ($_SESSION["searchSwitch"] == "1") {
         displayClassWithCode($_SESSION["user"]);
       } else if ($_SESSION["searchSwitch"] == "2") {

@@ -39,6 +39,45 @@ function fetchAllClasses()
   }
 }
 
+function fetchAllClasses1()
+{
+  $listController = new ListController();
+  $listOfClasses = $listController->getAllClass();
+  $_SESSION["list"] = $listOfClasses;
+
+  //Used for displaying list of classes from the database into the client
+  if (isset($_GET["paging"])) {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
+  } else {
+    $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
+  }
+
+  if ($_GET['adminBtn'] == "Class List") {
+    echo "<form id='editForm' action='{$urlForm}' method=post>";
+    for ($i = 0; $i < count($listOfClasses); $i++) {
+      echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_name"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
+      // Button will display same thing as add classes features
+    }
+    echo "</form>";
+  } else {
+
+    for ($i = 0; $i < count($listOfClasses); $i++) {
+      echo "<tr><td>" . $listOfClasses[$i]["class_code"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_name"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_teacher"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_schedule"] . "</td>";
+      echo "<td>" . $listOfClasses[$i]["class_status"] . "</td>";
+      // Button will display same thing as add classes features
+      echo "<td><a href='' class='btn btn-success btn-sm'>Edit</a></td></tr>";
+    }
+
+  }
+}
+
 function displayClassWithCode($result)
 {
 

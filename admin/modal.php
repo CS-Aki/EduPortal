@@ -4,8 +4,9 @@
     } else {
         $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]);
     }
+    
     ?>
-
+  
   <div class="modal fade" id="editClass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editClassLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -73,8 +74,6 @@
                           </select>
                       </div>
 
-
-
                       <div class="form-group">
                           <label>Class Status</label>
                           <select name="status" id="status">
@@ -95,6 +94,7 @@
                       <button type="submit" class="btn btn-primary" name="editClassBtn">Update Class</button>
                   </div>
               </form>
+
           </div>
       </div>
   </div>
