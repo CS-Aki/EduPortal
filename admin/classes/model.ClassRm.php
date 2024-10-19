@@ -73,10 +73,13 @@ class ClassRm extends DbConnection
 
     protected function fetchClassFromIns($classIns)
     {
+        $min = (int) $_SESSION["min"];
+        $max = (int) $_SESSION["max"];  
+
         $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_teacher = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$classIns]);
-
+        // $stmt->execute([$_SESSION["min"], $_SESSION["max"]]);
         return $class = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -72,7 +72,7 @@ require_once("includes/prof-list.inc.php");
 </style>
 
 <body>
-
+  
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
     <input type="text" name="searchClassInstructor" placeholder="Enter Class Instructor">
     <input type="submit" name="searchClassInstructorBtn" value="Search Class Instructor" class="btn">

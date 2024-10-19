@@ -10,9 +10,7 @@ require_once("includes/search.inc.php");
 require_once("includes/ses-message.inc.php");
 require_once("includes/paging.inc.php");
 // require_once("includes/edit-init.inc.php");
-// echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
-
-// // echo $_SESSION['classNumber'];
+echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
 
 ?>
 
@@ -88,7 +86,7 @@ if (isset($_GET["paging"])) {
            <input type="text" name="classNum" id="class_num" hidden>
           <div class="form-group">
             <label>Class Code</label><br>
-            <input type="text" name="class_code" id="classCode" class="form-control" disabled>
+            <input type="text" name="class_code" id="classCode" class="form-control" readonly>
           </div>
 
           <div class="form-group">
@@ -171,23 +169,39 @@ if (isset($_GET["paging"])) {
   </div>
 </div>
 
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
-  <label for="searchClassCode">Search Class</label>
-  <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
-  <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn">
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="post">
+  <label for="searchClassCode" class="search_value">Search Class Code</label>
+  <input type="text" name="class_code" class="search_value" placeholder="Enter Class Code" value="<?php  ?>">
+  <input type="submit" name="searchClassCodeBtn" class="search_btn" value="Search Class Code" >
 
-  <label for="searchClassBtn">Search Class</label>
-  <input type="text" name="searchClass" placeholder="Enter Class">
-  <input type="submit" name="searchClassBtn" value="Search Class Name" class="btn">
+  <label for="searchClassBtn" class="search_value">Search Class Name</label>
+  <input type="text" name="searchClass" class="search_value" placeholder="Enter Class">
+  <input type="submit" name="searchClassBtn" class="search_btn" value="Search Class Name" >
 
-  <label for="searchClassInsBtn">Search Class</label>
+  <label for="searchClassInsBtn" class="search_value">Search Class Instructor</label>
   <input type="text" name="searchClassIns" placeholder="Enter Class Instructor">
-  <input type="submit" name="searchClassInsBtn" value="Search Class Instructor" class="btn">
+  <input type="submit" name="searchClassInsBtn" class="search_btn" value="Search Class Instructor">
 
   <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
 </form>
 
 <label for="msg" id="msg"><?php displaySessionMessage("msg", 1); ?></label>
+
+<?php 
+
+if (isset($_GET["searchBtn"])) {
+  switch ($_GET["searchBtn"]) {
+      case "Search Class Code":
+          break;
+      case "Search Class Name":
+          break;
+      case "Search Class Instructor":
+         include("update-class.php");
+         break;
+  }
+}
+?>
+
 
 <div class="result-container">
   <table>
@@ -202,7 +216,7 @@ if (isset($_GET["paging"])) {
     <!-- Prints out the class data from the db -->
     <?php
     if ($_SESSION["searchSwitch"] == "all") {
-      fetchAllClasses1();
+      fetchAllClasses();
     } else if ($_SESSION["searchSwitch"] == "1") {
       displayClassWithCode($_SESSION["user"]);
     } else if ($_SESSION["searchSwitch"] == "2") {
@@ -218,14 +232,12 @@ if (isset($_GET["paging"])) {
 
 <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=next" . "=" . urlencode($_SESSION["counter"]); ?>">Next</a>
 
-
 <script>
   $(document).ready(function() {
 
     $('.edit_data').click(function(e) {
       e.preventDefault();
       var class_code = $(this).closest('tr').find('.class_code').text();
-      // var btn_num = $(this).closest('tr').find('.btn_num').text();
      
       $.ajax({
         method: "POST",
@@ -233,7 +245,6 @@ if (isset($_GET["paging"])) {
         data: {
           'click_edit_btn': true,
           'class_code': class_code,
-          // 'btn_num' : btn_num,
         },
 
         success: function(response) {
@@ -257,7 +268,7 @@ if (isset($_GET["paging"])) {
           //   // Parse the JSON response
           console.log(response);
           // //  $('.edit_class_data').html(response);
-          $('#editClassModal').modal('show');
+         $('#editClassModal').modal('show');
         }
       });
 

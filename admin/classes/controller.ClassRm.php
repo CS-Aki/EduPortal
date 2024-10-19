@@ -151,8 +151,12 @@ class ClassRmController extends ClassRm
         $result = $this->editClassInfo($this->classCode, $this->className, $fullSched, $this->classProf, $this->status);
         if ($result == true) {
             $_SESSION["msg"] = "Edit Successfully";
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
         } else {
             $_SESSION["msg"] = "Edit Failed";
+            header("Location: admin-dashboard.php?adminBtn=Update Class");
+            exit();
         }
     }
 
@@ -199,9 +203,13 @@ class ClassRmController extends ClassRm
         // echo $this->classSchedule["endingHour"] . " " . $this->classSchedule["startingHour"] . "<br>";
         // echo $this->classSchedule["endingMin"] . " " . $this->classSchedule["startingMin"] . "<br>";
 
-        if ($this->classSchedule["startTimePeriod"] == $this->classSchedule["endTimePeriod"]) {
-            if ($this->classSchedule["endingHour"] <= $this->classSchedule["startingHour"] || $this->classSchedule["endingMin"] < $this->classSchedule["startingMin"]) {
-                return true;
+        if($this->classSchedule["startTimePeriod"] == $this->classSchedule["endTimePeriod"]){
+            if($this->classSchedule["startingHour"] > $this->classSchedule["endingHour"]){
+               return true;
+            }else if($this->classSchedule["startingHour"] == $this->classSchedule["endingHour"]){
+                if($this->classSchedule["startingMin"] >= $this->classSchedule["endingMin"]){
+                    return true;
+                }
             }
         }
 

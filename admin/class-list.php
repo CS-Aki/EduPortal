@@ -69,17 +69,13 @@ require_once("includes/paging.inc.php");
 
 <body>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
-        <label for="searchClassCode">Search Class</label>
+        <label for="searchClassCode">Search Class Code</label>
         <input type="text" name="searchClassCode" placeholder="Enter Class Code" value="<?php  ?>">
         <input type="submit" name="searchClassCodeBtn" value="Search Class Code" class="btn">
 
-        <label for="searchClassBtn">Search Class</label>
+        <label for="searchClassBtn">Search Class Name</label>
         <input type="text" name="searchClass" placeholder="Enter Class">
         <input type="submit" name="searchClassBtn" value="Search Class Name" class="btn">
-
-        <label for="searchClassInsBtn">Search Class</label>
-        <input type="text" name="searchClassIns" placeholder="Enter Class Instructor">
-        <input type="submit" name="searchClassInsBtn" value="Search Class Instructor" class="btn">
 
         <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
     </form>

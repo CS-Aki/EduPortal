@@ -1,5 +1,8 @@
 <?php
 if (session_id() === "") session_start();
+$_SESSION["searchSwitch"] = "all";
+// $_SESSION["n"] += 1;
+// echo "Number: {$_SESSION['n']}<br>";
 
 ?>
 
@@ -11,7 +14,6 @@ if (session_id() === "") session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Side</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 
 <style>
@@ -51,13 +53,13 @@ if (session_id() === "") session_start();
                     include("add-class.php");
                     break;
                 case "Update Class":
-                    include("update-class.php");
+                     include("update-class.php");
                     break;
                     //   case "Archive Class": include("archive-class.php"); break;
                 case "Post Announcement":
                     break;
                 case "Instructor List":
-                    $_SESSION["searchSwitch"] = "all";
+                    
                     include("prof-list.php");
                     break;
                 case "Student List":
