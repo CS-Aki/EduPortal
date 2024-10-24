@@ -24,7 +24,19 @@ class InstructorController extends Instructor
             header("Location: admin-dashboard.php?adminBtn=Instructor List");
             exit();
         }
-
         return $result;
+    }
+
+    public function getAllProfClasses(){
+        $profName = $_POST["user_name"];
+
+        $list = $this->fetchAllProfClass($profName);
+        if($list == 0 || $list == null){
+            echo "Error";
+            return;
+        }
+
+        return $list;
+
     }
 }

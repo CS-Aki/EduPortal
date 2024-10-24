@@ -27,10 +27,6 @@ echo "Min: " . $_SESSION["min"] . " Max: " . $_SESSION["max"];
     margin-top: 10px;
   }
 
-  table {
-    margin-top: 50px;
-  }
-
   table,
   th,
   td {
@@ -202,7 +198,6 @@ if (isset($_GET["searchBtn"])) {
 }
 ?>
 
-
 <div class="result-container">
   <table>
     <tr>
@@ -238,7 +233,7 @@ if (isset($_GET["searchBtn"])) {
     $('.edit_data').click(function(e) {
       e.preventDefault();
       var class_code = $(this).closest('tr').find('.class_code').text();
-     
+       
       $.ajax({
         method: "POST",
         url: "update-class.php",
@@ -265,9 +260,8 @@ if (isset($_GET["searchBtn"])) {
 
           });
 
-          //   // Parse the JSON response
           console.log(response);
-          // //  $('.edit_class_data').html(response);
+   
          $('#editClassModal').modal('show');
         }
       });

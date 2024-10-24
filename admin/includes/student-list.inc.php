@@ -5,7 +5,7 @@ function fetchAllStudent()
     $instController = new InstructorController();
     $instructorList = $instController->getAllProf();
     $_SESSION["list"] = $instructorList;
-
+    
     if (isset($_GET["paging"])) {
         $urlForm = htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]) . "&paging=" . urlencode($_GET["paging"]);
     } else {

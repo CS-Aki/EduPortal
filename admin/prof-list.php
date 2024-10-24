@@ -72,11 +72,10 @@ require_once("includes/prof-list.inc.php");
 </style>
 
 <body>
-  
+
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET["adminBtn"]); ?>" method="POST">
     <input type="text" name="searchClassInstructor" placeholder="Enter Class Instructor">
     <input type="submit" name="searchClassInstructorBtn" value="Search Class Instructor" class="btn">
-
     <input type="submit" name="backBtn" value="Go Back" class="btn"><br>
   </form>
 
@@ -107,6 +106,86 @@ require_once("includes/prof-list.inc.php");
   <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=prev" . "=" . urlencode($_SESSION["counter"]); ?>">Previous</a>
 
   <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?adminBtn=" . urlencode($_GET['adminBtn']) . "&paging=next" . "=" . urlencode($_SESSION["counter"]); ?>">Next</a>
+
+  <!-- View Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">Teacher Profile</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="">
+            <div class="form-group">
+              <label>Class Teacher</label><br>
+              <div name="classProf" id="class_prof" class="form-control"></div>
+            </div>
+           
+            <div>
+              <!-- <label>CLASSES</label> -->
+              <table id="class_list">
+                  
+              </table>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function() {
+
+      $('.view_profile').click(function(e) {
+        e.preventDefault();
+        var user_name = $(this).closest('tr').find('.user_name').text();
+
+        $.ajax({
+          method: "POST",
+          url: "includes/prof-list.inc.php",
+          data: {
+            'click_view_btn': true,
+            'user_name': user_name,
+          },
+
+          success: function(response) {
+              //  $('#class_prof').val(response[0]['class_teacher']);
+            $('#class_prof').empty();
+            $('#class_list').empty();
+            $('#class_list').append("<tr><th colspan='3'>Classes</th></tr>");
+            $('#class_prof').append("<label>"+response[0]['class_teacher'] +"</label>");
+            $('#class_list').append("<tr><th>Class Code </th><th> Class Name </th><th>Class Sched</th></tr>");
+
+            $.each(response, function(key, value) {
+              
+              $('#class_list').append("<tr>");
+              $('#class_list').append("<td>"+value["class_code"]+"</td>");
+              $('#class_list').append("<td>"+value["class_name"]+"</td>");
+              $('#class_list').append("<td>"+value["class_schedule"]+"</td>");
+              // $('#class_list').append("</tr>");
+
+            });
+            $('#class_list').append("</table>");
+            // $('#class_num').val(value['class_num']);
+
+            $('#profileModal').modal('show');
+          }
+        });
+
+      });
+
+    });
+  </script>
+
 </body>
 
 </html>

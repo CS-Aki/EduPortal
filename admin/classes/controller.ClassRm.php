@@ -76,7 +76,6 @@ class ClassRmController extends ClassRm
 
         if ($result == true) {
             $_SESSION["msg"] = "New Class Successfully Added";
-            unset($_SESSION["msg"]);
             unset($_SESSION["className"]);
             unset($_SESSION["classProf"]);
             unset($_SESSION['daySched']);

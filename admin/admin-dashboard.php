@@ -63,6 +63,7 @@ $_SESSION["searchSwitch"] = "all";
                     include("prof-list.php");
                     break;
                 case "Student List":
+                    
                     break;
                 case "Class List":
                     $_SESSION["searchSwitch"] = "all";
