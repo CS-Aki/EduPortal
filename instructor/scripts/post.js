@@ -63,14 +63,14 @@ $(document).ready(function() {
             }
         }
      
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0], pair[1]);
+        // }
 
         if(date == "" && selectedValue != "material"){
             return;
         }
+         console.log($("#fileInput")[0].files.length);
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
@@ -115,7 +115,7 @@ $(document).ready(function() {
                 
                         success: function (response) {
                             console.table("this is ",response);
-                            
+                            console.log("upload");
                             // console.log(response.date);
             
                             var data = {
@@ -139,6 +139,39 @@ $(document).ready(function() {
                 error: function (xhr, status, error) {
                     console.error("Error:", status, error);
                     console.error("Response Text:", xhr.responseText);
+                }
+            });
+        }else{
+            $.ajax({
+                method: "POST",
+                url: "includes/create-post.php",
+                data: { "type": selectedValue,
+                        "title": title,
+                        "desc" : desc,
+                        "date" : date,
+                        "time" : time,
+                        "classCode" : classCode
+                },
+        
+                success: function (response) {
+                    console.table("this is ",response);
+                    console.log("upload");
+                    // console.log(response.date);
+    
+                    var data = {
+                        title : title,
+                        date : response[0]["month"],
+                        classCode : classCode,
+                        postId : md5(response[0]["post_id"]),
+                        contentType : selectedValue
+                    };
+    
+                    socket.emit("serverRcvPost", data);
+    
+                    $(".form-message").html("Post Success");
+                    $('#title').val("");
+                    $('#description').val("");
+                    $('#fileInput').val("");
                 }
             });
         }

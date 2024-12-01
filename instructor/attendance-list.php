@@ -145,8 +145,11 @@ if(isset($_SESSION["user_category"])){
     </div>
     <br><br><br>
     <br><br><br>
+    
+    <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
 
     <script>
+
         function getSelectedVal(){
         var ID={};
         ID.values=[];
@@ -208,6 +211,17 @@ if(isset($_SESSION["user_category"])){
         }
 
         $(document).ready(function() { 
+            const socket = io("https://eduportal-wgrc.onrender.com", {
+                transports: ["websocket"] // Ensure WebSocket transport
+            });
+            
+            socket.on('connect_error', (err) => {
+                console.error("Connection error:", err);
+            });
+            
+            socket.on('connect', () => {
+                console.log('Connected to Socket.IO server');
+            });
 
             $("#attendanceForm").submit(function (event) {
                 event.preventDefault();
