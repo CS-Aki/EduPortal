@@ -1,0 +1,261 @@
+:root {
+    --green1: #219E53;
+    --green2: #56B37B;
+    --green3: #8AC9A3;
+    --green1_hover: #208046;
+    --black1: #3D363D;
+    --black2: #6B656B;
+    --black3: #989598;
+    --white1: #FFFFFF;
+    --white2: #FCFCFC;
+    --white3: #EEEEEE;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif; /* Apply default font to the body */
+}
+
+
+.green1 {
+    color: var(--green1);
+}
+.green2 {
+    color: var(--green2);
+}
+.green3 {
+    color: var(--green3);
+}
+
+.black1 {
+    color: var(--black1);
+}
+.black2 {
+    color: var(--black2);
+}
+.black3 {
+    color: var(--black3);
+}
+
+.white1 {
+    color: var(--white1);
+}
+.white2 {
+    color: var(--white2);
+}
+.white3 {
+    color: var(--white3);
+}
+
+.green {
+    background-color: var(--green1);
+}
+
+.green:hover {
+    background-color: var(--green1_hover);
+}
+
+.greenicon {
+    color: var(--green1);
+    background-color: transparent;
+}
+
+.greentoggle{
+    color: var(--green1);
+    background-color: transparent;
+}
+
+.card {
+    width: 100%;
+}
+
+.greenicon:hover {
+    color: #F1F1F1;
+}
+
+.shadow-elevation-light-3 {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
+}
+
+a {
+    text-decoration: none;
+}
+
+.icon {
+    color: var(--green1);
+}
+
+button {
+    color: white !important;
+    font-family: 'Source Sans 3', sans-serif !important;
+    font-weight: bold !important;
+}
+
+.h-font {
+    font-family: 'Source Sans 3', cursive;
+    font-weight: bold;
+}
+
+.i-font {
+    font-family: 'Inter', cursive;
+    font-weight: bold;
+}
+
+.logo {
+    max-width: 200px;
+    max-height: 81px;
+}
+
+.content {
+    background-color: black;
+}
+
+.line {
+    border-bottom: 1px solid var(--green1);
+}
+
+.line-h {
+    flex-grow: 1;
+    height: 1px; /* Adjust the height (thickness) of the line */
+    background-color: var(--green3); /* Use your desired color */
+    margin-left: 10px; /* Optional: Space between heading and line */
+ 
+}
+
+/* Sidebar Styles */
+#sidebar-menu {
+    background-color: #F1F1F1;
+    height: 100%;
+    position: fixed;
+    transition: left 0.3s;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+
+/* Remove default styles for <ul> and <li> */
+#sidebar-menu ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+#sidebar-menu li {
+    width: 100%;
+    padding: 5px;
+}
+
+#sidebar-menu ul, 
+#sidebar-menu li, 
+#sidebar-menu a {
+    background-color: transparent; 
+    font-weight: bold;
+    color: var(--green1);
+    text-decoration: none;
+}
+
+#sidebar-menu li:hover {
+    cursor: pointer;
+    background-color: var(--green1);
+    color: #F1F1F1;
+}
+
+#sidebar-menu li:hover a {
+    color: #F1F1F1; /* Text turns white on hover */
+}
+
+#sidebar-menu li:hover ul {
+    background-color: var(--green1); /* Submenu background color on hover */
+}
+
+#sidebar-menu li:hover .greenicon {
+    color: #F1F1F1; /* Icon turns white on hover */
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+    #sidebar {
+        height: auto;
+        width: 100%;
+    }
+    #main-content {
+        margin-top: 80px;
+    }
+}
+
+.toggle-btn {
+    cursor: pointer;
+}
+
+.accordion {
+    list-style-type: none; /* Removes bullets */
+    padding: 0;  
+
+    background-color: transparent; /* Removes default padding */
+}
+
+.accordion-button {
+    background-color: transparent; /* Removes default padding */
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: transparent; /* Keep expanded button background transparent */
+    color: var(--green1); /* Optional: Use your desired text color */
+}
+
+.accordion-button.collapsed{
+    background-color: transparent; /* Keep expanded button background transparent */
+    color: var(--green1); /* Optional: Use your desired text color */
+}
+
+
+.accordion-button:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Example hover effect */
+}
+.accordion-item {
+    background-color: transparent; /* Removes default padding */
+    margin: 0;
+}
+.accordion-header {
+    font-size: 1.9rem;
+    background-color: transparent;
+    color: var(--green1);
+}
+
+#folder {
+    font-size: 1.7rem;
+    background-color: transparent;
+    color: var(--green1);
+}
+
+#class{
+    font-size: 1.4rem;
+    background-color: transparent;
+    color: var(--green1);
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+#flush-collapseTwo {
+    font-size: 1.9rem;
+    margin-left: 40px;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 992px) {
+    #sidebar-menu {
+        height: auto;
+        width: 100%;
+    }
+    #main-content {
+        margin-top: 80px;
+
+    }
+}

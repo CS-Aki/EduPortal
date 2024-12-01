@@ -1,0 +1,99 @@
+:root {
+    --green1: #219E53;
+    --green2: #56B37B;
+    --green3: #8AC9A3;
+    --green1_hover: #208046;
+    --black1: #3D363D;
+    --black2: #6B656B;
+    --black3: #989598;
+    --white1: #FFFFFF;
+    --white2: #FCFCFC;
+    --white3: #EEEEEE;
+}
+
+.modal-content {
+    border-radius: 40px !important; /* You can change 20px to your preferred radius */
+}
+.green1 {
+    color: var(--green1) !important;
+}
+.green2 {
+    color: var(--green2);
+}
+.green3 {
+    color: var(--green3);
+}
+
+.black1 {
+    color: var(--black1);
+}
+.black2 {
+    color: var(--black2);
+}
+.black3 {
+    color: var(--black3);
+}
+
+.white1 {
+    color: var(--white1);
+}
+.white2 {
+    color: var(--white2);
+}
+.white3 {
+    color: var(--white3);
+}
+
+.green {
+    background-color: var(--green1);
+}
+
+.green:hover {
+    background-color: var(--green1_hover);
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font: "Inter", sans-serif;
+}
+
+.line {
+    height: 1px; /* Adjust the height (thickness) of the line */
+    background-color: var(--black3); /* Use your desired color */
+}
+
+li, a {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 20px;
+}
+
+button {
+    color: white !important;
+    font-family: 'Source Sans 3', sans-serif !important;
+    font-weight: bold !important;
+
+}
+
+.h-font {
+    font-family: 'Source Sans 3', cursive;
+    font-weight: bold;
+    color: var(--green1);
+}
+
+.h-font2 {
+    font-family: 'Source Sans 3', cursive;
+    font-weight: 800px;
+}
+
+.logo {
+    max-width: 200px;
+    max-height: 81px;
+
+}
+
+.navbar {
+    max-height: 143px;
+}
+
