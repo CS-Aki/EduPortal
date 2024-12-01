@@ -27,8 +27,95 @@
     </div>
 </nav>
 
+
 <!-- Sign Up Modal -->
 <div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg w-70">
+        <div class="modal-content rounded-pill p-2">
+            <div class="modal-body">
+                <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
+                    <h1 class="modal-title fs-1 h-font" id="staticBackdropLabel">Sign Up</h1>
+                    <button type="button" id="close_btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <form action="log and reg backend/includes/register.inc.php" class="row g-3 needs-validation" novalidate method="post" id="signUpForm">
+                    <div class="container-fluid">
+                        <div class="row mb-1">
+                            <div class="col-lg-4">
+                                <label class="form-label black2 mb-0 ">First Name</label>
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" required value="<?php if (isset($_SESSION['google_name'])) {
+                                                                                                                                                                                echo $_SESSION['google_name'];
+                                                                                                                        } ?>">
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label black2 mb-0">Last Name</label>
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" required>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label black2 mb-0">Middle Name (optional)</label>
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Middle Name" name="middleName" id="middle_name">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-6">
+                                <label class="form-label black2 mb-0">Email</label>
+                                <input type="email" class="form-control black2 shadow-sm" placeholder="Enter Email" name="email" id="email" required value="<?php if (isset($_SESSION['google_email'])) {
+                                                                                                                                                                echo $_SESSION['google_email'];
+                                                                                                                                } ?>">
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label black2 mb-0">Date of Birth</label>
+                                <input type="date" class="form-control black2 shadow-sm" value="" name="dateOfBirth" id="date_of_birth"  max="<?= date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label black2 mb-0">Gender</label>
+                                <select class="form-select shadow-elevation-light-3 black2" id="gender" required>
+                                    <option value="blank"></option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Rather not say">Rather not say</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-12 mb-1">                                                                                                                                 
+                                <label class="form-label black2 mb-0">Address</label>
+                                <textarea class="form-control black2 container-fluid shadow-sm" resize: none; rows="2" aria-label="With textarea" placeholder="Enter Address" id="address" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-6 mb-1">
+                                <label class="form-label black2 mb-0">Password</label>
+                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                            </div>
+                            <div class="col-lg-6 mb-1">
+                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center align-content-center mt-3">
+                            <p class="black3">Already have an account?</p> <a data-target="#signInModal" data-bs-toggle="modal" href="#signInModal" class="green2 fs-6 ms-2" id="goSignIn">Sign in</a>
+                        </div>
+                        <div class="justify-content-center">
+                            <button type="submit" name="registerBtn" id="register_btn" class="w-100 btn green shadow-none rounded-5 px-5 py-2">Sign Up</button>
+                        </div>
+                        <div class="col-12 mb-1 d-flex justify-content-center align-items-center">
+                            <div class="w-25 line"></div>
+                            <p class="black3 mx-3 mt-1">or</p>
+                            <div class="w-25 line"></div>
+                        </div>
+                        <div class="justify-content-center">
+                            <a href="google-oauth.php" class="google-login-btn"><button type="button" class="w-100 btn green shadow-none rounded-5 px-5 py-2"><i class="bi bi-google me-2" hidden></i>Continue with Google</button></a>
+                        </div>                                                                                                                              
+                        <p class="sign-up-msg"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sign Up Modal -->
+<!-- <div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md w-70">
         <div class="modal-content rounded-pill p-2">
             <div class="modal-body">
@@ -89,7 +176,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Sign In Modal -->
 <div class="modal fade" id="signInModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">

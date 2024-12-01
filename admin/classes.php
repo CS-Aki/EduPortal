@@ -330,9 +330,12 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-3">
                                                 <div class="col-lg-12">
                                                     <label class="form-label black3 mb-0">Class Instructor</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="" name="classInstructor" id="create_instructor" required>
-                                                </div>
-                                            </div>
+                                                    <select class="form-select shadow-elevation-light-3 black3" id="create_status">
+                                                            <option value=""></option>
+                                                            <option value="Sir Victor D. Aquino">Sir Victor D. Aquino</option>
+                                                            <option value="Christian Mojica">Christian Mojica</option>
+                                                        </select>                                                </div>
+                                                 </div>
                                             <div class="row mb-3 mt-2 align-items-center">
                                                 <label class="form-label black3 mb-0">Schedule</label>
                                                     <div class="col-lg-1">

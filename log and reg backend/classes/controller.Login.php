@@ -30,6 +30,17 @@ class LoginController extends User{
             exit();
         }
 
+        if($this->isUserActive($this->email) == false){
+            echo "<div class='alert alert-danger' role='alert'>";
+            echo "<span>User Account Suspended!</span>";
+            echo "</div>";
+            // $_SESSION["msg"] = "Invalid Email Format";
+            // header("Location: index.php?error=invalidEmail");
+            exit();
+        }
+
+
+
         $user = $this->isUserCredentialCorrect($this->email, $this->password);
         $_SESSION["msg"] = "Logged In";
         $num = $user[0]["user_id"];

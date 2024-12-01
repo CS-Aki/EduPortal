@@ -4,22 +4,29 @@ class StudentController extends ClassRm{
     public function joinClass($classCode){
     
         if(strlen($classCode) != 8){
-            echo "<div class='alert alert-danger' role='alert'>";
+            echo "<br><div class='alert alert-danger' role='alert'>";
             echo "<span>Code Must be 8 Letters Long!</span>";
             echo "</div>";
             return;
         }
         
         if($this->isClassCodeExist($classCode) == false){
-            echo "<div class='alert alert-danger' role='alert'>";
+            echo "<br><div class='alert alert-danger' role='alert'>";
             echo "<span>Class Not Found!</span>";
             echo "</div>";
             return;
         }
 
         if($this->alreadyInClass($classCode, $_SESSION['user_id']) == true){
-            echo "<div class='alert alert-danger' role='alert'>";
+            echo "<br><div class='alert alert-danger' role='alert'>";
             echo "<span>You are already in this class</span>";
+            echo "</div>";
+            return;
+        }
+
+        if($this->isClassActive($classCode) == false){
+            echo "<br><div class='alert alert-danger' role='alert'>";
+            echo "<span>Class Not Available!</span>";
             echo "</div>";
             return;
         }

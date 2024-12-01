@@ -35,22 +35,32 @@ $(document).ready(function() {
         event.preventDefault();
 
         var firstName = $("#first_name").val();
+        var middleName = $("#middle_name").val();
+        var birthdate = $("#date_of_birth").val();
         var lastName = $("#last_name").val();
+        var gender = $("#gender").val();
+        var address = $("#address").val();
         var email = $("#email").val();
         var password = $("#password").val();
         var repeatPass = $("#repeat_pass").val();
         var registerBtn = $("#register_btn").val();
-    
+  
+        console.log(middleName);
+
         $.ajax({
             url: "log%20and%20reg%20backend/includes/register.inc.php",
             type: "POST",
             data: {
                 firstName : firstName,
+                middleName : middleName,
                 lastName : lastName,
                 email: email,
                 password: password,
                 repeatPass : repeatPass,
-                registerBtn: registerBtn
+                registerBtn: registerBtn,
+                birthdate : birthdate,
+                gender : gender,
+                address : address
             },
             
             success: function(response) {
@@ -59,7 +69,8 @@ $(document).ready(function() {
                 if (response.includes("REGISTRATION SUCCESSFULLY")) {
     
                     $('#signUpForm').removeClass('was-validated');
-                    $("#first_name, #last_name, #email, #password, #repeat_pass").val("");
+                    $("#first_name, #last_name, #middle_name, #email, #password, #repeat_pass, #date_of_birth").val("");
+                    $("#gender").val("blank");
                               
                 }
             },

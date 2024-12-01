@@ -67,9 +67,22 @@
     </div>
 
     <div class="d-flex align-items-center">
+        <?php 
+         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+            $url = "https";
+            } else {
+            $url = "http";
+            }
+        
+            $url .= "://";
+            $url .= $_SERVER['HTTP_HOST'];
+            $url .= $_SERVER['REQUEST_URI'];
+            if($url == "http://localhost/EduPortal/student/student-dashboard.php"){
+        ?>
         <button type="button" class="btn bg-transparent p-0 m-0" data-bs-toggle="modal" data-bs-target="#joinClassModal">
             <i class="bi bi-plus-lg icon fs-1 me-2"></i>
         </button>
+        <?php } ?>
         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <!-- <i class="me-2 bi bi-person-circle fs-1 icon"></i> -->
             <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" style="width: 40px;" class="me-2 bi me-2 rounded pill" id="smolImg"></span> 
@@ -83,6 +96,7 @@
 </div>
 
 <!-- Join Class Modal -->
+
 <div class="modal fade" id="joinClassModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="joinClassLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">

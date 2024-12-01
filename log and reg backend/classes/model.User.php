@@ -5,12 +5,12 @@ class User extends DbConnection
     // Function will take request from controller then interact with db
     // Return the result back to controller
 
-    protected function insertUser($name, $email, $password)
+    protected function insertUser($name, $email, $password, $birthdate, $gender, $address)
     {
-        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`) VALUES (?, ? ,?, ?, ?)";
+        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`, `birthdate`, `gender`, `address`) VALUES (? ,?, ?, ?, ? ,?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png"))) {
+        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png", $birthdate, $gender, $address))) {
             return true;
         } else {
             return false;
@@ -124,6 +124,30 @@ class User extends DbConnection
 
 
         return $listOfClass;
+    }
+
+    protected function isUserActive($email){
+        $sql = "SELECT status FROM users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($email))) {
+                if ($stmt->rowCount() > 0) {
+                   $status = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                   if($status[0]["status"] == "Archived"){
+                      return false;
+                   }else{
+                      return true;
+                   }
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Log the error message
+            echo "Error in isUserActive (User Model): " . $e->getMessage();
+            return false;
+        }
     }
 
     // protected function insertSession($email, $session){

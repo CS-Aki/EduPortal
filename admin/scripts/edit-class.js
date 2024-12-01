@@ -2,7 +2,7 @@ $(document).ready(function() {
     let isChange = false;
     let tempClassName = "";
     var table = $('#myTable').DataTable();
-    
+   
     $(document).on('hidden.bs.modal', '#editClassModal', function () {
         // console.log('Modal is hidden');
         $("#message").empty();

@@ -374,4 +374,28 @@ class ClassRm extends DbConnection
         }
     }
 
+    protected function isClassActive($classCode){
+        $sql = "SELECT class_status FROM classes WHERE class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                if ($stmt->rowCount() > 0) {
+                   $status = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                   if($status[0]["class_status"] == "Archived"){
+                      return false;
+                   }else{
+                      return true;
+                   }
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Log the error message
+            echo "Error in isUserActive (User Model): " . $e->getMessage();
+            return false;
+        }
+    }
+
 }

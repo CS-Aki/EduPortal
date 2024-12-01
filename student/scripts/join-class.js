@@ -5,6 +5,18 @@ $(document).ready(function() {
         $("#class_code").val("");
     });
 
+    $(document).on('hidden.bs.modal', '#joinClassModal', function () {
+        console.log('Modal is hidden');
+        $(".join-class-msg").text("");
+        $("#class_code").val("");
+    });
+
+    $("#joinClassModal").on("shown.bs.modal", function () {
+        // Capture the initial values of modal fields
+        $(".join-class-msg").text("");
+        $("#class_code").val("");
+    });
+
     $("#joinClassForm").submit(function(event) {
         event.preventDefault();
 
