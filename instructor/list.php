@@ -76,7 +76,7 @@ if(isset($_SESSION["user_category"])){
                               for($i = 0 ; $i < count($studentList); $i++){
                                 echo "<div class='d-flex align-items-center mb-2'>
                                      <img src='{$studentList[$i]['image']}' style='width: 40px;' class='rounded-5 me-3'></span>
-                                     <p class='green2 fw-semibold lh-sm m-0 p-0 fs-5' id='student-name'>{$studentList[$i]["name"]} </p>
+                                     <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-5' >{$studentList[$i]["name"]} </p>
                                      </div>";
                               }
                             ?>

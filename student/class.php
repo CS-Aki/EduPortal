@@ -84,7 +84,8 @@ if(isset($_SESSION["user_category"])){
                                     <input class="form-check-input" type="checkbox" id="attendance-toggle">
                                 </div>
                             </div>
-                            <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">View Attendance</button>
+                            <!-- Change element into an unclickable element -->
+                            <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Attendance Status: <br><?php include("student backend/includes/attendance-status.php"); ?></button>
                         </div>
                     </div>
                     <div class="mt-2">

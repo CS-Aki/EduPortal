@@ -91,6 +91,23 @@ class StudentController extends ClassRm{
         return $this->findInstructor($profName);
     }
 
+    public function getAttendance($studentId){
+        date_default_timezone_set('Asia/Manila');
+
+        $currentDate = date("Y-m-d");
+        // echo $currentDate;
+
+        $classCode = $_GET["class"];
+        $status = $this->fetchStudentAttendance($studentId, $classCode, $currentDate);
+
+        if($status == null || count($status) == 0){
+            // echo "Error fetching attendance";
+            return;
+        }
+
+        return $status;
+    }
+
 }
 
 ?>

@@ -393,8 +393,27 @@ class ClassRm extends DbConnection
             }
         } catch (PDOException $e) {
             // Log the error message
-            echo "Error in isUserActive (User Model): " . $e->getMessage();
+            echo "Error in isUserActive (ClassRm Model): " . $e->getMessage();
             return false;
+        }
+    }
+
+    protected function fetchStudentAttendance($studentId, $classCode, $currentDate){
+    
+        $sql = "SELECT status FROM attendance WHERE user_id = ? AND MD5(class_code) = ? AND date = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($studentId, $classCode, $currentDate))) {
+                if ($stmt->rowCount() > 0) {
+                   return $status = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in fetchStudentAttendance (ClassRm Model): " . $e->getMessage();
+            return null;
         }
     }
 
