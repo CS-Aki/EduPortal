@@ -24,11 +24,11 @@
     <script>
         $(document).ready(function () {
             let questionCount = 0;
-
+            let inputCount = 1;
             // Add a new question
             $('#add-question').click(function () {
                 questionCount++;
-            
+                
                 $('#questions-container').append(`
                     <div class="question id" data-id="${questionCount}">
                         <label class="question_count">Question ${questionCount}:</label>
@@ -45,11 +45,11 @@
                             <label>Options:</label>
                             <div class="option-container">
                                 <div>
-                                <input type="text" class="option remove_text" placeholder="Enter Question Choice"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a>
+                                <input type="text" class="option remove_text" name="multiChoice[]" placeholder="Enter Question Choice"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a>
                                 <br>
                                 </div>
                                 <div>
-                                <input type="text" class="option remove_text" placeholder="Enter Question Choice"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a>
+                                <input type="text" class="option remove_text" name="multiChoice[]" placeholder="Enter Question Choice"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a>
                                 <br>
                                 </div>
                                 <button type="button" class="add-option">Add Option</button>
@@ -63,10 +63,10 @@
                                 <option value="True">True</option>
                                 <option value="False">False</option>
                             </select><br>
-                            <input type="text" placeholder="Enter Answer Key" class="answer_key"><br>
+                            <input type="text" name="trueOrFalse" placeholder="Enter Answer Key" class="boolean_answer_key"><br>
                         </div><br>
                         <div class="short-text-select" style="display: none;"">
-                             <input type="text" placeholder="Enter Answer Key" class="answer_key"><br>
+                             <input type="text" placeholder="Enter Answer Key" class="short_ans_key"><br>
                         </div>
                         <button type="button" class="remove-question">Remove Question</button>
                         <hr>
@@ -128,7 +128,7 @@
             // Add an option (for multiple-choice only)
             $(document).on('click', '.add-option', function () {
                 // Append a new input field and remove link after the last .remove-choice sibling
-                $(this).prev('div').last().after('<div><input type="text" class="option" placeholder="Enter Question Choice"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a></div>');
+                $(this).prev('div').last().after('<div><input type="text" class="option" placeholder="Enter Question Choice" name="multipleChoice[]"><a href="#" class="remove-choice"> X || </a><a href="#" class="select_ans_key"> Answer Key</a></div>');
             });
 
             // Event handler for removing input fields
@@ -163,8 +163,8 @@
 
             $(document).on('change', '.booleanSelect', function () {
                  console.log($(".booleanSelect").val());
-                 var answerKey = $(".booleanSelect").val();
-                 $(this).closest('.true-false-select').find('.answer_key').val(answerKey);
+                 var answerKey = $(this).closest('.true-false-select').find('.boolean_answer_key');
+                 answerKey.val($(this).val());
             });
 
             // updates the question if changing question type
@@ -175,58 +175,92 @@
             });
 
             // Update display based on question type
-            function updateQuestionDisplay() {
+            function updateQuestionDisplay() {  
                 $('.question').each(function () {
                     const type = $(this).find('.question-type').val();
                     const options = $(this).find('.options');
                     const trueFalseSelect = $(this).find('.true-false-select');
                     const shortText = $(this).find('.short-text-select');
+                    const answerKey = $(this).find('.answer_key'); 
+                    
                     if (type === 'multiple-choice') {
+
                         options.show();
                         options.find('.option-container').show();
                         shortText.hide();
                         trueFalseSelect.hide();
-                        options.find('.option').prop('required', true);
+                        options.find('.option').prop('required', true); // Make multiple-choice options required
+                        answerKey.prop('readonly', true).show(); // Make answer key visible and readonly
+
                     } else if (type === 'true-false') {
+               
                         options.hide();
-                        shortText.hide();
                         options.find('.option-container').hide();
+                        options.find('.option').prop('required', false); // Remove required attribute from hidden inputs
+                        
                         trueFalseSelect.show();
-                    } else {
+                        shortText.hide();
+                        answerKey.prop('readonly', true).show(); // Make answer key visible and readonly
+
+                        const selectedValue = trueFalseSelect.find('.booleanSelect').val();
+                        $(this).find(".boolean_answer_key").val(selectedValue);
+                        answerKey.val(selectedValue); 
+
+                    } else if (type === 'short-text') {
+
                         options.hide();
+                        options.find('.option-container').hide();
+                        options.find('.option').prop('required', false); // Remove required attribute from hidden inputs
+                        
                         trueFalseSelect.hide();
                         shortText.show();
-                        options.find('.option').prop('required', false);
-                        // options.append("<input type='text' placeholder='Enter Answer Key' class='answer_key'><br>");
+
+                        answerKey.prop('readonly', false).show(); // Make answer key visible and editable
                     }
                 });
             }
 
-            // Get class code from url and id, pass it as well
+            // Get class code from url, pass it as well
             // Submit quiz
             $('#quiz-form').submit(function (e) {
                 e.preventDefault();
+                const urlParams = new URLSearchParams(window.location.search);
+                const classCode = urlParams.get('class');
 
                 const title = $('#quiz-title').val();
                 const questions = [];
-
+                console.log("Quiz Title : " + title);
                 $('.question').each(function () {
                     const questionText = $(this).find('.question-text').val();
                     const type = $(this).find('.question-type').val();
+
                     let options = [];
+                    let ansKey = "";
+
+                    console.log("Question : " + questionText);
+                    console.log("Question Type : " + type);
+
                     // console.log(questionText);
                     if (type === 'multiple-choice') {
                         $(this).find('.option').each(function () {
+                            console.log("Choice : " + $(this).val());
                             options.push($(this).val());
                         });
+                        console.log("Answer Key: " + $(this).find('.answer_key').val());
+                        ansKey = ($(this).find('.answer_key').val());
                     } else if (type === 'true-false') {
                         options = ['True', 'False'];
+                        console.log("Answer Key: " + $(this).find('.boolean_answer_key').val());
+                        ansKey = ($(this).find('.answer_key').val());
+                    } else {
+                        console.log("Answer Key: " + $(this).closest(".question").find(".short-text-select .short_ans_key").val());
+                        ansKey = $(this).closest(".question").find(".short-text-select .short_ans_key").val();
                     }
 
-                    questions.push({ question: questionText, type, options });
+                    questions.push({ question: questionText, type, options, ansKey});
                 });
 
-
+                console.table(questions);
 
                 // Send to PHP
                 // $.post('save_quiz.php', { title, questions: JSON.stringify(questions) }, function (response) {
