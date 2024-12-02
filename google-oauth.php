@@ -42,9 +42,26 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
         // Make sure the profile data exists
         if (isset($profile['email'])) {
             $google_name_parts = [];
-            $google_name_parts[] = isset($profile['given_name']) ? preg_replace('/[^a-zA-Z0-9.]/s', '', $profile['given_name']) : '';
-            $google_name_parts[] = isset($profile['family_name']) ? preg_replace('/[^a-zA-Z0-9.]/s', '', $profile['family_name']) : '';
-            
+            // Sanitize and get the given name
+            if (isset($profile['given_name'])) {
+                $google_name_parts['given_name'] = preg_replace('/[^a-zA-Z0-9.]/s', ' ', $profile['given_name']);
+            } else {
+                $google_name_parts['given_name'] = ''; // Default to empty if not set
+            }
+
+            // Sanitize and get the family name
+            if (isset($profile['family_name'])) {
+                $google_name_parts['family_name'] = preg_replace('/[^a-zA-Z0-9.]/s', '', $profile['family_name']);
+            } else {
+                $google_name_parts['family_name'] = ''; // Default to empty if not set
+            }
+
+            // Combine names if needed
+            $fullName = trim($google_name_parts['given_name'] . ' ' . $google_name_parts['family_name']);
+            $_SESSION["fullname"] = $fullName;
+            $_SESSION["givenName"] = $google_name_parts['given_name'];
+            $_SESSION["familyName"] = $google_name_parts['family_name'];
+
             // Authenticate the user
             session_regenerate_id();
             $_SESSION['google_loggedin'] = TRUE;
@@ -87,7 +104,6 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
 
                 exit();
             }else{
-
               $_SESSION['signUp'] = "true";
               header('Location: index.php');
               exit();

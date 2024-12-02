@@ -196,7 +196,7 @@ class ClassRm extends DbConnection
 
     protected function fetchPostDetails($title, $classCode){
         // $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE posts.class_code = ?";
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, posts.content_type, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {

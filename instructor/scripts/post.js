@@ -17,23 +17,46 @@ $(document).ready(function() {
 
     var selectedValue = "material";
 
-    $('#contetType').on('change', function() {
+    $('#contentType').on('change', function() {
         selectedValue = $(this).val();
+        console.log(selectedValue);
         title = $('#title').val();
         desc = $('#description').val();
         date = $('#deadlineDate').val();
         time = $('timeContainer').val();
-
+       
         if(selectedValue == "material"){
+            $(".sub-title").text("Create Material");
+            $("#dateContainer").find('#deadlineDate').prop('required', false);
+            $("#timeContainer").find('#deadlineTime').prop('required', false);
             $("#dateContainer").hide();
             $("#timeContainer").hide();
+        }else if(selectedValue == "quiz"){
+            $(".sub-title").text("Create Quiz");
+            $("#dateContainer").removeAttr("hidden");
+            $("#timeContainer").removeAttr("hidden");
+            $("#dateContainer").show();
+            $("#timeContainer").show();
         }else{
+            $(".sub-title").text("Create Activity");
             $("#dateContainer").removeAttr("hidden");
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
         }
 
+    });
+
+    $('#fileInput').on('change', function() {
+        // Get the number of selected files
+        var fileCount = this.files.length;
+
+        // Update the text in the paragraph to show the file count
+        if (fileCount > 0) {
+            $('#fileCount').text(fileCount + ' file(s) selected');
+        } else {
+            $('#fileCount').text('No files selected');
+        }
     });
 
     $("#postForm").submit(function (event) {
@@ -56,6 +79,7 @@ $(document).ready(function() {
     
         let formData = new FormData();
         formData.append("classCode", classCode);
+
         if($("#fileInput")[0].files.length > 0){
             for (let i = 0; i < $("#fileInput")[0].files.length; i++) {
                 // Append each file to the FormData object
@@ -68,8 +92,10 @@ $(document).ready(function() {
         // }
 
         if(date == "" && selectedValue != "material"){
+            $(".form-message").append("<div class='alert alert-danger' role='alert'><span>EMPTY DATE FIELDS</span></div>");
             return;
         }
+        
          console.log($("#fileInput")[0].files.length);
 
         // Handles file transfer to gdrive and upload to db
@@ -94,14 +120,7 @@ $(document).ready(function() {
                     }else{
                         console.log("Success");
                     }
-                    // const data = JSON.parse(response);
-                    // console.log(data);
-                    // if (data.authUrl) {
-                    //     // Redirect to Google OAuth if authUrl is returned
-                    //     window.location.href = data.authUrl;
-                    // } else {
-                    //     console.log("Success:", data);
-                    // }
+
                     $.ajax({
                         method: "POST",
                         url: "includes/create-post.php",
@@ -127,8 +146,7 @@ $(document).ready(function() {
                             };
             
                             socket.emit("serverRcvPost", data);
-            
-                            $(".form-message").html("Post Success");
+                            $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                             $('#title').val("");
                             $('#description').val("");
                             $('#fileInput').val("");
@@ -168,7 +186,7 @@ $(document).ready(function() {
     
                     socket.emit("serverRcvPost", data);
     
-                    $(".form-message").html("Post Success");
+                    $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                     $('#title').val("");
                     $('#description').val("");
                     $('#fileInput').val("");

@@ -105,21 +105,21 @@ class User extends DbConnection
         }
     }
 
-    protected function getUserId($email, $name)
+    protected function getUserId($email)
     {
-        $sql = "SELECT user_id FROM users WHERE email = ? AND name = ?";
+        $sql = "SELECT user_id FROM users WHERE email = ?";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute(array($email, $name));
+        $stmt->execute(array($email));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $listOfClass;
     }
 
-    protected function getUserCategory($email, $name)
+    protected function getUserCategory($email)
     {
-        $sql = "SELECT user_category FROM users WHERE email = ? AND name = ?";
+        $sql = "SELECT user_category FROM users WHERE email = ?";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute(array($email, $name));
+        $stmt->execute(array($email));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 

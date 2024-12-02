@@ -11,7 +11,8 @@ if(isset($_SESSION["name"])){
     $id = $profile[0]["user_id"];
     $currentDate = new DateTime();
     $year = $currentDate->format("Y");
+    
     $id = sprintf("%04d", $id);
     $userId = $year . "" . $id . "-S";
-    
+
 }

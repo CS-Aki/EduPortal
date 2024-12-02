@@ -29,6 +29,11 @@
     font-weight: 500;
 }
 
+.labelText {
+    color: var(--green1); 
+    font-weight: 500;
+}
+
 body {
     font-family: 'Inter', sans-serif; 
 }
@@ -374,4 +379,66 @@ color: #ffffff !important;
 .fc .fc-button .fc-button-cushion {
 font-size: 14px !important; /* Button font size */
 font: 'Inter', sans-serif;
+}
+
+
+.form-label{
+    color: var(--black2);
+    margin-right: 1rem;
+}
+
+input[type="date"] {
+    width: auto; 
+    min-width: 150px; 
+    padding: 10px 15px; 
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: var(--black2);
+    border: 2px solid var(--black3);
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+input[type="date"]:hover {
+    border-color: darken(var(--black3), 10%);
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3);
+}
+input[type="date"]:focus {
+    border-color: var(--black3); 
+    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5);
+    outline: none;
+}
+input[type="time"] {
+    width: auto;  
+    min-width: 150px;  
+    padding: 10px 15px;  
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: var(--black2); 
+    border: 2px solid var(--black3); 
+    border-radius: 8px;  
+    background-color: #fff;  
+    transition: all 0.3s ease;  
+}
+
+input[type="time"]:hover {
+    border-color: darken(var(--black3), 10%);
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3); 
+} 
+input[type="time"]:focus {
+    border-color: var(--black3);
+    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5); 
+    outline: none;  
+} 
+
+.question-type{
+    border-color: var(--black3); 
+    height: 30px; 
+    padding: 4px 10px;
+}
+
+.question-point{
+    border-color: var(--black3);
+    width: 6ch;
 }

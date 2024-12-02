@@ -82,7 +82,9 @@ if (isset($_SESSION["regMsg"])) {
             <div class="position-absolute overlay">
                 <h1 class="h-font2 white2 mb-0 pb-0" style="font-size: 90px; font-weight: 700;">Education</h1>
                 <h1 class="h-font2 white2 mt-0 mb-4 pt-0" style="font-size: 90px; font-weight: 700;">made <i class="green2">accessible.</i></h1>
-                <a data-target="#signUpModal" data-bs-toggle="modal" href="#signUpModal" class="green2 fs-6 ms-2"><button class="btn btn-lg green rounded-5 px-3">Start your journey</button></a>
+                <!-- <a data-target="#signUpModal" data-bs-toggle="modal" href="#signUpModal" class="green2 fs-6 ms-2"><button class="btn btn-lg green rounded-5 px-3">Start your journey</button></a> -->
+                <a href="google-oauth.php" class="green2 fs-6 ms-2"><button class="btn btn-lg green rounded-5 px-3">Start your journey</button></a>
+
             </div>
             <div class="carousel-inner z-n1">
                 <div class="carousel-item active">

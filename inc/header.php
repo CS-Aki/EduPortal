@@ -16,17 +16,19 @@
                         <a class="nav-link green1 active me-4 h-font" aria-current="page" href="facilities.php">About Us</a>
                     </li>
                 </ul>
-                <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signUpModal">
+                <!-- <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signUpModal"> -->
+                <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" id="signUpBtn">
                     Sign Up
                 </button>
+                
                 <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signInModal">
                     Sign In
                 </button>
+
             </div>
         </div>
     </div>
 </nav>
-
 
 <!-- Sign Up Modal -->
 <div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
@@ -43,13 +45,13 @@
                         <div class="row mb-1">
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0 ">First Name</label>
-                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" required value="<?php if (isset($_SESSION['google_name'])) {
-                                                                                                                                                                                echo $_SESSION['google_name'];
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" required value="<?php if (isset($_SESSION["givenName"])) {
+                                                                                                                                                                                echo $_SESSION["givenName"];
                                                                                                                         } ?>">
                             </div>
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0">Last Name</label>
-                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" required>
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" required value ="<?php if(isset($_SESSION["familyName"])) echo $_SESSION["familyName"]; ?>">
                             </div>
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0">Middle Name (optional)</label>
@@ -61,7 +63,7 @@
                                 <label class="form-label black2 mb-0">Email</label>
                                 <input type="email" class="form-control black2 shadow-sm" placeholder="Enter Email" name="email" id="email" required value="<?php if (isset($_SESSION['google_email'])) {
                                                                                                                                                                 echo $_SESSION['google_email'];
-                                                                                                                                } ?>">
+                                                                                                                                } ?>" readonly>
                             </div>
                             <div class="col-lg-3">
                                 <label class="form-label black2 mb-0">Date of Birth</label>

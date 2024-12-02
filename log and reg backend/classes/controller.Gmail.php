@@ -40,12 +40,12 @@ class GmailController extends User{
     }
 
     public function getId(){
-       $id = $this->getUserId($_SESSION['google_email'] ,$_SESSION['google_name']);
+       $id = $this->getUserId($_SESSION['google_email']);
        return $id;
     }
 
     public function getCategory(){
-        $category = $this->getUserCategory($_SESSION['google_email'] ,$_SESSION['google_name']);
+        $category = $this->getUserCategory($_SESSION['google_email']);
         return $category;
     }
 

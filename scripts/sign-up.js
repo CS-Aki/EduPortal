@@ -16,15 +16,28 @@ $(document).ready(function() {
         $("#first_name, #last_name, #email, #password, #repeat_pass").val("");
     });
 
-    $("#signUpModal").on("shown.bs.modal", function () {
-             $(".sign-up-msg").text("");
-        $('#signUpForm').removeClass('was-validated');
-        $("#first_name, #last_name, #email, #password, #repeat_pass").val("");
-
-        // console.log("display");
+    $("#signUpBtn").click(function(){
+        console.log("inside sign up");
+        window.location.href = "google-oauth.php";
     });
 
+    // $("#signUpModal").on("shown.bs.modal", function () {
+    //     $(".sign-up-msg").text("");
+    //     $('#signUpForm').removeClass('was-validated');
+    //     $("#first_name, #last_name, #email, #password, #repeat_pass").val("");
+
+    //     // console.log("display");
+    // });
+
     $("#signUpModal").on("hidden.bs.modal", function () {
+        $.ajax({
+            url: 'log and reg backend/includes/unset-session.php', // URL to your PHP script
+            type: 'POST',
+            success: function(response) {
+                console.log('Session variable unset:', response);
+            }
+        });
+
         $(".sign-up-msg").text("");
         $('#signUpForm').removeClass('was-validated');
         $("#first_name, #last_name, #email, #password, #repeat_pass").val("");

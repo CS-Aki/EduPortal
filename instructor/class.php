@@ -91,6 +91,7 @@ if(isset($_SESSION["user_category"])){
                         <a href="post-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button></a>
                         </div>
                     </div>
+                    
                     <div class="col-lg-3 ms-auto">
                         <a href="quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Quiz</button></a>
                         </div>
@@ -99,8 +100,8 @@ if(isset($_SESSION["user_category"])){
                             <h1 class="h-font green1 me-2 sub-title">Lessons</h1>
                             <div class="line-h"></div>
                         </div>
-                        <div id="materialContent">
 
+                        <div id="materialContent">
                             <?php
                                     if(isset($post[0]["content_type"])){
                                         for($i = 0 ; $i < count($post); $i++){
