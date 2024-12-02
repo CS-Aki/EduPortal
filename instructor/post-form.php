@@ -24,7 +24,7 @@ if(isset($_GET["code"])){
     include("includes/upload-file.php");
 }else{
     unset($_SESSION["classCode"]);
-unset($_SESSION["storedFile"]);
+    unset($_SESSION["storedFile"]);
 }
 
 
@@ -101,13 +101,17 @@ unset($_SESSION["storedFile"]);
                                         <label>Description</label>
                                         <input type="text" id="description" placeholder="Enter Description" required><br>
                                          <div id="dateContainer" hidden>
-                                        <label for="deadlineDate">Deadline Date:</label>
-                                        <input type="date" id="deadlineDate" name="deadlineDate">
+                                            <label for="startingDate">Starting Date:</label>
+                                            <input id="startingDate" type="date" name="startingDate" value="12:00"><br>
+                                            <label for="deadlineDate">Deadline Date:</label>
+                                            <input type="date" id="deadlineDate" name="deadlineDate">
                                         </div>  <br>
 
                                         <div id="timeContainer" hidden>
-                                        <label for="deadlineTime">Deadline Time:</label>
-                                        <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">
+                                            <label for="startingTime">Starting Time:</label>
+                                            <input id="startingTime" type="time" name="startingTime" value="12:00"><br>
+                                            <label for="deadlineTime">Deadline Time:</label>
+                                            <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">
                                         </div>
 
                                         <div class="col-lg-2">
@@ -115,7 +119,7 @@ unset($_SESSION["storedFile"]);
                                         </div>
                                     </form>
 
-                                    <div class="form-group">
+                                    <div class="form-group" id="uploadContainer">
                                     <form method="post" action="includes/upload-file.php" class="form" enctype="multipart/form-data" id="fileForm">
                                         <label>File</label>
                                         <input type="file" name="files[]" class="form-control" id="fileInput" multiple>
@@ -127,9 +131,6 @@ unset($_SESSION["storedFile"]);
 
                                     <p class="form-message"></p>
 
-
-
-                                 
                                 </div>
         </div>
     </div>

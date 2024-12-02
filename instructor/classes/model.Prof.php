@@ -474,4 +474,55 @@ class Instructor extends DbConnection
         }
         return false;
     }
+
+    protected function uploadQuiz($quizTitle, $classCode, $questions, $totalPoints) {
+        $realCode = $this->findSimilarCode($classCode);
+        $connection = $this->connect(); // Store the connection
+    
+        foreach ($questions as $question) {
+            $questionText = $question['question'];
+            $type = $question['type'];
+            $options = $question['options'];
+            $ansKey = $question['ansKey'];
+            $points = $question['points'];
+    
+            $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $connection->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($realCode[0]["class_code"], $ansKey, $points, $questionText, $type))) {
+                    $questionId = $connection->lastInsertId(); // Use the same connection
+                    foreach ($options as $option) {
+                        $this->insertOptions($option, $questionId);
+                    }
+                } else {
+                    echo "Insert failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                    return false;
+                }
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage(); // Log the error
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Put data into options table
+    protected function insertOptions($option, $questionId){
+        $sql = "INSERT INTO `options`(`question_id`, `option_text`) VALUES (?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($questionId, $option))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return false;
+        }
+    }
+
+    
 }

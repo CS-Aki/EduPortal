@@ -143,8 +143,6 @@ class InstructorController extends Instructor
        }
     }
 
-    
-
     public function submitAttendance($classCode, $studentId, $status){
         date_default_timezone_set('Asia/Manila');
         $currentDate = date("Y/m/d");
@@ -159,5 +157,20 @@ class InstructorController extends Instructor
 
     public function updatePicture($userId, $profile){
         return $this->updateProfilePicture($userId, $profile);
+    }
+
+    public function createQuiz($quizTitle, $classCode, $questions){
+        $totalPoints = 0;
+        foreach ($questions as $question) {
+             $totalPoints += $question["points"];
+        }
+        // echo $totalPoints;
+        $result = $this->uploadQuiz($quizTitle, $classCode, $questions, $totalPoints);
+        if($result == false){
+            echo "Error Uploading Quiz In Db\n";
+            return;
+        }
+
+        echo "Success Uploading Quiz In Db\n";
     }
 }
