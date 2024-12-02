@@ -22,6 +22,7 @@
     </form>
 
     <!-- You can see the question format inside here, try to preserve the div names and element hierarchy -->
+     <!-- Check check niyo nalang din kung working siya and walang error habang ginagawa, sa console log niyo mkaikita yung messages -->
     <script src="scripts/create-quiz.js">
 
     </script>

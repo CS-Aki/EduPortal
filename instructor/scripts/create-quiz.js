@@ -8,7 +8,9 @@ $(document).ready(function () {
         $('#questions-container').append(`
             <div class="question id" data-id="${questionCount}">
                 <label class="question_count">Question ${questionCount}:</label>
-                <input type="text" class="question-text" placeholder="Enter question" required>
+                <input type="text" class="question-text" placeholder="Enter question" required> 
+                     <label>Points </label>
+                     <input type="number" class="points" name="points" min="1" max="100" value="1" required>
                 <div class="question-settings">
                     <label>Question Type:</label>
                     <select class="question-type">
@@ -30,18 +32,21 @@ $(document).ready(function () {
                         </div>
                         <button type="button" class="add-option">Add Option</button>
                         <br>
+                        <label>Answer Key</label>
                         <input type="text" placeholder="Enter Answer Key" class="answer_key"><br>
                     </div>
                 </div>
                 <div class="true-false-select" style="display: none;">
-                    <label>True/False:</label>
+                    <label>Select Answer Key:</label>
                     <select class="booleanSelect">
                         <option value="True">True</option>
                         <option value="False">False</option>
                     </select><br>
+                    <label>Answer Key</label>
                     <input type="text" name="trueOrFalse" placeholder="Enter Answer Key" class="boolean_answer_key"><br>
                 </div><br>
                 <div class="short-text-select" style="display: none;"">
+                     <label>Answer Key</label>
                      <input type="text" placeholder="Enter Answer Key" class="short_ans_key"><br>
                 </div>
                 <button type="button" class="remove-question">Remove Question</button>
@@ -158,7 +163,7 @@ $(document).ready(function () {
             const trueFalseSelect = $(this).find('.true-false-select');
             const shortText = $(this).find('.short-text-select');
             const answerKey = $(this).find('.answer_key'); 
-            
+
             if (type === 'multiple-choice') {
 
                 options.show();
@@ -212,13 +217,15 @@ $(document).ready(function () {
             const questionText = $(this).find('.question-text').val();
             const type = $(this).find('.question-type').val();
             let questionId = $(this).closest('.question').data("id");
+            const points = $(this).find('.points').val(); 
+            
             // console.log("QUESTION ID : " + questionId);
             let options = [];
             let ansKey = "";
 
             console.log("Question : " + questionText);
             console.log("Question Type : " + type);
-
+            console.log("Points : " + points);
             // console.log(questionText);
             if (type === 'multiple-choice') {
                 $(this).find('.option').each(function () {
@@ -244,12 +251,12 @@ $(document).ready(function () {
                 }
             }
 
-            questions.push({ question: questionText, type, options, ansKey});
+            questions.push({ question: questionText, type, options, ansKey, points});
         });
 
         if(noAnswerKey != true){
             console.table(questions);
-
+            console.log("inside");
             $.ajax({
                 url: "includes/create-quiz.php",
                 type: "POST",
@@ -259,7 +266,6 @@ $(document).ready(function () {
                 },
 
                 success: function(response) {
-                    console.log("inside");
                     console.log(response);
                 },
                 error: function(xhr, status, error) {
@@ -267,6 +273,7 @@ $(document).ready(function () {
                 }
             });
         }else{
+                noAnswerKey = false;
                 options = [];
                 question = [];
                 questions = [];
@@ -275,7 +282,6 @@ $(document).ready(function () {
 
         // Send to PHP
         
-
         // $.post('includes/create-quiz.php', { title, questions: JSON.stringify(questions) }, function (response) {
         //     alert(response.message);
         // }, 'json');
