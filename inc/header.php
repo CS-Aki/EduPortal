@@ -101,14 +101,14 @@
                         <div class="justify-content-center">
                             <button type="submit" name="registerBtn" id="register_btn" class="w-100 btn green shadow-none rounded-5 px-5 py-2">Sign Up</button>
                         </div>
-                        <div class="col-12 mb-1 d-flex justify-content-center align-items-center">
+                        <!-- <div class="col-12 mb-1 d-flex justify-content-center align-items-center">
                             <div class="w-25 line"></div>
                             <p class="black3 mx-3 mt-1">or</p>
                             <div class="w-25 line"></div>
                         </div>
                         <div class="justify-content-center">
                             <a href="google-oauth.php" class="google-login-btn"><button type="button" class="w-100 btn green shadow-none rounded-5 px-5 py-2"><i class="bi bi-google me-2" hidden></i>Continue with Google</button></a>
-                        </div>                                                                                                                              
+                        </div>                                                                                                                               -->
                         <p class="sign-up-msg"></p>
                     </div>
                 </form>
