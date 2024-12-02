@@ -1,0 +1,3 @@
+<?php
+
+echo "CREATE QUIZ";
