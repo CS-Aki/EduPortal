@@ -33,18 +33,21 @@ $(document).ready(function() {
             $("#timeContainer").find('#deadlineTime').prop('required', false);
             $("#dateContainer").hide();
             $("#timeContainer").hide();
+            $("#uploadContainer").show();
         }else if(selectedValue == "quiz"){
             $(".sub-title").text("Create Quiz");
             $("#dateContainer").removeAttr("hidden");
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
+            $("#uploadContainer").hide();
         }else{
             $(".sub-title").text("Create Activity");
             $("#dateContainer").removeAttr("hidden");
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
+            $("#uploadContainer").show();
         }
 
     });
@@ -170,6 +173,8 @@ $(document).ready(function() {
                         console.log("Success");
                     }
 
+                    console.log( "Selected "+ selectedValue);
+                        console.log("Title " + title);
                     $.ajax({
                         method: "POST",
                         url: "includes/create-post.php",
@@ -209,6 +214,7 @@ $(document).ready(function() {
                 }
             });
         }else{
+            console.log("uploading iwthout file");
             $.ajax({
                 method: "POST",
                 url: "includes/create-post.php",

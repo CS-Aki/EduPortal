@@ -118,7 +118,7 @@ $_SESSION["tmp"] = $_GET["class"];
                     </select><span> <br>
                     </span>
 
-                    <form action="includes/upload-file.php" method="post" id="combinedForm" enctype="multipart/form-data">
+                     <form action="includes/upload-file.php" method="post" id="combinedForm" enctype="multipart/form-data">
                         <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Title: </span>
                         <div class="form-floating">
                             <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="title" name="title" required></textarea>
@@ -144,7 +144,7 @@ $_SESSION["tmp"] = $_GET["class"];
                         </div>
 
                         <div class="form-group">
-                            <label for="fileInput" class="btn btn-success mt-2 ms-2 fw-semibold" title="Upload File">
+                            <label for="fileInput" class="btn btn-success mt-2 ms-2 fw-semibold" id="uploadContainer" title="Upload File">
                                 <i style="font-size: 24px;" class="whiteicon bi bi-upload me-2"></i>Upload File
                             </label>
                             <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
