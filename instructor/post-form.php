@@ -132,12 +132,28 @@ $_SESSION["tmp"] = $_GET["class"];
                         </div>
 
                         <br>
+                        <!-- <div class="row">
+                            <div class="col-3" id="dateContainer" hidden>
+                                <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Starting Date: </span>
+                                <input type="date" id="deadlineDate" name="deadlineDate">
+                            </div>
+                            <div class="col-3" id="timeContainer" hidden>
+                                <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Starting Time: </span>
+                                <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">
+                            </div>
+                        </div>
+                        <br> -->
+
                         <div class="row">
                             <div class="col-3" id="dateContainer" hidden>
+                                <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Starting Date: </span>
+                                <input type="date" id="startingDate" name="startingDate"><br><br>
                                 <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Deadline Date: </span>
                                 <input type="date" id="deadlineDate" name="deadlineDate">
                             </div>
                             <div class="col-3" id="timeContainer" hidden>
+                                <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Starting Time: </span>
+                                <input id="startingTime" type="time" name="startingTime" value="12:00"><br><br>
                                 <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Deadline Time: </span>
                                 <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">
                             </div>
@@ -148,7 +164,7 @@ $_SESSION["tmp"] = $_GET["class"];
                                 <i style="font-size: 24px;" class="whiteicon bi bi-upload me-2"></i>Upload File
                             </label>
                             <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
-                            <p id="fileCount">No files selected</p>
+                            <p id="fileCount"></p>
                             <input type="text" name="classCode" value="<?php echo md5($details[0]["class_code"]); ?>" hidden>
                             <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]; ?>" hidden>
                         </div>
@@ -172,10 +188,8 @@ $_SESSION["tmp"] = $_GET["class"];
                         </div>
                     </form>
 
-            
-
                     <!-- Handles the messaging -->
-                    <div class="form-message" hidden><?php if(isset($_SESSION["tmp"])){ echo $_SESSION["tmp"]; unset($_SESSION["tmp"]); }?></div>
+                    <div class="form-message"></div>
                     <hr>
 
                 </div>

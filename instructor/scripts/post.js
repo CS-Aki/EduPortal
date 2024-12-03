@@ -49,7 +49,6 @@ $(document).ready(function() {
             $("#timeContainer").show();
             $("#uploadContainer").show();
         }
-
     });
 
 
@@ -149,70 +148,74 @@ $(document).ready(function() {
                 }
             });
             // $("#fileForm").submit();
+
             $.ajax({
                 method: "POST",
-                url: "includes/upload-file.php",
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: "includes/create-post.php",
+                data: { "type": selectedValue,
+                        "title": title,
+                        "desc" : desc,
+                        "date" : date,
+                        "time" : time,
+                        "classCode" : classCode
+                },
+        
                 success: function (response) {
-                    console.log(response);
-                    // console.log(hasToken);
-                    if(hasToken == false){
-                        console.log(response);
-                        const data = JSON.parse(response);
-                        if (data.authUrl) {
-                            hasToken = true;
-                            // Redirect to Google OAuth if authUrl is returned
-                            console.log(data);
-                            // window.location.href = data.authUrl;
-                        }else{
-                            console.log("Error");
-                        }
-                    }else{
-                        console.log("Success");
-                    }
-
-                    console.log( "Selected "+ selectedValue);
-                        console.log("Title " + title);
+                    // console.table("this is ",response);
+                    console.log("upload");
+                    // console.log(response.date);
+    
+                    var data = {
+                        title : title,
+                        date : response[0]["month"],
+                        classCode : classCode,
+                        postId : md5(response[0]["post_id"]),
+                        contentType : selectedValue
+                    };
+                         
                     $.ajax({
                         method: "POST",
-                        url: "includes/create-post.php",
-                        data: { "type": selectedValue,
-                                "title": title,
-                                "desc" : desc,
-                                "date" : date,
-                                "time" : time,
-                                "classCode" : classCode
-                        },
-                
+                        url: "includes/upload-file.php",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
                         success: function (response) {
-                            // console.table("this is ",response);
-                            console.log("upload");
-                            // console.log(response.date);
-            
-                            var data = {
-                                title : title,
-                                date : response[0]["month"],
-                                classCode : classCode,
-                                postId : md5(response[0]["post_id"]),
-                                contentType : selectedValue
-                            };
-            
+                            console.log(response);
+                            // console.log(hasToken);
+                            if(hasToken == false){
+                                console.log(response);
+                                const data = JSON.parse(response);
+                                if (data.authUrl) {
+                                    hasToken = true;
+                                    // Redirect to Google OAuth if authUrl is returned
+                                    console.log(data);
+                                    // window.location.href = data.authUrl;
+                                }else{
+                                    console.log("Error");
+                                }
+                            }else{
+                                console.log("Success");
+                            }
+
+                            console.log( "Selected "+ selectedValue);
+                            console.log("Title " + title);
+                                    
                             socket.emit("serverRcvPost", data);
-                                $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
-                                $('#title').val("");
-                                $('#description').val("");
-                                $('#fileInput').val("");
+                            $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                            $('#title').val("");
+                            $('#description').val("");
+                            $('#fileInput').empty();
+                            $("#fileCount").empty();
+                            $("#fileContainer").empty();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error:", status, error);
+                            console.error("Response Text:", xhr.responseText);
                         }
                     });
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error:", status, error);
-                    console.error("Response Text:", xhr.responseText);
                 }
             });
+
         }else{
             console.log("uploading iwthout file");
             $.ajax({
@@ -245,6 +248,9 @@ $(document).ready(function() {
                     $('#title').val("");
                     $('#description').val("");
                     $('#fileInput').val("");
+                    $("#fileContainer").empty();
+                    $("form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+
                 }
             });
         }
