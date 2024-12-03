@@ -42,7 +42,7 @@ if(!isset($_SESSION['access_token'])){
 // if(!isset($_SESSION["tmp"])){
 //     include("includes/upload-file.php");
 // }
-$_SESSION["tmp"] = $_GET["class"];
+$_SESSION["classCode"] = $_GET["class"];
 // echo $_SESSION['access_token'];
 ?>
 

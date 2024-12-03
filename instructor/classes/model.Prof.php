@@ -183,7 +183,9 @@ class Instructor extends DbConnection
     }
 
     protected function addPost($classCode, $type, $title, $desc, $date, $time){
+        // session_start();
         session_start();
+
         $newCode = $this->findSimilarCode($classCode);
 
         if($type != "material"){
@@ -193,17 +195,19 @@ class Instructor extends DbConnection
         }
 
         $stmt = $this->connect()->prepare($sql);
-
+       
         if($type == "quiz"){
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
-
+            $_SESSION["postId"] = $this->lastInsertId();
             $stmt = null;
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+            $_SESSION["postId"] = $postID;
             $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             if ($stmt->execute(array($postID[0]["post_id"], $newCode[0]["class_code"], $date, $time, 100))) {
+             
                 return true;
             }else{
                 echo "Error statement";
@@ -214,6 +218,7 @@ class Instructor extends DbConnection
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+            $_SESSION["postId"] = $postID;
             $stmt = null;
             $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
@@ -228,6 +233,8 @@ class Instructor extends DbConnection
         }else{
             $type = ucfirst($type);
             if ($stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"))) {
+                $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+                $_SESSION["postId"] = $postID;
                 return true;
             }else{
                 echo "Error statement";
@@ -514,6 +521,28 @@ class Instructor extends DbConnection
 
         try {
             if ($stmt->execute(array($questionId, $option))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return false;
+        }
+    }
+
+    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId){
+        $newCode = $this->findSimilarCode($classCode);
+        echo "Class Code " . $newCode[0]["class_code"] . " <br>\n";
+        echo "Post Id " . $postId . " <br>\n";
+        echo "Name " . $fileName . " <br>\n";
+        echo "ID " . $gdriveId . " <br>\n";
+
+        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`) VALUES (?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId))) {
                 return true;
             } else {
                 return false;

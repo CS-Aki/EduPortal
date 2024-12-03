@@ -19,6 +19,7 @@ if(isset($_SESSION["user_category"])){
 }
 
 $_SESSION["storeCode"] = $_GET["class"];
+
 ?>
 
 <!DOCTYPE html>

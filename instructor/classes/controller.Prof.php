@@ -173,4 +173,15 @@ class InstructorController extends Instructor
 
         echo "Success Uploading Quiz In Db\n";
     }
+
+    public function uploadGdriveData($postId, $classCode, $fileName, $gdriveId){
+       $result = $this->insertGdriveData($postId, $classCode, $fileName, $gdriveId);
+
+       if($result == false){
+        echo "ERROR UPLOADING GDRIVE DATA INTO DB";
+        return;
+       }
+
+       echo "GDRIVE DATA SUCCESS";
+    }
 }

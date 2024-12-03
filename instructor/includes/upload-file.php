@@ -13,65 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 if(isset($_GET["code"])){
     require_once("../vendor/autoload.php");
+    require_once("../log and reg backend/classes/connection.php");
+    require_once("classes/model.Prof.php");
+    require_once("classes/controller.Prof.php");
 }else{
     require_once("../../vendor/autoload.php");
+    require_once("../../log and reg backend/classes/connection.php");
+    require_once("../classes/model.Prof.php");
+    require_once("../classes/controller.Prof.php");
 }
 
 session_start();
 
-// if (!isset($_SESSION['access_token'])) {
-//     header('Location: auth.php'); // Redirect to authentication
-//     exit();
-// }
-
-// $client = new Google_Client();
-// if(isset($_GET["code"])){
-//     $client->setAuthConfig('../log and reg backend/config/credentials.json');
-// }else{
-//     $client->setAuthConfig('../../log and reg backend/config/credentials.json');
-// }
-// // if(isset($_POST["classCode"])){
-// //     $_SESSION["classCode"] = $_POST["classCode"];
-// //     $_SESSION["storedFile"] = $_FILES['files'];
-// // }
-
-// $client->addScope(Google_Service_Drive::DRIVE_FILE);
-// $client->setRedirectUri('http://localhost/EduPortal/instructor/post-form.php');
-
-// // Check if we have an authorization code in the query string
-// if (isset($_GET['code'])) {
-//     // Fetch the access token using the authorization code
-//     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-//     $_SESSION['access_token'] = $token;
-
-//     // $_SESSION["classCode"] = $_POST["classCode"];
-//     // $_SESSION["storedFile"] = $_FILES['files'];
-    
-//     // Redirect back to the page to ensure everything is set
-//     header('Location: http://localhost/EduPortal/instructor/includes/upload-file.php');
-//     exit;
-// }
-
-// if (!isset($_SESSION['access_token'])) {
-//     // Redirect to the Google authentication page if no access token or it's expired
-//     $authUrl = $client->createAuthUrl();
-//     // if(isset($_POST["classCode"])){
-//     //     $_SESSION["classCode"] = $_POST["classCode"];
-//     //     $_SESSION["storedFile"] = $_FILES['files'];
-//     // }
-//     echo $authUrl;
-//     echo json_encode(['authUrl' => $authUrl]);
-//     exit();
-// }
-
-// If there's no access token, or it has expired, we need to redirect to Google OAuth
-// if (!isset($_SESSION['access_token']) || $client->isAccessTokenExpired()) {
-//     // Redirect the user to Google's OAuth 2.0 consent screen
-//     $authUrl = $client->createAuthUrl();
-//     header("Location: " . $authUrl);
-//     exit;
-// }
-echo "test";
 $client = new Google_Client();
 // If we have an access token, proceed with file handling or whatever your logic is
 $client->setAccessToken($_SESSION['access_token']);
@@ -89,12 +42,17 @@ if(isset($_POST["classCode"])){
 }
 // Create Google Drive service
 $service = new Google_Service_Drive($client);
+echo "RANDOM HERE";
+// echo $_SESSION["postId"]["post_id"] . "\n\n\n\n";
+echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
+
+echo $_SESSION["postId"][0]["post_id"];
 
 if ($_SESSION['access_token']) {
     $_SESSION["tmp"] = "<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>";
-
+    $postId = $_SESSION["postId"][0]["post_id"];
     $files = $_SESSION["storedFile"];
-    echo var_dump($files); // Debugging line to inspect the uploaded files
+    echo var_dump($files); 
     $uploadedFiles = [];
     $folderName = "EduPortal";
 
@@ -170,6 +128,7 @@ if ($_SESSION['access_token']) {
                     $service->permissions->create($file->id, $permission);
 
                     $uploadedFiles[] = $file->id;
+                    $fileNames[] = $files['name'][$index];
 
                     echo "File {$files['name'][$index]} uploaded to Google Drive successfully. File ID: " . $file->id . "<br>";
 
@@ -191,13 +150,24 @@ if ($_SESSION['access_token']) {
     }
 
     unset($_SESSION["storedFile"]);
-    
+ 
+    $instrCtrlr = new InstructorController();
+
     // Provide feedback to the user
     if (count($uploadedFiles) > 0) {
         echo "Files uploaded successfully!<br>";
+        $i = 0;
         foreach ($uploadedFiles as $fileId) {
-            echo "File ID: " . htmlspecialchars($fileId) . "<br>";
+            // echo "POST ID " . $_SESSION["postId"][0]["post_id"] . "\n";
+            // echo "CLASS CODE " . $_SESSION["storeCode"] . "\n";
+            // echo "FILE NAME " . $fileNames[$i]. "\n";
+            // echo "FILE ID " . htmlspecialchars($fileId). "\n";
+
+            $instrCtrlr->uploadGdriveData($_SESSION["postId"][0]["post_id"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId));
+            $i++;
+            // echo "File ID: " . htmlspecialchars($fileId) . "<br>";
         }
+        unset($_SESSION["postId"]);
         // Redirect or exit
         // header("location: ../post-form.php?class=" . $_SESSION["tmp"]);
         exit();
