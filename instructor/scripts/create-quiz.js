@@ -254,7 +254,6 @@ $(document).ready(function () {
             questions.push({ question: questionText, type, options, ansKey, points});
         });
 
-
         if(noAnswerKey != true){
             console.table(questions);
             console.log("inside");

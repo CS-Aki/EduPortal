@@ -1,5 +1,7 @@
 $(document).ready(function() {
     console.log(io);
+    console.log("test");
+
     // const socket = io('http://localhost:4000');
     console.log("This is the ", $("#token").val().length);
     // let hide = true;
@@ -47,17 +49,49 @@ $(document).ready(function() {
 
     });
 
-    $('#fileInput').on('change', function() {
-        // Get the number of selected files
-        var fileCount = this.files.length;
 
-        // Update the text in the paragraph to show the file count
-        if (fileCount > 0) {
-            $('#fileCount').text(fileCount + ' file(s) selected');
-        } else {
-            $('#fileCount').text('No files selected');
-        }
-    });
+    $(document).on('change', '#fileInput', function (event) {
+        $("#fileContainer").empty();
+          var fileCount = this.files.length;
+          var files = event.target.files; 
+          var size = 0;
+          var word = "";
+          $.each(files, function(index, file) {
+            var temp = file.size;
+            // console.log(temp.toString().length);
+            if(temp.toString().length >= 7 ){
+                size = Math.ceil((file.size / (1024 * 1024)).toFixed(2));
+                word = "MB";
+            }else{
+                size = Math.ceil((file.size / 1024).toFixed(2));
+                word = "KB";
+            }
+            $("#fileContainer").append(`
+                    <a class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
+                        <div class="d-flex">
+                            <div class="me-2">
+                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                            </div>
+                            <div>
+                                <span class="green2 fw-bold mb-0">${file.name}</span>
+                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${size} ${word}</span>
+                            </div>
+                        </div>
+                    </a>
+            `);
+ 
+            console.log('File name: ' + file.name);
+            console.log('File type: ' + file.type);
+            console.log('File size: ' + file.size + ' bytes');
+            console.log('Converted File size: ' + size + " " + word);
+          });
+  
+          if (fileCount > 0) {
+              $('#fileCount').text(fileCount + ' file(s) selected');
+          } else {
+              $('#fileCount').text('No files selected');
+          }
+   });
 
     $("#combinedForm").submit(function (event) {
         event.preventDefault();

@@ -153,14 +153,29 @@ $_SESSION["tmp"] = $_GET["class"];
                             <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]; ?>" hidden>
                         </div>
 
+                        <div id="fileContainer"></div>
+
+                        <!-- <a class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
+                        <div class="d-flex">
+                                <div class="me-2">
+                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                </div>
+                                <div>
+                                    <span class="green2 fw-bold mb-0">File1.jpeg</span>
+                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
+                                </div>
+                            </div>
+                        </a> -->
 
                         <div class="col-lg-2">
                             <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button>
                         </div>
                     </form>
 
+            
+
                     <!-- Handles the messaging -->
-                    <div class="form-message"><?php if(isset($_SESSION["tmp"])){ echo $_SESSION["tmp"]; unset($_SESSION["tmp"]); }?></div>
+                    <div class="form-message" hidden><?php if(isset($_SESSION["tmp"])){ echo $_SESSION["tmp"]; unset($_SESSION["tmp"]); }?></div>
                     <hr>
 
                 </div>
