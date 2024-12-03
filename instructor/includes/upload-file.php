@@ -191,6 +191,7 @@ if ($_SESSION['access_token']) {
     }
 
     unset($_SESSION["storedFile"]);
+    
     // Provide feedback to the user
     if (count($uploadedFiles) > 0) {
         echo "Files uploaded successfully!<br>";
