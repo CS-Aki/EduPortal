@@ -22,5 +22,4 @@ if(isset($_POST["type"])){
     // echo var_dump($postDetails);
     header('content-type: application/json');
     echo json_encode($postDetails);
-
 }

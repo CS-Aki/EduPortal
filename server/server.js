@@ -40,4 +40,5 @@ io.on("connection", (socket) => {
         console.log("Receive new post ", data);
         io.emit("displayNewPost", data);
     });
+    
 });

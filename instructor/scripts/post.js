@@ -2,7 +2,7 @@ $(document).ready(function() {
     console.log(io);
     // const socket = io('http://localhost:4000');
     console.log("This is the ", $("#token").val().length);
-
+    // let hide = true;
     const socket = io("https://eduportal-wgrc.onrender.com", {
         transports: ["websocket"] // Ensure WebSocket transport
       });
@@ -59,7 +59,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#postForm").submit(function (event) {
+    $("#combinedForm").submit(function (event) {
         event.preventDefault();
         $(".form-message").empty();
         // console.log("clicked");
@@ -95,11 +95,22 @@ $(document).ready(function() {
             $(".form-message").append("<div class='alert alert-danger' role='alert'><span>EMPTY DATE FIELDS</span></div>");
             return;
         }
-        
+
          console.log($("#fileInput")[0].files.length);
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
+            $.ajax({
+                method: "POST",
+                url: "includes/save-file-session.php",
+                data: formData,
+                processData: false,
+                contentType: false,
+        
+                success: function (response) {
+                    console.table("this is ",response);
+                }
+            });
             // $("#fileForm").submit();
             $.ajax({
                 method: "POST",
@@ -108,14 +119,18 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    // console.log(response);
-                    console.log(hasToken);
+                    console.log(response);
+                    // console.log(hasToken);
                     if(hasToken == false){
+                        console.log(response);
                         const data = JSON.parse(response);
                         if (data.authUrl) {
                             hasToken = true;
                             // Redirect to Google OAuth if authUrl is returned
-                            window.location.href = data.authUrl;
+                            console.log(data);
+                            // window.location.href = data.authUrl;
+                        }else{
+                            console.log("Error");
                         }
                     }else{
                         console.log("Success");
@@ -133,7 +148,7 @@ $(document).ready(function() {
                         },
                 
                         success: function (response) {
-                            console.table("this is ",response);
+                            // console.table("this is ",response);
                             console.log("upload");
                             // console.log(response.date);
             
@@ -146,10 +161,10 @@ $(document).ready(function() {
                             };
             
                             socket.emit("serverRcvPost", data);
-                            $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
-                            $('#title').val("");
-                            $('#description').val("");
-                            $('#fileInput').val("");
+                                $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                                $('#title').val("");
+                                $('#description').val("");
+                                $('#fileInput').val("");
                         }
                     });
                     

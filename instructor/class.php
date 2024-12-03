@@ -18,6 +18,7 @@ if(isset($_SESSION["user_category"])){
     exit();
 }
 
+$_SESSION["storeCode"] = $_GET["class"];
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +34,9 @@ if(isset($_SESSION["user_category"])){
     <!-- <script src="scripts/view-class.js"></script> -->
     <!-- <script src="scripts/class-content.js"></script> -->
     <!-- <script src="scripts/view-post.js"></script> -->
+
     <?php if(isset($_GET["class"])){ include("includes/view-class.php"); } ?>
-    <?php require('inc/links.php');  ?>
+    <?php require('inc/links.php');  $_SESSION["tmpCode"] = $_GET["class"]; ?>
 </head>
 
 <body>

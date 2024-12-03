@@ -28,73 +28,10 @@ if(isset($_SESSION["user_category"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
     <?php require('inc/links.php'); ?>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        initialDate: '2024-10-07',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: [
-            {
-            title: 'All Day Event',
-            start: '2024-10-01'
-            },
-            {
-            title: 'Long Event',
-            start: '2024-10-07',
-            end: '2024-10-10'
-            },
-            {
-            groupId: '999',
-            title: 'Repeating Event',
-            start: '2024-10-09T16:00:00'
-            },
-            {
-            groupId: '999',
-            title: 'Repeating Event',
-            start: '2024-10-16T16:00:00'
-            },
-            {
-            title: 'Conference',
-            start: '2024-10-11',
-            end: '2024-10-13'
-            },
-            {
-            title: 'Meeting',
-            start: '2024-10-12T10:30:00',
-            end: '2024-10-12T12:30:00'
-            },
-            {
-            title: 'Lunch',
-            start: '2024-10-12T12:00:00'
-            },
-            {
-            title: 'Meeting',
-            start: '2024-10-12T14:30:00'
-            },
-            {
-            title: 'Birthday Party',
-            start: '2024-10-13T07:00:00'
-            },
-            {
-            title: 'Click for Google',
-            url: 'https://google.com/',
-            start: '2024-10-28'
-            }
-        ]
-        });
-
-        calendar.render();
-    });
-
-    </script>
 </head>
 <body class="bg-white">
     <?php require('inc/header.php'); ?>
@@ -116,7 +53,8 @@ if(isset($_SESSION["user_category"])){
     
     
 
-
+    <script src="scripts/calendar.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
 </body>

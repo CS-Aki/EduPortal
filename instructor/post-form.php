@@ -28,13 +28,22 @@ if (isset($_SESSION["user_category"])) {
 // echo "This is the " . $_SESSION["access_token"]["access_token"];
 // phpinfo();
 if (isset($_GET["code"])) {
-    include("includes/upload-file.php");
+    include("includes/auth.php");
 } else {
     unset($_SESSION["classCode"]);
     unset($_SESSION["storedFile"]);
 }
 
+// echo $_SESSION['access_token'];
 
+if(!isset($_SESSION['access_token'])){
+    include("includes/auth.php");
+}
+// if(!isset($_SESSION["tmp"])){
+//     include("includes/upload-file.php");
+// }
+$_SESSION["tmp"] = $_GET["class"];
+// echo $_SESSION['access_token'];
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +81,7 @@ if (isset($_GET["code"])) {
 
 <body>
     <?php require('inc/header.php'); ?>
-
+    <input type="text" id="tmp" value="<?php if(isset($_SESSION["tmp"])) echo $_SESSION["tmp"]; ?>" hidden>
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
             <div class="col-lg-10 col-sm-12 ms-auto">
@@ -109,59 +118,49 @@ if (isset($_GET["code"])) {
                     </select><span> <br>
                     </span>
 
-                    <form action="includes/create-post.php" method="post" id="postForm" enctype="multipart/form-data">
-                        <!-- <input type="text" id="title" placeholder="Enter Title" required> -->
+                    <form action="includes/upload-file.php" method="post" id="combinedForm" enctype="multipart/form-data">
                         <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Title: </span>
                         <div class="form-floating">
-                            <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="title" required></textarea>
+                            <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="title" name="title" required></textarea>
                             <label for="floatingTextarea2" style="color: var(--black3);">Enter Title</label>
                         </div>
 
-                        <!-- <div class="input-group"></div> -->
                         <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Description:</span>
                         <div class="form-floating">
-                            <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="description" required></textarea>
+                            <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="description" name="description" required></textarea>
                             <label for="floatingTextarea2" style="height: 7rem; color: var(--black3);">Enter Description</label>
                         </div>
-                        <!-- <input type="text" id="description" placeholder="Enter Description" required> -->
 
                         <br>
                         <div class="row">
                             <div class="col-3" id="dateContainer" hidden>
-                                <!-- <label for="deadlineDate">Deadline Date:</label> -->
                                 <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Deadline Date: </span>
-                                <!-- <input type="date" id="deadlineDate" name="deadlineDate"> -->
-                                <input type="date" id="deadlineDate" name="deadlineDate"  >
-
+                                <input type="date" id="deadlineDate" name="deadlineDate">
                             </div>
                             <div class="col-3" id="timeContainer" hidden>
-                                <!-- <label for="deadlineTime">Deadline Time:</label> -->
                                 <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Deadline Time: </span>
-                                <input id="deadlineTime" type="time" name="deadlineTime" value="12:00" >
+                                <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">
                             </div>
                         </div>
-                        <div class="col-lg-2">
-                             <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button>
-                         </div>
-                    </form>
 
-                    <div class="form-group">
-                        <form method="post" action="includes/upload-file.php" class="form" enctype="multipart/form-data" id="fileForm">
-                            <!-- <label>File</label> -->
-                            <!-- <div style="border: 2px solid var(--green2); width: 65px; height: 65px; display: flex; justify-content: center; align-items: center;" class="rounded-2"><i class="greenicon bi bi-upload" ></i></div> -->
-                            <label for="fileInput" class="btn btn-success mt-2 ms-2 fw-semibold" title="Upload File"><i style="font-size: 24px;" class="whiteicon bi bi-upload me-2"></i>Upload File</label>
+                        <div class="form-group">
+                            <label for="fileInput" class="btn btn-success mt-2 ms-2 fw-semibold" title="Upload File">
+                                <i style="font-size: 24px;" class="whiteicon bi bi-upload me-2"></i>Upload File
+                            </label>
                             <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
                             <p id="fileCount">No files selected</p>
-                            <!-- <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Upload</span> -->
-                            <!-- <input type="file" name="files[]" class="form-control" id="fileInput" multiple> -->
-                            <input type="submit" hidden>
                             <input type="text" name="classCode" value="<?php echo md5($details[0]["class_code"]); ?>" hidden>
-                            <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]["access_token"]; ?>" hidden>
-                        </form>
-                    </div>
+                            <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]; ?>" hidden>
+                        </div>
+
+
+                        <div class="col-lg-2">
+                            <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button>
+                        </div>
+                    </form>
 
                     <!-- Handles the messaging -->
-                    <div class="form-message"></div>
+                    <div class="form-message"><?php if(isset($_SESSION["tmp"])){ echo $_SESSION["tmp"]; unset($_SESSION["tmp"]); }?></div>
                     <hr>
 
                 </div>
