@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
     // Listen for new comments
     socket.on("serverRcvComment", (data) => {
         console.log("Received new comment:", data);
-        console.log("ID " . data.postId);
+        console.log("ID ", data.postId);
         // Broadcast new comment to all connected clients
         io.emit(data.postId, data);
     });
