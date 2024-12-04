@@ -54,12 +54,27 @@ if ($_SESSION['access_token']) {
     $files = $_SESSION["storedFile"];
     echo var_dump($files); 
     $uploadedFiles = [];
+    $fileSizes = [];
     $folderName = "EduPortal";
 
     // Loop through each file in the uploaded files array
     foreach ($files['tmp_name'] as $index => $tmp_name) {
         $destination = '../uploads/' . basename($files['name'][$index]);
         echo "<br>Destination for file {$files['name'][$index]}: " . $destination;
+
+        $fileSizeBytes = $files['size'][$index]; // File size in bytes
+        $size = 0;
+        $word = "";
+        // Determine whether the file size is in MB or KB
+        if (strlen((string)$fileSizeBytes) >= 7) {
+            $size = ceil(($fileSizeBytes / (1024 * 1024))); // Convert to MB
+            $word = "MB";
+        } else {
+            $size = ceil(($fileSizeBytes / 1024)); // Convert to KB
+            $word = "KB";
+        }
+
+        $fileSizes[] = $size . " {$word}";
 
         // Move the uploaded file to the server
         if (move_uploaded_file($tmp_name, $destination)) {
@@ -163,7 +178,7 @@ if ($_SESSION['access_token']) {
             // echo "FILE NAME " . $fileNames[$i]. "\n";
             // echo "FILE ID " . htmlspecialchars($fileId). "\n";
 
-            $instrCtrlr->uploadGdriveData($_SESSION["postId"][0]["post_id"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId));
+            $instrCtrlr->uploadGdriveData($_SESSION["postId"][0]["post_id"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]);
             $i++;
             // echo "File ID: " . htmlspecialchars($fileId) . "<br>";
         }

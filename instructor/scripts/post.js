@@ -1,11 +1,17 @@
+
+
 $(document).ready(function() {
-    console.log(io);
+    // console.log(io);
     console.log("test");
+
+    // let searchParams = new URLSearchParams(window.location.search);
+    // let classUrl = searchParams.get('class');
+    // console.log(classUrl);
 
     // const socket = io('http://localhost:4000');
     console.log("This is the ", $("#token").val().length);
     // let hide = true;
-    const socket = io("https://eduportal-wgrc.onrender.com", {
+      const socket = io("https://eduportal-wgrc.onrender.com", {
         transports: ["websocket"] // Ensure WebSocket transport
       });
     

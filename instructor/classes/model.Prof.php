@@ -199,7 +199,6 @@ class Instructor extends DbConnection
         if($type == "quiz"){
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
-            $_SESSION["postId"] = $this->lastInsertId();
             $stmt = null;
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
@@ -257,14 +256,15 @@ class Instructor extends DbConnection
         return $code = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    protected function fetchPostDetails($title, $classCode){
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ?";
+    protected function fetchPostDetails($postID, $classCode){
+        // echo $title;
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode))) {
+            if ($stmt->execute(array($postID, $classCode))) {
                 if ($stmt->rowCount() == 0) {
-                    return $result = $this->fetchNoComment($title, $classCode);
+                    return $result = $this->fetchNoComment($postID, $classCode);
                 }
                 // Add conditional statement if rowCount == 0 then call a function
                 $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -320,12 +320,12 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function fetchComments($title, $classCode){
-        $sql = "SELECT comments.post_id, comments.name, comments.comment, comments.user_id, users.image, TIME(comments.created_at) as 'time', DATE(comments.created_at) as 'month' FROM comments INNER JOIN posts ON posts.post_id = comments.post_id INNER JOIN users ON comments.user_id = users.user_id WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ?";
+    protected function fetchComments($postId, $classCode){
+        $sql = "SELECT comments.post_id, comments.name, comments.comment, comments.user_id, users.image, TIME(comments.created_at) as 'time', DATE(comments.created_at) as 'month' FROM comments INNER JOIN posts ON posts.post_id = comments.post_id INNER JOIN users ON comments.user_id = users.user_id WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode))) {
+            if ($stmt->execute(array($postId, $classCode))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -342,14 +342,37 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function insertComment($title, $classCode, $comment){
+    protected function getFIlesInDb($postId, $classCode){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
 
-        $postID = $this->getPostId($title, $classCode);
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function insertComment($postId, $classCode, $comment){
+        $postID = $this->decryptPostId($postId, $classCode);
         $sql = "INSERT INTO comments (`post_id`, `class_code`, `name`, `comment`, `user_id`) VALUES(?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postID[0]["post_id"], $classCode, $_SESSION["name"], $comment, $_SESSION["id"]))) {
+            if ($stmt->execute(array($postId, $classCode, $_SESSION["name"], $comment, $_SESSION["id"]))) {
                 // Add conditional statement if rowCount == 0 then call a function
                 return true;
             } else {
@@ -361,6 +384,26 @@ class Instructor extends DbConnection
         }
 
         return false;
+    }
+
+    protected function decryptPostId($postId, $classCode){
+        $sql = "SELECT post_id FROM posts WHERE MD5(post_id) = ? AND class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                // Add conditional statement if rowCount == 0 then call a function
+                return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return null;
+        }
+        return null;
     }
 
     protected function getPostId($title, $classCode){
@@ -531,24 +574,24 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId){
+    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize){
         $newCode = $this->findSimilarCode($classCode);
         echo "Class Code " . $newCode[0]["class_code"] . " <br>\n";
         echo "Post Id " . $postId . " <br>\n";
         echo "Name " . $fileName . " <br>\n";
         echo "ID " . $gdriveId . " <br>\n";
 
-        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId))) {
+            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize))) {
                 return true;
             } else {
                 return false;
             }
         } catch (PDOException $e) {
-            echo "Error: ";
+            echo "Error: " . $e;
             return false;
         }
     }

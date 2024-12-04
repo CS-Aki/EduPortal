@@ -26,7 +26,7 @@ if(isset($_GET["post"])){
     
     if (session_id() === "") session_start();   
     
-    $postTitle =  $_GET["post"];
+    $postID =  $_GET["post"];
     $instrCtrlr = new InstructorController();
 
     // sleep(5);
@@ -34,9 +34,10 @@ if(isset($_GET["post"])){
     if(isset($_GET["code"])) $classCode = $_GET["code"];
     else $classCode = $_GET["class"];
 
-    $postDetails = $instrCtrlr->getPostDetails($postTitle, $classCode);
-    $comments = $instrCtrlr->getComments($postTitle, $classCode);
-    
+    $postDetails = $instrCtrlr->getPostDetails($postID, $classCode);
+    $comments = $instrCtrlr->getComments($postID, $classCode);
+    $files = $instrCtrlr->getFiles($postID, $classCode);
+    // echo var_dump($files);
     // echo var_dump($postDetails);
     // $postDetails = $stdController->getPostDetails($postTitle, $classCode);
     // $comments = $stdController->getComments($postTitle, $classCode);
@@ -47,7 +48,12 @@ if(isset($_GET["post"])){
         $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];
         $month = $months[$postDetails[0]["month"][5] . "" . $postDetails[0]["month"][6] - 1];
         $day = $postDetails[0]["month"][8] . "" . $postDetails[0]["month"][9];
-    // }else{
+    //  }else{
+    //     $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+    //     $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];
+    //     $month = $months[$postDetails[0]["month"][5] . "" . $postDetails[0]["month"][6] - 1];
+    //     $day = $postDetails[0]["month"][8] . "" . $postDetails[0]["month"][9];
+    //  }
 
     if(isset($_GET["temp"])){
         // $comments[count($comments) - 1]["id"] = $_SESSION["id"];

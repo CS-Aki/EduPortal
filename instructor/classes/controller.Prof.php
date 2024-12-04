@@ -98,8 +98,8 @@ class InstructorController extends Instructor
         return $details;
     }
 
-    public function getPostDetails($title, $classCode){
-        $content = $this->fetchPostDetails($title, $classCode);
+    public function getPostDetails($postID, $classCode){
+        $content = $this->fetchPostDetails($postID, $classCode);
         if($content == null){
             echo "Controller error";
         }
@@ -110,8 +110,8 @@ class InstructorController extends Instructor
         return $this->fetchComments($title, $classCode);
     }
 
-    public function postComment($title, $classCode, $comment){
-        return $this->insertComment($title, $classCode, $comment);
+    public function postComment($postID, $classCode, $comment){
+        return $this->insertComment($postID, $classCode, $comment);
     }
 
     public function createPost($classCode, $type, $title, $desc, $date, $time){
@@ -174,8 +174,8 @@ class InstructorController extends Instructor
         echo "Success Uploading Quiz In Db\n";
     }
 
-    public function uploadGdriveData($postId, $classCode, $fileName, $gdriveId){
-       $result = $this->insertGdriveData($postId, $classCode, $fileName, $gdriveId);
+    public function uploadGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize){
+       $result = $this->insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize);
 
        if($result == false){
         echo "ERROR UPLOADING GDRIVE DATA INTO DB";
@@ -183,5 +183,17 @@ class InstructorController extends Instructor
        }
 
        echo "GDRIVE DATA SUCCESS";
+    }
+
+    public function getFiles($postId, $classCode){
+        $content = $this->getFIlesInDb($postId, $classCode);
+
+        if($content == null){
+            // echo "Controller error";
+            return;
+        }
+
+        return $content;
+
     }
 }

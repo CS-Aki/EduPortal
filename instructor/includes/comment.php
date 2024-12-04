@@ -11,18 +11,18 @@ if(isset($_POST["comment"])){
     if(empty($comment)) return;
 
     // echo $comment;
-    $postTitle =  $_POST["post-title"];
+    $postId =  $_POST["post-id"];
     $instrCtrlr = new InstructorController();
     // $stdController = new StudentController();
     $classCode = $_POST["class-code"];
-    $postDetails = $instrCtrlr->getPostDetails($postTitle, $classCode);
+    $postDetails = $instrCtrlr->getPostDetails($postId, $classCode);
     
     // $postDetails = $stdController->getPostDetails($postTitle, $classCode);
 
     // echo $postDetails[0]["class_code"];
     // echo "<br>". $postDetails[0]["title"];
 
-    $result = $instrCtrlr->postComment($postDetails[0]["title"],  $postDetails[0]["class_code"], $comment);
+    $result = $instrCtrlr->postComment($postDetails[0]["post_id"],  $postDetails[0]["class_code"], $comment);
 
     if($result == true){
         echo "Success Comment";

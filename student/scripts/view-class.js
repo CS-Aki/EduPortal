@@ -2,6 +2,10 @@ $(document).ready(function() {
 
   console.log(io);
 
+  let searchParams = new URLSearchParams(window.location.search);
+  let classUrl = searchParams.get('class');
+  console.log(classUrl);
+
   const socket = io("https://eduportal-wgrc.onrender.com", {
     transports: ["websocket"] // Ensure WebSocket transport
   });
@@ -14,7 +18,7 @@ $(document).ready(function() {
     console.log('Connected to Socket.IO server');
   });
 
-  socket.on('displayNewPost', data=>{
+  socket.on(classUrl, data=>{
     console.log("this is the ", data);
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let temp = data.date.charAt(5) + data.date.charAt(6);
@@ -25,6 +29,7 @@ $(document).ready(function() {
     switch(data.contentType){
       case "material":
 
+      // Can use `` instead of double quote inside append for better readability and easier to edit 
         $('#materialContent').append("<a href='material.php?class="+data.classCode+"&post="+ md5(data.title) +"'<div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'><div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div><div class='ms-3 mt-1'><p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>"+ data.title +"<br><span class='fs-6 fw-light green3' id='material-date'>"+ month +" "+ day +", "+ year +"</span></p></div></div></a>");
         // $('#materialContent').append("<div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>");
         // $('#materialContent').append("<div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>");

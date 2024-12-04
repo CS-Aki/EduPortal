@@ -194,15 +194,15 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function fetchPostDetails($title, $classCode){
+    protected function fetchPostDetails($postId, $classCode){
         // $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE posts.class_code = ?";
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content, posts.content_type, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, posts.content_type, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode, "Visible"))) {
+            if ($stmt->execute(array($postId, $classCode, "Visible"))) {
                 if ($stmt->rowCount() == 0) {
-                    return $result = $this->fetchNoComment($title, $classCode);
+                    return $result = $this->fetchNoComment($postId, $classCode);
                 }
                 // Add conditional statement if rowCount == 0 then call a function
                 $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -217,12 +217,12 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function fetchComments($title, $classCode){
-        $sql = "SELECT comments.post_id, comments.name, comments.comment, comments.user_id, users.image, TIME(comments.created_at) as 'time', DATE(comments.created_at) as 'month' FROM comments INNER JOIN posts ON posts.post_id = comments.post_id INNER JOIN users ON comments.user_id = users.user_id WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ?";
+    protected function fetchComments($postID, $classCode){
+        $sql = "SELECT comments.post_id, comments.name, comments.comment, comments.user_id, users.image, TIME(comments.created_at) as 'time', DATE(comments.created_at) as 'month' FROM comments INNER JOIN posts ON posts.post_id = comments.post_id INNER JOIN users ON comments.user_id = users.user_id WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode))) {
+            if ($stmt->execute(array($postID, $classCode))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -239,12 +239,12 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function fetchNoComment($title, $classCode){
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content , TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM `posts` WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ? AND posts.visiblity=?";
+    protected function fetchNoComment($postId, $classCode){
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content , TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM `posts` WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visiblity=?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode, "Visible"))) {
+            if ($stmt->execute(array($postId, $classCode, "Visible"))) {
                 // Add conditional statement if rowCount == 0 then call a function
                 return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
                 //echo var_dump($result);

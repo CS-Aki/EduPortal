@@ -74,31 +74,40 @@ if(isset($_SESSION["user_category"])){
                                     </p>                         
                                 </div>
                                 <div class="d-flex" id="material-download">
-                                    <a href="" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
+                                    <!-- <a href="https://drive.google.com/file/d/1NhAcy-s6ESxqBbSlWJo_hprXxuyavetV/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
                                         <div class="d-flex justify-content-start">
                                             <div class="me-2">
                                                 <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
                                             </div>
                                             <div>
-                                                <span class="green2 fw-bold mb-0">File1.jpeg</span>
+                                                <span class="green2 fw-bold mb-0">Click me.jpeg</span>
                                                 <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
                                             </div>
                                         </div>
-                                    </a>
-                                    <a href="" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
-                                        <div class="d-flex">
-                                            <div class="me-2">
-                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
-                                            </div>
-                                            <div>
-                                                <span class="green2 fw-bold mb-0">File1.jpeg</span>
-                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
-                                            </div>
-                                        </div>
-                                    </a>
+                                    </a> -->
+                                    <!-- google_drive_file_id -->
+                                    <?php 
+                                        if($files != null){
+                                            for($i = 0 ; $i < count($files); $i++){
+                                                echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
+                                                        <div class="d-flex">
+                                                            <div class="me-2">
+                                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                            </div>
+                                                            <div>
+                                                                 <span class="green2 fw-bold mb-0">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
+                                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>';
+                                            }
+                                        }
+                                    ?>
+                    
                                 </div>
                                 <div class="line2 mt-5"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
+                                <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
 
                                     <!-- FOR COMMENT -->
                                     <div class="input-group mt-lg-2">
@@ -167,8 +176,7 @@ if(isset($_SESSION["user_category"])){
 
                     </div>
                 </div>
-
-                
+         
             </div>
         </div>
     </div>

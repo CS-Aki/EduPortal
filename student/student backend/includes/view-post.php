@@ -13,15 +13,15 @@ if(isset($_GET["temp"])){
 }
 
 if(isset($_GET["post"])){
-    $postTitle =  $_GET["post"];
+    $postId =  $_GET["post"];
     $stdController = new StudentController();
     if(isset($_GET["code"])) $classCode = $_GET["code"];
     else $classCode = $_GET["class"];
 
-    $postDetails = $stdController->getPostDetails($postTitle, $classCode);
-    $comments = $stdController->getComments($postTitle, $classCode);
+    $postDetails = $stdController->getPostDetails($postId, $classCode);
+    $comments = $stdController->getComments($postId, $classCode);
     // echo var_dump($comments);
-
+    
     // if(isset($comments[0]["month"])){
         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
         $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];

@@ -24,7 +24,7 @@ if(isset($_SESSION["user_category"])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
@@ -64,6 +64,7 @@ if(isset($_SESSION["user_category"])){
                     if($postDetails[0]["content_type"] != "Activity"){
                 ?>
                 <div class="container mt-4 px-lg-5 px-sm-2">
+                    <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
                     <div class="mt-2">
                         <div class="d-flex">
                             <div>
@@ -112,7 +113,38 @@ if(isset($_SESSION["user_category"])){
                                             <a href="" class="align-items-end green1 fs-3 pe-2 comment-btn"><i class="bi bi-send-fill"></i></a>
                                         </span>
                                     </div>
-                                    </div>
+                                </div>
+                                <div class="ms-lg-3 mt-4">
+                                        <?php 
+                                        //    echo $comments[0]["name"];
+                                        // if(isset($comments[0]["name"])){
+                                        //     for($i = 0 ; $i < count($comments); $i++){
+                                        //         $year = $comments[$i]["month"][0] . "" . $comments[$i]["month"][1] . $comments[$i]["month"][2] . "" . $comments[$i]["month"][3];
+                                        //         $month = $months[$comments[$i]["month"][5] . "" . $comments[$i]["month"][6] - 1];
+                                        //         $month = $month[0] . "" . $month[1] . "" . $month[2] ;
+                                        //         $day = $comments[$i]["month"][8] . "" . $comments[$i]["month"][9];
+                                                
+                                        //         echo "<div class='d-flex align-items-start mb-3' id='comment-container'>
+                                        //                 <div class='me-lg-3 d-flex align-items-center justify-content-center'>
+                                        //                     <img src='{$comments[$i]['image']}' style='width: 35px;' class='rounded-5'></span>
+                                        //                 </div>
+    
+                                        //                 <div class=''>
+                                        //                 <div class='d-flex'>
+                                        //                     <p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>{$comments[$i]["name"]}</p>
+                                        //                     <p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>{$month} {$day}</p>                                              
+                                        //                 </div>
+    
+                                        //                 <div class='m-0 p-'>
+                                        //                     <p class='black2 m-0 p-0' id='comment'>{$comments[$i]["comment"]}</p>
+                                        //                 </div>
+                                        //                 </div>
+                                        //             </div>";
+                                        //     }
+                                        // }   
+                                        // ?>
+                                        <div id="comments"></div>
+                                </div>
                                 </div>
                                 
                             </div>
@@ -120,6 +152,7 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </div>
                 <?php } else {?>
+                    <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
 
                 <div class="container mt-4 px-lg-5 px-sm-2">
                     <div class="mt-2">
@@ -219,39 +252,43 @@ if(isset($_SESSION["user_category"])){
                                             <a href="" class="align-items-end green1 fs-3 pe-2 comment-btn"><i class="bi bi-send-fill"></i></a>
                                         </span>
                                     </div>
-
+    
+                                    <!-- <div class="ms-lg-3 mt-4" id="comments">
+                                    </div> -->
+                          
                                     <!-- DISPLAY COMMENTS -->
                                     <div class="ms-lg-3 mt-4">
                                         <?php 
-                                        if(isset($comments[0]["name"])){
-                                            for($i = 0 ; $i < count($comments); $i++){
-                                                $year = $comments[$i]["month"][0] . "" . $comments[$i]["month"][1] . $comments[$i]["month"][2] . "" . $comments[$i]["month"][3];
-                                                $month = $months[$comments[$i]["month"][5] . "" . $comments[$i]["month"][6] - 1];
-                                                $month = $month[0] . "" . $month[1] . "" . $month[2] ;
-                                                $day = $comments[$i]["month"][8] . "" . $comments[$i]["month"][9];
+                                        //    echo $comments[0]["name"];
+                                        // if(isset($comments[0]["name"])){
+                                        //     for($i = 0 ; $i < count($comments); $i++){
+                                        //         $year = $comments[$i]["month"][0] . "" . $comments[$i]["month"][1] . $comments[$i]["month"][2] . "" . $comments[$i]["month"][3];
+                                        //         $month = $months[$comments[$i]["month"][5] . "" . $comments[$i]["month"][6] - 1];
+                                        //         $month = $month[0] . "" . $month[1] . "" . $month[2] ;
+                                        //         $day = $comments[$i]["month"][8] . "" . $comments[$i]["month"][9];
                                                 
-                                                echo "<div class='d-flex align-items-start mb-3' id='comment-container'>
-                                                        <div class='me-lg-3 d-flex align-items-center justify-content-center'>
-                                                            <img src='images/profile.png' style='width: 35px;' class='rounded-5'></span>
-                                                        </div>
+                                        //         echo "<div class='d-flex align-items-start mb-3' id='comment-container'>
+                                        //                 <div class='me-lg-3 d-flex align-items-center justify-content-center'>
+                                        //                     <img src='images/profile.png' style='width: 35px;' class='rounded-5'></span>
+                                        //                 </div>
     
-                                                        <div class=''>
-                                                        <div class='d-flex'>
-                                                            <p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>{$comments[$i]["name"]}</p>
-                                                            <p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>{$month} {$day}</p>                                              
-                                                        </div>
+                                        //                 <div class=''>
+                                        //                 <div class='d-flex'>
+                                        //                     <p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>{$comments[$i]["name"]}</p>
+                                        //                     <p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>{$month} {$day}</p>                                              
+                                        //                 </div>
     
-                                                        <div class='m-0 p-'>
-                                                            <p class='black2 m-0 p-0' id='comment'>{$comments[$i]["comment"]}</p>
-                                                        </div>
-                                                        </div>
-                                                    </div>";
-                                            }
-                                            echo "<div id='appendNewComment'></div>";
-                                        } else{
-                                             echo "<div id='appendNewComment'></div>";
-                                        }          
-                                        ?>
+                                        //                 <div class='m-0 p-'>
+                                        //                     <p class='black2 m-0 p-0' id='comment'>{$comments[$i]["comment"]}</p>
+                                        //                 </div>
+                                        //                 </div>
+                                        //             </div>";
+                                        //     }
+                                        //     echo "<div id='appendNewComment'></div>";
+                                        // } else{
+                                        //      echo "<div id='appendNewComment'></div>";
+                                        // }       
+                                        // ?>
                                         <!-- <div class="d-flex align-content-center mb-3" id="comment-container">
 
                                             <div class="me-lg-3 d-flex align-items-center justify-content-center">
@@ -267,7 +304,8 @@ if(isset($_SESSION["user_category"])){
                                                     <p class="black2 m-0 p-0" id="comment">Thanks for the lesson!</p>
                                                 </div>
                                             </div>
-                                        </div>                                  -->
+                                        </div>                                -->
+                                        <div id="comments"></div>
 
                                     </div>
                                 </div>

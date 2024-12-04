@@ -61,16 +61,16 @@ class StudentController extends ClassRm{
       //  echo $details[0]["title"];
     }
 
-    public function getPostDetails($title, $classCode){
-        $content = $this->fetchPostDetails($title, $classCode);
+    public function getPostDetails($postId, $classCode){
+        $content = $this->fetchPostDetails($postId, $classCode);
         if($content == null){
             echo "Controller error";
         }
         return $content;
     }
 
-    public function getComments($title, $classCode){
-          return $this->fetchComments($title, $classCode);
+    public function getComments($postId, $classCode){
+          return $this->fetchComments($postId, $classCode);
     }
 
     public function postComment($title, $classCode, $comment){

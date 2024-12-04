@@ -90,7 +90,7 @@ if(isset($_GET["class"])){
     </script>    
     
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
-
+    <!-- <script src="../server/socket.js"></script> -->
     <script>    
         const socket = io("https://eduportal-wgrc.onrender.com", {
             transports: ["websocket"] // Ensure WebSocket transport

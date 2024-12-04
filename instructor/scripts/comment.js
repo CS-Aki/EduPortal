@@ -1,11 +1,10 @@
-// import { io } from "socket.io-client";
+
 
 $(document).ready(function() {  
   
   console.log(io);
   // const socket = io('http://localhost:4000');
   // const socket = io('https://eduportal-wgrc.onrender.com');
-
   const socket = io("https://eduportal-wgrc.onrender.com", {
     transports: ["websocket"] // Ensure WebSocket transport
   });
@@ -18,7 +17,9 @@ $(document).ready(function() {
     console.log('Connected to Socket.IO server');
   });
 
-  socket.on('displayNewComment', data=>{
+
+  console.log($("#post-id").text());
+  socket.on($("#post-id").text(), data=>{
     console.log("this is the ", data);
     $('#comments').append("<div class='d-flex align-content-center mb-3' id='comment-container'><div class='me-lg-3 d-flex align-items-center justify-content-center'> <img src='"+data.image+"' style='width: 35px;' class='rounded-5'></span></div><div class=''><div class='d-flex'><p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>"+ data.name + "</p><p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>"+ data.month +" "+ data.day +"</p></div><div class='m-0 p-'><p class='black2 m-0 p-0' id='comment'>" + data.comment + "</p></div></div></div>");
 
@@ -48,11 +49,11 @@ $(document).ready(function() {
       data: {
         'comment': comment,
         'class-code': classUrl,
-        'post-title': postUrl
+        'post-id': postUrl
       },
 
       success: function(response) {
-
+        console.log(response);
         if (response.includes("Success Comment")) {
             console.log(response);
             $.ajax({
@@ -72,7 +73,7 @@ $(document).ready(function() {
                   month = month[0] + "" + month[1] + "" + month[2];
                   let day = response[response.length - 1]["month"].charAt(8) + response[response.length - 1]["month"].charAt(9);
 
-                  console.table(response);
+                  // console.table(response);
                   // console.log("The commenet is \n" + response[response.length - 1]["comment"]);
                   let comment =  response[response.length - 1]["comment"];
                   comment = comment.replaceAll("\n", "<br>");
@@ -89,7 +90,8 @@ $(document).ready(function() {
                       name : response[response.length - 1]["name"],
                       id : response[response.length - 1]["user_id"],
                       month : month,
-                      day : day
+                      day : day,
+                      postId: response[response.length - 1]["post_id"],
                   };
 
                   socket.emit("serverRcvComment", data);
