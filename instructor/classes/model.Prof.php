@@ -187,6 +187,7 @@ class Instructor extends DbConnection
         session_start();
 
         $newCode = $this->findSimilarCode($classCode);
+        $connection = $this->connect();
 
         if($type != "material"){
              $sql = "INSERT INTO `posts`(`class_code`, `prof_name`, `title`, `content_type`, `content`, `visibility`) VALUES (?, ?, ?, ?, ?, ?)";
@@ -194,18 +195,19 @@ class Instructor extends DbConnection
             $sql = "INSERT INTO `posts`(`class_code`, `prof_name`, `title`, `content_type`, `content`, `visibility`) VALUES (?, ?, ?, ?, ?, ?)";
         }
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $connection->prepare($sql);
        
         if($type == "quiz"){
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
+            $_SESSION["postId"] = $connection->lastInsertId();
             $stmt = null;
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
-            $_SESSION["postId"] = $postID;
+           
             $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->connect()->prepare($sql);
-            if ($stmt->execute(array($postID[0]["post_id"], $newCode[0]["class_code"], $date, $time, 100))) {
+            $stmt = $connection->prepare($sql);
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $date, $time, 100))) {
              
                 return true;
             }else{
@@ -217,11 +219,12 @@ class Instructor extends DbConnection
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
-            $_SESSION["postId"] = $postID;
+            $_SESSION["postId"] = $connection->lastInsertId();
+            echo "THIS IS THE POST ID " + $_SESSION["postId"];
             $stmt = null;
             $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->connect()->prepare($sql);
-            if ($stmt->execute(array($postID[0]["post_id"], $newCode[0]["class_code"], $date, $time, 100))) {
+            $stmt = $connection->prepare($sql);
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $date, $time, 100))) {
                 return true;
                 exit();
             }else{
@@ -233,7 +236,8 @@ class Instructor extends DbConnection
             $type = ucfirst($type);
             if ($stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"))) {
                 $postID = $this->getPostId($title, $newCode[0]["class_code"]);
-                $_SESSION["postId"] = $postID;
+                $_SESSION["postId"] = $connection->lastInsertId();
+                
                 return true;
             }else{
                 echo "Error statement";
@@ -406,12 +410,12 @@ class Instructor extends DbConnection
         return null;
     }
 
-    protected function getPostId($title, $classCode){
-        $sql = "SELECT post_id FROM posts WHERE title = ? AND class_code = ?";
+    protected function getPostId($postId, $classCode){
+        $sql = "SELECT post_id FROM posts WHERE MD5(post_id) = ? AND class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($title, $classCode))) {
+            if ($stmt->execute(array($postId, $classCode))) {
                 // Add conditional statement if rowCount == 0 then call a function
                 return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
                 //echo var_dump($result);
@@ -581,11 +585,11 @@ class Instructor extends DbConnection
         echo "Name " . $fileName . " <br>\n";
         echo "ID " . $gdriveId . " <br>\n";
 
-        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`, `user_category`) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize))) {
+            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "3"))) {
                 return true;
             } else {
                 return false;

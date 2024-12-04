@@ -46,11 +46,11 @@ echo "RANDOM HERE";
 // echo $_SESSION["postId"]["post_id"] . "\n\n\n\n";
 echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
 
-echo $_SESSION["postId"][0]["post_id"];
+echo $_SESSION["postId"];
 
 if ($_SESSION['access_token']) {
     $_SESSION["tmp"] = "<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>";
-    $postId = $_SESSION["postId"][0]["post_id"];
+    $postId = $_SESSION["postId"];
     $files = $_SESSION["storedFile"];
     echo var_dump($files); 
     $uploadedFiles = [];
@@ -167,7 +167,7 @@ if ($_SESSION['access_token']) {
     unset($_SESSION["storedFile"]);
  
     $instrCtrlr = new InstructorController();
-
+    echo "POST ID : " . $_SESSION["postId"];
     // Provide feedback to the user
     if (count($uploadedFiles) > 0) {
         echo "Files uploaded successfully!<br>";
@@ -178,7 +178,7 @@ if ($_SESSION['access_token']) {
             // echo "FILE NAME " . $fileNames[$i]. "\n";
             // echo "FILE ID " . htmlspecialchars($fileId). "\n";
 
-            $instrCtrlr->uploadGdriveData($_SESSION["postId"][0]["post_id"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]);
+            $instrCtrlr->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]);
             $i++;
             // echo "File ID: " . htmlspecialchars($fileId) . "<br>";
         }

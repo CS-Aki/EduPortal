@@ -12,7 +12,7 @@ $stdController = new StudentController();
 $status = $stdController->getAttendance($_SESSION["id"]);
 
 if($status == null || count($status) == 0){
-    echo "Pending...";
+    echo "Pending";
 }else{
     echo $status[0]["status"];
 }

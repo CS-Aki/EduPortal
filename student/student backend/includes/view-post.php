@@ -14,12 +14,22 @@ if(isset($_GET["temp"])){
 
 if(isset($_GET["post"])){
     $postId =  $_GET["post"];
+    // if(isset($_SESSION["storedId"])){
+    //     $postId = $_SESSION["storedId"];
+    // }
+    $_SESSION["storedId"] = $postId;
     $stdController = new StudentController();
     if(isset($_GET["code"])) $classCode = $_GET["code"];
     else $classCode = $_GET["class"];
 
+    // if(isset($_SESSION["storedCode"])){
+    //     $classCode = $_SESSION["storedCode"];
+    // }
+    
     $postDetails = $stdController->getPostDetails($postId, $classCode);
     $comments = $stdController->getComments($postId, $classCode);
+    $files = $stdController->getFiles($postId, $classCode);
+    // echo var_dump($files);
     // echo var_dump($comments);
     
     // if(isset($comments[0]["month"])){

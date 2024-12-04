@@ -108,6 +108,17 @@ class StudentController extends ClassRm{
         return $status;
     }
 
+    public function getFiles($postId, $classCode){
+        $content = $this->getFIlesInDb($postId, $classCode);
+
+        if($content == null){
+            // echo "Controller error";
+            return;
+        }
+
+        return $content;
+    }
+
 }
 
 ?>

@@ -31,7 +31,10 @@ if(isset($_SESSION["user_category"])){
 
     <!-- <script src="scripts/view-class.js"></script> -->
     <!-- <script src="scripts/class-content.js"></script> -->
-    <?php if(isset($_GET["class"])){ include("student backend/includes/view-class.php"); } ?>
+    <?php if(isset($_GET["class"])){ include("student backend/includes/view-class.php"); } 
+        $_SESSION["storeCode"] = $_GET["class"]; 
+        // $_SESSION["storedId"] = $_GET["post"];
+    ?>
     <?php require('inc/links.php');  ?>
     
 </head>

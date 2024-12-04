@@ -194,15 +194,15 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function fetchPostDetails($postId, $classCode){
-        // $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE posts.class_code = ?";
+    protected function fetchPostDetails($postID, $classCode){
+        // echo $title;
         $sql = "SELECT posts.post_id, posts.class_code, posts.content, posts.content_type, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $classCode, "Visible"))) {
+            if ($stmt->execute(array($postID, $classCode, "Visible"))) {
                 if ($stmt->rowCount() == 0) {
-                    return $result = $this->fetchNoComment($postId, $classCode);
+                    return $result = $this->fetchNoComment($postID, $classCode);
                 }
                 // Add conditional statement if rowCount == 0 then call a function
                 $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -238,13 +238,12 @@ class ClassRm extends DbConnection
             return null;
         }
     }
-
-    protected function fetchNoComment($postId, $classCode){
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content , TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM `posts` WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visiblity=?";
+    protected function fetchNoComment($title, $classCode){
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content , TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM `posts` WHERE MD5(posts.title) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $classCode, "Visible"))) {
+            if ($stmt->execute(array($title, $classCode))) {
                 // Add conditional statement if rowCount == 0 then call a function
                 return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
                 //echo var_dump($result);
@@ -417,4 +416,27 @@ class ClassRm extends DbConnection
         }
     }
 
+    protected function getFIlesInDb($postId, $classCode){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_category = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, "3"))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
 }
