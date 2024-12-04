@@ -11,11 +11,43 @@
     --white3: #EEEEEE;
 }
 
-.modal-content {
-    border-radius: 40px !important; /* You can change 20px to your preferred radius */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.navbar .nav-link {
+    color: var(--green3); 
+}
+
+.navbar .nav-link:hover {
+    color: var(--green1_hover);
+}
+
+.navbar .nav-link.active {
+    color: var(--green1); 
+    font-weight: 500;
+}
+
+.labelText {
+    color: var(--green1); 
+    font-weight: 500;
+}
+
+body {
+    font-family: 'Inter', sans-serif; 
+}
+.navgreen {
+    color: var(--green1);
+}
+.navgreen:active {
+    color: var(--green1_hover);
+}
+.dropdown-item:hover {
+    color: var(--green1_hover)
 }
 .green1 {
-    color: var(--green1) !important;
+    color: var(--green1);
 }
 .green2 {
     color: var(--green2);
@@ -52,48 +84,361 @@
     background-color: var(--green1_hover);
 }
 
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font: "Inter", sans-serif;
+.greenicon {
+    color: var(--green1);
+    background-color: transparent;
 }
 
-.line {
-    height: 1px; /* Adjust the height (thickness) of the line */
-    background-color: var(--black3); /* Use your desired color */
+.greentoggle{
+    color: var(--green1);
+    background-color: transparent;
 }
 
-li, a {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 20px;
+.card {
+    width: 100%;
+}
+.title {
+    font-size: 3.5rem;
+}
+
+.sub-title {
+    font-size: 2rem;
+}
+
+
+.greenicon:hover {
+    color: #F1F1F1;
+}
+
+.shadow-elevation-light-3 {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
+}
+.shadow-elevation-dark-1 {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.2); 
+}
+
+a {
+    text-decoration: none;
+}
+
+.icon {
+    color: var(--green1);
 }
 
 button {
     color: white !important;
     font-family: 'Source Sans 3', sans-serif !important;
     font-weight: bold !important;
-
 }
 
 .h-font {
     font-family: 'Source Sans 3', cursive;
     font-weight: bold;
-    color: var(--green1);
 }
 
-.h-font2 {
-    font-family: 'Source Sans 3', cursive;
-    font-weight: 800px;
+.i-font {
+    font-family: 'Inter', cursive;
+    font-weight: bold;
 }
 
 .logo {
     max-width: 200px;
     max-height: 81px;
+}
+
+.content {
+    background-color: black;
+}
+
+.line {
+    border-bottom: 1px solid var(--green1);
+}
+.line2 {
+    border-bottom: 1px solid var(--green3);
+}
+.line-left {
+    border-left: 2px solid var(--black3);
 
 }
 
-.navbar {
-    max-height: 143px;
+.line-h {
+    flex-grow: 1;
+    height: 1px; /* Adjust the height (thickness) of the line */
+    background-color: var(--green3); /* Use your desired color */
+    margin-left: 10px; /* Optional: Space between heading and line */
+ 
 }
 
+/* Sidebar Styles */
+#sidebar-menu {
+    background-color: #F1F1F1;
+    height: 100%;
+    position: fixed;
+    transition: left 0.3s;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+
+/* Remove default styles for <ul> and <li> */
+#sidebar-menu ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+#sidebar-menu li {
+    width: 100%;
+    padding: 5px;
+}
+
+#sidebar-menu ul, 
+#sidebar-menu li, 
+#sidebar-menu a {
+    background-color: transparent; 
+    font-weight: bold;
+    color: var(--green1);
+    text-decoration: none;
+}
+
+#sidebar-menu li:hover {
+    cursor: pointer;
+    background-color: var(--green1);
+    color: #F1F1F1;
+}
+
+#sidebar-menu li:hover a {
+    color: #F1F1F1; /* Text turns white on hover */
+}
+
+#sidebar-menu li:hover ul {
+    background-color: var(--green1); /* Submenu background color on hover */
+}
+
+#sidebar-menu li:hover .greenicon {
+    color: #F1F1F1; /* Icon turns white on hover */
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+    #sidebar {
+        height: auto;
+        width: 100%;
+    }
+    #main-content {
+        margin-top: 80px;
+    }
+    #card-container {
+        display: block !important;
+    }
+    #card-left-side {
+        width: 100% !important;
+    }
+    #card-right-side {
+        width: 100% !important;
+        border-left: none;
+    }
+    #material-comment-container {
+        width: 100% !important;
+    }
+}
+
+.toggle-btn {
+    cursor: pointer;
+}
+
+.accordion {
+    list-style-type: none; /* Removes bullets */
+    padding: 0;  
+
+    background-color: transparent; /* Removes default padding */
+}
+
+.accordion-button {
+    background-color: transparent; /* Removes default padding */
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: transparent; /* Keep expanded button background transparent */
+    color: var(--green1); /* Optional: Use your desired text color */
+}
+
+.accordion-button.collapsed{
+    background-color: transparent; /* Keep expanded button background transparent */
+    color: var(--green1); /* Optional: Use your desired text color */
+}
+
+
+.accordion-button:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Example hover effect */
+}
+.accordion-item {
+    background-color: transparent; /* Removes default padding */
+    margin: 0;
+}
+.accordion-header {
+    font-size: 1.9rem;
+    background-color: transparent;
+    color: var(--green1);
+}
+
+#folder {
+    font-size: 1.7rem;
+    background-color: transparent;
+    color: var(--green1);
+}
+
+#class{
+    font-size: 1.4rem;
+    background-color: transparent;
+    color: var(--green1);
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+#flush-collapseTwo {
+    font-size: 1.9rem;
+    margin-left: 40px;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 992px) {
+    #sidebar-menu {
+        height: auto;
+        width: 100%;
+    }
+    #main-content {
+        margin-top: 80px;
+
+    }
+}
+
+/* CALENDAR */
+
+/* Overall calendar size */
+#calendar {
+height: 100%;  /* Adjust to fit your layout */
+margin: auto;
+}
+
+/* Calendar box color and borders */
+.fc-daygrid-day {
+border: 2px solid var(--black2); /* Border color for each day box */
+}
+.fc .fc-daygrid-day {
+    width: 100px !important; /* Set desired box width */
+    height: 100px !important; /* Set desired box height */
+
+}
+/* Font and text size for events */
+.fc-event {
+font-size: 14px; /* Customize event font size */
+color: #ffffff;
+background-color: var(--green1); /* Event background color */
+}
+
+/* Font size for header and day names */
+.fc-toolbar-title, .fc-col-header-cell-cushion {
+font-size: 1.3em; /* Title font size */
+color: var(--green1); /* Title color */
+font-weight: bold;
+}
+
+/* Font size for days (date numbers) */
+.fc-daygrid-day-number {
+font-size: 1em; /* Adjust day number font size */
+color: #555555;
+}
+
+.fc .fc-button {
+background-color: var(--green1) !important; /* Button background color */
+color: #ffffff !important; /* Button text color */
+font-weight: bold !important;
+border: none !important;
+padding: 12px 15px !important;
+
+}
+.fc-daygrid-event-dot {
+    border: calc(var(--fc-daygrid-event-dot-width) / 2) solid var(--green3);
+}
+/* Hover effect for buttons */
+.fc .fc-button:hover {
+background-color: var(--green1_hover); /* Darker shade on hover */
+cursor: pointer;
+}
+
+/* Active (clicked) state for buttons */
+.fc .fc-button.fc-button-active {
+background-color: var(--green1_hover) !important; /* Even darker for active state */
+color: #ffffff !important;
+}
+
+/* Customize the font and size of button text */
+.fc .fc-button .fc-button-cushion {
+font-size: 14px !important; /* Button font size */
+font: 'Inter', sans-serif;
+}
+
+
+.form-label{
+    color: var(--black2);
+    margin-right: 1rem;
+}
+
+input[type="date"] {
+    width: auto; 
+    min-width: 150px; 
+    padding: 10px 15px; 
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: var(--black2);
+    border: 2px solid var(--black3);
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+input[type="date"]:hover {
+    border-color: darken(var(--black3), 10%);
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3);
+}
+input[type="date"]:focus {
+    border-color: var(--black3); 
+    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5);
+    outline: none;
+}
+input[type="time"] {
+    width: auto;  
+    min-width: 150px;  
+    padding: 10px 15px;  
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: var(--black2); 
+    border: 2px solid var(--black3); 
+    border-radius: 8px;  
+    background-color: #fff;  
+    transition: all 0.3s ease;  
+}
+
+input[type="time"]:hover {
+    border-color: darken(var(--black3), 10%);
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3); 
+} 
+input[type="time"]:focus {
+    border-color: var(--black3);
+    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5); 
+    outline: none;  
+} 
+
+.question-type{
+    border-color: var(--black3); 
+    height: 30px; 
+    padding: 4px 10px;
+}
+
+.question-point{
+    border-color: var(--black3);
+    width: 6ch;
+}
