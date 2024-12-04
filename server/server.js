@@ -28,8 +28,8 @@ io.on("connection", (socket) => {
     socket.on("serverRcvComment", (data) => {
         console.log("Received new comment:", data);
         console.log("ID ", data.postId);
-        // Broadcast new comment to all connected clients
-        io.emit(data.postId, data);
+       
+        io.emit(data.postId, data);  // Send comment to that specific post
     });
 
     socket.on("disconnect", () => {
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
 
     socket.on("serverRcvPost", (data)=>{
         console.log("Receive new post ", data);
-        io.emit("displayNewPost", data);
+        io.emit(data.classCode, data); // Send post to that class code
     });
     
 });
