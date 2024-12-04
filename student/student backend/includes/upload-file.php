@@ -17,16 +17,18 @@ if(isset($_GET["code"])){
     require_once("classes/model.Prof.php");
     require_once("classes/controller.Prof.php");
 }else{
-    require_once("../../vendor/autoload.php");
-    require_once("../../log and reg backend/classes/connection.php");
-    require_once("../classes/model.Prof.php");
-    require_once("../classes/controller.Prof.php");
+    require_once("../../../vendor/autoload.php");
+    require_once("../../../log and reg backend/classes/connection.php");
+    require_once("../../student backend/classes/model.ClassRm.php");
+    require_once("../../student backend/classes/controller.Lists.php");
+    require_once("../../student backend/classes/controller.Student.php");
 }
 
 session_start();
 
 $client = new Google_Client();
 // If we have an access token, proceed with file handling or whatever your logic is
+echo var_dump($_SESSION['access_token']);
 $client->setAccessToken($_SESSION['access_token']);
 
 // Check if the access token is expired and refresh it
@@ -59,7 +61,7 @@ if ($_SESSION['access_token']) {
 
     // Loop through each file in the uploaded files array
     foreach ($files['tmp_name'] as $index => $tmp_name) {
-        $destination = '../uploads/' . basename($files['name'][$index]);
+        $destination = '../../uploads/' . basename($files['name'][$index]);
         echo "<br>Destination for file {$files['name'][$index]}: " . $destination;
 
         $fileSizeBytes = $files['size'][$index]; // File size in bytes
@@ -166,23 +168,25 @@ if ($_SESSION['access_token']) {
 
     unset($_SESSION["storedFile"]);
  
-    $instrCtrlr = new InstructorController();
-    echo "POST ID : " . $_SESSION["postId"];
+    // $instrCtrlr = new InstructorController();
+    echo "\n\n\nPOST ID : " . $_SESSION["postId"];
     // Provide feedback to the user
+    $stdController = new StudentController();
+
     if (count($uploadedFiles) > 0) {
-        echo "Files uploaded successfully!<br>";
+        echo "\n\n\nFiles uploaded successfully!<br>";
         $i = 0;
         foreach ($uploadedFiles as $fileId) {
             // echo "POST ID " . $_SESSION["postId"][0]["post_id"] . "\n";
             // echo "CLASS CODE " . $_SESSION["storeCode"] . "\n";
             // echo "FILE NAME " . $fileNames[$i]. "\n";
             // echo "FILE ID " . htmlspecialchars($fileId). "\n";
-
-            $instrCtrlr->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i], $_SESSION["id"]);
+            $stdController->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i], $_SESSION["id"]);
+            // $instrCtrlr->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]);
             $i++;
             // echo "File ID: " . htmlspecialchars($fileId) . "<br>";
         }
-        unset($_SESSION["postId"]);
+        // unset($_SESSION["postId"]);
         // Redirect or exit
         // header("location: ../post-form.php?class=" . $_SESSION["tmp"]);
         exit();

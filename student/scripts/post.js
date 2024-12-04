@@ -124,20 +124,22 @@ $(document).ready(function() {
           }
    });
 
-    $("#combinedForm").submit(function (event) {
+    $("#formSubmit").click(function (event) {
+        console.log("clicked");
         event.preventDefault();
+
         $(".form-message").empty();
         // console.log("clicked");
-        if($("#token").val().length > 0){
-            var hasToken = true;
-        }else{
-            var hasToken = false;
-        }
+        // if($("#token").val().length > 0){
+        //     var hasToken = true;
+        // }else{
+        //     var hasToken = false;
+        // }
 
-        var title = $('#title').val();
-        var desc = $('#description').val();
-        var date = $('#deadlineDate').val();
-        var time = $('#deadlineTime').val();
+        // var title = $('#title').val();
+        // var desc = $('#description').val();
+        // var date = $('#deadlineDate').val();
+        // var time = $('#deadlineTime').val();
 
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
@@ -156,10 +158,10 @@ $(document).ready(function() {
         //     console.log(pair[0], pair[1]);
         // }
 
-        if(date == "" && selectedValue != "material"){
-            $(".form-message").append("<div class='alert alert-danger' role='alert'><span>EMPTY DATE FIELDS</span></div>");
-            return;
-        }
+        // if(date == "" && selectedValue != "material"){
+        //     $(".form-message").append("<div class='alert alert-danger' role='alert'><span>EMPTY DATE FIELDS</span></div>");
+        //     return;
+        // }
 
          console.log($("#fileInput")[0].files.length);
 
@@ -167,69 +169,28 @@ $(document).ready(function() {
         if($("#fileInput")[0].files.length > 0){
             $.ajax({
                 method: "POST",
-                url: "includes/save-file-session.php",
+                url: "student backend/includes/save-file-session.php",
                 data: formData,
                 processData: false,
                 contentType: false,
         
                 success: function (response) {
                     console.table("this is ",response);
-                }
-            });
-            // $("#fileForm").submit();
 
-            $.ajax({
-                method: "POST",
-                url: "includes/create-post.php",
-                data: { "type": selectedValue,
-                        "title": title,
-                        "desc" : desc,
-                        "date" : date,
-                        "time" : time,
-                        "classCode" : classCode
-                },
-        
-                success: function (response) {
-                    // console.table("this is ",response);
-                    console.log("upload");
-                    // console.log(response.date);
-    
-                    var data = {
-                        title : title,
-                        date : response[0]["month"],
-                        classCode : classCode,
-                        postId : md5(response[0]["post_id"]),
-                        contentType : selectedValue
-                    };
-                         
                     $.ajax({
                         method: "POST",
-                        url: "includes/upload-file.php",
+                        url: "student backend/includes/upload-file.php",
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function (response) {
                             console.log(response);
-                            // console.log(hasToken);
-                            if(hasToken == false){
-                                console.log(response);
-                                const data = JSON.parse(response);
-                                if (data.authUrl) {
-                                    hasToken = true;
-                                    // Redirect to Google OAuth if authUrl is returned
-                                    console.log(data);
-                                    // window.location.href = data.authUrl;
-                                }else{
-                                    console.log("Error");
-                                }
-                            }else{
-                                console.log("Success");
-                            }
-
-                            console.log( "Selected "+ selectedValue);
-                            console.log("Title " + title);
+                            // const data = JSON.parse(response);
+        
+                            // console.log( "Selected "+ selectedValue);
+                            // console.log("Title " + title);
                                     
-                            socket.emit("serverRcvPost", data);
+                            // socket.emit("serverRcvPost", data);
                             $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                             $('#title').val("");
                             $('#description').val("");
@@ -245,43 +206,10 @@ $(document).ready(function() {
                 }
             });
 
+
         }else{
             console.log("uploading iwthout file");
-            $.ajax({
-                method: "POST",
-                url: "includes/create-post.php",
-                data: { "type": selectedValue,
-                        "title": title,
-                        "desc" : desc,
-                        "date" : date,
-                        "time" : time,
-                        "classCode" : classCode
-                },
-        
-                success: function (response) {
-                    console.table("this is ",response);
-                    console.log("upload");
-                    // console.log(response.date);
-    
-                    var data = {
-                        title : title,
-                        date : response[0]["month"],
-                        classCode : classCode,
-                        postId : md5(response[0]["post_id"]),
-                        contentType : selectedValue
-                    };
-    
-                    socket.emit("serverRcvPost", data);
-    
-                    $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
-                    $('#title').val("");
-                    $('#description').val("");
-                    $('#fileInput').val("");
-                    $("#fileContainer").empty();
-                    $("form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
-
-                }
-            });
+            
         }
     });
 

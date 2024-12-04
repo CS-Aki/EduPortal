@@ -118,6 +118,17 @@ class StudentController extends ClassRm{
 
         return $content;
     }
+    // $_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]
+    public function uploadGdriveData($postId, $classCode, $fileName, $fileId, $fileSize, $userId){
+        $result = $this->insertGdriveData($postId, $classCode, $fileName, $fileId, $fileSize, $userId);
+
+        if($result == false){
+         echo "ERROR UPLOADING GDRIVE DATA INTO DB";
+         return;
+        }
+ 
+        echo "GDRIVE DATA SUCCESS";
+    }
 
 }
 

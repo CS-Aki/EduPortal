@@ -439,4 +439,27 @@ class ClassRm extends DbConnection
             return null;
         }
     }
+
+    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize, $userId){
+        $newCode = $this->findSimilarCode($classCode);
+        echo $classCode;
+        echo "\n\nClass Code " . $newCode[0]["class_code"] . " <br>\n";
+        echo "\nPost Id " . $postId . " <br>\n";
+        echo "\nName " . $fileName . " <br>\n";
+        echo "\nID " . $gdriveId . " <br>\n";
+
+        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`, `user_category`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "4", $userId))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+            return false;
+        }
+    }
 }

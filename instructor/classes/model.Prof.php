@@ -578,18 +578,18 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize){
+    protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize, $userId){
         $newCode = $this->findSimilarCode($classCode);
         echo "Class Code " . $newCode[0]["class_code"] . " <br>\n";
         echo "Post Id " . $postId . " <br>\n";
         echo "Name " . $fileName . " <br>\n";
         echo "ID " . $gdriveId . " <br>\n";
 
-        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`, `user_category`) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`, `user_category`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "3"))) {
+            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "3", $userId))) {
                 return true;
             } else {
                 return false;

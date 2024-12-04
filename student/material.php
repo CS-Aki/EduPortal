@@ -26,8 +26,9 @@ if (isset($_GET["code"])) {
     unset($_SESSION["storedFile"]);
 }
 
-
-
+$_SESSION["postId"] = $_GET["post"];
+$_SESSION["storeCode"] =  $_GET["class"];
+echo $_SESSION["postId"];
 
 // echo $_SESSION['access_token'];
 
@@ -206,9 +207,9 @@ if (isset($_GET["code"])) {
                                         </div>
                                     </div>
                                     <?php if(isset($_SESSION["authorized"])) {?>
-
+                                         
                                     <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3">
-                                        <form action="" class="h-100">
+                                        <form class="h-100" id="uploadForm">
                                             <div class="d-flex justify-content-between flex-column h-100">
                                                 <div>
                                                     <p class="fw-semibold green2 fs-4 lh-sm">Your work<br>
@@ -242,7 +243,7 @@ if (isset($_GET["code"])) {
 
                                                 </div>
                                                 <div>
-                                                    <a href="#">
+                                                    <a href="#" id="formSubmit">
                                                     <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
                                                         <div class="d-flex justify-content-center align-items-center p-2">
                                                             <span class="white2 fw-semibold mb-0">Submit</span>
@@ -278,7 +279,7 @@ if (isset($_GET["code"])) {
                                             </div>
                                     </div>
                                 </div>
-                                <?php }?>
+                                <?php } ?>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
 
@@ -301,7 +302,8 @@ if (isset($_GET["code"])) {
 
                                     </div>
                                 </div>
-                                
+                                <div class="form-message"></div>
+
                             </div>
                         </div>
                        
