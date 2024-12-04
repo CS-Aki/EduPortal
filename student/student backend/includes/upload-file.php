@@ -30,12 +30,30 @@ $client = new Google_Client();
 // If we have an access token, proceed with file handling or whatever your logic is
 echo var_dump($_SESSION['access_token']);
 $client->setAccessToken($_SESSION['access_token']);
+// echo $_SESSION["access_token"];
+$token = $client->getAccessToken();
 
+if (isset($token['expires_in'])) {
+    // Calculate the expiration time
+    $expirationTime = time() + $token['expires_in'];
+    echo "The token will expire at: " . date('Y-m-d H:i:s', $expirationTime);
+} elseif (isset($token['expires_at'])) {
+    // If expires_at is directly provided
+    echo "The token will expire at: " . date('Y-m-d H:i:s', $token['expires_at']);
+} else {
+    echo "Expiration time not available in the token.";
+}
 // Check if the access token is expired and refresh it
+echo "\n\n\nREFRESH TOKEN : " . $_SESSION['refresh_token'] . "\n\n\n";
 if ($client->isAccessTokenExpired()) {
-    $refreshToken = $client->getRefreshToken();
-    $client->fetchAccessTokenWithRefreshToken($refreshToken);
-    $_SESSION['access_token'] = $client->getAccessToken();
+    // Set refresh token if access token is expired
+    if (isset($_SESSION['refresh_token'])) {
+        $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
+        // Save the new access token
+        $_SESSION['access_token'] = $client->getAccessToken();
+    } else {
+        throw new Exception('Refresh token is not available.');
+    }
 }
 
 if(isset($_POST["classCode"])){

@@ -440,8 +440,29 @@ class ClassRm extends DbConnection
         }
     }
 
+    protected function findId($postId, $classCode){
+        $sql = "SELECT post_id FROM posts WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                // Add conditional statement if rowCount == 0 then call a function
+                return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return null;
+        }
+        return null;
+    }
+
     protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize, $userId){
         $newCode = $this->findSimilarCode($classCode);
+        $newId = $this->findId($postId, $classCode);
         echo $classCode;
         echo "\n\nClass Code " . $newCode[0]["class_code"] . " <br>\n";
         echo "\nPost Id " . $postId . " <br>\n";
@@ -452,7 +473,7 @@ class ClassRm extends DbConnection
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "4", $userId))) {
+            if ($stmt->execute(array($newId[0]["post_id"], $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "4", $userId))) {
                 return true;
             } else {
                 return false;
@@ -460,6 +481,27 @@ class ClassRm extends DbConnection
         } catch (PDOException $e) {
             echo "Error: " . $e;
             return false;
+        }
+    }
+
+    protected function fetchSubmissions($classCode){
+        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? ";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+            return null;
         }
     }
 }

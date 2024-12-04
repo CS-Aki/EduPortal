@@ -130,6 +130,17 @@ class StudentController extends ClassRm{
         echo "GDRIVE DATA SUCCESS";
     }
 
+    public function getSubmissions($classCode){
+        $result = $this->fetchSubmissions($classCode);
+        
+        if($result == null){
+ 
+            // return;
+        }
+
+        return $result;
+    }
+
 }
 
 ?>

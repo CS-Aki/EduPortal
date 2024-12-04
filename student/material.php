@@ -28,7 +28,7 @@ if (isset($_GET["code"])) {
 
 $_SESSION["postId"] = $_GET["post"];
 $_SESSION["storeCode"] =  $_GET["class"];
-echo $_SESSION["postId"];
+// echo $_SESSION["postId"];
 
 // echo $_SESSION['access_token'];
 

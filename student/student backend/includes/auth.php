@@ -9,6 +9,9 @@ if(isset($_GET["code"])){
 }
 
 $client = new Google_Client();
+$client->setAccessType('offline'); // Request offline access
+$client->setPrompt('consent'); 
+
 if(isset($_GET["code"])){
     $client->setAuthConfig('../log and reg backend/config/credentials.json');
 }else{
@@ -28,6 +31,7 @@ if (isset($_GET['code'])) {
     // Fetch the access token using the authorization code
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
     $_SESSION['access_token'] = $token;
+    $_SESSION["refresh_token"] = $token["refresh_token"];
     echo var_dump($_SESSION['access_token']);
     // $_SESSION["classCode"] = $_POST["classCode"];
     // $_SESSION["storedFile"] = $_FILES['files'];
