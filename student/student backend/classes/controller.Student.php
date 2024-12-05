@@ -141,6 +141,12 @@ class StudentController extends ClassRm{
         return $result;
     }
 
+    public function getSubmittedFiles($postId, $classCode){
+        if (session_id() === "") session_start();
+        $result = $this->fetchSubmittedInPost($postId, $classCode, $_SESSION["id"]);
+        return $result;
+    }
+
 }
 
 ?>

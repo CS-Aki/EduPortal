@@ -60,12 +60,12 @@ $(document).ready(function() {
         $("#fileInput").trigger('click');
     });
 
-    window.onerror = function (message, source, lineno, colno, error) {
-        console.error("Global Error Caught:", message, "at", source, "line:", lineno, "column:", colno);
-    };
+    // window.onerror = function (message, source, lineno, colno, error) {
+    //     console.error("Global Error Caught:", message, "at", source, "line:", lineno, "column:", colno);
+    // };
 
     $(document).on('change', '#fileInput', function (event) {
-        $("#fileContainer").empty();
+        $(".new-file").empty();
           var fileCount = this.files.length;
           var files = event.target.files; 
           var size = 0;
@@ -94,22 +94,24 @@ $(document).ready(function() {
                 fileName = file.name;
             }
 
-            $("#fileContainer").append(`
-                     <a>
+            $(".new-file").append(`
+                <div class="fileCont">
+                    <a>
                         <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
                             <div class="d-flex justify-content-start">
                                 <div class="me-2 ms-2">
                                     <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
                                 </div>
                                 <div>
-                                <span class="green2 fw-bold mb-0">${fileName}</span>
-                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${size} ${word}</span>
+                                    <span class="green2 fw-bold mb-0">${fileName}</span>
+                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${size} ${word}</span>
                                 </div>
                             </div>
                         </div>
-                </a>
-            
+                    </a>
+                </div>
             `);
+            
  
             // console.log('File name: ' + file.name);
             // console.log('File type: ' + file.type);
@@ -153,7 +155,7 @@ $(document).ready(function() {
                 formData.append("files[]", $("#fileInput")[0].files[i]); 
             }
         }
-     
+
         // for (let pair of formData.entries()) {
         //     console.log(pair[0], pair[1]);
         // }
@@ -185,18 +187,80 @@ $(document).ready(function() {
                         contentType: false,
                         success: function (response) {
                             console.log(response);
+
+                            // for (let [key, value] of formData.entries()) {
+                            //     console.log(key, value);
+             
+                            // }
                             // const data = JSON.parse(response);
         
                             // console.log( "Selected "+ selectedValue);
                             // console.log("Title " + title);
                                     
                             // socket.emit("serverRcvPost", data);
-                            $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
-                            $('#title').val("");
-                            $('#description').val("");
-                            $('#fileInput').empty();
-                            $("#fileCount").empty();
-                            $("#fileContainer").empty();
+                            $.ajax({
+                                method: "POST",
+                                url: "student backend/includes/view-post.php",
+                                data: {
+                                    displayFiles : "temp"
+                                },
+                                success: function (response) {
+                                    console.log(response);
+
+
+                                    $("#fileContainer").empty(); 
+                                    console.log(response); 
+                                    $(".fileCont").empty();
+                                    const data = response; 
+                                    $(".new-file").empty();
+
+                                    for(let i = 0; i < data.length; i++){
+                                        console.log(data[i]["file_name"]);
+                                        $("#fileContainer").append(`
+                                            <div id='${data[i]["file_id"]}'></div>
+                                            <a href="https://drive.google.com/file/d/${data[i]["google_drive_file_id"]}/view" target='_blank'>
+                                                <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
+                                                    <div class='d-flex justify-content-start'>
+                                                        <div class='me-2 ms-2'>
+                                                            <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
+                                                        </div>
+                                                        <div>
+                                                            <span class='green2 fw-bold mb-0'>${data[i]["file_name"]}</span>
+                                                            <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>${data[i]["file_size"]}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        `);
+                                    }
+
+                                 
+
+                                             
+                                    
+                                    // console.log( "Selected "+ selectedValue);
+                                    // console.log("Title " + title);
+                                            
+                                    // socket.emit("serverRcvPost", data);
+                                    $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                                  
+                                    // $('#title').val("");
+                                    // $('#description').val("");
+                                    // $('#fileInput').empty();
+                                    // $("#fileCount").empty();
+                                    // $("#fileContainer").empty();
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("Error:", status, error);
+                                    console.error("Response Text:", xhr.responseText);
+                                }
+                            });
+                            // $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                            // $('#title').val("");
+                            // $('#description').val("");
+                            // $('#fileInput').empty();
+                            // $("#fileCount").empty();
+                            // $("#fileContainer").empty();
                         },
                         error: function (xhr, status, error) {
                             console.error("Error:", status, error);

@@ -217,6 +217,27 @@ class ClassRm extends DbConnection
         }
     }
 
+    protected function fetchSubmittedInPost($postId, $classCode, $userId){
+        $sql = "SELECT * FROM files WHERE md5(class_code) = ? AND md5(post_id) = ? AND user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, $postId, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+            return null;
+        }
+    }
+
     protected function fetchComments($postID, $classCode){
         $sql = "SELECT comments.post_id, comments.name, comments.comment, comments.user_id, users.image, TIME(comments.created_at) as 'time', DATE(comments.created_at) as 'month' FROM comments INNER JOIN posts ON posts.post_id = comments.post_id INNER JOIN users ON comments.user_id = users.user_id WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);

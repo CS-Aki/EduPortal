@@ -1,18 +1,19 @@
 <?php 
 
-if(isset($_GET["temp"])){
-    require_once("../../../log and reg backend/classes/connection.php");
-    require_once("../classes/model.ClassRm.php");
-    require_once("../classes/controller.Lists.php");
-    require_once("../classes/controller.Student.php");
-}else{
-    require_once("../log and reg backend/classes/connection.php");
-    require_once("student backend/classes/model.ClassRm.php");
-    require_once("student backend/classes/controller.Lists.php");
-    require_once("student backend/classes/controller.Student.php");
-}
 
 if(isset($_GET["post"])){
+    if(isset($_GET["temp"])){
+        require_once("../../../log and reg backend/classes/connection.php");
+        require_once("../classes/model.ClassRm.php");
+        require_once("../classes/controller.Lists.php");
+        require_once("../classes/controller.Student.php");
+    }else{
+        require_once("../log and reg backend/classes/connection.php");
+        require_once("student backend/classes/model.ClassRm.php");
+        require_once("student backend/classes/controller.Lists.php");
+        require_once("student backend/classes/controller.Student.php");
+    }
+
     $postId =  $_GET["post"];
     // if(isset($_SESSION["storedId"])){
     //     $postId = $_SESSION["storedId"];
@@ -29,6 +30,9 @@ if(isset($_GET["post"])){
     $postDetails = $stdController->getPostDetails($postId, $classCode);
     $comments = $stdController->getComments($postId, $classCode);
     $files = $stdController->getFiles($postId, $classCode);
+    
+    $submissions = $stdController->getSubmittedFiles($postId, $classCode);
+    // echo var_dump($submissions);
     // echo var_dump($files);
     // echo var_dump($comments);
     
@@ -45,4 +49,21 @@ if(isset($_GET["post"])){
     }
 
     // echo var_dump($comments);
+}
+
+if(isset($_POST["displayFiles"])){
+    if (session_id() === "") session_start();
+    // echo "\n\n\ninside";
+    require_once("../../../log and reg backend/classes/connection.php");
+    require_once("../classes/model.ClassRm.php");
+    require_once("../classes/controller.Lists.php");
+    require_once("../classes/controller.Student.php");
+
+    $stdController = new StudentController();
+    $submissions = $stdController->getSubmittedFiles($_SESSION["postId"], $_SESSION["storeCode"]);
+    // echo var_dump($submissions);
+    header('content-type: application/json');
+    echo json_encode($submissions);
+    // $_SESSION["postId"];
+
 }

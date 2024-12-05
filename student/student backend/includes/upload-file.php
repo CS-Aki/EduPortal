@@ -26,34 +26,70 @@ if(isset($_GET["code"])){
 
 session_start();
 
-$client = new Google_Client();
 // If we have an access token, proceed with file handling or whatever your logic is
 echo var_dump($_SESSION['access_token']);
-$client->setAccessToken($_SESSION['access_token']);
-// echo $_SESSION["access_token"];
-$token = $client->getAccessToken();
 
-if (isset($token['expires_in'])) {
-    // Calculate the expiration time
-    $expirationTime = time() + $token['expires_in'];
-    echo "The token will expire at: " . date('Y-m-d H:i:s', $expirationTime);
-} elseif (isset($token['expires_at'])) {
-    // If expires_at is directly provided
-    echo "The token will expire at: " . date('Y-m-d H:i:s', $token['expires_at']);
-} else {
-    echo "Expiration time not available in the token.";
-}
-// Check if the access token is expired and refresh it
-echo "\n\n\nREFRESH TOKEN : " . $_SESSION['refresh_token'] . "\n\n\n";
-if ($client->isAccessTokenExpired()) {
-    // Set refresh token if access token is expired
-    if (isset($_SESSION['refresh_token'])) {
-        $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
-        // Save the new access token
-        $_SESSION['access_token'] = $client->getAccessToken();
+// $client = new Google_Client();
+
+// $_SESSION['access_token'] = [
+//     'access_token' => $_SESSION["access_token"],
+//     'expires_in' => 1, // 1 second
+//     'refresh_token' => $_SESSION["refresh_token"]
+// ];
+// sleep(2);
+// echo var_dump($_SESSION["access_token"]);
+
+// try {
+//     $client->setAccessToken($_SESSION['access_token']);
+
+//     if ($client->isAccessTokenExpired()) {
+//         echo "Access token is expired. Attempting to refresh...<br>";
+
+//         if (isset($_SESSION['refresh_token'])) {
+//             $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
+//             $_SESSION['access_token'] = $client->getAccessToken();
+//             echo "New access token: " . print_r($_SESSION['access_token'], true);
+//         } else {
+//             throw new Exception("Refresh token is missing.");
+//         }
+//     } else {
+//         echo "Access token is still valid.";
+//     }
+// } catch (Exception $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+
+
+try {
+    $client = new Google_Client();
+    // Set the access token
+    $client->setAccessToken($_SESSION['access_token']);
+    $token = $client->getAccessToken();
+
+    // Calculate expiration time
+    if (isset($token['expires_in'])) {
+        $expirationTime = time() + $token['expires_in'];
+        echo "The token will expire at: " . date('Y-m-d H:i:s', $expirationTime);
+    } elseif (isset($token['expires_at'])) {
+        echo "The token will expire at: " . date('Y-m-d H:i:s', $token['expires_at']);
     } else {
-        throw new Exception('Refresh token is not available.');
+        echo "Expiration time not available in the token.";
     }
+
+    // Refresh the token if expired
+    if ($client->isAccessTokenExpired()) {
+        if (isset($_SESSION['refresh_token'])) {
+            $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
+            $_SESSION['access_token'] = $client->getAccessToken();
+            echo "Access Token refreshed successfully.";
+        } else {
+            unset($_SESSION['authorized'], $_SESSION['access_token']);
+            echo "<div class='alert alert-danger'>Access Token Expired, Login Again</div>";
+            throw new Exception('Refresh token is not available.');
+        }
+    }
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
 }
 
 if(isset($_POST["classCode"])){
