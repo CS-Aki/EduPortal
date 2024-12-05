@@ -111,6 +111,14 @@ $(document).ready(function() {
             var hasToken = false;
         }
 
+        Swal.fire({
+            title: 'Uploading...',
+            text: 'Please wait while we upload your file.',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         var title = $('#title').val();
         var desc = $('#description').val();
         var date = $('#deadlineDate').val();
@@ -213,8 +221,19 @@ $(document).ready(function() {
                             $('#fileInput').empty();
                             $("#fileCount").empty();
                             $("#fileContainer").empty();
+
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'File uploaded successfully!',
+                                icon: 'success'
+                            });
                         },
                         error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'There was an error uploading the file.',
+                                icon: 'error'
+                            });
                             console.error("Error:", status, error);
                             console.error("Response Text:", xhr.responseText);
                         }
@@ -257,10 +276,25 @@ $(document).ready(function() {
                     $("#fileContainer").empty();
                     $("form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
 
+                    
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'File uploaded successfully!',
+                        icon: 'success'
+                    });
+
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'There was an error uploading the file.',
+                        icon: 'error'
+                    });
+                    console.error("Error:", status, error);
+                    console.error("Response Text:", xhr.responseText);
                 }
             });
         }
-
     });
 
     // $("#fileForm").submit(function (event) {

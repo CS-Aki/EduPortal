@@ -94,35 +94,37 @@ if(isset($_SESSION["user_category"])){
                                     echo "</div> 
                                             </div>
                                         </div>                    
-                                    </button>";       
-                                    foreach ($submissions as $submission) {
-                                        if ($post[$i]["post_id"] == $submission["post_id"]) {
-                                            $date = $submission["created"]; 
-                                            $datetime = new DateTime($date); 
-                                            $formattedDate = $datetime->format('F j, Y'); 
-                                            $temp = true;
-                                     echo "<div class='collapse mb-2' id='{$i}'>
-                                            <div class='d-flex flex-column align-items-end justify-content-end' >
-                                                <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                    <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                        <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
-                                                            <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
-                                                            <p class='black3 fs-6 lh-sm'>{$post[$i]["content"]}</p>
-                                                        </div>
-                                                        <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
-                                                            <div class='mt-3'>
-                                                                            <i class='bi bi-check-circle green2 fs-1'></i>
-                                                                            <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
-                                                                <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'>{$formattedDate}</p>   
-                                                            </div>                                           
+                                    </button>";
+                                    if($submissions != null){       
+                                        foreach ($submissions as $submission) {
+                                            if ($post[$i]["post_id"] == $submission["post_id"]) {
+                                                $date = $submission["created"]; 
+                                                $datetime = new DateTime($date); 
+                                                $formattedDate = $datetime->format('F j, Y'); 
+                                                $temp = true;
+                                        echo "<div class='collapse mb-2' id='{$i}'>
+                                                <div class='d-flex flex-column align-items-end justify-content-end' >
+                                                    <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                        <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                            <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
+                                                                <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
+                                                                <p class='black3 fs-6 lh-sm'>{$post[$i]["content"]}</p>
+                                                            </div>
+                                                            <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
+                                                                <div class='mt-3'>
+                                                                                <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'>{$formattedDate}</p>   
+                                                                </div>                                           
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>";
-                                            break; 
-                                        }else{
-                                            $temp = false;
+                                            </div>";
+                                                break; 
+                                            }else{
+                                                $temp = false;
+                                            }
                                         }
                                     }
                                     if($temp != true){
