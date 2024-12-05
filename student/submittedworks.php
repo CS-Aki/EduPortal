@@ -163,11 +163,9 @@ if(isset($_SESSION["user_category"])){
                         </div>
                         <div>
                             <?php 
-
                                 if(isset($post[0]['content_type'])){
                                     for($i = 0 ; $i < count($post); $i++){
                                         if($post[$i]['content_type'] == 'Quiz'){
-  
                                             echo "<div id='material'>
                                             <button data-bs-toggle='collapse' href='#{$i}' role='button' aria-expanded='false' aria-controls='collapseExample' class='btn container-fluid p-0 m-0'>
                                                 <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1' >
