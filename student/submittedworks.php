@@ -62,9 +62,12 @@ if(isset($_SESSION["user_category"])){
                         <div>
                             <?php 
                           $temp = false;
-                          if (isset($post[0]['content_type'])) {
-                            for ($i = 0; $i < count($post); $i++) {
-                                if ($post[$i]['content_type'] == 'Activity') {
+                          if ($activity != null) {
+                            for ($i = 0; $i < count($activity); $i++) {
+                                if ($activity[$i]['content_type'] == 'Activity') {
+                                    $year = $activity[$i]["month"][0] . "" . $activity[$i]["month"][1] . $activity[$i]["month"][2] . "" . $activity[$i]["month"][3];
+                                    $month = $months[$activity[0]["month"][5] . "" . $activity[0]["month"][6] - 1];
+                                    $day = $activity[$i]["month"][8] . "" . $activity[$i]["month"][9];
                                     echo "<div id='material'>
                                     <button data-bs-toggle='collapse' href='#{$i}' role='button' aria-expanded='false' aria-controls='collapseExample' class='btn container-fluid p-0 m-0'>
                                         <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1' >
@@ -74,7 +77,7 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                                 <div class='ms-3 mt-1'> 
                                                     <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start' id='material-title'>
-                                                        {$post[$i]["title"]} <br>";
+                                                        {$activity[$i]["title"]} <br>";
                         
                                     // Default placeholder for the date
                                     $formattedDate = "N/A";
@@ -89,7 +92,7 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                                 <div>";
                                     ?>      
-                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
+                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($activity[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
                                     <?php 
                                     echo "</div> 
                                             </div>
@@ -108,7 +111,7 @@ if(isset($_SESSION["user_category"])){
                                                         <div class='mt-0 pt-0 d-flex' id='card-container'>
                                                             <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
                                                                 <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
-                                                                <p class='black3 fs-6 lh-sm'>{$post[$i]["content"]}</p>
+                                                                <p class='black3 fs-6 lh-sm'>{$activity[$i]["content"]}</p>
                                                             </div>
                                                             <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                 <div class='mt-3'>
@@ -135,7 +138,7 @@ if(isset($_SESSION["user_category"])){
                                                         <div class='mt-0 pt-0 d-flex' id='card-container'>
                                                             <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
                                                                 <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
-                                                                <p class='black3 fs-6 lh-sm'>{$post[$i]["content"]}</p>
+                                                                <p class='black3 fs-6 lh-sm'>{$activity[$i]["content"]}</p>
                                                             </div>
                                                             <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                 <div class='mt-3'>
@@ -165,9 +168,12 @@ if(isset($_SESSION["user_category"])){
                         </div>
                         <div>
                             <?php 
-                                if(isset($post[0]['content_type'])){
-                                    for($i = 0 ; $i < count($post); $i++){
-                                        if($post[$i]['content_type'] == 'Quiz'){
+                                if($quiz != null){
+                                    for($i = 0 ; $i < count($quiz); $i++){
+                                        if($quiz[$i]['content_type'] == 'Quiz'){
+                                            $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];
+                                            $month = $months[$quiz[0]["month"][5] . "" . $quiz[0]["month"][6] - 1];
+                                            $day = $quiz[$i]["month"][8] . "" . $quiz[$i]["month"][9];
                                             echo "<div id='material'>
                                             <button data-bs-toggle='collapse' href='#{$i}' role='button' aria-expanded='false' aria-controls='collapseExample' class='btn container-fluid p-0 m-0'>
                                                 <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1' >
@@ -177,7 +183,7 @@ if(isset($_SESSION["user_category"])){
                                                         </div>
                                                         <div class='ms-3 mt-1 d-flex align-content-start justify-content-start'> 
                                                             <p class='green2 fw-bold lh-sm fs-5 mb-0 pb-0 d-flex flex-column align-items-start' id='material-title'>
-                                                                {$post[$i]["title"]} <br>
+                                                                {$quiz[$i]["title"]} <br>
                                                                 <span class='fw-light green2 fs-6 d-flex mt-1' id='material-date'>{$month} {$day}, {$year}</span>                                         
                                                             </p>
                                                         </div>
@@ -187,7 +193,7 @@ if(isset($_SESSION["user_category"])){
                                                             <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'> 6/10</p>
                                                         </div>
                                                         <div>";
-                                                           ?> <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
+                                                           ?> <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
                                                     <?php  echo" </div> 
                                                     </div>
                                                 </div>                    
@@ -199,7 +205,7 @@ if(isset($_SESSION["user_category"])){
                                                                 <div class='mt-0 pt-0 d-flex' id='card-container'>
                                                                     <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
                                                                         <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
-                                                                        <p class='black3 fs-6 lh-sm'>{$post[$i]["content"]}</p>
+                                                                        <p class='black3 fs-6 lh-sm'>{$quiz[$i]["content"]}</p>
                                                                     </div>
                                                                     <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                         <div class='mt-3'>
