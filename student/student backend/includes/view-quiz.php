@@ -30,9 +30,10 @@ $totalPoints = 0;
 // echo "<br>Quiz Total Points: " . $totalPoints;
 
 $ansKey = array();
-
-for ($i = 0; $i < count($quizDetails); $i++) {
-    $ansKey[$quizDetails[$i]["question_id"]] = $quizDetails[$i]["ans_key"];
+if($quizDetails != null){
+    for ($i = 0; $i < count($quizDetails); $i++) {
+        $ansKey[$quizDetails[$i]["question_id"]] = $quizDetails[$i]["ans_key"];
+    }
 }
 
 $_SESSION["answerKey"] = $ansKey;

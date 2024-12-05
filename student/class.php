@@ -101,6 +101,9 @@ if(isset($_SESSION["user_category"])){
                             <?php
                                     if(isset($post[0]["content_type"])){
                                         for($i = 0 ; $i < count($post); $i++){
+                                            $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
+                                            $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
+                                            $day = $post[$i]["month"][8] . "" . $post[$i]["month"][9];
                                             if($post[$i]["content_type"] == "Material"){
                                                 ?>
                                                     <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'>             
@@ -143,17 +146,21 @@ if(isset($_SESSION["user_category"])){
                         </div>
                         <div id="actsContent">
                         <?php
-                                    if(isset($post[0]["content_type"])){
-                                        for($i = 0 ; $i < count($post); $i++){
-                                            if($post[$i]["content_type"] == "Activity"){
+                                    if($activity != null){
+                                        // echo var_dump($activity);
+                                        for($i = 0 ; $i < count($activity); $i++){
+                                            if($activity[$i]["content_type"] == "Activity"){
+                                                $year = $activity[$i]["month"][0] . "" . $activity[$i]["month"][1] . $activity[$i]["month"][2] . "" . $activity[$i]["month"][3];
+                                                $month = $months[$activity[0]["month"][5] . "" . $activity[0]["month"][6] - 1];
+                                                $day = $activity[$i]["month"][8] . "" . $activity[$i]["month"][9];
                                                 ?>
-                                                <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'>             
+                                                <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($activity[$i]['post_id']); ?>'>             
                                             <?php
                                             echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
                                                     <div><i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i></div>
                                                     <div class='ms-3 mt-1'> 
-                                                        <p id='material-id' hidden>{$post[$i]['post_id']}</p>
-                                                        <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$post[$i]['title']}<br>
+                                                        <p id='material-id' hidden>{$activity[$i]['post_id']}</p>
+                                                        <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$activity[$i]['title']}<br>
                                                             <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
                                                         </p>
                                                     </div>
@@ -173,17 +180,20 @@ if(isset($_SESSION["user_category"])){
                         </div>
                         <div id="quizContent">
                         <?php
-                                    if(isset($post[0]["content_type"])){
-                                        for($i = 0 ; $i < count($post); $i++){
-                                            if($post[$i]["content_type"] == "Quiz"){
+                                    if($quiz != null){
+                                        for($i = 0 ; $i < count($quiz); $i++){
+                                            if($quiz[$i]["content_type"] == "Quiz"){
                                                 ?>
-                                                <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'>             
+                                                <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
                                              <?php
+                                            $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];
+                                            $month = $months[$quiz[0]["month"][5] . "" . $quiz[0]["month"][6] - 1];
+                                            $day = $quiz[$i]["month"][8] . "" . $quiz[$i]["month"][9];
                                              echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
                                                     <div><i class='bi bi-question-circle-fill green1 fs-2 p-0 m-0'></i></div>
                                                     <div class='ms-3 mt-1'> 
-                                                        <p id='material-id' hidden>{$post[$i]['post_id']}</p>
-                                                        <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$post[$i]['title']}<br>
+                                                        <p id='material-id' hidden>{$quiz[$i]['post_id']}</p>
+                                                        <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$quiz[$i]['title']}<br>
                                                             <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
                                                         </p>
                                                     </div>

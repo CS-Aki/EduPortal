@@ -66,7 +66,7 @@ class StudentController extends ClassRm{
     public function getPostDetails($postId, $classCode){
         $content = $this->fetchPostDetails($postId, $classCode);
         if($content == null){
-            echo "Controller error";
+            // echo "Controller error";
         }
         return $content;
     }
@@ -169,6 +169,22 @@ class StudentController extends ClassRm{
     public function getQuizResult($postId, $classCode, $userId){
         $result = $this->getQuizResultFromDb($postId, $classCode, $userId);
         return $result;
+    }
+
+    public function listOfQuiz($classCode){
+        $content = $this->getQuizInClass($classCode);
+        if($content == null){
+            // echo "Controller error";
+        }
+        return $content;
+    }
+
+    public function listOfActs($classCode){
+        $content = $this->getActsInClass($classCode);
+        if($content == null){
+            // echo "Controller error";
+        }
+        return $content;
     }
 }
 

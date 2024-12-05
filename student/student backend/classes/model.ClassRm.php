@@ -149,10 +149,10 @@ class ClassRm extends DbConnection
         // echo "<br> Inside of " . $classCode;
         // $code = $this->findSimilarCode($classCode);
 
-        $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE classes.class_code = ? AND visibility = ?";
+        $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE classes.class_code = ? AND visibility = ? AND posts.content_type = ?";
         $stmt = $this->connect()->prepare($sql);
 
-        $stmt->execute([$classCode, "Visible"]);
+        $stmt->execute([$classCode, "Visible", "Material"]);
 
         if ($stmt->rowCount() == 0) {
             return $result = $this->fetchClassFromCode($classCode);
@@ -196,7 +196,7 @@ class ClassRm extends DbConnection
 
     protected function fetchPostDetails($postID, $classCode){
         // echo $title;
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content, posts.content_type, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -533,7 +533,7 @@ class ClassRm extends DbConnection
         try {
             if ($stmt->execute(array($postId, $classCode))) {
                 if ($stmt->rowCount() == 0) {
-                    return $result = null;
+                    return $result = $this->fetchQuizTitle($postId, $classCode);;
                 }
                 $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -545,6 +545,10 @@ class ClassRm extends DbConnection
             echo "Error fetchQuizDetails: " . $e;
             return null;
         }
+    }
+
+    protected function fetchQuizTitle($postId, $classCode){
+        return null;
     }
 
     protected function submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId){
@@ -586,5 +590,31 @@ class ClassRm extends DbConnection
             echo "Error fetchQuizDetails: " . $e;
             return null;
         }
+    }
+
+    protected function getQuizInClass($classCode){
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND quiz.starting_date <= NOW()";
+        $stmt = $this->connect()->prepare($sql);
+
+        $stmt->execute([$classCode]);
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+
+        return $code = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    protected function getActsInClass($classCode){
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, activity.starting_date, activity.starting_time, activity.deadline_date, activity.deadline_time, activity.status FROM `posts` INNER JOIN activity ON activity.post_id = posts.post_id WHERE posts.class_code = ? AND activity.starting_date <= NOW()";
+        $stmt = $this->connect()->prepare($sql);
+
+        $stmt->execute([$classCode]);
+
+        if ($stmt->rowCount() == 0) {
+            return null;
+        }
+
+        return $code = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
