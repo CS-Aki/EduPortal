@@ -26,6 +26,10 @@ if (isset($_GET["code"])) {
     unset($_SESSION["storedFile"]);
 }
 
+if(isset($_GET["error"])){
+    header("location: http://localhost/EduPortal/student/material.php?class=" . $_SESSION["storeCode"] . "&post="  . $_SESSION["postId"]);
+}
+
 $_SESSION["postId"] = $_GET["post"];
 $_SESSION["storeCode"] =  $_GET["class"];
 // echo $_SESSION["postId"];

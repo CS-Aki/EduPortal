@@ -18,6 +18,10 @@ if(isset($_SESSION["user_category"])){
     exit();
 }
 
+if(isset($_GET["error"])){
+    header("location: http://localhost/EduPortal/instructor/class.php?class=" . $_SESSION["storeCode"]);
+}
+
 $_SESSION["storeCode"] = $_GET["class"];
 
 ?>
