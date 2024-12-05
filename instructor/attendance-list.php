@@ -82,17 +82,43 @@ if(isset($_SESSION["user_category"])){
                             <h1 class="h-font green1 me-2 sub-title mb-0 pb-0">Students</h1>
                             <div class="line-h mt-0"></div>
                         </div>
+
+                        <style>
+                            table {
+                                width: 100%;              
+                                border-collapse: collapse; 
+                                color: var(--black1)
+                            }
+
+                            th, td {
+                                border: 1px solid var(--black3); 
+                                text-align: center;              
+                                vertical-align: middle;          
+                                padding: 10px;                   
+                            }
+                            thead th {
+                                position: sticky;       
+                                top: 0;                   
+                                z-index: 2;                
+                                background-color: var(--green2); 
+                                color: white;              
+                            }
+                            th[colspan] {
+                                text-align: center; 
+                            }
+                        </style>
+
                         <div class="ms-3 mt-3">
                             <form action="includes/attendance.php" method="post" id="attendanceForm">
                             <table>
-                            <thead>
-                                <th>NAME</th>
-                                <th>STATUS</th>
-                                <th colspan=3>BUTTON</th>
-                            </thead>
+                                <thead style="background-color: var(--green2);color: white;">
+                                    <th>NAME</th>
+                                    <th>STATUS</th>
+                                    <th colspan=3 class="">ACTION</th>
+                                </thead>
                             <tbody id="loadStudents">
 
-                            <td><label>Check All</label></td><td></td><td><input type="checkbox" id="checkAllPresent" name="checkAll" value="Present"></td><td><input type="checkbox" id="checkAllAbsent" name="checkAll" value="Absent"></td><td><input type="checkbox" name="checkAll" id="checkAllLate" value="Late"></td>
+                            <td><label class="fw-semibold">Check All</label></td><td></td><td><input type="checkbox" id="checkAllPresent" name="checkAll" value="Present"></td><td><input type="checkbox" id="checkAllAbsent" name="checkAll" value="Absent"></td><td><input type="checkbox" name="checkAll" id="checkAllLate" value="Late"></td>
                             
                            <?php
                                 if(isset($studentList[0]["status"])){
@@ -116,7 +142,7 @@ if(isset($_SESSION["user_category"])){
                             </tbody>
                             
                             </table>
-                            <input type="submit">
+                            <input type="submit" class="btn green shadow-none mt-2 fw-medium fs-5" style="color: white; width: 10rem;">
                             </form>
 
                             <!-- <div class="d-flex align-items-center mb-2" id="professor">

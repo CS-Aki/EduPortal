@@ -187,7 +187,7 @@ if(isset($_SESSION["user_category"])){
                                                             <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'> 6/10</p>
                                                         </div>
                                                         <div>";
-                                                           ?> <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
+                                                           ?> <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
                                                     <?php  echo" </div> 
                                                     </div>
                                                 </div>                    

@@ -45,6 +45,8 @@ class StudentController extends ClassRm{
         }
     }
 
+        
+
     public function getClassDetails($classCode){
         // echo $classCode;
         $details = $this->fetchClassDetails($classCode);
@@ -147,6 +149,27 @@ class StudentController extends ClassRm{
         return $result;
     }
 
+    public function getQuizDetails($postId, $classCode){
+        $details = $this->fetchQuizDetails($postId, $classCode);
+        if($details == null){
+            echo "No Quiz Yet";
+        }
+
+        return $details;
+    }
+
+    public function submitAnswers($userId, $postId, $classCode, $status, $answer, $questionId){
+        $result = $this->submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId);
+        if($result == false){
+            echo "Error uploading answers to db";
+            exit();
+        }
+    }
+
+    public function getQuizResult($postId, $classCode, $userId){
+        $result = $this->getQuizResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
 }
 
 ?>

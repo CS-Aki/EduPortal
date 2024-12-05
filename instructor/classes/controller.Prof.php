@@ -114,26 +114,45 @@ class InstructorController extends Instructor
         return $this->insertComment($postID, $classCode, $comment);
     }
 
-    public function createPost($classCode, $type, $title, $desc, $date, $time){
-        date_default_timezone_set('Asia/Manila');
-        $currentDateTime = date('Y-m-d H:i');
-        $userDateTime = $date . ' ' . $time;
-        $currentDate = new DateTime($currentDateTime);
-        $userDate = new DateTime($userDateTime);
-     
-        if ($userDate > $currentDate) {
+    public function createPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points){
+        if (session_id() === "") session_start();
 
-        } else {
-            echo "<div class='alert alert-error' role='alert'>";
-            echo "<span>INVALID INPUT</span>";
-            echo "</div>";
-            exit();
-        }
+        // date_default_timezone_set('Asia/Manila');
+    
+        // // Get the current date and time
+        // $currentDateTime = date('Y-m-d H:i');
+        // $currentDate = new DateTime($currentDateTime);
+    
+        // // Combine user input for ending and starting dates and times
+        // $endDateTime = new DateTime($endDate . ' ' . $endTime);
+        // $startingDateTime = new DateTime($startingDate . ' ' . $startingTime);
+    
+        // // Validate the conditions
+        // if ($startingDateTime < $currentDate) {
+        //     echo "<div class='alert alert-error' role='alert'>";
+        //     echo "<span>Starting time and date should not be less than the current time and date.</span>";
+        //     echo "</div>";
+        //     exit();
+        // }
+    
+        // if ($startingDateTime > $endDateTime) {
+        //     echo "<div class='alert alert-error' role='alert'>";
+        //     echo "<span>Starting time and date should not be greater than the deadline time and date.</span>";
+        //     echo "</div>";
+        //     exit();
+        // }
+    
+        // if ($endDateTime <= $currentDate) {
+        //     echo "<div class='alert alert-error' role='alert'>";
+        //     echo "<span>Deadline time and date should be greater than the current time and date.</span>";
+        //     echo "</div>";
+        //     exit();
+        // }
 
-       $result =  $this->addPost($classCode, $type, $title, $desc, $date, $time);
+       $result =  $this->addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points);
        if($result == true){
             // echo $classCode;
-            return $this->getPost($title, $classCode);
+            return $this->getPostViaId($_SESSION["postId"], $classCode);
             // echo "<div class='alert alert-success' role='alert'>";
             // echo "<span>Post Success</span>";
             // echo "</div>";
@@ -194,6 +213,5 @@ class InstructorController extends Instructor
         }
 
         return $content;
-
     }
 }

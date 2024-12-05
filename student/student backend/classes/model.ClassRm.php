@@ -521,7 +521,69 @@ class ClassRm extends DbConnection
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error: " . $e;
+            echo "Error: fetchSubmissions " . $e;
+            return null;
+        }
+    }
+
+    protected function fetchQuizDetails($postId, $classCode){
+        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz INNER JOIN questions ON quiz.post_id = questions.post_id INNER JOIN options ON options.question_id = questions.question_id INNER JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
+
+    protected function submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId){
+        $sql = "INSERT INTO `answers`(`user_id`, `post_id`, `class_code`, `status`, `answer_text`, `question_id`) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $postId, $classCode, $status, $answer, $questionId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error inside submitAnswersToQuiz: " . $e;
+            return false;
+        }
+    }
+
+    protected function getQuizResultFromDb($postId, $classCode, $userId){
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
             return null;
         }
     }

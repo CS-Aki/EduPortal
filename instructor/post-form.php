@@ -130,6 +130,16 @@ $_SESSION["classCode"] = $_GET["class"];
                             <textarea class="form-control rounded-2" placeholder="Leave a comment here" id="description" name="description" required></textarea>
                             <label for="floatingTextarea2" style="height: 7rem; color: var(--black3);">Enter Description</label>
                         </div>
+                        <br>
+
+                        <div id="pointsContainer" hidden>
+                            <div class="d-flex col-2">
+                                <span style="font-size: large;" class="ms-2 form-label">Point:</span>
+                                <div class="form-floating ms-2" style="flex: 1;">
+                                    <input type="number" class="rounded-2 ps-2" id="points" value="1" min="1" max="100" placeholder="Enter number" required>
+                                </div>
+                            </div>
+                        </div>
 
                         <br>
                         <!-- <div class="row">
@@ -152,7 +162,7 @@ $_SESSION["classCode"] = $_GET["class"];
                                 <input type="date" id="deadlineDate" name="deadlineDate">
                             </div>
                             <div class="col-3" id="timeContainer" hidden>
-                                <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Starting Time: </span>
+                                <span style="font-size: large;" class="form-label" id="startingDate">Starting Time: </span>
                                 <input id="startingTime" type="time" name="startingTime" value="12:00"><br><br>
                                 <span style="font-size: large;" class="form-label" id="inputGroup-sizing-default">Deadline Time: </span>
                                 <input id="deadlineTime" type="time" name="deadlineTime" value="12:00">

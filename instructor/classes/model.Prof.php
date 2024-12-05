@@ -182,9 +182,7 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function addPost($classCode, $type, $title, $desc, $date, $time){
-        // session_start();
-        session_start();
+    protected function addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points){
 
         $newCode = $this->findSimilarCode($classCode);
         $connection = $this->connect();
@@ -205,10 +203,9 @@ class Instructor extends DbConnection
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
            
-            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
-            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $date, $time, 100))) {
-             
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, $startingDate, $startingTime, "Pending"))) {
                 return true;
             }else{
                 echo "Error statement";
@@ -220,11 +217,12 @@ class Instructor extends DbConnection
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
             $_SESSION["postId"] = $connection->lastInsertId();
-            echo "THIS IS THE POST ID " + $_SESSION["postId"];
+
             $stmt = null;
-            $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
-            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $date, $time, 100))) {
+            
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, "Pending"))) {
                 return true;
                 exit();
             }else{
@@ -279,6 +277,28 @@ class Instructor extends DbConnection
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getPostViaId($postId, $classCode){
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE posts.post_id = ? AND MD5(posts.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = $this->fetchNoComment($postId, $classCode);
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error post via id: " . $e->getMessage();
             return null;
         }
     }

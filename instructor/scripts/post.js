@@ -31,28 +31,44 @@ $(document).ready(function() {
         title = $('#title').val();
         desc = $('#description').val();
         date = $('#deadlineDate').val();
-        time = $('timeContainer').val();
+        time = $('#timeContainer').val();
+        $points = $('#pointsContainer');
        
+        // <div class="d-flex col-2">
+        //                         <span style="font-size: large;" class="ms-2 form-label">Point:</span>
+        //                         <div class="form-floating ms-2" style="flex: 1;">
+        //                             <input type="number" class="rounded-2 ps-2" id="points" value="1" min="1" max="100" placeholder="Enter number" required>
+        //                         </div>
+        //                     </div>
         if(selectedValue == "material"){
             $(".sub-title").text("Create Material");
+            $("#dateContainer").find('#startingDate').prop('required', false);
+            $("#timeContainer").find('#startingTime').prop('required', false);
             $("#dateContainer").find('#deadlineDate').prop('required', false);
             $("#timeContainer").find('#deadlineTime').prop('required', false);
+            $('#pointsContainer').find("#points").prop("required", false);
+            $('#pointsContainer').find("#points").val(1);
+            $('#pointsContainer').hide();
             $("#dateContainer").hide();
             $("#timeContainer").hide();
             $("#uploadContainer").show();
         }else if(selectedValue == "quiz"){
             $(".sub-title").text("Create Quiz");
+            $('#pointsContainer').removeAttr("hidden");
             $("#dateContainer").removeAttr("hidden");
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
+            $('#pointsContainer').show();
             $("#uploadContainer").hide();
         }else{
             $(".sub-title").text("Create Activity");
+            $('#pointsContainer').removeAttr("hidden");
             $("#dateContainer").removeAttr("hidden");
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
+            $('#pointsContainer').show();
             $("#uploadContainer").show();
         }
     });
@@ -74,6 +90,7 @@ $(document).ready(function() {
                 size = Math.ceil((file.size / 1024).toFixed(2));
                 word = "KB";
             }
+
             $("#fileContainer").append(`
                     <a class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
                         <div class="d-flex">
@@ -103,6 +120,7 @@ $(document).ready(function() {
 
     $("#combinedForm").submit(function (event) {
         event.preventDefault();
+
         $(".form-message").empty();
         // console.log("clicked");
         if($("#token").val().length > 0){
@@ -111,22 +129,62 @@ $(document).ready(function() {
             var hasToken = false;
         }
 
-        Swal.fire({
-            title: 'Uploading...',
-            text: 'Please wait while we upload your file.',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
         var title = $('#title').val();
         var desc = $('#description').val();
-        var date = $('#deadlineDate').val();
-        var time = $('#deadlineTime').val();
+           // Get the current date and time
+        const currentDate = new Date();
 
+        // Get the starting date and time from the input fields
+        const startDate = $("#startingDate").val();
+        const startTime = $("#startingTime").val();
+        const startingDateTime = new Date(`${startDate}T${startTime}`);
+
+        // Get the deadline date and time from the input fields
+        const deadlineDate = $('#deadlineDate').val();
+        const deadlineTime = $('#deadlineTime').val();
+        const deadlineDateTime = new Date(`${deadlineDate}T${deadlineTime}`);
+
+        // Perform validations
+        // if($(".sub-title").text() != "Create Material"){
+        //     if (startingDateTime < currentDate) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Invalid Starting Time',
+        //             text: 'Starting time and date should not be less than the current time and date.',
+        //         });
+        //         return; // Stop execution
+        //     }
+    
+        //     if (startingDateTime > deadlineDateTime) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Invalid Starting Time',
+        //             text: 'Starting time and date should not be greater than the deadline time and date.',
+        //         });
+        //         return; // Stop execution
+        //     }
+    
+        //     if (deadlineDateTime <= currentDate) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Invalid Deadline Time',
+        //             text: 'Deadline time and date should be greater than the current time and date.',
+        //         });
+        //         return; // Stop execution
+        //     }
+        // }
+        
+        if($(".sub-title").text() != "Create Material"){
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Valid Dates!',
+            //     text: 'The input dates and times are valid!',
+            // });
+
+        }
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
-    
+
         let formData = new FormData();
         formData.append("classCode", classCode);
 
@@ -135,21 +193,29 @@ $(document).ready(function() {
                 // Append each file to the FormData object
                 formData.append("files[]", $("#fileInput")[0].files[i]); 
             }
+            Swal.fire({
+                title: 'Uploading...',
+                text: 'Please wait while we upload your file.',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
         }
      
         // for (let pair of formData.entries()) {
         //     console.log(pair[0], pair[1]);
         // }
+        let points = $("#points").val();
 
-        if(date == "" && selectedValue != "material"){
-            $(".form-message").append("<div class='alert alert-danger' role='alert'><span>EMPTY DATE FIELDS</span></div>");
-            return;
-        }
+        // if(selectedValue != "material"){
+        //     return;
+        // }
 
-         console.log($("#fileInput")[0].files.length);
+        console.log($("#fileInput")[0].files.length);
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
+            
             $.ajax({
                 method: "POST",
                 url: "includes/save-file-session.php",
@@ -169,16 +235,18 @@ $(document).ready(function() {
                 data: { "type": selectedValue,
                         "title": title,
                         "desc" : desc,
-                        "date" : date,
-                        "time" : time,
-                        "classCode" : classCode
+                        "date" : deadlineDate,
+                        "time" : deadlineTime,
+                        "classCode" : classCode,
+                        "startDate" : startDate,
+                        "startTime" : startTime,
+                        "points" : points
                 },
         
                 success: function (response) {
-                    // console.table("this is ",response);
+                    console.table("this ",response);
                     console.log("upload");
                     // console.log(response.date);
-    
                     var data = {
                         title : title,
                         date : response[0]["month"],
@@ -224,7 +292,7 @@ $(document).ready(function() {
 
                             Swal.fire({
                                 title: 'Success!',
-                                text: 'File uploaded successfully!',
+                                text: 'Added New Post Successfully!',
                                 icon: 'success'
                             });
                         },
@@ -242,19 +310,22 @@ $(document).ready(function() {
             });
 
         }else{
-            console.log("uploading iwthout file");
             $.ajax({
                 method: "POST",
                 url: "includes/create-post.php",
                 data: { "type": selectedValue,
                         "title": title,
                         "desc" : desc,
-                        "date" : date,
-                        "time" : time,
-                        "classCode" : classCode
+                        "date" : deadlineDate,
+                        "time" : deadlineTime,
+                        "classCode" : classCode,
+                        "startDate" : startDate,
+                        "startTime" : startTime,
+                        "points" : points
                 },
         
                 success: function (response) {
+                    console.log("testtt");
                     console.table("this is ",response);
                     console.log("upload");
                     // console.log(response.date);
@@ -274,27 +345,27 @@ $(document).ready(function() {
                     $('#description').val("");
                     $('#fileInput').val("");
                     $("#fileContainer").empty();
-                    $("form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                    // $("form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
 
-                    
                     Swal.fire({
                         title: 'Success!',
-                        text: 'File uploaded successfully!',
+                        text: 'Added New Post Successfully!',
                         icon: 'success'
                     });
 
                 },
                 error: function (xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'There was an error uploading the file.',
-                        icon: 'error'
-                    });
+                    // Swal.fire({
+                    //     title: 'Error!',
+                    //     text: 'There was an error uploading the file.',
+                    //     icon: 'error'
+                    // });
                     console.error("Error:", status, error);
                     console.error("Response Text:", xhr.responseText);
                 }
             });
         }
+        console.log("testasda");
     });
 
     // $("#fileForm").submit(function (event) {

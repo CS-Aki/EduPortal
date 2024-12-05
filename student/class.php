@@ -177,7 +177,7 @@ if(isset($_SESSION["user_category"])){
                                         for($i = 0 ; $i < count($post); $i++){
                                             if($post[$i]["content_type"] == "Quiz"){
                                                 ?>
-                                                <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'>             
+                                                <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'>             
                                              <?php
                                              echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
                                                     <div><i class='bi bi-question-circle-fill green1 fs-2 p-0 m-0'></i></div>
