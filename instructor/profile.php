@@ -37,22 +37,24 @@ if(isset($_SESSION["user_category"])){
             <div class="col-lg-10 col-sm-12 ms-auto ">
                 <div class="container px-lg-5 px-sm-2 d-flex align-items-center justify-content-center">
                     <div class="rounded-5 bg-body-tertiary w-100 mt-5 px-4 py-4">
-                        <div class="p-3 d-flex align-content-center">
-                            <div>
-                                 <!-- <i class='me-2 bi bi-person-circle fs-1 icon' style="font-size: 3rem;"></i> -->
-                                <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" id="imageProfile" style="width: 160px;" class="rounded-pill">
-                            </div>
-                            <div class="ms-4">
-                                <h2 class="h-font green1 me-2 title mb-0 pb-0"><?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?></h2>
-                                <p class="lh-base fw-semibold black3 fs-5 pt-0 mt-0 mb-2">
-                                    Professor
-                                </p>
-                                <form enctype="multipart/form-data" id="changeProfileForm">
-                                    <input type="file" id="file" style="display: none;" name="file">
-                                    <button type="submit" name="changeBtn" id="changeProfileBtn" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0">
-                                        <i class="bi bi-pencil-square white2 me-2"></i>Change Profile
-                                    </button>
-                                </form>
+                        <div class="p-3 d-flex align-content-center" id="profile-content">
+                            <div class="row container-fluid">
+                                <div class="col-lg-3">
+                                    <!-- <i class='me-2 bi bi-person-circle fs-1 icon' style="font-size: 3rem;"></i> -->
+                                    <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" id="imageProfile" style="width: 160px;" class="rounded-pill">
+                                </div>
+                                <div class="col-lg-9">
+                                    <h2 class="h-font green1 me-2 title mb-0 pb-0"><?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?></h2>
+                                    <p class="lh-base fw-semibold black3 fs-5 pt-0 mt-0 mb-2">
+                                        Professor
+                                    </p>
+                                    <form enctype="multipart/form-data" id="changeProfileForm">
+                                        <input type="file" id="file" style="display: none;" name="file">
+                                        <button type="submit" name="changeBtn" id="changeProfileBtn" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0">
+                                            <i class="bi bi-pencil-square white2 me-2"></i>Change Profile
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -97,9 +99,8 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
-    <br><br><br>
-    <br><br><br>
 
+    <?php require('inc/footer.php'); ?>
     <script src="scripts/change-profile.js">      
 
     </script>

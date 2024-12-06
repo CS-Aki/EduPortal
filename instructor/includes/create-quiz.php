@@ -4,7 +4,7 @@ require_once("../../log and reg backend/classes/connection.php");
 require_once("../classes/model.Prof.php");
 require_once("../classes/controller.Prof.php");
 
-$quizTitle = $_POST["title"];
+// $quizTitle = $_POST["title"];
 $classCode = $_POST["classCode"]; // Note this is still encrypted
 $jsonData = $_POST["questions"];
 
@@ -16,11 +16,11 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
-echo "The title is " . $quizTitle . "\n";
+// echo "The title is " . $quizTitle . "\n";
 // echo var_dump($data);
-
+$postId = $_POST["postId"];
 $instrCtrlr = new InstructorController();
-$instrCtrlr->createQuiz($quizTitle, $classCode, $questions);
+$instrCtrlr->createQuiz($classCode, $questions, $postId);
 
 // foreach ($questions as $question) {
 //     $questionText = $question['question'];

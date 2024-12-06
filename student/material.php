@@ -81,7 +81,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                     </div>
                 </nav>
                 <?php 
-                    if($postDetails[0]["content_type"] != "Activity"){
+                    if($postDetails[0]["content_type"] == "Material"){
                 ?>
                 <div class="container mt-4 px-lg-5 px-sm-2">
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
@@ -166,7 +166,95 @@ $_SESSION["storeCode"] =  $_GET["class"];
                         </div>
                     </div>
                 </div>
-                <?php } else {?>
+                <?php } else if($postDetails[0]["content_type"] == "Quiz"){ ?>
+                    <div class="container-fluid mt-4 px-lg-5 px-sm-4">
+                    <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
+                    <div class="mt-2">
+                        <div class="d-flex px-3">
+                            <div id="icon-material">
+                                <i class="bi bi-question-circle-fill green1 fs-1 p-0 m-0 me-3"></i>
+                            </div>
+                            <div class="w-100">
+                                <div>
+                                    <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
+                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
+                                </div>
+                                <div class="mt-3" id="material-description">
+                                    <p class="black3 fs-6 lh-sm">
+                                    <?php echo $postDetails[0]["content"]; ?>
+                                    </p>                         
+                                </div>
+                                
+                                <div class="container-fluid p-0">
+                                    <h1 class="h-font green2 me-2 sub-title mb-0" id="material-title">Your Work</h1>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12">
+                                            <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>'>
+                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                    <div class="d-flex justify-content-center align-items-center p-2 py-3">
+                                                        <span class="white2 fw-semibold mb-0">Take Quiz</span>
+                                                    </div> 
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container-fluid mt-2 m-0 p-0 table-responsive" id="table-container">
+                                    <table id="classTable" class="table table-bordered text-center align-middle teble-responsive">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Quiz</th>
+                                            <th scope="col">Points</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">View</th>
+                                        
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
+                                                <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-success">Passed</span></td>
+                                                <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
+                                                <td><a href="#" class="green2">View</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
+                                                <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-danger">Failed</span></td>
+                                                <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
+                                                <td><a href="#" class="green2">View</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">No record</td>
+                                            </tr>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                                <div class="line2 mt-5"></div>
+                                <div class="w-75 mt-4" id="material-comment-container">
+                                    <div class="input-group mt-lg-2">
+                                        <span class="input-group-text rounded-start-5 bg-white ps-3"><img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" style="width: 35px;" class="rounded-5"></span>
+                                        <textarea class="form-control py-3 black3 5 border-start-0 border-end-0 fs-6" id="commentArea" style="resize: none;" rows="1" aria-label="With textarea" placeholder="Leave a comment..."></textarea>
+                                        <span class="input-group-text rounded-end-5 bg-white">                                        
+                                            <a href="" class="align-items-end green1 fs-3 pe-2 comment-btn"><i class="bi bi-send-fill"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ms-lg-3 mt-4">
+
+                                        <div id="comments"></div>
+                                </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <?php }            
+     
+                    else {?>
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
 
                 <div class="container mt-4 px-lg-5 px-sm-2">

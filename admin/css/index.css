@@ -206,7 +206,12 @@ button {
 #sidebar-menu li:hover .greenicon {
     color: #F1F1F1; /* Icon turns white on hover */
 }
-
+#table-container td{
+    color: var(--black2);
+}
+#table-container th{
+    color: var(--black2);
+}
 
 .toggle-btn {
     cursor: pointer;
@@ -332,13 +337,51 @@ button {
     font: 'Inter', sans-serif;
     }
 
+/* NEW */
+
+#mobile_directory {
+    background-color: var(--green1);
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.active_directory {
+    display: flex !important;
+    position: absolute !important;
+    z-index: 4 !important;
+}
+
+
+#toggleBtn {
+    display: none;
+}
 @media screen and (max-width: 992px) {
     #sidebar-menu {
         height: auto;
         width: 100%;
         display: none;
     }
-    #main-content {
-        margin-top: 20px;
+    #toggleBtn {
+        display: block;
     }
+    #myTable th, #myTable td {
+        padding: 0.5rem;
+        font-size: 0.575rem;
+    }
+    #classTable th, #classTable td {
+        padding: 0.5rem;
+        font-size: 0.575rem;
+    }
+    #studentTable th, #studentTable td {
+        padding: 0.5rem;
+        font-size: 0.575rem;
+    }
+    #table-container {
+        padding: 0;
+    }
+}
+
+.activesidebar, .activesidebar i, .activesidebar #folder {
+    background-color: var(--green1) !important;
+    color: #F1F1F1 !important;
 }

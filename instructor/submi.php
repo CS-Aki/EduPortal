@@ -84,7 +84,7 @@ if(isset($_SESSION["user_category"])){
                                                             <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'> 6/10</p>
                                                         </div>
                                                         <div>";
-                                                      ?>      <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
+                                                      ?>      <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['title']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
                                                        <?php echo"</div> 
                                                     </div>
                                                 </div>                    
@@ -152,7 +152,7 @@ if(isset($_SESSION["user_category"])){
                                                             <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'> 6/10</p>
                                                         </div>
                                                         <div>";
-                                                           ?> <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
+                                                           ?> <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['title']); ?>'><i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i></a>
                                                     <?php  echo" </div> 
                                                     </div>
                                                 </div>                    
@@ -195,7 +195,6 @@ if(isset($_SESSION["user_category"])){
                                                                                     <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6' >Jarmen Cachero</p>
                                                                                 </div>
                                                                             </a>
-                                                                            
                                                                             <a href='#' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                                                 <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' width:'95%;'>
                                                                                     <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'></span>
@@ -232,7 +231,7 @@ if(isset($_SESSION["user_category"])){
         </div>
     </div>
     <br><br><br>
-    <br><br><br>
+    <?php require('inc/footer.php'); ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>

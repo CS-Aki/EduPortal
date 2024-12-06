@@ -25,6 +25,8 @@ if (isset($_SESSION["user_category"])) {
     exit();
 }
 
+
+
 // echo "This is the " . $_SESSION["access_token"]["access_token"];
 // phpinfo();
 if (isset($_GET["code"])) {
@@ -33,6 +35,7 @@ if (isset($_GET["code"])) {
     unset($_SESSION["classCode"]);
     unset($_SESSION["storedFile"]);
 }
+
 
 // echo $_SESSION['access_token'];
 
@@ -43,6 +46,7 @@ if(!isset($_SESSION['access_token'])){
 //     include("includes/upload-file.php");
 // }
 $_SESSION["classCode"] = $_GET["class"];
+// echo $_SESSION["displayQuiz"];
 // echo $_SESSION['access_token'];
 ?>
 
@@ -106,6 +110,8 @@ $_SESSION["classCode"] = $_GET["class"];
                     </div>
                 </nav>
 
+                <!-- <div id="dispQuiz"></div> -->
+
                 <?php $toCreate = "Material" ?> <!-- ausin pa para ma save ung clicked sa prev dropdown as variable para ma show, or if may easier paraan ka -->
 
                 <h1 style="margin: 15px 0px 0px 15px;" class="h-font green1 me-2 sub-title">Create <?php echo $toCreate; ?></h1>
@@ -114,7 +120,7 @@ $_SESSION["classCode"] = $_GET["class"];
                     <select style="position: absolute; z-index: 20;" id="contentType">
                         <option class="green2" value="material">Material</option>
                         <option class="green2" value="activity">Activity</option>
-                        <option class="green2" value="quiz">Quiz</option>
+                        <option class="green2" value="quiz" <?php if(isset($_SESSION["displayQuiz"])){ echo "selected"; unset($_SESSION["displayQuiz"]); }?>>Quiz</option>
                     </select><span> <br>
                     </span>
 
@@ -196,8 +202,12 @@ $_SESSION["classCode"] = $_GET["class"];
                         <div class="col-lg-2">
                             <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button>
                         </div>
-                    </form>
 
+
+                    </form>
+                    <div class="quiz-list-container col-lg-2" hidden>
+                            <a href="quiz-list.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">View Quiz List</button></a>
+                        </div>
                     <!-- Handles the messaging -->
                     <div class="form-message"></div>
                     <hr>

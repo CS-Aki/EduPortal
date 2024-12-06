@@ -209,6 +209,11 @@ button {
     color: #F1F1F1;
 }
 
+.activesidebar, .activesidebar i, .activesidebar #folder {
+    background-color: var(--green1) !important;
+    color: #F1F1F1 !important;
+}
+
 #sidebar-menu li:hover a {
     color: #F1F1F1; /* Text turns white on hover */
 }
@@ -223,13 +228,6 @@ button {
 
 /* Responsive Styles */
 @media screen and (max-width: 992px) {
-    #sidebar {
-        height: auto;
-        width: 100%;
-    }
-    #main-content {
-        margin-top: 80px;
-    }
     #card-container {
         display: block !important;
     }
@@ -304,17 +302,72 @@ button {
     background-color: transparent;
 }
 
-@media screen and (max-width: 992px) {
-    #sidebar-menu {
-        height: auto;
-        width: 100%;
-    }
-    #main-content {
-        margin-top: 80px;
+/* NEW */
 
-    }
+#mobile_directory {
+    background-color: var(--green1);
+    display: none;
+    transition: all 0.3s ease;
 }
 
+.active_directory {
+    display: flex !important;
+    position: absolute !important;
+    z-index: 4 !important;
+}
+
+#toggleBtn {
+    display: none;
+}
+
+@media screen and (max-width: 992px) {
+    #sidebar-menu {
+        display: none;
+    }
+    #card-container {
+        display: block !important;
+    }
+    #card-left-side {
+        width: 100% !important;
+    }
+    #card-right-side {
+        width: 100% !important;
+        border-left: none;
+    }
+    #material-comment-container {
+        width: 100% !important;
+    }
+    #toggleBtn {
+        display: block;
+    }
+}
+.fc-list-day-cushion a {
+    color: var(--black2);
+}
+
+.fc-list-event-dot {
+    border: calc(var(--fc-list-event-dot-width) / 2) solid var(--white2) !important;
+}
+@media screen and (max-width: 770px) {
+    .fc-toolbar-title {
+        font-size: 0.9rem; /* Smaller title for mobile */
+    }
+
+    .fc-toolbar .fc-button {
+        padding: 0.2rem 0.4rem; /* Compact padding for buttons */
+        font-size: 0.7rem; /* Even smaller button text */
+    }
+
+    .fc-header-toolbar {
+        flex-wrap: wrap; /* Allow buttons to wrap if needed */
+        gap: 0.5rem; /* Add spacing between wrapped items */
+    }
+
+    .fc-toolbar-chunk {
+        flex: 1 1 100%; /* Make chunks stack vertically */
+        text-align: center; /* Center align buttons */
+    }
+}
 /* CALENDAR */
 
 /* Overall calendar size */
@@ -441,4 +494,12 @@ input[type="time"]:focus {
 .question-point{
     border-color: var(--black3);
     width: 6ch;
+}
+
+.white-btn {
+    transition: .7s;
+    background-color: #E2E7E9 !important;
+}
+.white-btn:hover {
+    background-color: #C8CDCE !important;
 }

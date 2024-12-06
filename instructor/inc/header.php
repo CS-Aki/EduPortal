@@ -24,7 +24,7 @@
     </nav>
     </div>
 
-<?php  require("includes/load-classes.php");?>
+    <?php  require("includes/load-classes.php");?>
 <div class="col-lg-3 sidebar shadow-sm" id="sidebar">
     <nav class="navbar navbar-expand-lg">
         <ul>

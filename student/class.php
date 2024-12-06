@@ -184,7 +184,7 @@ if(isset($_SESSION["user_category"])){
                                         for($i = 0 ; $i < count($quiz); $i++){
                                             if($quiz[$i]["content_type"] == "Quiz"){
                                                 ?>
-                                                <a href='quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
+                                                <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
                                              <?php
                                             $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];
                                             $month = $months[$quiz[0]["month"][5] . "" . $quiz[0]["month"][6] - 1];

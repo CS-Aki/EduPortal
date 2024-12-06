@@ -430,6 +430,26 @@ class Instructor extends DbConnection
         return null;
     }
 
+    protected function decryptPostId1($postId, $classCode){
+        $sql = "SELECT post_id FROM posts WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                // Add conditional statement if rowCount == 0 then call a function
+                return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return null;
+        }
+        return null;
+    }
+
     protected function getPostId($postId, $classCode){
         $sql = "SELECT post_id FROM posts WHERE MD5(post_id) = ? AND class_code = ?";
         $stmt = $this->connect()->prepare($sql);
@@ -549,10 +569,32 @@ class Instructor extends DbConnection
         return false;
     }
 
-    protected function uploadQuiz($quizTitle, $classCode, $questions, $totalPoints) {
+    protected function fetchQuizDetails($postId, $classCode){
+        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
+
+    protected function uploadQuiz($classCode, $questions, $totalPoints, $postId) {
         $realCode = $this->findSimilarCode($classCode);
         $connection = $this->connect(); // Store the connection
-    
+        $newPostId = $this->decryptPostId1($postId,$classCode);
+        echo var_dump($newPostId);
         foreach ($questions as $question) {
             $questionText = $question['question'];
             $type = $question['type'];
@@ -560,11 +602,11 @@ class Instructor extends DbConnection
             $ansKey = $question['ansKey'];
             $points = $question['points'];
     
-            $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`, `post_id`) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
     
             try {
-                if ($stmt->execute(array($realCode[0]["class_code"], $ansKey, $points, $questionText, $type))) {
+                if ($stmt->execute(array($realCode[0]["class_code"], $ansKey, $points, $questionText, $type, $newPostId[0]["post_id"]))) {
                     $questionId = $connection->lastInsertId(); // Use the same connection
                     foreach ($options as $option) {
                         $this->insertOptions($option, $questionId);

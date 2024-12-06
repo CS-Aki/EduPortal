@@ -14,11 +14,10 @@ $(document).ready(function () {
             }
 
             console.table(response);
-            console.log(response.length);
-            
+
             for (let i = 0; i < response.length; i++) {
                 var parts = response[i]["class_schedule"].match(/\((.*?)\)\s(.*?)\-(.*)/);
-                startTime.push(parts[2]); // Extracted start time
+                startTime.push(parts[2]); 
                 endTime.push(parts[3]);
                 className.push(response[i]["class_name"]);
                 classCode.push(response[i]["class_code"]);
@@ -31,35 +30,33 @@ $(document).ready(function () {
                     case "Thu": day.push(4); break;
                     case "Fri": day.push(5); break;
                     case "Sat": day.push(6); break;
-                    case "Sun": day.push(0); break; 
+                    case "Sun": day.push(0); break;
                 }
             }
 
-            // console.log("Day:", day);
-            // console.log("Start Time:", startTime);
-            // console.log("End Time:", endTime);
-
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                initialDate: '2024-10-07',
+                initialView: getInitialView(), // Determine the initial view based on screen size
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
-                events: [] 
+                height: 'auto',
+                events: [], 
             });
 
             calendar.render();
 
-            for (let i = 0; i < day.length; i++) {
-                // console.log(`Processing event ${i}:`);
-                // console.log("Class Name:", className[i]);
-                // console.log("Day:", day[i]);
-                // console.log("Start Time:", startTime[i]);
-                // console.log("End Time:", endTime[i]);
+            // Adjust view on window resize
+            $(window).on('resize', function () {
+                const newView = getInitialView();
+                if (calendar.view.type !== newView) {
+                    calendar.changeView(newView);
+                }
+            });
 
+            for (let i = 0; i < day.length; i++) {
                 const convertedStartTime = convertTo24Hour(startTime[i]);
                 const convertedEndTime = convertTo24Hour(endTime[i]);
 
@@ -68,7 +65,7 @@ $(document).ready(function () {
                         originalStartTime: startTime[i],
                         originalEndTime: endTime[i],
                     });
-                    continue; 
+                    continue;
                 }
 
                 addWeeklyEventWithMinutes(calendar, className[i], "2024-11-01", "2024-12-31", day[i], convertedStartTime, convertedEndTime, classCode[i]);
@@ -78,6 +75,16 @@ $(document).ready(function () {
             console.log("Error:", status, error);
         },
     });
+
+    function getInitialView() {
+        if (window.innerWidth <= 768) {
+            return 'listWeek';
+        } else if (window.innerWidth <= 1024) {
+            return 'timeGridWeek';
+        } else {
+            return 'dayGridMonth';
+        }
+    }
 
     function convertTo24Hour(time) {
         const timeParts = time.match(/(\d+):(\d+)\s?(AM|PM)/);
@@ -98,36 +105,27 @@ $(document).ready(function () {
 
     function addWeeklyEventWithMinutes(calendar, title, startDate, endDate, weekday, startTime, endTime, classCode) {
         var start = new Date(startDate);
-        var end = new Date(endDate);     
-        // console.log(md5(classCode));   
+        var end = new Date(endDate);
         var classCodeLink = "class.php?class=" + md5(classCode);
-        // Adjust `start` to the first occurrence of the desired weekday
+
         while (start.getDay() !== weekday) {
             start.setDate(start.getDate() + 1);
         }
 
-        // Loop through each week until the end date
         while (start <= end) {
-            // Combine `start` date with the converted `startTime` and `endTime`
             const startDateTime = `${start.toISOString().split("T")[0]}T${startTime}`;
             const endDateTime = `${start.toISOString().split("T")[0]}T${endTime}`;
 
-            // Add the event to the calendar
-            // console.log("Adding event:", {
-            //     title: title,
-            //     start: startDateTime,
-            //     end: endDateTime
-            // });
             calendar.addEvent({
                 title: title,
-                url : classCodeLink,
+                url: classCodeLink,
                 start: startDateTime,
                 end: endDateTime,
-                allDay: false // Ensure it's not an all-day event
+                allDay: false
             });
 
-            // Increment by 7 days (1 week)
             start.setDate(start.getDate() + 7);
         }
     }
-}); 
+
+});

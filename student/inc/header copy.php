@@ -58,22 +58,11 @@
         </div>
 </nav>
 </div> -->
-<?php
-// Get the current file name
-$current_page = basename($_SERVER['PHP_SELF']);
-?>
-<div class="container-fluid greenbg vh-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
-    <a href="student-dashboard.php" class="fs-3 white1"><i class="bi bi-house-door-fill me-2 white1"></i>Home</a>
-    <a href="calendar.php" class="fs-3 white1"><i class="bi bi-calendar-week me-2 white1"></i>Calendar</a>
-    <a href="student-dashboard.php" class="fs-3 white1"><i class="bi bi-mortarboard-fill me-2 white1"></i>Enrolled</a>
-    <a href="profile.php" class="fs-3 white1"><i class="me-2 bi bi-person-circle white1"></i>Profile</a>
-    <a onclick="toggleSidebar()" class="fs-3 white1">Back</a>
-</div>
 
 <div class="container-fluid sticky-top d-flex align-items-center bg-white justify-content-between line p-2">
 
     <div class="d-flex align-items-center">
-        <span class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()"><i class="bi bi-list fs-1 greentoggle"></i></span>
+        <span class="toggle-btn" onclick="toggleSidebar()"><i class="bi bi-list fs-1 greentoggle"></i></span>
         <a class="navbar-brand ms-3" href="student-dashboard.php"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
     </div>
 
@@ -100,6 +89,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>
+            <li><a class="dropdown-item h-font green1 fs-4" href="#">Settings</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="student backend/includes/logout.inc.php">Log Out</a></li>
         </ul>
     </div>
@@ -112,7 +102,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="modal-content">
             <div class="modal-body">
                 <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
-                    <h1 class="modal-title fs-2 h-font ms-3 green1" id="staticBackdropLabel">Join Class</h1>
+                    <h1 class="modal-title fs-2 h-font ms-3" id="staticBackdropLabel">Join Class</h1>
                     <button type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="includes/join-class.php" method="post" id="joinClassForm">
@@ -136,9 +126,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <div class="col-lg-2 shadow-sm" id="sidebar-menu">
     <ul>
-        <a href="student-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'student-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
-        <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
-        <a href="calendar.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'calendar.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-calendar-week ms-3 me-2 greenicon"></i>Calendar</li></a>
+        <a href="student-dashboard.php" class="fs-3 h-font"><li class="mt-3"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
+        <a href="calendar.php" class="fs-3 h-font"><li class=""><i class="bi bi-calendar-week ms-3 me-2 greenicon"></i>Calendar</li></a>
     </ul>
 
     <div class="line container-fluid">
@@ -146,30 +135,37 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="accordion accordion-flush mt-3" id="accordionFlushExample">
         <div class="accordion-item">
-            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php') ? 'activesidebar' : ''; ?>">
+            <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Enrolled</div>
             </h2>
 
-            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1">
+            <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample1">
 
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            <div id="class"><i class="ms-3 bi bi-folder me-2 greenicon"></i>BSCS 2A</div>
+                    </h2>
+
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample2">
                         <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
+                            <a href="" class="fs-5 text-truncate d-inline-block" style="max-width: 100%;">
                                 <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
                             </a>
                         </div>
                         <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
-                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
+                            <a href="" class="fs-5 text-truncate d-inline-block" style="max-width: 100%;">
+                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Software Engineering
                             </a>
                         </div>
                         <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
-                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
+                            <a href="" class="fs-5 text-truncate d-inline-block" style="max-width: 100%;">
+                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Web Systems
                             </a>
                         </div>
-                   
-                
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -134,10 +134,11 @@
                                 $questionCount++;
                             }
                         } 
+                        // echo $postDetails[0]["post_id"];
                     ?>
 
                         <button type="submit" class="btn btn-info">Submit Quiz</button>
-                        <a href="class.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>"><button type="button" class="btn btn-secondary">Back</button></a><br><br>
+                        <a href="material.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>"><button type="button" class="btn btn-secondary">Back</button></a><br><br>
                         </div>
                     </form>
 

@@ -77,4 +77,13 @@ class ListController extends ClassRm
         return $this->fetchStudentAttndList($classCode);
     }
 
+    public function displayQuizList($classCode){
+        return $this->fetchQuizzes($classCode);
+    }
+
+    
+    public function displayQuiz($classCode, $postId){
+        return $this->fetchQuiz($classCode, $postId);
+    }
+
 }

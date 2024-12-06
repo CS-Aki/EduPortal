@@ -220,6 +220,48 @@ class ClassRm extends DbConnection
             return false;
         }
     }
-    
 
+    protected function fetchQuizzes($classCode){
+        $sql = "SELECT quiz.*, posts.title FROM quiz INNER JOIn posts ON quiz.post_id = posts.post_id WHERE MD5(quiz.class_code) = ? AND posts.content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, "Quiz"))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error post via id: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function fetchQuiz($classCode, $postId){
+        $sql = "SELECT quiz.*, posts.title FROM quiz INNER JOIn posts ON quiz.post_id = posts.post_id WHERE MD5(quiz.class_code) = ? AND posts.content_type = ? AND MD5(quiz.post_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, "Quiz", $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error post via id: " . $e->getMessage();
+            return null;
+        }
+    }
 }

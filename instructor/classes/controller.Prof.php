@@ -178,13 +178,13 @@ class InstructorController extends Instructor
         return $this->updateProfilePicture($userId, $profile);
     }
 
-    public function createQuiz($quizTitle, $classCode, $questions){
+    public function createQuiz($classCode, $questions, $postId){
         $totalPoints = 0;
         foreach ($questions as $question) {
              $totalPoints += $question["points"];
         }
         // echo $totalPoints;
-        $result = $this->uploadQuiz($quizTitle, $classCode, $questions, $totalPoints);
+        $result = $this->uploadQuiz($classCode, $questions, $totalPoints, $postId);
         if($result == false){
             echo "Error Uploading Quiz In Db\n";
             return;
@@ -213,5 +213,14 @@ class InstructorController extends Instructor
         }
 
         return $content;
+    }
+
+    public function getQuizDetails($postId, $classCode){
+        $details = $this->fetchQuizDetails($postId, $classCode);
+        if($details == null){
+            echo "No Quiz Yet";
+        }
+
+        return $details;
     }
 }

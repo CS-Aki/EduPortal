@@ -24,6 +24,22 @@ $(document).ready(function() {
       });
 
     var selectedValue = "material";
+    
+    //   console.log("Content : " + $('#contentType').val());
+
+    if($('#contentType').val() == "quiz"){
+        console.log("inside");
+        $(".sub-title").text("Create Quiz");
+        $('#pointsContainer').removeAttr("hidden");
+        $("#dateContainer").removeAttr("hidden");
+        $("#timeContainer").removeAttr("hidden");
+        $("#dateContainer").show();
+        $("#timeContainer").show();
+        $(".quiz-list-container").removeAttr("hidden");
+        $(".quiz-list-container").show();
+        $('#pointsContainer').show();
+        $("#uploadContainer").hide();
+    }
 
     $('#contentType').on('change', function() {
         selectedValue = $(this).val();
@@ -52,6 +68,8 @@ $(document).ready(function() {
             $("#dateContainer").hide();
             $("#timeContainer").hide();
             $("#uploadContainer").show();
+            $(".quiz-list-container").hide();
+
         }else if(selectedValue == "quiz"){
             $(".sub-title").text("Create Quiz");
             $('#pointsContainer').removeAttr("hidden");
@@ -59,6 +77,8 @@ $(document).ready(function() {
             $("#timeContainer").removeAttr("hidden");
             $("#dateContainer").show();
             $("#timeContainer").show();
+            $(".quiz-list-container").removeAttr("hidden");
+            $(".quiz-list-container").show();
             $('#pointsContainer').show();
             $("#uploadContainer").hide();
         }else{
@@ -70,6 +90,8 @@ $(document).ready(function() {
             $("#timeContainer").show();
             $('#pointsContainer').show();
             $("#uploadContainer").show();
+            $(".quiz-list-container").hide();
+
         }
     });
 

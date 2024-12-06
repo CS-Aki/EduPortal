@@ -1,14 +1,15 @@
 $(document).ready(function () {
-    let questionCount = 0;
+    let questionCount = $('#questions-container').children().length;
     let inputCount = 1;
     // Add a new question
+    console.log("Len" + $('#questions-container').children().length);
     $('#add-question').click(function () {
         questionCount++;
-
         $('#questions-container').append(`
             <div class="question id" data-id="${questionCount}">
-                <div class="input-group row mb-3">
+                 <div class="notSaved" hidden>not save</div>
 
+                <div class="input-group row mb-3">
                     <div class="d-flex col-6">
                         <span style="font-size: large;" class="question_count form-label col-3">Question ${questionCount}:</span>
                         <div class="form-floating col-8">
@@ -74,7 +75,7 @@ $(document).ready(function () {
 
                     <div class="mt-1 col-8 d-flex align-items-center">
                         <div class="form-floating col-8">
-                            <input type="text" class="boolean_answer_key form-control rounded-2 remove_text" placeholder=">Answer Key" id="floatingText1a">
+                            <input type="text" class="boolean_answer_key form-control rounded-2 remove_text" placeholder=">Answer Key" id="floatingText1a" readonly>
                             <label for="floatingText1a" class="black3">Answer Key</label>
                         </div>
                     </div>
@@ -177,8 +178,14 @@ $(document).ready(function () {
 
     $(document).on('click', '.remove-question', function () {
         let questionId = $(this).closest('.question').data("id");
-        questionCount--;
+        console.log("Testt "  + $(this).closest(".question").find(".notSaved").text());
+        // questionCount--;
+        if($(this).closest(".question").find(".notSaved").text() != "not save"){
+            
+        }
+        
         console.log("ID: " + $(this).closest('.question').data("id"));
+
         $(this).closest('.question').remove();
         $('.question').each(function () {
             let currentId = $(this).closest('.question').data("id");
@@ -261,6 +268,9 @@ $(document).ready(function () {
 
     // Update display based on question type
     function updateQuestionDisplay() {
+        // console.log("Len" + $('#questions-container').length);
+        console.log("Len" + $('#questions-container').children().length);
+
         $('.question').each(function () {
             const type = $(this).find('.question-type').val();
             const options = $(this).find('.options');
@@ -310,8 +320,15 @@ $(document).ready(function () {
     // Submit quiz
     $('#quiz-form').submit(function (e) {
         e.preventDefault();
+
+        if($('#questions-container').children().length == 0){
+            alert("Cannot save quiz without a question");
+            return;
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
+        const postId = urlParams.get('post');
 
         const title = $('#quiz-title').val();
         var questions = [];
@@ -374,6 +391,7 @@ $(document).ready(function () {
                 data: {
                     title: title,
                     classCode: classCode,
+                    postId : postId,
                     questions: JSON.stringify(questions)
                 },
 
