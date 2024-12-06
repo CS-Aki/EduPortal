@@ -54,7 +54,7 @@ class InstructorController extends Instructor
         $result = $this->updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName);
 
         if($result == false || $result == null){
-            echo "Error changeProfDetails";
+            // echo "Error changeProfDetails";
             return;
         }
 

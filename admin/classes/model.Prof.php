@@ -70,8 +70,8 @@ class Instructor extends DbConnection
                 return false;
             }
         } catch (PDOException $e) {
-
-            echo "Error inside Prof Model (updateProfDetails): " . $e->getMessage();
+            echo "Email already in use";
+            // echo "Error inside Prof Model (updateProfDetails): " . $e->getMessage();
             return null;
         }
     }

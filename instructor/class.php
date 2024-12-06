@@ -82,26 +82,22 @@ $_SESSION["storeCode"] = $_GET["class"];
                                 Professor: <span id="classInstructor" class="fw-semibold black3"><?php echo $details[0]["class_teacher"]; ?></span></br>
                                 Class Code: <span id="classCode" class="fw-semibold black3"><?php echo $details[0]["class_code"]; ?></span></p>
                         </div>
-                        <div class="col-lg-3 ms-auto">
+                        <div class="col-lg-3 ms-auto p-2">
                             <div class="container-fluid bg-body-tertiary py-2 rounded-4">
                                 <p class="fw-semibold green2 fs-5 lh-sm">Attendance <br>
                                       <!-- Add Current Date Here -->
                                     <span class="fs-6 fw-semibold black3"><?php echo $currentDate; ?></span>
                                 </p>
-                                <div class="container-fluid form-check form-switch container-fluid ">
-                                    <input class="form-check-input" type="checkbox" id="attendance-toggle">
-                                </div>
+                                <a href="attendance-list.php?class=<?php echo md5($details[0]["class_code"]); ?>"><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">View Attendance</button></a>
                             </div>
-                            <a href="attendance-list.php?class=<?php echo md5($details[0]["class_code"]); ?>"><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">View Attendance</button></a>
                         </div>
                         <div class="col-lg-3 ms-auto">
-                        <a href="post-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button></a>
+                            <a href="post-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Post</button></a>
+                        </div>  <div></div>
+                        <div class="col-lg-3 ms-auto">
+                            <a href="quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Quiz</button></a>
                         </div>
                     </div>
-                    
-                    <div class="col-lg-3 ms-auto">
-                        <a href="quiz-form.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Create Quiz</button></a>
-                        </div>
                     <div class="mt-2">
                         <div class="d-flex align-items-center justify-content-between">
                             <h1 class="h-font green1 me-2 sub-title">Lessons</h1>

@@ -65,6 +65,7 @@ if(isset($_SESSION["user_category"])){
                           if ($activity != null) {
                             for ($i = 0; $i < count($activity); $i++) {
                                 if ($activity[$i]['content_type'] == 'Activity') {
+                                    // echo md5($activity[0]["post_id"]);
                                     $year = $activity[$i]["month"][0] . "" . $activity[$i]["month"][1] . $activity[$i]["month"][2] . "" . $activity[$i]["month"][3];
                                     $month = $months[$activity[0]["month"][5] . "" . $activity[0]["month"][6] - 1];
                                     $day = $activity[$i]["month"][8] . "" . $activity[$i]["month"][9];
@@ -98,9 +99,10 @@ if(isset($_SESSION["user_category"])){
                                             </div>
                                         </div>                    
                                     </button>";
+                                    // echo var_dump($submissions);
                                     if($submissions != null){       
                                         foreach ($submissions as $submission) {
-                                            if ($post[$i]["post_id"] == $submission["post_id"]) {
+                                            if ($activity[$i]["post_id"] == $submission["post_id"]) {
                                                 $date = $submission["created"]; 
                                                 $datetime = new DateTime($date); 
                                                 $formattedDate = $datetime->format('F j, Y'); 

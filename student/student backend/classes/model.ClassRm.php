@@ -527,7 +527,7 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchQuizDetails($postId, $classCode){
-        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz INNER JOIN questions ON quiz.post_id = questions.post_id INNER JOIN options ON options.question_id = questions.question_id INNER JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ?";
+        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {

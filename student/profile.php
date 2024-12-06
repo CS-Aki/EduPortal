@@ -92,8 +92,6 @@ if(isset($_SESSION["user_category"])){
                         </div>
                     </div>
                 </div>
-
-                
             </div>
         </div>
     </div>

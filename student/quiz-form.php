@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Maker with Question Types</title>
+    <title>Student Dashboard</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
@@ -86,12 +86,14 @@
                     </div>
                 </nav>
                 <!-- Display this if quiz has not been answered -->
+                 <!-- If need mo makita yung nasa loob ng display na 'to and na-submit mo yung form na may answers, truncate mo lang yung answers table sa db -->
                 <?php if($submittedQuiz == null){ ?>
                    <form id="quiz-answer-form">
                         <div class="form-container">
                         <h1><?php echo $quizDetails[0]["title"]; ?></h1>
                         <!-- <input type="text" id="quiz-title" placeholder="Quiz Title" readonly><br><br> -->
                     <?php        
+                            
                         $questionTitle = "";
                         $questionCount = 1;
                         $choiceCount = 1; // Pwedeng alisin 'to if pangit tignan, paki-alis nalang din nung mga variable na choiceCount below
@@ -106,7 +108,7 @@
                                       <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
                                       Choice {$choiceCount} : {$quizDetails[$i]["option_text"]}</label><br><br>";
                             } else {
-                                // HTML Elements for Short Text
+                                // Short text elements
                                 if ($quizDetails[$i]["question_type"] == "short-text") {
                                     echo "<div class='question-id-{$quizDetails[$i]['question_id']}'>";
                                     echo "<label>Question Number {$questionCount} : </label> 
@@ -117,7 +119,7 @@
                                     echo "</div>";
                                 } else {
                                     $questionTitle = $quizDetails[$i]["question_text"];
-                                    $choiceCount = 1;
+                                    $choiceCount = 1; // Reset the choice counter for new questions
                                     echo "<div class='question-id-{$quizDetails[$i]['question_id']}'>";
                                     echo "<label>Question Number {$questionCount} : </label> 
                                           <label>POINTS : {$quizDetails[$i]["points"]}</label><br>";
@@ -135,16 +137,21 @@
                     ?>
 
                         <button type="submit" class="btn btn-info">Submit Quiz</button>
-                        <button type="button" id="add-question" class="btn btn-secondary">Back</button><br><br>
+                        <a href="class.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>"><button type="button" class="btn btn-secondary">Back</button></a><br><br>
                         </div>
                     </form>
 
                      <!-- Display Quiz Results -->
-                    <?php } else{ echo var_dump($submittedQuiz);
+                      <!-- Not working pa, pero mag-chchange ng itsura sana yung questions kapag mali or tama yung sagot niya dun -->
+                    <?php } else{ 
                                     echo "<label></label>";
                                     $questionTitle = "";
                                     $questionCount = 1;
                                     $choiceCount = 1; // Pwedeng alisin 'to if pangit tignan, paki-alis nalang din nung mga variable na choiceCount below
+
+                                    // echo "<pre>";
+                                    // print_r($quizDetails); 
+                                    // echo "</pre>";
 
                                     for ($i = 0; $i < count($quizDetails); $i++) {
                                         if ($questionTitle == $quizDetails[$i]["question_text"]) {
@@ -182,8 +189,13 @@
                                             $questionCount++;
                                         }
                                     } 
-                                }
+                                ?>    
+                                <a href="class.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>"><button type="button" class="btn btn-secondary">Back</button></a><br><br>
+
+                               <?php }
                      ?>
+ 
+
                 </div>
             </div>
         </div>
