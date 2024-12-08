@@ -1,4 +1,5 @@
 <?php
+if (session_id() === "") session_start();
 
 require_once("../log and reg backend/classes/connection.php");
 require_once("student backend/classes/model.ClassRm.php");
@@ -15,12 +16,20 @@ $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["i
                                                                                      //will add checker for attempt no. and add attempt number col on answer table
 $score = 0;
 $totalPoints = 0;              
-
+// $result = "";
 // Viewing the quiz result
 if(isset($_GET["attempt"])){
-    
+    // echo "POST ID " . $postId . "<br>";
+    // echo "CLASS CODE " . $classCode . "<br>";
+    // echo "user id " . $_SESSION["id"] . "<br>";
+    // echo "ATTEMPT " . $_GET["attempt"] . "<br>";
+    $result = $stdController->getQuizResultFormat($postId, $classCode, $_SESSION["id"], $_GET["attempt"]);
 }
 
+
+
+// echo var_dump($result);
+// echo count($result);
 
 // echo var_dump($submittedQuiz);  
 // if($submittedQuiz != null){

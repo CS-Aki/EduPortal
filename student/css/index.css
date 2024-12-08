@@ -463,3 +463,13 @@ font: 'Inter', sans-serif;
     border: 3px solid var(--green2) !important;
     color: var(--green1) !important;
 }
+
+.quizborder {
+    border: 1px solid var(--black3);
+}
+.correct {
+    border: 1px solid var(--green1);
+}
+.wrong {
+    border: 1px solid var(--red);
+}

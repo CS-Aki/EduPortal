@@ -329,12 +329,12 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                      }
                                                  }else{?>
                                                   <?php for($i = 0; $i < count($yourScore); $i++){ 
-                                                        $grade = ($totalCorrectAnsCount[$i] / $totalItems) * 100;
+                                                        $grade = ($totalCorrectAnsCount[$i + 1] / $totalItems) * 100;
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $i + 1; ?></td>
-                                                        <td><?php echo $totalCorrectAnsCount[$i]; ?> / <?php echo $totalItems; ?></td>
-                                                        <td>Your Score: <?php echo $yourScore[$i]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
+                                                        <td><?php echo $totalCorrectAnsCount[$i + 1]; ?> / <?php echo $totalItems; ?></td>
+                                                        <td>Your Points: <?php echo $yourScore[$i + 1]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
                                                         <td><?php echo ceil($grade) . "%"; ?></td>
                                                         <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
                                                         <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo $i + 1; ?>' class="green2">View</a></td>

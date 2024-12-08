@@ -659,4 +659,30 @@ class ClassRm extends DbConnection
             return null;
         }
     }
+
+    protected function getQuizFormatInDb($postId, $classCode, $userId, $attempt){
+        // echo "POST ID " . $postId . "<br>";
+        // echo "CLASS CODE " . $classCode . "<br>";
+        // echo "user id " . $userId . "<br>";
+        // echo "ATTEMPT " . $attempt . "<br>";
+
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ? AND answers.attempt = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId, $attempt))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
 }

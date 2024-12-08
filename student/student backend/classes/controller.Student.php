@@ -195,6 +195,14 @@ class StudentController extends ClassRm{
     public function getQuizAttempt($postId, $userId){
         $content = $this->getQuizAttemptDb($postId, $userId);
     }
+
+    public function getQuizResultFormat($postId, $classCode, $userId, $attempt){
+         $result = $this->getQuizFormatInDb($postId, $classCode, $userId, $attempt);
+         if($result == null){
+            // echo "THIS IS NULL";
+         }
+         return $result;
+    }
 }
 
 ?>

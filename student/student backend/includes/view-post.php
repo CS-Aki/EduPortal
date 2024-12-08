@@ -36,7 +36,7 @@ if(isset($_GET["post"])){
 
     if($postDetails[0]["content_type"] == "Quiz"){
         $yourScore = array();
-        $currentAttempt = 1;
+        $currentAttempt = 0;
         $quizContent = $stdController->getQuizContent($postId, $classCode);
         // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
         $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
