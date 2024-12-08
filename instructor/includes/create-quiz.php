@@ -7,9 +7,12 @@ require_once("../classes/controller.Prof.php");
 // $quizTitle = $_POST["title"];
 $classCode = $_POST["classCode"]; // Note this is still encrypted
 $jsonData = $_POST["questions"];
-
+$jsonRemoved = $_POST["removedElements"];
+$jsonChRemoved = $_POST["removeChoices"];
 // echo "Class Code: ". $classCode . "\n";
 $questions = json_decode($jsonData, true);
+$removedElements = json_decode($jsonRemoved, true);
+$removedChoices = json_decode($jsonChRemoved, true);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode(['message' => 'Invalid JSON data']);
@@ -20,7 +23,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 // echo var_dump($data);
 $postId = $_POST["postId"];
 $instrCtrlr = new InstructorController();
-$instrCtrlr->createQuiz($classCode, $questions, $postId);
+$instrCtrlr->createQuiz($classCode, $questions, $postId, $removedElements, $removedChoices);
 
 // foreach ($questions as $question) {
 //     $questionText = $question['question'];

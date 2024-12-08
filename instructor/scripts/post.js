@@ -140,6 +140,8 @@ $(document).ready(function() {
           }
    });
 
+   console.log("CONTENT TYPE: " + $('#contentType').val());
+
     $("#combinedForm").submit(function (event) {
         event.preventDefault();
 
@@ -167,34 +169,34 @@ $(document).ready(function() {
         const deadlineDateTime = new Date(`${deadlineDate}T${deadlineTime}`);
 
         // Perform validations
-        // if($(".sub-title").text() != "Create Material"){
-        //     if (startingDateTime < currentDate) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Invalid Starting Time',
-        //             text: 'Starting time and date should not be less than the current time and date.',
-        //         });
-        //         return; // Stop execution
-        //     }
+        if($(".sub-title").text() != "Create Material"){
+            if (startingDateTime < currentDate) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Starting Time',
+                    text: 'Starting time and date should not be less than the current time and date.',
+                });
+                return; // Stop execution
+            }
     
-        //     if (startingDateTime > deadlineDateTime) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Invalid Starting Time',
-        //             text: 'Starting time and date should not be greater than the deadline time and date.',
-        //         });
-        //         return; // Stop execution
-        //     }
+            if (startingDateTime > deadlineDateTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Starting Time',
+                    text: 'Starting time and date should not be greater than the deadline time and date.',
+                });
+                return; // Stop execution
+            }
     
-        //     if (deadlineDateTime <= currentDate) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Invalid Deadline Time',
-        //             text: 'Deadline time and date should be greater than the current time and date.',
-        //         });
-        //         return; // Stop execution
-        //     }
-        // }
+            if (deadlineDateTime <= currentDate) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Deadline Time',
+                    text: 'Deadline time and date should be greater than the current time and date.',
+                });
+                return; // Stop execution
+            }
+        }
         
         if($(".sub-title").text() != "Create Material"){
             // Swal.fire({
@@ -347,9 +349,9 @@ $(document).ready(function() {
                 },
         
                 success: function (response) {
-                    console.log("testtt");
+                    // console.log("testtt");
                     console.table("this is ",response);
-                    console.log("upload");
+                    // console.log("upload");
                     // console.log(response.date);
     
                     var data = {

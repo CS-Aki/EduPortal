@@ -12,6 +12,7 @@ $instrCtrlr = new InstructorController();
 $quizContent = $instrCtrlr->getQuizDetails($postId, $classCode);
 
 // echo var_dump($quizContent);
+// echo var_dump($quizContent);
 
 if($quizContent != null){
     $groupedQuestions = [];
@@ -31,3 +32,4 @@ if($quizContent != null){
         $groupedQuestions[$questionId]['options'][] = $question['option_text'];
     }
 }
+//  echo var_dump($groupedQuestions);

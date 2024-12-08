@@ -23,6 +23,7 @@ if(isset($_GET["error"])){
 }
 
 $_SESSION["storeCode"] = $_GET["class"];
+unset($_SESSION["displayQuiz"]);
 
 ?>
 
@@ -207,8 +208,8 @@ $_SESSION["storeCode"] = $_GET["class"];
         </div>
     </div>
     </div>
-    <br><br><br>
-    <br><br><br>
+
+    <?php require('inc/footer.php'); ?>   
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>

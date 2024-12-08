@@ -16,4 +16,17 @@ if(isset($_GET["post"])){
     $listController = new ListController();
     $quizContent = $listController->displayQuiz($_GET["class"], $_GET["post"]);
 }
+
+$title = "";
 // echo var_dump($quiz);
+if(isset($_GET["post"])){
+    for($i = 0; $i < count($quiz); $i++){
+        if(md5($quiz[$i]["post_id"]) == $_GET["post"]){
+            $title = $quiz[$i]["title"];
+            break;
+        }
+    }
+}
+
+
+

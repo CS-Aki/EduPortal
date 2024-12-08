@@ -58,23 +58,11 @@
         </div>
 </nav>
 </div> -->
-<?php
-// Get the current file name
-$current_page = basename($_SERVER['PHP_SELF']);
-?>
-<div class="container-fluid greenbg vh-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
-    <a href="admin-dashboard.php" class="fs-3 white1"><i class="bi bi-house-door-fill me-2 white1"></i>Home</a>
-    <a href="calendar.php" class="fs-3 white1"><i class="bi bi-calendar-week me-2 white1"></i>Calendar</a>
-    <a href="classes.php" class="fs-3 white1"><i class="bi bi-mortarboard-fill me-2 white1"></i>Classes</a>
-    <a href="instructor_records.php" class="fs-3 white1"><i class="bi bi-card-checklist me-2 white1"></i>Records</a>
-    <a href="profile.php" class="fs-3 white1"><i class="me-2 bi bi-person-circle white1"></i>Profile</a>
-    <a onclick="toggleSidebar()" class="fs-3 white1">Back</a>
-</div>
 
 <div class="container-fluid sticky-top d-flex align-items-center  justify-content-between line p-2 z-3" style="background-color: white;">
 
         <div class="d-flex align-items-center">
-            <span class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()"><i class="bi bi-list fs-1 greentoggle"></i></span>
+            <span class="toggle-btn" onclick="toggleSidebar()"><i class="bi bi-list fs-1 greentoggle"></i></span>
             <a class="navbar-brand ms-3" href="admin-dashboard.php"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
         </div>
 
@@ -84,6 +72,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>
+            <li><a class="dropdown-item h-font green1 fs-4" href="#">Settings</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="includes/logout.inc.php">Log Out</a></li>
         </ul>
         </div>
@@ -93,18 +82,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <div class="col-lg-2 shadow-sm" id="sidebar-menu">
     <ul>
-        <a href="admin-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'admin-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
-        <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
-        <a href="calendar.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'calendar.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-calendar-week ms-3 me-2 greenicon"></i>Calendar</li></a>
+        <a href="admin-dashboard.php" class="fs-3 h-font"><li class="mt-3"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
+        <a href="calendar.php" class="fs-3 h-font"><li class=""><i class="bi bi-calendar-week ms-3 me-2 greenicon"></i>Calendar</li></a>
     </ul>
 
     <div class="line container-fluid"></div>
     <ul class="my-2">
-    <a href="classes.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'classes.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-mortarboard-fill ms-3 me-2 greenicon"></i>Classes</li></a>
+    <a href="classes.php" class="fs-3 h-font"><li class=""><i class="bi bi-mortarboard-fill ms-3 me-2 greenicon"></i>Classes</li></a>
     </ul>
     <div class="line container-fluid"></div>
 
     <ul>
-        <a href="instructor_records.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'instructor_records.php' || $current_page == 'staff_records.php' || $current_page == 'student_records.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-card-checklist ms-3 me-2 greenicon"></i>Records</li></a>
+        <a href="instructor_records.php" class="fs-3 h-font"><li class="mt-3"><i class="bi bi-card-checklist ms-3 me-2 greenicon"></i>Records</li></a>
+        <a href="calendar.php" class="fs-3 h-font"><li class=""><i class="bi bi-gear-fill ms-3 me-2 greenicon"></i>Settings</li></a>
     </ul>
 </div>

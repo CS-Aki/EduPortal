@@ -120,7 +120,7 @@ $_SESSION["classCode"] = $_GET["class"];
                     <select style="position: absolute; z-index: 20;" id="contentType">
                         <option class="green2" value="material">Material</option>
                         <option class="green2" value="activity">Activity</option>
-                        <option class="green2" value="quiz" <?php if(isset($_SESSION["displayQuiz"])){ echo "selected"; unset($_SESSION["displayQuiz"]); }?>>Quiz</option>
+                        <option class="green2" value="quiz">Quiz</option>
                     </select><span> <br>
                     </span>
 
@@ -182,7 +182,7 @@ $_SESSION["classCode"] = $_GET["class"];
                             <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
                             <p id="fileCount"></p>
                             <input type="text" name="classCode" value="<?php echo md5($details[0]["class_code"]); ?>" hidden>
-                            <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]; ?>" hidden>
+                            <input type="text" id="token" value="<?php if (isset($_SESSION["access_token"])) echo $_SESSION["access_token"]; else echo "";?>" hidden>
                         </div>
 
                         <div id="fileContainer"></div>
@@ -214,10 +214,9 @@ $_SESSION["classCode"] = $_GET["class"];
 
                 </div>
             </div>
-            <br><br><br>
-            <br><br><br>
             <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
             <script src="scripts/post.js"></script>
+            <?php require('inc/footer.php'); ?>   
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
             <script>

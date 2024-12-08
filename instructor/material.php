@@ -1,3 +1,4 @@
+<!-- ORIG MATERIAL -->
 <?php 
 if (session_id() === "") session_start();
 
@@ -26,6 +27,83 @@ if(isset($_SESSION["user_category"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professor Dashboard</title>
+    <style>
+
+        .table thead th{
+
+            background-color: #219E53 !important; 
+
+            color: #FCFCFC !important; 
+
+            border: #219E53;
+
+        }
+
+        .table td {
+
+            font-weight: semibold;
+
+            color: #6B656B;
+
+        }
+
+
+
+        .dataTables_info {
+
+            color: #989598 !important; /* Change color */
+
+        }
+
+        .active >.page-link {
+
+            background-color: #219E53 !important;
+
+            color: #FCFCFC !important;
+
+            border-color: #219E53 !important;
+
+        }
+
+        .page-link {
+
+            color: #219E53 !important;
+
+        }
+
+        #myTable_filter input {
+
+            border: 2px solid #4CAF50; /* Green border */
+
+            padding: 5px 1em;
+
+            color: #333;               /* Text color inside the input */
+
+            border-radius: 50px;
+
+        }
+
+        #myTable_filter label {
+
+            color: #56B37B; /* Change this color to whatever you prefer */
+
+        }
+
+        #editProfModal .dataTables_scroll {
+
+        width: 100% !important;
+
+        }
+
+        #editProfModal .dataTables_scrollHeadInner,
+
+        #editProfModal table.dataTable {
+
+            width: 100% !important;
+
+        }
+
+    </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <?php if(session_id() === "") session_start(); require('inc/links.php'); include("includes/view-post.php"); ?>
@@ -37,7 +115,7 @@ if(isset($_SESSION["user_category"])){
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row" >
             <div class="col-lg-10 col-sm-12 ms-auto">
-                <nav class="navbar navbar-expand-lg sticky-top line fs-5 z-2" style="background-color: white">
+                <nav class="navbar navbar-expand-lg sticky-top line fs-5 z-2">
                     <div class="container-fluid sticky-top">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -57,13 +135,15 @@ if(isset($_SESSION["user_category"])){
                         </div>
                     </div>
                 </nav>
-                <div class="container mt-4 px-lg-5 px-sm-2">
+
+                <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <div class="mt-2">
-                        <div class="d-flex">
-                            <div>
+                        <div class="d-flex px-3">
+                            <div id="icon-material">
                                 <i class="bi bi-bookmark-fill green1 fs-1 p-0 m-0 me-3"></i>
                             </div>
                             <div class="w-100">
+                            <div class="row">
                                 <div>
                                     <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
                                     <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
@@ -73,29 +153,20 @@ if(isset($_SESSION["user_category"])){
                                     <?php echo $postDetails[0]["content"]; ?>
                                     </p>                         
                                 </div>
-                                <div class="d-flex" id="material-download">
-                                    <!-- <a href="https://drive.google.com/file/d/1NhAcy-s6ESxqBbSlWJo_hprXxuyavetV/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
-                                        <div class="d-flex justify-content-start">
-                                            <div class="me-2">
-                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
-                                            </div>
-                                            <div>
-                                                <span class="green2 fw-bold mb-0">Click me.jpeg</span>
-                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
-                                            </div>
-                                        </div>
-                                    </a> -->
-                                    <!-- google_drive_file_id -->
+                                
+                                <div class="w-100" id="material-download">
+                                    <div class="row gap-2 px-2">
+
                                     <?php 
                                         if($files != null){
                                             for($i = 0 ; $i < count($files); $i++){
-                                                echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
-                                                        <div class="d-flex">
-                                                            <div class="me-2">
+                                                echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                                        <div class="d-flex justify-content-start ms-2">
+                                                            <div class="me-2 flex-shrink-0">
                                                                 <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
                                                             </div>
-                                                            <div>
-                                                                 <span class="green2 fw-bold mb-0">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
+                                                            <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                 <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
                                                                 <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
                                                             </div>
                                                         </div>
@@ -103,9 +174,12 @@ if(isset($_SESSION["user_category"])){
                                             }
                                         }
                                     ?>
-                    
+                             
+                                    </div>
+                                  </div>
                                 </div>
-                                <div class="line2 mt-5"></div>
+                                
+                                <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
                                 <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
 
@@ -169,9 +243,9 @@ if(isset($_SESSION["user_category"])){
                                         </div>                                  -->
 
                                     </div>
+                                  </div>
                                 </div>
-                                
-                            </div>
+                       
                         </div>
 
                     </div>
@@ -180,8 +254,8 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
-    <br><br><br>
-    <br><br><br>
+    <?php require('inc/footer.php'); ?>   
+
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
 

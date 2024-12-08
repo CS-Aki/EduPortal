@@ -1,3 +1,8 @@
+<?php 
+
+if (session_id() === "") session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -125,6 +130,7 @@
                                     </thead>
                                     <tbody id="quizTableBody">
                                         <?php 
+                                        if($quiz != null){
                                             for($i = 0; $i < count($quiz); $i++){
                                                 for ($i = 0; $i < count($quiz); $i++) {
                                                     // Convert starting and deadline times into AM/PM format
@@ -151,6 +157,7 @@
                                                         </tr>";
                                                 }                                                
                                             }
+                                        }
                                         ?>
                                         <!-- <tr>
                                             <td hidden>id here to fetch the title</td>
@@ -235,6 +242,7 @@
                 });
             }
         </script>
+    <?php require('inc/footer.php'); ?>   
 
 
         <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->

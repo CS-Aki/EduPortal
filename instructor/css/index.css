@@ -9,12 +9,47 @@
     --white1: #FFFFFF;
     --white2: #FCFCFC;
     --white3: #EEEEEE;
+    --red: #A63133;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+#mobile_directory {
+    background-color: var(--green1);
+    display: none;
+    transition: all 0.3s ease;
+}
+body {
+    position: relative;
+}
+
+.active_directory {
+    display: flex !important;
+    position: absolute !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 4;
+}
+.custom-ellipsis {
+    display: inline-block; /* Ensures it behaves like an inline element */
+    max-width: 100%; /* Set your desired max width */
+    width: 300px;
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden; /* Hides the overflowed text */
+    text-overflow: ellipsis; /* Adds the ellipsis */
+}
+.bordergreen {
+    border: 3px solid var(--green2) !important;
+    color: var(--green1) !important;
+}
+
+#toggleBtn {
+    display: none;
 }
 .navbar .nav-link {
     color: var(--green3); 
@@ -25,11 +60,6 @@
 }
 
 .navbar .nav-link.active {
-    color: var(--green1); 
-    font-weight: 500;
-}
-
-.labelText {
     color: var(--green1); 
     font-weight: 500;
 }
@@ -54,6 +84,10 @@ body {
 }
 .green3 {
     color: var(--green3);
+}
+
+.red {
+    color: var(--red);
 }
 
 .black1 {
@@ -209,11 +243,6 @@ button {
     color: #F1F1F1;
 }
 
-.activesidebar, .activesidebar i, .activesidebar #folder {
-    background-color: var(--green1) !important;
-    color: #F1F1F1 !important;
-}
-
 #sidebar-menu li:hover a {
     color: #F1F1F1; /* Text turns white on hover */
 }
@@ -228,6 +257,9 @@ button {
 
 /* Responsive Styles */
 @media screen and (max-width: 992px) {
+    #sidebar-menu {
+        display: none;
+    }
     #card-container {
         display: block !important;
     }
@@ -241,6 +273,19 @@ button {
     #material-comment-container {
         width: 100% !important;
     }
+    #toggleBtn {
+        display: block;
+    }
+    #icon-material {
+        display: none;
+    }
+}
+
+#table-container td{
+    color: var(--black2);
+}
+#table-container th{
+    color: var(--black2);
 }
 
 .toggle-btn {
@@ -302,52 +347,6 @@ button {
     background-color: transparent;
 }
 
-/* NEW */
-
-#mobile_directory {
-    background-color: var(--green1);
-    display: none;
-    transition: all 0.3s ease;
-}
-
-.active_directory {
-    display: flex !important;
-    position: absolute !important;
-    z-index: 4 !important;
-}
-
-#toggleBtn {
-    display: none;
-}
-
-@media screen and (max-width: 992px) {
-    #sidebar-menu {
-        display: none;
-    }
-    #card-container {
-        display: block !important;
-    }
-    #card-left-side {
-        width: 100% !important;
-    }
-    #card-right-side {
-        width: 100% !important;
-        border-left: none;
-    }
-    #material-comment-container {
-        width: 100% !important;
-    }
-    #toggleBtn {
-        display: block;
-    }
-}
-.fc-list-day-cushion a {
-    color: var(--black2);
-}
-
-.fc-list-event-dot {
-    border: calc(var(--fc-list-event-dot-width) / 2) solid var(--white2) !important;
-}
 @media screen and (max-width: 770px) {
     .fc-toolbar-title {
         font-size: 0.9rem; /* Smaller title for mobile */
@@ -368,14 +367,15 @@ button {
         text-align: center; /* Center align buttons */
     }
 }
+
 /* CALENDAR */
 
 /* Overall calendar size */
 #calendar {
-height: 100%;  /* Adjust to fit your layout */
-margin: auto;
+    max-width: 100%; /* Fit within parent container */
+    height: auto; /* Adjust height automatically */
+    overflow-x: auto; /* Allow horizontal scrolling for smaller screens */
 }
-
 /* Calendar box color and borders */
 .fc-daygrid-day {
 border: 2px solid var(--black2); /* Border color for each day box */
@@ -397,6 +397,14 @@ background-color: var(--green1); /* Event background color */
 font-size: 1.3em; /* Title font size */
 color: var(--green1); /* Title color */
 font-weight: bold;
+}
+
+.fc-list-day-cushion a {
+    color: var(--black2);
+}
+
+.fc-list-event-dot {
+    border: calc(var(--fc-list-event-dot-width) / 2) solid var(--white2) !important;
 }
 
 /* Font size for days (date numbers) */
@@ -434,72 +442,20 @@ font-size: 14px !important; /* Button font size */
 font: 'Inter', sans-serif;
 }
 
-
-.form-label{
-    color: var(--black2);
-    margin-right: 1rem;
-}
-
-input[type="date"] {
-    width: auto; 
-    min-width: 150px; 
-    padding: 10px 15px; 
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    color: var(--black2);
-    border: 2px solid var(--black3);
-    border-radius: 8px;
-    background-color: #fff;
-    transition: all 0.3s ease;
-}
-
-input[type="date"]:hover {
-    border-color: darken(var(--black3), 10%);
-    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3);
-}
-input[type="date"]:focus {
-    border-color: var(--black3); 
-    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5);
-    outline: none;
-}
-input[type="time"] {
-    width: auto;  
-    min-width: 150px;  
-    padding: 10px 15px;  
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    color: var(--black2); 
-    border: 2px solid var(--black3); 
-    border-radius: 8px;  
-    background-color: #fff;  
-    transition: all 0.3s ease;  
-}
-
-input[type="time"]:hover {
-    border-color: darken(var(--black3), 10%);
-    box-shadow: 0 0 5px rgba(0, 128, 0, 0.3); 
-} 
-input[type="time"]:focus {
-    border-color: var(--black3);
-    box-shadow: 0 0 8px rgba(0, 128, 0, 0.5); 
-    outline: none;  
-} 
-
-.question-type{
-    border-color: var(--black3); 
-    height: 30px; 
-    padding: 4px 10px;
-}
-
-.question-point{
-    border-color: var(--black3);
-    width: 6ch;
-}
-
 .white-btn {
     transition: .7s;
-    background-color: #E2E7E9 !important;
 }
 .white-btn:hover {
-    background-color: #C8CDCE !important;
+    background-color: var(--white3) !important;
 }
+
+.green {
+    background-color: var(--green1);
+    transition: .7s;
+}
+
+.activesidebar, .activesidebar i, .activesidebar #folder {
+    background-color: var(--green1) !important;
+    color: #F1F1F1 !important;
+}
+

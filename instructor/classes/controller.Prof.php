@@ -178,13 +178,15 @@ class InstructorController extends Instructor
         return $this->updateProfilePicture($userId, $profile);
     }
 
-    public function createQuiz($classCode, $questions, $postId){
+    public function createQuiz($classCode, $questions, $postId, $removedElements, $removedChoices){
         $totalPoints = 0;
+
+
         foreach ($questions as $question) {
              $totalPoints += $question["points"];
         }
         // echo $totalPoints;
-        $result = $this->uploadQuiz($classCode, $questions, $totalPoints, $postId);
+        $result = $this->uploadQuiz($classCode, $questions, $totalPoints, $postId, $removedElements, $removedChoices);
         if($result == false){
             echo "Error Uploading Quiz In Db\n";
             return;
@@ -218,9 +220,30 @@ class InstructorController extends Instructor
     public function getQuizDetails($postId, $classCode){
         $details = $this->fetchQuizDetails($postId, $classCode);
         if($details == null){
-            echo "No Quiz Yet";
+            // echo "No Quiz Yet";
         }
 
         return $details;
+    }
+
+    public function removeChoice($questionId, $choiceValue, $answerKey){
+        // $result = $this->removeChoiceInDb($questionId, $choiceValue, $answerKey);
+
+        // $ansResult = true;
+
+        // if($choiceValue == $answerKey){
+        //    $ansResult = $this->updateAnswerKey($questionId, $answerKey);
+        // }
+     
+        // if($ansResult == false){
+        //     echo "ERROR UPDATING ANSWER KEY";
+        // }
+
+        // if($result == false){
+        //     echo "ERROR REMOVING CHOICE \n\n\n";
+        //     return;
+        // }
+
+        // echo "REMOVE SUCCESSFULLY";
     }
 }

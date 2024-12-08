@@ -199,13 +199,13 @@ class Instructor extends DbConnection
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
             $_SESSION["postId"] = $connection->lastInsertId();
-            $stmt = null;
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
            
             $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
             if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, $startingDate, $startingTime, "Pending"))) {
+                // echo "trueee";
                 return true;
             }else{
                 echo "Error statement";
@@ -570,7 +570,7 @@ class Instructor extends DbConnection
     }
 
     protected function fetchQuizDetails($postId, $classCode){
-        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ?";
+        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ? ORDER BY questions.question_id";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -590,54 +590,265 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function uploadQuiz($classCode, $questions, $totalPoints, $postId) {
+    protected function removeChoicesInDb($removedChoices){
+        foreach ($removedChoices as $question) {
+            $id = $question["existingId"];
+            $choice = $question["choice"];
+            $answerKey = $question["answerKey"];
+
+            if($choice == $answerKey){
+                $this->updateAnswerKey($answerKey, $id);
+            }
+
+            $sql = "DELETE FROM options WHERE MD5(question_id) = ? AND option_text = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($id, $choice))) {
+                    echo "Remove choice successfull";
+                } else {
+                    echo "FAILED REMOVING CHOICE";
+                }
+            } catch (PDOException $e) {
+                echo "Error: removeChoicesInDb " . $e;
+                return false;
+            }
+
+        }
+    }
+
+    protected function addChoicesFromDb($removedChoices){
+        // foreach ($removedChoices as $question) {
+        //     $id = $question["existingId"];
+        //     $choice = $question["choice"];
+        //     $answerKey = $question["answerKey"];
+
+        //     if($choice == $answerKey){
+        //         $this->updateAnswerKey($answerKey, $id);
+        //     }
+
+        //     $sql = "DELETE FROM options WHERE MD5(question_id) = ? AND option_text = ?";
+        //     $stmt = $this->connect()->prepare($sql);
+    
+        //     try {
+        //         if ($stmt->execute(array($id, $choice))) {
+        //             echo "Remove choice successfull";
+        //         } else {
+        //             echo "FAILED REMOVING CHOICE";
+        //         }
+        //     } catch (PDOException $e) {
+        //         echo "Error: removeChoicesInDb " . $e;
+        //         return false;
+        //     }
+
+        // }
+    }
+
+    protected function uploadQuiz($classCode, $questions, $totalPoints, $postId, $removedElements, $removedChoices) {
         $realCode = $this->findSimilarCode($classCode);
         $connection = $this->connect(); // Store the connection
-        $newPostId = $this->decryptPostId1($postId,$classCode);
-        echo var_dump($newPostId);
+        $newPostId = $this->decryptPostId1($postId, $classCode);
+        // echo var_dump($newPostId);
+
+        if($removedElements != null){
+            $this->removingElementsInDb($newPostId[0]["post_id"], $removedElements, -1);
+        }
+
+        if($removedChoices != null){
+            $this->removeChoicesInDb($removedChoices);
+        }
+
         foreach ($questions as $question) {
             $questionText = $question['question'];
             $type = $question['type'];
             $options = $question['options'];
             $ansKey = $question['ansKey'];
             $points = $question['points'];
-    
-            $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`, `post_id`) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $connection->prepare($sql);
-    
-            try {
-                if ($stmt->execute(array($realCode[0]["class_code"], $ansKey, $points, $questionText, $type, $newPostId[0]["post_id"]))) {
-                    $questionId = $connection->lastInsertId(); // Use the same connection
-                    foreach ($options as $option) {
-                        $this->insertOptions($option, $questionId);
+            $questionId = $this->decryptQuestionId($newPostId[0]["post_id"], $question['existingId']);
+
+            // echo $questionId[0]["question_id"];
+            // echo "THIS IS THE QUESTION ID " . $questionId;
+            // echo $questionText . "\n";
+            // echo $type . "\n";
+            // echo $questionText . "\n";
+            // echo $questionText . "\n";
+            $qTextResult = $this->isQuestionTextInDb($questionText, $type, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
+            if($qTextResult == true){
+                echo "Question Text Already in database\n";
+                echo "Updating Question In Database\n";
+
+                // if($type != "short-text") $this->removingElementsInDb($newPostId[0]["post_id"], $options, $questionId[0]["question_id"]);
+                if($type != "short-text") $this->insertOptions($options, $questionId[0]["question_id"]);
+                // echo var_dump($options);
+
+                $sql = "UPDATE `questions` SET `question_text`= ?, `question_type` = ?, `ans_key`= ?, `points` = ? WHERE question_id = ? AND post_id = ?";
+                $stmt = $connection->prepare($sql);
+                try {
+                    if ($stmt->execute(array($questionText, $type, $ansKey, $points, $questionId[0]["question_id"] ,$newPostId[0]["post_id"]))) {
+                        if ($stmt->rowCount() > 0) {
+                            echo "update success";
+                        }
+                    } else {
+                        echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                        return false;
                     }
-                } else {
-                    echo "Insert failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                } catch (PDOException $e) {
+                    echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
                     return false;
                 }
-            } catch (PDOException $e) {
-                echo "Error: " . $e->getMessage(); // Log the error
-                return false;
+            }else{
+                // Not yet existing in database
+                if($questionId == null){
+                    echo "Question Text Not Yet In Database\n";
+                    $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`, `post_id`) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmt = $connection->prepare($sql);
+            
+                    try {
+                        if ($stmt->execute(array($realCode[0]["class_code"], $ansKey, $points, $questionText, $type, $newPostId[0]["post_id"]))) {
+                            $questionId = $connection->lastInsertId(); // Use the same connection
+                            // foreach ($options as $option) {
+                                $this->insertOptions($options, $questionId);
+                            // }
+                        } else {
+                            echo "Insert failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                            return false;
+                        }
+                    } catch (PDOException $e) {
+                        echo "Error inside questionId == null: " . $e->getMessage(); // Log the error
+                        return false;
+                    }
+                }
+                 // Exist in our db just need to update value
+                else{
+                    echo "Updating Question In Database\n";
+                    $sql = "UPDATE `questions` SET `question_text`= ?, `question_type` = ?, `ans_key`= ?, `points` = ? WHERE question_id = ? AND post_id = ?";
+                    $stmt = $connection->prepare($sql);
+                    try {
+                        if ($stmt->execute(array($questionText, $type, $ansKey, $points, $questionId[0]["question_id"] ,$newPostId[0]["post_id"]))) {
+                            if ($stmt->rowCount() > 0) {
+                                echo "update success";
+                            }
+                        } else {
+                            echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                            return false;
+                        }
+                    } catch (PDOException $e) {
+                        echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
+                        return false;
+                    }
+                }
             }
         }
         return true;
     }
 
-    // Put data into options table
-    protected function insertOptions($option, $questionId){
-        $sql = "INSERT INTO `options`(`question_id`, `option_text`) VALUES (?, ?)";
+    protected function removingElementsInDb($postId, $removedElements, $id){
+  
+        foreach ($removedElements as $question) {
+            $questionText = $question['question'];
+            $type = $question['type'];
+            $options = $question['options'];
+            $ansKey = $question['ansKey'];
+            $points = $question['points'];
+            echo "POST ID IN DELETE " .$postId;
+            $questionId = $this->decryptQuestionId($postId, $question['existingId']);
+            echo "Existing ID : " . $question['existingId'] . "\n";
+            echo "Deleting Question In Database\n";
+            $sql = "DELETE FROM questions WHERE question_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            try {
+                if ($stmt->execute(array($questionId[0]["question_id"]))) {
+                    if ($stmt->rowCount() > 0) {
+                        echo "deletion success";
+                    }
+                } else {
+                    echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                    return false;
+                }
+            } catch (PDOException $e) {
+                echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
+                return false;
+            }
+        }
+    
+    }
+
+    protected function isQuestionTextInDb($questionText, $type, $classCode, $postId){
+        $sql = "SELECT question_text FROM questions WHERE question_text = ? AND class_code = ? AND post_id = ? AND question_type = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($questionId, $option))) {
-                return true;
+            if ($stmt->execute(array($questionText, $classCode, $postId, $type))) {
+                if ($stmt->rowCount() > 0) {
+                    return true;
+                }else{
+                    return false;
+                }
             } else {
                 return false;
             }
         } catch (PDOException $e) {
-            echo "Error: ";
+            echo "Error: isQuestionTextInDb";
             return false;
         }
+    }
+
+    protected function decryptQuestionId($postId, $questionId){
+        $sql = "SELECT question_id FROM questions WHERE post_id = ? AND MD5(question_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $questionId))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+
+    // Put data into options table
+    protected function insertOptions($options, $questionId){
+        foreach ($options as $option) {
+            echo $questionId;
+            echo "This is the option " . $option . "\n\n";
+            $sql = "SELECT * FROM `options` WHERE `option_text` = ? AND `question_id` = ?";
+            $stmt = $this->connect()->prepare($sql);
+            try {
+                if ($stmt->execute(array($option ,$questionId))) {
+                    if ($stmt->rowCount() > 0) {
+                        echo "No new option";
+                    }else{
+                        echo "INSERTION NEW OPTIONS\n";
+                        $sql = "INSERT INTO `options`(`question_id`, `option_text`) VALUES (?, ?)";
+                        $stmt = $this->connect()->prepare($sql);
+                        try {
+                            if ($stmt->execute(array($questionId, $option))) {
+
+                            } else {
+
+                            }
+                        } catch (PDOException $e) {
+                            echo "Error: ";
+                            return false;
+                        }
+                    }
+                } else {
+                    
+                }
+            } catch (PDOException $e) {
+                echo "Error: ";
+                return false;
+            }
+        }
+
+
     }
 
     protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize, $userId){
@@ -652,6 +863,23 @@ class Instructor extends DbConnection
 
         try {
             if ($stmt->execute(array($postId, $newCode[0]["class_code"], $fileName, $gdriveId, $fileSize, "3", $userId))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+            return false;
+        }
+    }
+
+    protected function updateAnswerKey($questionId, $answerKey){
+        $empty = '';
+        $sql = "UPDATE questions SET ans_key = ? WHERE MD5(question_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+        
+        try {
+            if ($stmt->execute(array($empty, $questionId))) {
                 return true;
             } else {
                 return false;

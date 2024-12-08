@@ -1,3 +1,6 @@
+<!-- ORIGINAL Material -->
+
+
 <?php 
 if (session_id() === "") session_start();
 
@@ -48,6 +51,83 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
+    <style>
+
+        .table thead th{
+
+            background-color: #219E53 !important; 
+
+            color: #FCFCFC !important; 
+
+            border: #219E53;
+
+        }
+
+        .table td {
+
+            font-weight: semibold;
+
+            color: #6B656B;
+
+        }
+
+        
+
+        .dataTables_info {
+
+            color: #989598 !important; /* Change color */
+
+        }
+
+        .active >.page-link {
+
+            background-color: #219E53 !important;
+
+            color: #FCFCFC !important;
+
+            border-color: #219E53 !important;
+
+        }
+
+        .page-link {
+
+            color: #219E53 !important;
+
+        }
+
+        #myTable_filter input {
+
+            border: 2px solid #4CAF50; /* Green border */
+
+            padding: 5px 1em;
+
+            color: #333;               /* Text color inside the input */
+
+            border-radius: 50px;
+
+        }
+
+        #myTable_filter label {
+
+            color: #56B37B; /* Change this color to whatever you prefer */
+
+        }
+
+        #editProfModal .dataTables_scroll {
+
+        width: 100% !important;
+
+        }
+
+        #editProfModal .dataTables_scrollHeadInner,
+
+        #editProfModal table.dataTable {
+
+            width: 100% !important;
+
+        }
+
+    </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <?php if(session_id() === "") session_start(); require('inc/links.php'); include("student backend/includes/view-post.php"); 
@@ -83,11 +163,11 @@ $_SESSION["storeCode"] =  $_GET["class"];
                 <?php 
                     if($postDetails[0]["content_type"] == "Material"){
                 ?>
-                <div class="container mt-4 px-lg-5 px-sm-2">
+                    <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
                     <div class="mt-2">
-                        <div class="d-flex">
-                            <div>
+                        <div class="d-flex px-3">
+                         <div id="icon-material">
                                 <i class="bi bi-bookmark-fill green1 fs-1 p-0 m-0 me-3"></i>
                             </div>
                             <div class="w-100">
@@ -100,24 +180,27 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     <?php echo $postDetails[0]["content"]; ?>
                                     </p>                         
                                 </div>
-                                <div class="d-flex" id="material-download">
+                                <div class="w-100" id="material-download">
+                                <div class="row gap-2 px-2">
                                 <?php 
                                         if($files != null){
                                             for($i = 0 ; $i < count($files); $i++){
-                                                echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
-                                                        <div class="d-flex">
-                                                            <div class="me-2">
-                                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
-                                                            </div>
-                                                            <div>
-                                                                 <span class="green2 fw-bold mb-0">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
-                                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>';
+                                                echo '
+                                                    <a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                                <div class="d-flex">
+                                                    <div class="me-2">
+                                                        <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                    </div>
+                                                    <div>
+                                                         <span class="green2 fw-bold mb-0">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
+                                                        <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
+                                                    </div>
+                                                </div></a>
+                                               ';
                                             }
                                         }
                                     ?>
+                                </div>
                                 </div>
                                 <div class="line2 mt-5"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
@@ -184,10 +267,10 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     <?php echo $postDetails[0]["content"]; ?>
                                     </p>                         
                                 </div>
-                                
+
                                 <div class="container-fluid p-0">
-                                    <h1 class="h-font green2 me-2 sub-title mb-0" id="material-title">Your Work</h1>
-                                    <div class="row">
+                                    <h1 class="h-font green2 text-center sub-title mb-0" id="material-title">Your Work</h1><br>
+                                    <div class="row justify-content-center"> 
                                         <div class="col-lg-3 col-md-12">
                                             <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>'>
                                                 <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
@@ -198,7 +281,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div><br>
+                                
                                 <div class="container-fluid mt-2 m-0 p-0 table-responsive" id="table-container">
                                     <table id="classTable" class="table table-bordered text-center align-middle teble-responsive">
                                         <thead>
@@ -212,7 +296,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
                                                 <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-success">Passed</span></td>
@@ -225,13 +309,14 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                 <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-danger">Failed</span></td>
                                                 <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
                                                 <td><a href="#" class="green2">View</a></td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td colspan="5">No record</td>
-                                            </tr>
+                                            </tr> 
                                         </tbody>
                                     </table> 
                                 </div>
+
                                 <div class="line2 mt-5"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
                                     <div class="input-group mt-lg-2">
@@ -257,15 +342,15 @@ $_SESSION["storeCode"] =  $_GET["class"];
                     else {?>
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
 
-                <div class="container mt-4 px-lg-5 px-sm-2">
+                <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <div class="mt-2">
-                        <div class="d-flex">
-                            <div>
-                                <i class="bi bi-bookmark-fill green1 fs-1 p-0 m-0 me-3"></i>
+                        <div class="d-flex px-3">
+                            <div id="icon-material">
+                                 <i class="bi bi-bookmark-fill green1 fs-1 p-0 m-0 me-3"></i>      
                             </div>
                             <div class="w-100">
                                 <div class="row">
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-9 col-md-12 mb-md-2">
                                         <div>
                                             <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
                                             <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
@@ -297,46 +382,36 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     </div>
                                     <?php if(isset($_SESSION["authorized"])) {?>
                                          
-                                    <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3">
+                                    <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
                                         <form class="h-100" id="uploadForm">
                                             <div class="d-flex justify-content-between flex-column h-100">
                                                 <div>
-                                                    <p class="fw-semibold green2 fs-4 lh-sm">Your work<br>
+
+                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work<br>
                                                     <div id="fileContainer">
                                                         <?php if($submissions != null){ for($i = 0; $i < count($submissions); $i++){?>
                                                             <?php 
                                                             echo "<div class='fileCont'>
-                                                              <a href='https://drive.google.com/file/d/{$submissions[$i]['google_drive_file_id']}/view' target='_blank'>
-                                                                <div id='{$submissions[$i]['file_id']}'></div>
-                                                                <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
-                                                                    <div class='d-flex justify-content-start'>
-                                                                        <div class='me-2 ms-2'>
-                                                                            <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
-                                                                        </div>
-                                                                        <div>
-                                                                            <span class='green2 fw-bold mb-0'>{$submissions[$i]["file_name"]}</span>
-                                                                            <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>{$submissions[$i]["file_size"]}</span>
+                                                                <a href='https://drive.google.com/file/d/{$submissions[$i]['google_drive_file_id']}/view' target='_blank'>
+                                                                    <div id='{$submissions[$i]['file_id']}' hidden></div>
+                                                                    <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
+                                                                        <div class='d-flex justify-content-start'>
+                                                                            <div class='me-2 ms-2'>
+                                                                                <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
+                                                                            </div>
+                                                                            <div class='text-truncate' style='min-width: 0; flex-grow: 1;'>
+                                                                                <span class='green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start' style-'max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>{$submissions[$i]["file_name"]}</span>
+                                                                                <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>{$submissions[$i]["file_size"]}</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </a></div>";
+                                                                </a>
+                                                            </div>";
                                                             ?>
                                                         <?php } } ?>
                                                    </div>
                                                    <div class="new-file"></div>
-                                                    <!-- <a href="#">
-                                                        <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
-                                                            <div class="d-flex justify-content-start">
-                                                                <div class="me-2 ms-2">
-                                                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
-                                                                </div>
-                                                                <div>
-                                                                    <span class="green2 fw-bold mb-0">File1.jpeg</span>
-                                                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a> -->
+ 
                                                     <a href="" id="uploadLink">
                                                     <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
                                                         <div class="d-flex justify-content-start align-items-center text-center">
@@ -366,29 +441,67 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     </div>
                                 </div>
                                 <?php }else{ ?>       
-                                    <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3">
+
+                                <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
+                                        <form class="h-100" id="uploadForm">
                                             <div class="d-flex justify-content-between flex-column h-100">
                                                 <div>
-                                                    <p class="fw-semibold green2 fs-4 lh-sm">Your work<br>
-                                                    <div class="container-fluid btn shadow-elevation-dark-1 rounded-3">
-                                                        <div class='alert alert-error' role='alert'>
-                                                            <span>LOGIN TO GDRIVE TO UPLOAD FILES</span>
+                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work<br>
+                                                    <!-- <a href="#">
+                                                        <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
+                                                            <div class="d-flex justify-content-start">
+                                                                <div class="me-2 ms-2">
+                                                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                                </div>
+                                                                <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                    <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Fisadfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdle1.jpeg</span>
+                                                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                 <a href="student backend/includes/auth.php">
-                                                <div>
-                                                    <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
-                                                        <div class="d-flex justify-content-center align-items-center p-2">
-                                                            <span class="white2 fw-semibold mb-0">Login Google Drive</span>
+                                                    </a> 
+                                                     -->
+
+                                                    <!-- <a href="#">
+                                                    <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3 mb-2">
+                                                        <div class="d-flex justify-content-start align-items-center text-center">
+                                                            <div class="me-2">
+                                                                <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
+                                                            </div>
+                                                            <div>
+                                                                <span class="green2 fw-bold mb-0">Add or create</span>
+                                                            </div>  
                                                         </div> 
                                                     </div>
-                                             
+                                                    </a> -->
+
+                                                    <!-- GDRIVE -->
+                                                    <a href="student backend/includes/auth.php">
+                                                    <div class="container-fluid bg-white white-btn bordergreen shadow-elevation-dark-1 rounded-3 mb-2 p-lg-2">
+                                                        <div class="d-flex justify-content-center align-items-center text-center">
+                                                            <div class="me-2">
+                                                                <i class="bi bi-google green1 fs-2 p-0 m-0"></i>
+                                                            </div>
+                                                            <div>
+                                                                <span class="green2 fw-bold mb-0 text-center">Login to Gdrive </br>to upload files</span>
+                                                            </div>  
+                                                        </div> 
+                                                    </div>
+                                                    </a>
+
                                                 </div>
-                                                </a>
+                                                <!-- <div>
+                                                    <a href="#">
+                                                    <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                        <div class="d-flex justify-content-center align-items-center p-2">
+                                                            <span class="white2 fw-semibold mb-0">Submit</span>
+                                                        </div> 
+                                                    </div>
+                                                    </a>
+                                                </div> -->
                                             </div>
+                                        </form>
                                     </div>
-                                </div>
                                 <?php } ?>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
@@ -423,11 +536,11 @@ $_SESSION["storeCode"] =  $_GET["class"];
         </div>
     </div>
     <br><br><br>
-    <br><br><br>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
     <script src="scripts/post.js"></script>
-    
+    <?php require('inc/footer.php'); ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         const navLinks = document.querySelectorAll('.nav-link');

@@ -285,6 +285,7 @@ if(isset($_SESSION["user_category"])){
     </script>
     <script src="scripts/view-profile.js"></script>
     <script src="scripts/edit-profile.js"></script>
+    <?php require('inc/footer.php'); ?>   
 
 </body>
 </html>

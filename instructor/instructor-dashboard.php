@@ -80,7 +80,8 @@ if(isset($_GET["class"])){
             </div>
         </div>
     </div>
-
+    
+    <?php require('inc/footer.php'); ?>   
     
     <script>
         function toggleSidebar() {
