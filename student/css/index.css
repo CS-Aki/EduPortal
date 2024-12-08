@@ -446,7 +446,7 @@ font: 'Inter', sans-serif;
     transition: .7s;
 }
 .white-btn:hover {
-    background-color: var(--white3) !important;
+
 }
 
 .green {
@@ -459,3 +459,7 @@ font: 'Inter', sans-serif;
     color: #F1F1F1 !important;
 }
 
+.bordergreen {
+    border: 3px solid var(--green2) !important;
+    color: var(--green1) !important;
+}

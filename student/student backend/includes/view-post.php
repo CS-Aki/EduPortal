@@ -32,6 +32,13 @@ if(isset($_GET["post"])){
     $files = $stdController->getFiles($postId, $classCode);
     
     $submissions = $stdController->getSubmittedFiles($postId, $classCode);
+    
+
+    if($postDetails[0]["content_type"] == "Quiz"){
+        $quizContent = $stdController->getQuizContent($postId, $classCode);
+        $startingDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["starting_date"] . " " . $quizContent[0]["starting_time"]));
+        $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
+    }
     // echo var_dump($submissions);
     // echo var_dump($files);
     // echo var_dump($comments);

@@ -90,11 +90,16 @@ if (session_id() === "") session_start();
                 </nav>
 
                 <?php 
-                        $startingDateTime = date("F j, Y g:i A", strtotime($quiz[$i]["starting_date"] . " " . $quiz[$i]["starting_time"]));
-                        $deadlineDateTime = date("F j, Y g:i A", strtotime($quiz[$i]["deadline_date"] . " " . $quiz[$i]["deadline_time"]));                 
+            
                 ?>
-                
-                <h1><?php echo $title; ?></h1>
+
+                <div>
+                    <h1><?php echo $title; ?></h1>
+                    <label>STARTING DATE: <?php echo $startingDateTime; ?></label><br>
+                    <label>DEADLINE: <?php echo $deadlineDateTime; ?></label><br>
+                    <label>ATTEMPT(S): <?php echo $attempt; ?></label>
+                </div>
+
                 <form id="quiz-form">
                     <br>
                     <div id="questions-container">

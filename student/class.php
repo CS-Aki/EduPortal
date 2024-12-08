@@ -83,9 +83,9 @@ if(isset($_SESSION["user_category"])){
                                       <!-- Add Current Date Here -->
                                     <span class="fs-6 fw-semibold black3"><?php echo $currentDate; ?></span>
                                 </p>
-                                <div class="container-fluid form-check form-switch container-fluid ">
+                                <!-- <div class="container-fluid form-check form-switch container-fluid ">
                                     <input class="form-check-input" type="checkbox" id="attendance-toggle">
-                                </div>
+                                </div> -->
                             </div>
                             <!-- Change element into an unclickable element -->
                             <button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">Attendance Status: <br><?php include("student backend/includes/attendance-status.php"); ?></button>

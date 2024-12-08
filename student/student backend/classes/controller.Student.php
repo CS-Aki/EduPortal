@@ -186,6 +186,11 @@ class StudentController extends ClassRm{
         }
         return $content;
     }
+
+    public function getQuizContent($postId, $classCode){
+        $content = $this->getQuiz($postId, $classCode);
+        return $content;
+    }
 }
 
 ?>

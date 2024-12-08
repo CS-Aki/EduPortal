@@ -385,3 +385,8 @@ button {
     background-color: var(--green1) !important;
     color: #F1F1F1 !important;
 }
+
+.bordergreen {
+    border: 3px solid var(--green2) !important;
+    color: var(--green1) !important;
+}

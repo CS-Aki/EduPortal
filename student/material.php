@@ -250,6 +250,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                     </div>
                 </div>
                 <?php } else if($postDetails[0]["content_type"] == "Quiz"){ ?>
+
                     <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
                     <div class="mt-2">
@@ -260,11 +261,14 @@ $_SESSION["storeCode"] =  $_GET["class"];
                             <div class="w-100">
                                 <div>
                                     <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
-                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
+                                    <!-- <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year; ?></p>  -->
+                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
+                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineDateTime; ?></p>   
+                                    <p class="fw-light red fs-6 d-flex m-0" id="material-date">Max Attempt: <?php echo $quizContent[0]["attempt"]; ?></p>   
                                 </div>
                                 <div class="mt-3" id="material-description">
                                     <p class="black3 fs-6 lh-sm">
-                                    <?php echo $postDetails[0]["content"]; ?>
+                                        Description: <?php echo $postDetails[0]["content"]; ?>
                                     </p>                         
                                 </div>
 

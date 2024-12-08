@@ -28,6 +28,9 @@ $totalPoints = 0;
 
 // echo "Your score is " . $score;
 // echo "<br>Quiz Total Points: " . $totalPoints;
+// echo "<pre>";
+// print_r($quizDetails);
+// echo "</pre>";
 
 $ansKey = array();
 if($quizDetails != null){

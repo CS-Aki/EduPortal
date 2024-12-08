@@ -124,7 +124,7 @@ if (session_id() === "") session_start();
                                             <th>Quiz Title</th>
                                             <th>Starting Date/Time</th>
                                             <th>Deadline</th>
-                                            <th>Quiz Status</th>
+                                            <th>Attempt(s)</th>
                                             <th colspan="2">Action</th>
                                         </tr>
                                     </thead>
@@ -143,7 +143,7 @@ if (session_id() === "") session_start();
                                                             <td>{$quiz[$i]["title"]}</td>
                                                             <td>{$startingDateTime}</td>
                                                             <td>{$deadlineDateTime}</td>
-                                                            <td>{$quiz[$i]["status"]}</td>
+                                                            <td>{$quiz[$i]["attempt"]}</td>
                                                             <td>
                                                                 <a href='quiz-form.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($quiz[$i]["post_id"]) . "'>
                                                                     <i title='View' class='bi bi-eye green2 fs-2'></i>
@@ -225,7 +225,7 @@ if (session_id() === "") session_start();
                     </div> 
                             
                     <!-- Scroll to Bottom Button -->
-                    <button class="btn btn-secondary scroll-btn" onclick="scrollToBottom()">See quiz list</button>
+                    <a href="class.php?class=<?php echo md5($details[0]["class_code"]); ?>"><button class="btn btn-secondary scroll-btn" onclick="scrollToBottom()">Back To Class</button></a>
 
                 </div>
             </div>
