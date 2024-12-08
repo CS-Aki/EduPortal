@@ -17,7 +17,6 @@ $post = $stdController->getClassDetails($details[0]["class_code"]);
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
 
-
 if(isset($post[0]["content_type"])){
     $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
     $year = $post[0]["month"][0] . "" . $post[0]["month"][1] . $post[0]["month"][2] . "" . $post[0]["month"][3];

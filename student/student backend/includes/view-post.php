@@ -35,9 +35,52 @@ if(isset($_GET["post"])){
     
 
     if($postDetails[0]["content_type"] == "Quiz"){
+        $yourScore = array();
+        $currentAttempt = 0;
         $quizContent = $stdController->getQuizContent($postId, $classCode);
+        // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
+        $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
+        $totalScore = 0;
+        $totalCorrectAnsCount = array();
+
+        // echo var_dump($submittedQuiz);
+        if($submittedQuiz != null){
+            for ($i = 0; $i < count($submittedQuiz); $i++) {
+                if ($submittedQuiz[$i]["attempt"] != $currentAttempt) {
+                    $totalScore = $submittedQuiz[$i]["score"];
+                    $currentAttempt = $submittedQuiz[$i]["attempt"];
+                    $yourScore[$currentAttempt] = 0;
+        
+                    // Initialize totalCorrectAnsCount for this attempt
+                    if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+                        $totalCorrectAnsCount[$currentAttempt] = 0;
+                    }
+        
+                    if ($submittedQuiz[$i]["status"] == 1) {
+                        $yourScore[$currentAttempt] = $submittedQuiz[$i]["score"];
+                        $totalCorrectAnsCount[$currentAttempt] = 1;
+                    }
+                } else {
+                    $totalScore += $submittedQuiz[$i]["score"];
+        
+                    if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+                        $totalCorrectAnsCount[$currentAttempt] = 0;
+                    }
+        
+                    if ($submittedQuiz[$i]["status"] == 1) {
+                        $yourScore[$currentAttempt] += $submittedQuiz[$i]["score"];
+                        $totalCorrectAnsCount[$currentAttempt] += 1;
+                    }
+                }
+            }
+            $totalItems = count($submittedQuiz) / count($yourScore);
+
+        }
+
+        // echo var_dump($totalCorrectAnsCount);
         $startingDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["starting_date"] . " " . $quizContent[0]["starting_time"]));
         $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
+        
     }
     // echo var_dump($submissions);
     // echo var_dump($files);

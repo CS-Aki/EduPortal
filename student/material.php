@@ -249,7 +249,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                         </div>
                     </div>
                 </div>
-                <?php } else if($postDetails[0]["content_type"] == "Quiz"){ ?>
+                <?php } else if($postDetails[0]["content_type"] == "Quiz"){ ;?>
 
                     <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
@@ -292,31 +292,43 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                         <thead>
                                             <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Quiz</th>
+                                            <th scope="col">Items</th>
                                             <th scope="col">Points</th>
+                                            <th scope="col">Grade</th>
                                             <th scope="col">Status</th>
                                             <th scope="col">View</th>
                                         
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                                <td>1</td>
-                                                <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
-                                                <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-success">Passed</span></td>
-                                                <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
-                                                <td><a href="#" class="green2">View</a></td>
-                                            </tr>
-                                            <tr>
+                                            
+                                            <?php for($i = 0; $i < count($yourScore); $i++){ 
+
+                                                    $grade = ($totalCorrectAnsCount[$i + 1] / $totalItems) * 100;
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $i + 1; ?></td>
+                                                    <td><?php echo $totalCorrectAnsCount[$i + 1]; ?> / <?php echo $totalItems; ?></td>
+                                                    <td>Your Score: <?php echo $yourScore[$i + 1]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
+                                                    <td><?php echo ceil($grade) . "%"; ?></td>
+                                                    <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
+                                                    <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo md5($i + 1); ?>' class="green2">View</a></td>
+                                                </tr>
+                                            <?php 
+                                            }?>
+
+                                              <!--<tr>
                                                 <td>2</td>
                                                 <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
                                                 <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-danger">Failed</span></td>
                                                 <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
                                                 <td><a href="#" class="green2">View</a></td>
                                             </tr> -->
+                                            <?php if($submittedQuiz == null){ ?>
                                             <tr>
                                                 <td colspan="5">No record</td>
                                             </tr> 
+                                            <?php }?>
                                         </tbody>
                                     </table> 
                                 </div>

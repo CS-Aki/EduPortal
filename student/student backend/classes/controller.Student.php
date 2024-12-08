@@ -191,6 +191,10 @@ class StudentController extends ClassRm{
         $content = $this->getQuiz($postId, $classCode);
         return $content;
     }
+
+    public function getQuizAttempt($postId, $userId){
+        $content = $this->getQuizAttemptDb($postId, $userId);
+    }
 }
 
 ?>

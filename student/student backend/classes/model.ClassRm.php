@@ -638,4 +638,25 @@ class ClassRm extends DbConnection
             return null;
         }
     }
+
+    protected function getQuizAttemptDb($postId, $userId){
+        $sql = "SELECT attempt, starting_time, deadline_date, deadline_time, attempt FROM answers WHERE MD5(post_id) = ? AND user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
 }

@@ -82,9 +82,8 @@ if (session_id() === "") session_start();
 
 <body>
     <?php if (isset($_GET["class"])) {
-        include("student backend/includes/view-quiz.php");
     } ?>
-    <?php require('inc/header.php'); ?>
+    <?php require('inc/header.php');  include("student backend/includes/view-quiz.php"); ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
@@ -109,9 +108,7 @@ if (session_id() === "") session_start();
                         </div>
                     </div>
                 </nav>
-                <!-- Display this if quiz has not been answered -->
-                <!-- If need mo makita yung nasa loob ng display na 'to and na-submit mo yung form na may answers, truncate mo lang yung answers table sa db -->
-                <?php ?>
+                <?php echo var_dump($submittedQuiz);?>
                     <div class="container mt-4 px-lg-5 px-sm-2">
                         <form id="quiz-answer-form">
                             <div class="form-container">
@@ -128,13 +125,13 @@ if (session_id() === "") session_start();
                                         // For multiple-choice or true/false questions, add other choices to the existing question
                                         $choiceCount++;
                                         echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
-                                        <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}' 
-                                               name='{$quizDetails[$i]['question_id']}' 
-                                               value='{$quizDetails[$i]["option_text"]}' required>
-                                        <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
-                                             {$quizDetails[$i]["option_text"]}
-                                        </label>
-                                      </div>";
+                                                <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}' 
+                                                name='{$quizDetails[$i]['question_id']}' 
+                                                value='{$quizDetails[$i]["option_text"]}' required>
+                                                <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
+                                                {$quizDetails[$i]["option_text"]}
+                                                </label>
+                                            </div>";
                                     } else {
                                         // Close the previous question block if it's not the first question
                                         if ($i > 0) {
@@ -187,9 +184,9 @@ if (session_id() === "") session_start();
                                     <a href="material.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>"><button type="button" class="btn btn-secondary px-4 py-2">Back</button></a><br><br>
                                 </div>
                                 <br><br>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

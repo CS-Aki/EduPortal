@@ -15,7 +15,8 @@ $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["i
                                                                                      //will add checker for attempt no. and add attempt number col on answer table
 $score = 0;
 $totalPoints = 0;              
-        
+
+// echo var_dump($submittedQuiz);  
 // if($submittedQuiz != null){
 //     for($i = 0; $i < count($submittedQuiz); $i++){
 //         $score += $submittedQuiz[$i]["score"];
@@ -29,7 +30,7 @@ $totalPoints = 0;
 // echo "Your score is " . $score;
 // echo "<br>Quiz Total Points: " . $totalPoints;
 // echo "<pre>";
-// print_r($quizDetails);
+// print_r($submittedQuiz);
 // echo "</pre>";
 
 $ansKey = array();
