@@ -138,8 +138,8 @@ if (session_id() === "") session_start();
                                                     $deadlineDateTime = date("F j, Y g:i A", strtotime($quiz[$i]["deadline_date"] . " " . $quiz[$i]["deadline_time"]));
                                                 
                                                     echo "
-                                                        <tr>
-                                                            <td hidden>{$quiz[$i]["post_id"]}</td>
+                                                        <tr class='quiz-cont'>
+                                                            <td hidden class='post-id'>{$quiz[$i]["post_id"]}</td>
                                                             <td>{$quiz[$i]["title"]}</td>
                                                             <td>{$startingDateTime}</td>
                                                             <td>{$deadlineDateTime}</td>
@@ -150,7 +150,7 @@ if (session_id() === "") session_start();
                                                                 </a>
                                                             </td>
                                                             <td>
-                                                                <a href='#'>
+                                                                <a href='' class='delete-post'>
                                                                     <i title='Remove' class='bi bi-x text-danger fs-1'></i>
                                                                 </a>
                                                             </td>
@@ -234,7 +234,8 @@ if (session_id() === "") session_start();
         <!-- You can see the question format inside here, try to preserve the div names and element hierarchy -->
         <!-- Check check niyo nalang din kung working siya and walang error habang ginagawa, sa console log niyo mkaikita yung messages  --> <!-- ok na no bug so far -->
         <!-- <script src="scripts/create-quiz.js">  </script> -->
-        <script> 
+        <script src="scripts/delete-post.js"></script>
+       <script> 
             function scrollToBottom() {
                 window.scrollTo({
                     top: document.body.scrollHeight,  // Scroll to the bottom of the page

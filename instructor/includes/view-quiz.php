@@ -14,7 +14,7 @@ $quizContent = $instrCtrlr->getQuizDetails($postId, $classCode);
 // echo var_dump($quizContent);
 // echo var_dump($quizContent);
 
-if($quizContent != null){
+if($quizContent != null && $quizContent[0]["question_id"] != null){
     $groupedQuestions = [];
     foreach ($quizContent as $question) {
         $questionId = $question['question_id'];

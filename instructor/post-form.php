@@ -147,6 +147,15 @@ $_SESSION["classCode"] = $_GET["class"];
                             </div>
                         </div>
 
+                        <div id="attemptCont" hidden>
+                            <div class="d-flex col-2">
+                                <span style="font-size: large;" class="ms-2 form-label">Attempt:</span>
+                                <div class="form-floating ms-2" style="flex: 1;">
+                                    <input type="number" class="rounded-2 ps-2" id="attempt" value="1" min="1" max="5" placeholder="Enter number" required>
+                                </div>
+                            </div>
+                        </div>
+
                         <br>
                         <!-- <div class="row">
                             <div class="col-3" id="dateContainer" hidden>

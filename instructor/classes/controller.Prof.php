@@ -114,7 +114,7 @@ class InstructorController extends Instructor
         return $this->insertComment($postID, $classCode, $comment);
     }
 
-    public function createPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points){
+    public function createPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points, $attempt){
         if (session_id() === "") session_start();
 
         // date_default_timezone_set('Asia/Manila');
@@ -149,7 +149,7 @@ class InstructorController extends Instructor
         //     exit();
         // }
 
-       $result =  $this->addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points);
+       $result =  $this->addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points, $attempt);
        if($result == true){
             // echo $classCode;
             return $this->getPostViaId($_SESSION["postId"], $classCode);
@@ -245,5 +245,12 @@ class InstructorController extends Instructor
         // }
 
         // echo "REMOVE SUCCESSFULLY";
+    }
+
+    public function removeQuiz($postId){
+        $result = $this->removeQuizInDb($postId);
+        if($result == false){
+            echo "DELETION FAILED";
+        }
     }
 }

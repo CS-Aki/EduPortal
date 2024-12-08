@@ -89,12 +89,17 @@ if (session_id() === "") session_start();
                     </div>
                 </nav>
 
+                <?php 
+                        $startingDateTime = date("F j, Y g:i A", strtotime($quiz[$i]["starting_date"] . " " . $quiz[$i]["starting_time"]));
+                        $deadlineDateTime = date("F j, Y g:i A", strtotime($quiz[$i]["deadline_date"] . " " . $quiz[$i]["deadline_time"]));                 
+                ?>
+                
                 <h1><?php echo $title; ?></h1>
                 <form id="quiz-form">
-                    <!-- <input type="text" id="quiz-title" placeholder="Quiz Title" required><br><br> -->
                     <br>
                     <div id="questions-container">
                         <?php if (!empty($groupedQuestions)) {
+                            // echo var_dump($groupedQuestions);
                             $questionCount = 1;
                             foreach ($groupedQuestions as $question) {
                                 $questionId = $question["question_id"];
@@ -271,10 +276,12 @@ if (session_id() === "") session_start();
                             }
                         } ?>
                     </div>
+                    
            
             <button type="button" id="add-question" class="btn btn-secondary">Add Question</button><br><br>
             <input type="submit" class="btn btn-info" id="saveQuiz" value="Save Quiz">
             </form>
+
             <br>
             <a href="quiz-list.php?class=<?php echo md5($details[0]["class_code"]); ?>"><button class="btn btn-secondary">Back To Quiz List</button></a>
 

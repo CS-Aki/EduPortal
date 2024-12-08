@@ -49,7 +49,7 @@ $(document).ready(function() {
         date = $('#deadlineDate').val();
         time = $('#timeContainer').val();
         $points = $('#pointsContainer');
-       
+        $attemptContainer = $("#attemptCont");
         // <div class="d-flex col-2">
         //                         <span style="font-size: large;" class="ms-2 form-label">Point:</span>
         //                         <div class="form-floating ms-2" style="flex: 1;">
@@ -69,6 +69,7 @@ $(document).ready(function() {
             $("#timeContainer").hide();
             $("#uploadContainer").show();
             $(".quiz-list-container").hide();
+            $("#attemptCont").hide();
 
         }else if(selectedValue == "quiz"){
             $(".sub-title").text("Create Quiz");
@@ -79,8 +80,11 @@ $(document).ready(function() {
             $("#timeContainer").show();
             $(".quiz-list-container").removeAttr("hidden");
             $(".quiz-list-container").show();
-            $('#pointsContainer').show();
+            $('#pointsContainer').hide();
             $("#uploadContainer").hide();
+            $("#attemptCont").removeAttr("hidden");
+            $("#attemptCont").show();
+
         }else{
             $(".sub-title").text("Create Activity");
             $('#pointsContainer').removeAttr("hidden");
@@ -91,6 +95,7 @@ $(document).ready(function() {
             $('#pointsContainer').show();
             $("#uploadContainer").show();
             $(".quiz-list-container").hide();
+            $("#attemptCont").hide();
 
         }
     });
@@ -158,54 +163,75 @@ $(document).ready(function() {
            // Get the current date and time
         const currentDate = new Date();
 
-        // Get the starting date and time from the input fields
         const startDate = $("#startingDate").val();
         const startTime = $("#startingTime").val();
         const startingDateTime = new Date(`${startDate}T${startTime}`);
 
-        // Get the deadline date and time from the input fields
         const deadlineDate = $('#deadlineDate').val();
         const deadlineTime = $('#deadlineTime').val();
         const deadlineDateTime = new Date(`${deadlineDate}T${deadlineTime}`);
 
         // Perform validations
-        if($(".sub-title").text() != "Create Material"){
+        if ($(".sub-title").text() != "Create Material") {
+
+            if (!startDate || !startTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Start Time',
+                    text: 'Start date and time should not be empty.',
+                });
+                return; 
+            }
+        
+       
+            if (!deadlineDate || !deadlineTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Deadline Time',
+                    text: 'Deadline date and time should not be empty.',
+                });
+                return; 
+            }
+        
             if (startingDateTime < currentDate) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Invalid Starting Time',
                     text: 'Starting time and date should not be less than the current time and date.',
                 });
-                return; // Stop execution
+                return;
             }
-    
+        
             if (startingDateTime > deadlineDateTime) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Invalid Starting Time',
                     text: 'Starting time and date should not be greater than the deadline time and date.',
                 });
-                return; // Stop execution
+                return; 
             }
-    
+        
             if (deadlineDateTime <= currentDate) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Invalid Deadline Time',
                     text: 'Deadline time and date should be greater than the current time and date.',
                 });
-                return; // Stop execution
+                return; 
+            }
+        
+            if (startDate === deadlineDate) {
+                if (startingDateTime >= deadlineDateTime) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Time Comparison',
+                        text: 'Starting time cannot be the same or later than the deadline time on the same day.',
+                    });
+                    return;
+                }
             }
         }
         
-        if($(".sub-title").text() != "Create Material"){
-            // Swal.fire({
-            //     icon: 'success',
-            //     title: 'Valid Dates!',
-            //     text: 'The input dates and times are valid!',
-            // });
-
-        }
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
 
@@ -230,11 +256,11 @@ $(document).ready(function() {
         //     console.log(pair[0], pair[1]);
         // }
         let points = $("#points").val();
-
+        let attempt = $("#attempt").val();
         // if(selectedValue != "material"){
         //     return;
         // }
-
+        // console.log("ATTEMPT " + attempt);
         console.log($("#fileInput")[0].files.length);
 
         // Handles file transfer to gdrive and upload to db
@@ -264,7 +290,8 @@ $(document).ready(function() {
                         "classCode" : classCode,
                         "startDate" : startDate,
                         "startTime" : startTime,
-                        "points" : points
+                        "points" : points,
+                        "attempts" : attempt
                 },
         
                 success: function (response) {
@@ -345,7 +372,9 @@ $(document).ready(function() {
                         "classCode" : classCode,
                         "startDate" : startDate,
                         "startTime" : startTime,
-                        "points" : points
+                        "points" : points,
+                        "attempts" : attempt
+
                 },
         
                 success: function (response) {

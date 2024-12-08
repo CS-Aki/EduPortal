@@ -17,6 +17,8 @@ if(isset($_GET["post"])){
     $quizContent = $listController->displayQuiz($_GET["class"], $_GET["post"]);
 }
 
+echo var_dump($quiz);
+
 $title = "";
 // echo var_dump($quiz);
 if(isset($_GET["post"])){

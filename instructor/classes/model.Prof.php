@@ -182,8 +182,8 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points){
-
+    protected function addPost($classCode, $type, $title, $desc, $endDate, $endTime, $startingDate, $startingTime, $points, $attempt){
+        // echo "\n\nTHIS IS THE ATTEMPT " . $attempt . "\n\n";
         $newCode = $this->findSimilarCode($classCode);
         $connection = $this->connect();
 
@@ -202,9 +202,9 @@ class Instructor extends DbConnection
 
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
            
-            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `attempt`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
-            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, $startingDate, $startingTime, "Pending"))) {
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $attempt, $startingDate, $startingTime, "Pending"))) {
                 // echo "trueee";
                 return true;
             }else{
@@ -903,6 +903,37 @@ class Instructor extends DbConnection
         try {
             if ($stmt->execute(array($empty, $questionId))) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+            return false;
+        }
+    }
+
+    protected function removeQuizInDb($postId){
+        $sql = "DELETE FROM posts WHERE post_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+        
+        try {
+            if ($stmt->execute(array($postId))) {
+                if ($stmt->rowCount() > 0) {
+                    $sql = "DELETE FROM quiz WHERE post_id = ?";
+                    $stmt = $this->connect()->prepare($sql);  
+                    try {
+                        if ($stmt->execute(array($postId))) {
+                            if ($stmt->rowCount() > 0) {
+                                
+                            }
+                        } else {
+                            return false;
+                        }
+                    } catch (PDOException $e) {
+                        echo "Error: " . $e;
+                        return false;
+                    }
+                }
             } else {
                 return false;
             }

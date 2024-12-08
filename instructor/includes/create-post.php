@@ -13,19 +13,22 @@ if(isset($_POST["type"])){
     $startingDate = "";
     $startingTime = "";
     $points = 0;
-
+    $attempt = 0;
     if($type != "material"){
         $date = $_POST["date"];
         $time = $_POST["time"];
         $startingDate = $_POST["startDate"];
         $startingTime = $_POST["startTime"];
         $points = $_POST["points"];
+        $attempt = $_POST["attempts"];
     }
+
+    // echo "\n\nTHIS IS THE NEW ATTEMPT " . $attempt . "\n\n";
 
     $title = $_POST["title"];
     $desc = $_POST["desc"];
     $instrCtrlr = new InstructorController();
-    $postDetails = $instrCtrlr->createPost($classCode, $type, $title, $desc, $date, $time, $startingDate, $startingTime, $points);
+    $postDetails = $instrCtrlr->createPost($classCode, $type, $title, $desc, $date, $time, $startingDate, $startingTime, $points, $attempt);
     // echo var_dump($postDetails);
     header('content-type: application/json');
     echo json_encode($postDetails);
