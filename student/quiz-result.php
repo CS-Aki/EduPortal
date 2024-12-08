@@ -120,9 +120,21 @@ if (session_id() === "") session_start();
                 </nav>
                 <?php    //echo "<pre>" . print_r($submittedQuiz) . "</pre>"; ?>
                     <div class="container mt-4 px-lg-5 px-sm-2">
+
                         <form id="quiz-answer-form">
                             <div class="form-container">
-                                <h1 class="h-font green1 fs-1 me-2 mb-3" id="material-title"><?php echo $quizDetails[0]["title"]; ?></h1>
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="col-lg-9">
+                                        <h1 class="h-font green1 fs-1 me-2" id="material-title">
+                                            <?php echo $quizDetails[0]["title"]; ?>
+                                        </h1>
+                                    </div>
+                                    <div class="col-lg-2 ms-auto">
+                                            <p class="fw-semibold green2 fs-5 lh-sm">SCORE: 
+                                                <?php echo $numberOfCorrect . " / " . count($result); ?>
+                                            </p>
+                                    </div>
+                                </div>
                                 <!-- <input type="text" id="quiz-title" placeholder="Quiz Title" readonly><br><br> -->
                                 <?php
                              $j = 0;
@@ -131,20 +143,19 @@ if (session_id() === "") session_start();
                              $choiceCount = 1;
                              $correct = 0;
                              
-                   
                              // echo count($quizDetails);
-                             
+                            // echo count($result);
+                            // echo "<br>" .  $numberOfCorrect;
                              for ($i = 0; $i < count($quizDetails); $i++) {
-                                 // Check if the question title matches the previous one
                                  if ($questionTitle == $quizDetails[$i]["question_text"]) {
                                      // For multiple-choice or true/false questions, add other choices
                                      $choiceCount++;
                                      echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
                                          <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}'
                                                name='{$quizDetails[$i]['question_id']}' 
-                                               value='{$quizDetails[$i]["option_text"]}' disabled ";
+                                               value='{$quizDetails[$i]["option_text"]}' disabled ";    
                              
-                                     if (isset($result[$j]) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
+                                     if ($j < count($result) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
                                          echo "checked";
                                          $j++;
                                      }
@@ -155,16 +166,16 @@ if (session_id() === "") session_start();
                                          </label>
                                      </div>";
                                  } else {
-                                     // Close the previous question block if it's not the first question
+                    
                                      if ($i > 0) {
                                          echo ($correct != 1) 
                                              ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
                                              : "</div>";
-                                         echo "</div>"; // Closing the question-container
+                                         echo "</div>";
                                      }
                              
-                                     // Start a new question block
-                                     if (isset($result[$j]) && $quizDetails[$i]["ans_key"] == $result[$j]["answer_text"]) {
+
+                                     if ($j < count($result) && $quizDetails[$i]["ans_key"] == $result[$j]["answer_text"]) {
                                          $correct = 1;
                                          echo "<div class='correct question-container quizborder mb-2 py-4 rounded-4 px-5 black2 question-id-{$quizDetails[$i]['question_id']}'>";
                                      } else {
@@ -192,16 +203,16 @@ if (session_id() === "") session_start();
                                              ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i]['ans_key']}</label></div>"
                                              : "</div>";
                                              $correct = 1;
-                                         $j++;
+                                        //  $j++;
                                      } else {
                                          // New multiple-choice or true/false question
                                          $questionTitle = $quizDetails[$i]["question_text"];
-                                         $choiceCount = 1; // Reset choice counter for new question
+                                         $choiceCount = 1; 
                                          echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
                                              <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}' 
                                                     name='{$quizDetails[$i]['question_id']}' 
                                                     value='{$quizDetails[$i]["option_text"]}' ";
-                                         if (isset($result[$j]) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
+                                         if ($j < count($result) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
                                              echo "checked";
                                              $j++;
                                          }
@@ -218,9 +229,11 @@ if (session_id() === "") session_start();
                              }
                              
                              if (count($quizDetails) > 0) {
-                                 echo "</div>"; // Closing the row
-                                 echo "</div>"; // Closing the question-container
-                             }
+                                echo ($correct != 1) 
+                                    ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
+                                    : "</div>";
+                                echo "</div>";
+                                }
                              
                                 ?>
                                 <div class="d-flex justify-content-end align-items-center gap-2 mt-3">

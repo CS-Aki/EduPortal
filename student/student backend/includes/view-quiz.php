@@ -24,6 +24,13 @@ if(isset($_GET["attempt"])){
     // echo "user id " . $_SESSION["id"] . "<br>";
     // echo "ATTEMPT " . $_GET["attempt"] . "<br>";
     $result = $stdController->getQuizResultFormat($postId, $classCode, $_SESSION["id"], $_GET["attempt"]);
+    $numberOfCorrect = 0;
+    // $j = 0;
+    if($result != null){
+        for ($i = 0; $i < count($result); $i++) {
+            if($result[$i]["status"] == 1) $numberOfCorrect++;
+        }
+    }
 }
 
 
