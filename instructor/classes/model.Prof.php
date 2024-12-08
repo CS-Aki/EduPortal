@@ -672,10 +672,10 @@ class Instructor extends DbConnection
             // echo $type . "\n";
             // echo $questionText . "\n";
             // echo $questionText . "\n";
-            $qTextResult = $this->isQuestionTextInDb($questionText, $type, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
+            $qTextResult = $this->isQuestionTextInDb($questionText, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
             if($qTextResult == true){
-                echo "Question Text Already in database\n";
-                echo "Updating Question In Database\n";
+                echo "\nQuestion Text Already in database\n";
+                echo "\nUpdating Question In Database\n";
 
                 // if($type != "short-text") $this->removingElementsInDb($newPostId[0]["post_id"], $options, $questionId[0]["question_id"]);
                 if($type != "short-text") $this->insertOptions($options, $questionId[0]["question_id"]);
@@ -699,7 +699,7 @@ class Instructor extends DbConnection
             }else{
                 // Not yet existing in database
                 if($questionId == null){
-                    echo "Question Text Not Yet In Database\n";
+                    echo "\nQuestion Text Not Yet In Database\n";
                     $sql = "INSERT INTO `questions`(`class_code`, `ans_key`, `points`, `question_text`, `question_type`, `post_id`) VALUES (?, ?, ?, ?, ?, ?)";
                     $stmt = $connection->prepare($sql);
             
@@ -720,7 +720,7 @@ class Instructor extends DbConnection
                 }
                  // Exist in our db just need to update value
                 else{
-                    echo "Updating Question In Database\n";
+                    echo "\nUpdating Question In Database\n";
                     $sql = "UPDATE `questions` SET `question_text`= ?, `question_type` = ?, `ans_key`= ?, `points` = ? WHERE question_id = ? AND post_id = ?";
                     $stmt = $connection->prepare($sql);
                     try {
@@ -750,16 +750,16 @@ class Instructor extends DbConnection
             $options = $question['options'];
             $ansKey = $question['ansKey'];
             $points = $question['points'];
-            echo "POST ID IN DELETE " .$postId;
+            // echo "POST ID IN DELETE " .$postId;
             $questionId = $this->decryptQuestionId($postId, $question['existingId']);
-            echo "Existing ID : " . $question['existingId'] . "\n";
-            echo "Deleting Question In Database\n";
-            $sql = "DELETE FROM questions WHERE question_id = ?";
+            // echo "Existing ID : " . $question['existingId'] . "\n";
+            echo "\NDeleting Question In Database\n";
+            $sql = "DELETE FROM options WHERE question_id = ?";
             $stmt = $this->connect()->prepare($sql);
             try {
                 if ($stmt->execute(array($questionId[0]["question_id"]))) {
                     if ($stmt->rowCount() > 0) {
-                        echo "deletion success";
+                        echo "\ndeletion success\n";
                     }
                 } else {
                     echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
@@ -773,12 +773,12 @@ class Instructor extends DbConnection
     
     }
 
-    protected function isQuestionTextInDb($questionText, $type, $classCode, $postId){
-        $sql = "SELECT question_text FROM questions WHERE question_text = ? AND class_code = ? AND post_id = ? AND question_type = ?";
+    protected function isQuestionTextInDb($questionText, $classCode, $postId){
+        $sql = "SELECT question_text FROM questions WHERE question_text = ? AND class_code = ? AND post_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($questionText, $classCode, $postId, $type))) {
+            if ($stmt->execute(array($questionText, $classCode, $postId))) {
                 if ($stmt->rowCount() > 0) {
                     return true;
                 }else{

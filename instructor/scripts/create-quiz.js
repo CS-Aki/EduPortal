@@ -607,7 +607,8 @@ $(document).ready(function () {
 
         const title = $('#quiz-title').val();
         var questions = [];
-        console.log("Quiz Title : " + title);
+        noAnswerKey = false;
+        // console.log("Quiz Title : " + title);
         let listOfNoAns = "No answer key on question number : ";
 
         $('.question').each(function () {
@@ -621,13 +622,13 @@ $(document).ready(function () {
             let options = [];
             let ansKey = "";
             let existingId = $(this).closest(".question").find(".question-num").text();
-            console.log("Existing ID : " + existingId);
+            // console.log("Existing ID : " + existingId);
             console.log("Question : " + questionText);
             console.log("Question Type : " + type);
             console.log("Points : " + points);
             // console.log(questionText);
             if (type === 'multiple-choice') {
-                console.log("QUESTION ID : " + qId);
+                // console.log("QUESTION ID : " + qId);
                 $(this).find('.option').find(".optionText").each(function () {
                     console.log("Choice : " + $(this).val());
                     options.push($(this).val());
@@ -641,16 +642,16 @@ $(document).ready(function () {
                     noAnswerKey = true;
                 }
             } else if (type === 'true-false') {
-                console.log("QUESTION ID : " + qId);
+                // console.log("QUESTION ID : " + qId);
 
                 options = ['True', 'False'];
-                console.log("Answer Key: " + $(this).find('.booleanSelect').val());
+                console.log("Answer Key: " + $(this).closest(".true-false-select").find('.booleanSelect').val());
                 ansKey = $(this).find('.booleanSelect').val();
             } else {
-                console.log("QUESTION ID : " + qId);
+                // console.log("QUESTION ID : " + qId);
 
-                console.log("Answer Key: " + $(this).closest(".question").find(".short-text-select .short_ans_key").val());
-                ansKey = $(this).closest(".question").find(".short-text-select .short_ans_key").val();
+                console.log("Answer Key: " + $(this).closest(".short-text-select").find(".short-text-select .short_ans_key").val());
+                ansKey = $(this).find(".short-text-select .short_ans_key").val();
                 if (ansKey == "") {
                     console.log("You have no answer key for Question " + questionId);
                     listOfNoAns += questionId + ", ";
@@ -672,7 +673,7 @@ $(document).ready(function () {
 
         console.table(removeChoices);
         if (noAnswerKey != true) {
-            console.table(questions);
+            // console.table(questions);
             // console.log("inside");
             $.ajax({
                 url: "includes/create-quiz.php",
@@ -695,6 +696,7 @@ $(document).ready(function () {
                 }
             });
         } else {
+            console.log("insideeeee");
             alert(listOfNoAns.substring(0, listOfNoAns.length - 2));
             noAnswerKey = false;
             options = [];
