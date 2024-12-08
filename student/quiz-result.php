@@ -108,7 +108,7 @@ if (session_id() === "") session_start();
                         </div>
                     </div>
                 </nav>
-                <?php echo var_dump($submittedQuiz);?>
+                <?php echo "<pre>" . print_r($submittedQuiz) . "</pre>"; ?>
                     <div class="container mt-4 px-lg-5 px-sm-2">
                         <form id="quiz-answer-form">
                             <div class="form-container">

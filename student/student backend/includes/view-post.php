@@ -36,7 +36,7 @@ if(isset($_GET["post"])){
 
     if($postDetails[0]["content_type"] == "Quiz"){
         $yourScore = array();
-        $currentAttempt = 0;
+        $currentAttempt = 1;
         $quizContent = $stdController->getQuizContent($postId, $classCode);
         // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
         $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
@@ -74,7 +74,8 @@ if(isset($_GET["post"])){
                 }
             }
             $totalItems = count($submittedQuiz) / count($yourScore);
-
+            $attemptNum = count($totalCorrectAnsCount);
+            // echo "Attempt count " . count($totalCorrectAnsCount);
         }
 
         // echo var_dump($totalCorrectAnsCount);

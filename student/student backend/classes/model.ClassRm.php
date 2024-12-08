@@ -593,7 +593,7 @@ class ClassRm extends DbConnection
     }
 
     protected function getQuizInClass($classCode){
-        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND quiz.starting_date <= NOW()";
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND quiz.starting_date <= NOW() AND quiz.starting_time <= NOW()";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute([$classCode]);

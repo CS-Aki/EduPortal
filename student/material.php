@@ -52,6 +52,17 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
     <style>
+        .gray-out {
+            background-color: gray; /* Change to your desired gray color */
+            color: white; /* Change text color if needed */
+            opacity: 0.5; /* Adjust opacity to make it look grayed out */
+            pointer-events: none; /* Disable interaction */
+        }
+
+        a.disabled {
+            pointer-events: none;
+            cursor: default;
+        }
 
         .table thead th{
 
@@ -276,8 +287,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     <h1 class="h-font green2 text-center sub-title mb-0" id="material-title">Your Work</h1><br>
                                     <div class="row justify-content-center"> 
                                         <div class="col-lg-3 col-md-12">
-                                            <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>'>
-                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                            <a class='<?php echo ($attemptNum >= $quizContent[0]["attempt"]) ? "disabled" : ""; ?>' href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo ($submittedQuiz != null) ? $attemptNum + 1 : "1"; ?>'>
+                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3 <?php echo ($attemptNum >= $quizContent[0]["attempt"]) ? "gray-out" : "1"; ?>">
                                                     <div class="d-flex justify-content-center align-items-center p-2 py-3">
                                                         <span class="white2 fw-semibold mb-0">Take Quiz</span>
                                                     </div> 
@@ -302,8 +313,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                         </thead>
                                         <tbody>
                                             
-                                            <?php for($i = 0; $i < count($yourScore); $i++){ 
-
+                                            <?php  if(count($yourScore) > 1){
+                                                    for($i = 0; $i < count($yourScore); $i++){ 
                                                     $grade = ($totalCorrectAnsCount[$i + 1] / $totalItems) * 100;
                                                 ?>
                                                 <tr>
@@ -312,11 +323,24 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                     <td>Your Score: <?php echo $yourScore[$i + 1]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
                                                     <td><?php echo ceil($grade) . "%"; ?></td>
                                                     <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
-                                                    <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo md5($i + 1); ?>' class="green2">View</a></td>
+                                                    <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo $i + 1; ?>' class="green2">View</a></td>
                                                 </tr>
                                             <?php 
-                                            }?>
-
+                                                     }
+                                                 }else{?>
+                                                  <?php for($i = 0; $i < count($yourScore); $i++){ 
+                                                        $grade = ($totalCorrectAnsCount[$i] / $totalItems) * 100;
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo $i + 1; ?></td>
+                                                        <td><?php echo $totalCorrectAnsCount[$i]; ?> / <?php echo $totalItems; ?></td>
+                                                        <td>Your Score: <?php echo $yourScore[$i]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
+                                                        <td><?php echo ceil($grade) . "%"; ?></td>
+                                                        <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
+                                                        <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo $i + 1; ?>' class="green2">View</a></td>
+                                                    </tr>
+                                                 <?php } 
+                                                }?>
                                               <!--<tr>
                                                 <td>2</td>
                                                 <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
@@ -344,7 +368,6 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     </div>
                                 </div>
                                 <div class="ms-lg-3 mt-4">
-
                                         <div id="comments"></div>
                                 </div>
                                 </div>

@@ -16,6 +16,12 @@ $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["i
 $score = 0;
 $totalPoints = 0;              
 
+// Viewing the quiz result
+if(isset($_GET["attempt"])){
+    
+}
+
+
 // echo var_dump($submittedQuiz);  
 // if($submittedQuiz != null){
 //     for($i = 0; $i < count($submittedQuiz); $i++){
