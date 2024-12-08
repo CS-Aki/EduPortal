@@ -743,31 +743,53 @@ class Instructor extends DbConnection
     }
 
     protected function removingElementsInDb($postId, $removedElements, $id){
-  
         foreach ($removedElements as $question) {
+            $removeAllQuestion = $question["removeQuestion"];
             $questionText = $question['question'];
             $type = $question['type'];
             $options = $question['options'];
             $ansKey = $question['ansKey'];
             $points = $question['points'];
-            // echo "POST ID IN DELETE " .$postId;
-            $questionId = $this->decryptQuestionId($postId, $question['existingId']);
-            // echo "Existing ID : " . $question['existingId'] . "\n";
-            echo "\NDeleting Question In Database\n";
-            $sql = "DELETE FROM options WHERE question_id = ?";
-            $stmt = $this->connect()->prepare($sql);
-            try {
-                if ($stmt->execute(array($questionId[0]["question_id"]))) {
-                    if ($stmt->rowCount() > 0) {
-                        echo "\ndeletion success\n";
+            if($removeAllQuestion == 0){
+                // echo "POST ID IN DELETE " .$postId;
+                $questionId = $this->decryptQuestionId($postId, $question['existingId']);
+                // echo "Existing ID : " . $question['existingId'] . "\n";
+                echo "\NDeleting Question In Database\n";
+                $sql = "DELETE FROM options WHERE question_id = ?";
+                $stmt = $this->connect()->prepare($sql);
+                try {
+                    if ($stmt->execute(array($questionId[0]["question_id"]))) {
+                        if ($stmt->rowCount() > 0) {
+                            echo "\ndeletion success\n";
+                        }
+                    } else {
+                        echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                        return false;
                     }
-                } else {
-                    echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                } catch (PDOException $e) {
+                    echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
                     return false;
                 }
-            } catch (PDOException $e) {
-                echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
-                return false;
+            }else{
+                // echo "POST ID IN DELETE " .$postId;
+                $questionId = $this->decryptQuestionId($postId, $question['existingId']);
+                // echo "Existing ID : " . $question['existingId'] . "\n";
+                echo "\NDeleting Question In Database\n";
+                $sql = "DELETE FROM questions WHERE question_id = ?";
+                $stmt = $this->connect()->prepare($sql);
+                try {
+                    if ($stmt->execute(array($questionId[0]["question_id"]))) {
+                        if ($stmt->rowCount() > 0) {
+                            echo "\ndeletion success\n";
+                        }
+                    } else {
+                        echo "update failed: " . implode(", ", $stmt->errorInfo()); // Log the error
+                        return false;
+                    }
+                } catch (PDOException $e) {
+                    echo "Error inside else statement of questionId == null: " . $e->getMessage(); // Log the error
+                    return false;
+                }
             }
         }
     

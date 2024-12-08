@@ -13,6 +13,7 @@ $stdController = new StudentController();
 $details = $stdController->getClassDetails1($classCode);
 $submissions = $stdController->getSubmissions($classCode);
 $post = $stdController->getClassDetails($details[0]["class_code"]);
+
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
 

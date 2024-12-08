@@ -190,7 +190,7 @@ $(document).ready(function () {
         let questionIdTemp = $(this).closest('.question').data("id");
         console.log("Testt "  + $(this).closest(".question").find(".notSaved").text());
         questionCount--;
-
+        let removeQuestion = 1;
         if($(this).closest(".question").find(".notSaved").text() != "not save"){
             const questionText = $(this).closest('.question').find('.question-text').val();
             const type = $(this).closest('.question').find('.question-type').val();
@@ -240,7 +240,7 @@ $(document).ready(function () {
                 }
             }
 
-            removedElements.push({ question: questionText, type, options, ansKey, points, existingId});
+            removedElements.push({ question: questionText, type, options, ansKey, points, existingId, removeQuestion});
         }
 
         console.log("ID: " + $(this).closest('.question').data("id"));
@@ -376,7 +376,7 @@ $(document).ready(function () {
         var questionDiv = $(this).closest('.question'); // Get the closest question div
         refreshQuestionElements(questionDiv);
         updateQuestionDisplay();
-
+        let removeQuestion = 0;
         if($(this).closest(".question").find(".notSaved").text() != "not save"){
             const questionText = $(this).closest('.question').find('.question-text').val();
             const type = $(this).closest('.question').find('.question-type').val();
@@ -432,7 +432,7 @@ $(document).ready(function () {
             if (isExistingIdInRemovedElements) {
                 console.log(`existingId "${existingId}" is already in removedElements.`);
             } else {
-               removedElements.push({ question: questionText, type, options, ansKey, points, existingId});
+               removedElements.push({ question: questionText, type, options, ansKey, points, existingId, removeQuestion});
             }
         }else{
             console.log("not found");

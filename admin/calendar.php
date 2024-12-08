@@ -86,7 +86,6 @@ if(isset($_SESSION["user_category"])){
 
         calendar.render();
     });
-    <?php require('inc/footer.php'); ?>   
 
     </script>
 </head>
