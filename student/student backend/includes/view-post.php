@@ -33,11 +33,11 @@ if(isset($_GET["post"])){
     
     $submissions = $stdController->getSubmittedFiles($postId, $classCode);
     
-
     if($postDetails[0]["content_type"] == "Quiz"){
         $yourScore = array();
         $currentAttempt = 0;
         $quizContent = $stdController->getQuizContent($postId, $classCode);
+        $quizStatus = $stdController->getQuizStatus($postId, $classCode, $_SESSION["id"]);
         // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
         $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
         $totalScore = 0;

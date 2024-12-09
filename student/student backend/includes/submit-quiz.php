@@ -14,15 +14,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $classCode = $_POST['classCode'];
     $attempt = $_POST['attempt'];
     $form = $_POST; // The serialized form data
-    
+    $date = $_POST['date'];
+    $time = $_POST['time'];
     $stdController = new StudentController();
+    // $quizDetails = $stdController->getQuizDetails($postId, $classCode);
     // user id, post id, class code, status, answer, question id
     // echo "POST ID : " . $classCode . "\n\n";
+    
+    $currentDateTime = new DateTime(); 
+    $comparisonDateTime = new DateTime($date . " " . $time);
+    $status = "";
+
+    if ($currentDateTime <= $comparisonDateTime) {
+        $status = "On Time";
+    } elseif ($currentDateTime > $comparisonDateTime) {
+        $status = "Late";
+    } 
+
     $yourScore = 0;
     $totalItems = 0;
     $answers = [];
     foreach ($_POST as $questionId => $answer) {
-        if ($questionId === 'classCode' || $questionId === 'postId' || $questionId === "attempt") {
+        if ($questionId === 'classCode' || $questionId === 'postId' || $questionId === "attempt" || $questionId === "date" || $questionId === "time") {
             continue; 
         }
           
@@ -32,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $yourScore++;           
              $stdController->submitAnswers($_SESSION["id"], $postId, $classCode, 1, $answer, $questionId, $attempt);
         } else {
-            $stdController->submitAnswers($_SESSION["id"], $postId, $classCode, 0, $answer, $questionId, $attempt);
+             $stdController->submitAnswers($_SESSION["id"], $postId, $classCode, 0, $answer, $questionId, $attempt);
             echo "Wrong Answer for Question ID $questionId: $answer\n\n";
         }
         $totalItems++;
@@ -40,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $grade = ($yourScore / $totalItems) * 100;
-    $stdController->insertGrade($_SESSION["id"], $postId, $classCode, "Quiz", $grade);
+    $stdController->insertGrade($_SESSION["id"], $postId, $classCode, "Quiz", $grade, $status);
     // echo "\n\nTOTAL ITEMS " . $totalItems;
     // echo "\n\SCORE  " . $yourScore;
     // echo "\n\GRADE  " . $grade;

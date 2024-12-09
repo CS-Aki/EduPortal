@@ -17,8 +17,22 @@ $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["i
 $temp = $stdController->getTotalItems($postId);                                             
 $numberOfItems = $temp[0]["totalItems"];
 $score = 0;
-$totalPoints = 0;             
+$totalPoints = 0;            
+
+
+$time = $quizDetails[0]["deadline_time"];
+$dateTime = DateTime::createFromFormat('H:i:s', $time);
+$formattedTime = $dateTime->format('h:i A');
+
+// $tempDate = $quizDetails[0]["deadline_date"] . " " . $quizDetails[0]["deadline_time"];
+
+
+// $date = new DateTime($tempDate);
+// $formattedDeadline = $date->format('F d, Y');
+// $formattedDeadline.substr(0, 3);
+
 // echo var_dump($quizDetails); 
+
 // $result = "";
 // Viewing the quiz result
 if(isset($_GET["attempt"])){

@@ -211,7 +211,9 @@ if(isset($_SESSION["user_category"])){
     </div>
     </div>
     <br><br><br>
-    <br><br><br>
+    
+    <?php require('inc/footer.php'); ?>
+
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/view-class.js"></script>
 

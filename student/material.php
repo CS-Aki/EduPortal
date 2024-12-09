@@ -315,6 +315,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                 
                                             <?php  
                                                 // echo $yourScore[1];
+                                                // echo count($quizStatus);
+                                                $j = 0;
                                                 if (count($yourScore) > 0) {
                                                     // echo $_SESSION["attempt"];
                                                     foreach ($yourScore as $attempt => $score) { 
@@ -335,8 +337,14 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                                 </span>
                                                             </td>
                                                             <td><?php echo ceil($grade) . "%"; ?></td>
-                                                            <td>
-                                                                <span class="badge rounded-pill text-bg-success">Finished</span>
+                                                            <td><?php 
+                                                                 if($quizStatus[$j]["status"] == "On Time"){
+                                                                    echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
+                                                                 }else{
+                                                                    echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
+                                                                 }
+                                                                 $j++;
+                                                                ?>
                                                             </td>
                                                             <td>
                                                                 <a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $attempt; ?>' class="green2">View</a>

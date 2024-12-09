@@ -52,6 +52,7 @@ if(isset($_SESSION["user_category"])){
     </div>
     
     
+    <?php require('inc/footer.php'); ?>
 
     <script src="scripts/calendar.js">
     </script>

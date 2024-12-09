@@ -102,7 +102,8 @@ if(isset($_GET["class"])){
         </div>
     </div>
 
-    
+    <?php require('inc/footer.php'); ?>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-menu');

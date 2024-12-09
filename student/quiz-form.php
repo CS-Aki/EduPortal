@@ -125,12 +125,17 @@ if (session_id() === "") session_start();
                                         <p class="fw-semibold green2 fs-5 lh-sm">
                                             <?php echo "ATTEMPT : " . $_GET["attempt"]; ?>
                                         </p>
+                                        <p class="fw-semibold red fs-8 lh-sm">Deadline: 
+                                            <?php echo $quizDetails[0]["deadline_date"] . " - ". $formattedTime; ?>
+                                        </p>
                                     </div>
+
                                     <div class="col-lg-2 ms-auto">
-                                            <p class="fw-semibold green2 fs-5 lh-sm">SCORE: 
-                                                <?php echo"? / " . $numberOfItems; ?>
-                                            </p>
+                                        <p class="fw-semibold green2 fs-5 lh-sm">SCORE: 
+                                            <?php echo"? / " . $numberOfItems; ?>
+                                        </p>
                                     </div>
+
                                 </div>
                                 <!-- <input type="text" id="quiz-title" placeholder="Quiz Title" readonly><br><br> -->
                                 <?php
@@ -215,7 +220,11 @@ if (session_id() === "") session_start();
 
     <div id="postIdValue" hidden><?php echo $postDetails[0]["post_id"]; ?></div>
     <div id="classCodeValue" hidden><?php echo $postDetails[0]["class_code"]; ?></div>
+    <div id="date" hidden><?php echo $quizDetails[0]["deadline_date"]; ?></div>
+    <div id="time" hidden><?php echo $quizDetails[0]["deadline_time"]; ?></div>
+
     <!-- <div id="totalItems"><?php echo $j; ?>SASASASA</div> -->
+    <?php require('inc/footer.php'); ?>
 
     <script src="scripts/submit-quiz.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

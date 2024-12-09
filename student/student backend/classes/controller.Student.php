@@ -208,8 +208,8 @@ class StudentController extends ClassRm{
         return $this->getTotalItemsInDb($postId);
     }
 
-    public function insertGrade($userId, $postId, $classCode, $contentType, $grade){
-        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade);
+    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status){
+        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status);
         if($result == false){
             echo "ERROR INSERTING GRADE";
         }
@@ -220,6 +220,11 @@ class StudentController extends ClassRm{
         // if($result == null){
         //     // echo "ERROR FETCHING ANSWERED QUIZ";
         // }
+        return $result;
+    }
+
+    public function getQuizStatus($postId, $classCode, $userId){
+        $result = $this->getQuizStatusFromDb($postId, $classCode, $userId);
         return $result;
     }
 }
