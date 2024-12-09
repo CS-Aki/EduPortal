@@ -70,6 +70,7 @@ if(isset($_SESSION["user_category"])){
                                 // echo var_dump($activity);
                                 foreach ($activity as $index => $act) {
                                     if ($act['content_type'] === 'Activity') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
                                         $year = substr($act["month"], 0, 4);
                                         $month = $months[intval(substr($act["month"], 5, 2)) - 1];
                                         $day = substr($act["month"], 8, 2);
@@ -106,7 +107,7 @@ if(isset($_SESSION["user_category"])){
                                                                     </div>
                                                                     <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                         <div class='mt-3'>
-                                                                        <?php if($j < count($submissions) && $act["post_id"] == $submissions[$j]["post_id"]){ 
+                                                                        <?php if($submissions != null){ if($j < count($submissions) && $act["post_id"] == $submissions[$j]["post_id"]){ 
                                                                                 $date = new DateTime($submissions[$j]["created"]);
                                                                                 $formattedDate = $date->format('F d, Y');
                                                                         ?>
@@ -114,7 +115,8 @@ if(isset($_SESSION["user_category"])){
                                                                         <i class='bi bi-check-circle green2 fs-1'></i>
                                                                         <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
                                                                         <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
-                                                                        <?php } else {?>
+                                                                        <?php } 
+                                                                        }else {?>
                                                                         <i class="bi bi-three-dots green2 fs-1"></i>
                                                                         <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
                                                                         <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>

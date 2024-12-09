@@ -27,7 +27,7 @@ $_SESSION["name"] = $name;
 if (session_id() === "") session_start();
 
 require_once("student backend/get-profile.php");
-
+// echo $_SESSION["access_token"];
 // if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 //     $url = "https";
 //     } else {

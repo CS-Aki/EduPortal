@@ -36,6 +36,7 @@ if (isset($_GET["code"])) {
     unset($_SESSION["storedFile"]);
 }
 
+// echo var_dump($_SESSION["access_token"]);
 
 // echo $_SESSION['access_token'];
 

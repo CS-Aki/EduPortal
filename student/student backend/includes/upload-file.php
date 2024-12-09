@@ -98,11 +98,11 @@ if(isset($_POST["classCode"])){
 }
 // Create Google Drive service
 $service = new Google_Service_Drive($client);
-echo "RANDOM HERE";
+// echo "RANDOM HERE";
 // echo $_SESSION["postId"]["post_id"] . "\n\n\n\n";
-echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
+// echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
 
-echo $_SESSION["postId"];
+// echo $_SESSION["postId"];
 
 if ($_SESSION['access_token']) {
     $_SESSION["tmp"] = "<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>";

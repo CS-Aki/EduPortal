@@ -150,6 +150,7 @@ if(isset($_SESSION["user_category"])){
                                         // echo var_dump($activity);
                                         for($i = 0 ; $i < count($activity); $i++){
                                             if($activity[$i]["content_type"] == "Activity"){
+                                                $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
                                                 $year = $activity[$i]["month"][0] . "" . $activity[$i]["month"][1] . $activity[$i]["month"][2] . "" . $activity[$i]["month"][3];
                                                 $month = $months[$activity[0]["month"][5] . "" . $activity[0]["month"][6] - 1];
                                                 $day = $activity[$i]["month"][8] . "" . $activity[$i]["month"][9];
@@ -211,7 +212,7 @@ if(isset($_SESSION["user_category"])){
     </div>
     </div>
     <br><br><br>
-    
+
     <?php require('inc/footer.php'); ?>
 
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>

@@ -132,13 +132,6 @@ $(document).ready(function() {
 
         $(".form-message").empty();
 
-        Swal.fire({
-            title: 'Uploading...',
-            text: 'Please wait while we upload your file.',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
         // console.log("clicked");
         // if($("#token").val().length > 0){
         //     var hasToken = true;
@@ -177,6 +170,15 @@ $(document).ready(function() {
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
+            
+            Swal.fire({
+                title: 'Uploading...',
+                text: 'Please wait while we upload your file.',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
             $.ajax({
                 method: "POST",
                 url: "student backend/includes/save-file-session.php",
@@ -291,7 +293,12 @@ $(document).ready(function() {
 
 
         }else{
-            console.log("uploading iwthout file");
+            Swal.fire({
+                title: 'No File Selected',
+                text: 'Please choose a file before proceeding.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
             
         }
     });

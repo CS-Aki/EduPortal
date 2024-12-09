@@ -227,6 +227,10 @@ class StudentController extends ClassRm{
         $result = $this->getQuizStatusFromDb($postId, $classCode, $userId);
         return $result;
     }
+
+    public function removeFiles($files){
+        $this->removeFilesFromDb($files);
+    }
 }
 
 ?>

@@ -464,9 +464,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                     <div id="fileContainer">
                                                         <?php if($submissions != null){ for($i = 0; $i < count($submissions); $i++){?>
                                                             <?php 
-                                                            echo "<div class='fileCont'>
+                                                        echo "<div class='fileCont'>
                                                                 <a href='https://drive.google.com/file/d/{$submissions[$i]['google_drive_file_id']}/view' target='_blank'>
-                                                                    <div id='{$submissions[$i]['file_id']}' hidden></div>
+                                                                    <div class='file-id' hidden>{$submissions[$i]['google_drive_file_id']}</div>
                                                                     <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
                                                                         <div class='d-flex justify-content-start'>
                                                                             <div class='me-2 ms-2'>
@@ -484,30 +484,50 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                         <?php } } ?>
                                                    </div>
                                                    <div class="new-file"></div>
- 
-                                                    <a href="" id="uploadLink">
-                                                    <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
-                                                        <div class="d-flex justify-content-start align-items-center text-center">
-                                                            <div class="me-2">
-                                                                <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
-                                                            </div>
-                                                            <div>
-                                                                <span class="green2 fw-bold mb-0">Add or create</span>
-                                                            </div>  
-                                                        </div> 
-                                                    </div>
-                                                    </a>
                                                     <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
-
                                                 </div>
                                                 <div>
-                                                    <a href="#" id="formSubmit">
-                                                    <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
-                                                        <div class="d-flex justify-content-center align-items-center p-2">
-                                                            <span class="white2 fw-semibold mb-0">Submit</span>
-                                                        </div> 
-                                                    </div>
+                                                    <?php if($submissions == null){ ?>
+                                                    <a href="" id="uploadLink">
+                                                        <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
+                                                            <div class="d-flex justify-content-start align-items-center text-center">
+                                                                <div class="me-2">
+                                                                    <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="green2 fw-bold mb-0">Add or create</span>
+                                                                </div>  
+                                                            </div> 
+                                                        </div>
                                                     </a>
+                                                    <a href="#" id="formSubmit">
+                                                        <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                            <div class="d-flex justify-content-center align-items-center p-2">
+                                                                <span class="submit-text white2 fw-semibold mb-0">Submit</span>
+                                                            </div> 
+                                                        </div>
+                                                    </a>
+                                                    <?php }else{ ?>
+                                                        <a href="" id="uploadLink" style="display: none;">
+                                                            <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
+                                                                <div class="d-flex justify-content-start align-items-center text-center">
+                                                                    <div class="me-2">
+                                                                        <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="green2 fw-bold mb-0">Add or create</span>
+                                                                    </div>  
+                                                                </div> 
+                                                            </div>
+                                                        </a>
+                                                        <a href="#" id="unsubmitFile">
+                                                            <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                                <div class="d-flex justify-content-center align-items-center p-2">
+                                                                    <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
+                                                                </div> 
+                                                            </div>
+                                                        </a>
+                                                    <?php }?>
                                                 </div>
                                             </div>
                                         </form>
@@ -612,6 +632,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
     <script src="scripts/post.js"></script>
+    <script src="scripts/delete-file.js"></script>
+
     <?php require('inc/footer.php'); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -770,4 +770,23 @@ class ClassRm extends DbConnection
             return false;
         }
     }
+
+    protected function removeFilesFromDb($files){
+         $sql = "DELETE FROM files WHERE google_drive_file_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($files))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error removeFilesFromDb: " . $e;
+            return false;
+        }
+    }
 }
