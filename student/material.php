@@ -312,35 +312,61 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
-                                            <?php  if(count($yourScore) > 1){
-                                                    for($i = 0; $i < count($yourScore); $i++){ 
-                                                    $grade = ($totalCorrectAnsCount[$i + 1] / $totalItems) * 100;
+                                                
+                                            <?php  
+                                                // echo $yourScore[1];
+                                                if (count($yourScore) > 0) {
+                                                    // echo $_SESSION["attempt"];
+                                                    foreach ($yourScore as $attempt => $score) { 
+                                                        // Ensure $totalCorrectAnsCount and $totalItems are defined
+                                                        $correctCount = isset($totalCorrectAnsCount[$attempt]) ? $totalCorrectAnsCount[$attempt] : 0;
+                                                        $grade = ($totalItems > 0) ? ($correctCount / $totalItems) * 100 : 0;
+
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $attempt; ?></td>
+                                                            <td><?php echo $correctCount; ?> / <?php echo $totalItems; ?></td>
+                                                            <td>
+                                                                Your Points: <?php echo $score; ?> <br> 
+                                                                Total Points: <?php echo $totalScore; ?> <br> 
+                                                                Result: 
+                                                                <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
+                                                                    <?php echo ($grade >= 70) ? "Passed" : "Failed"; ?>
+                                                                </span>
+                                                            </td>
+                                                            <td><?php echo ceil($grade) . "%"; ?></td>
+                                                            <td>
+                                                                <span class="badge rounded-pill text-bg-success">Finished</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $attempt; ?>' class="green2">View</a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php 
+                                                    }
+                                                } 
+                                                
+                                                if(isset($_SESSION[$_GET["class"]])){ ?>
+                                                        <!-- <td><?php echo $_SESSION["attempt"]; ?></td>
+                                                            <td> ? / <?php echo $totalItems; ?></td>
+                                                            <td>
+                                                                Your Score: ? <br> 
+                                                                Total Points: <?php echo $totalScore; ?> <br> 
+                                                                Result: 
+                                                                <span class="badge rounded-pill text-bg-secondary">
+                                                                    Not Yet Submitted
+                                                                </span>
+                                                            </td>
+                                                            <td>?</td>
+                                                            <td>
+                                                                <span class="badge rounded-pill text-bg-secondary">Answering</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION["attempt"]; ?>' class="green2">View</a>
+                                                            </td>
+                                                        </tr> -->
+                                        <?php    }
                                                 ?>
-                                                <tr>
-                                                    <td><?php echo $i + 1; ?></td>
-                                                    <td><?php echo $totalCorrectAnsCount[$i + 1]; ?> / <?php echo $totalItems; ?></td>
-                                                    <td>Your Score: <?php echo $yourScore[$i + 1]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
-                                                    <td><?php echo ceil($grade) . "%"; ?></td>
-                                                    <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
-                                                    <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo $i + 1; ?>' class="green2">View</a></td>
-                                                </tr>
-                                            <?php 
-                                                     }
-                                                 }else{?>
-                                                  <?php for($i = 0; $i < count($yourScore); $i++){ 
-                                                        $grade = ($totalCorrectAnsCount[$i + 1] / $totalItems) * 100;
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo $i + 1; ?></td>
-                                                        <td><?php echo $totalCorrectAnsCount[$i + 1]; ?> / <?php echo $totalItems; ?></td>
-                                                        <td>Your Points: <?php echo $yourScore[$i + 1]; ?> <br> Total Points: <?php echo $totalScore; ?> <br> Result: <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ?  "success": "danger"; ?>"><?php echo ($grade >= 70) ?  "Passed": "Failed"; ?></span></td>
-                                                        <td><?php echo ceil($grade) . "%"; ?></td>
-                                                        <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
-                                                        <td><a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo $i + 1; ?>' class="green2">View</a></td>
-                                                    </tr>
-                                                 <?php } 
-                                                }?>
                                               <!--<tr>
                                                 <td>2</td>
                                                 <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>

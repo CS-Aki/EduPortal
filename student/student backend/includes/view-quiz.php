@@ -14,8 +14,11 @@ $postDetails = $stdController->getPostDetails($postId, $classCode);
 $quizDetails = $stdController->getQuizDetails($postId, $classCode);
 $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); // Checks answer table if student already done with the quiz, 
                                                                                      //will add checker for attempt no. and add attempt number col on answer table
+$temp = $stdController->getTotalItems($postId);                                             
+$numberOfItems = $temp[0]["totalItems"];
 $score = 0;
-$totalPoints = 0;              
+$totalPoints = 0;             
+// echo var_dump($quizDetails); 
 // $result = "";
 // Viewing the quiz result
 if(isset($_GET["attempt"])){
@@ -33,10 +36,13 @@ if(isset($_GET["attempt"])){
     }
 }
 
-
-
 // echo var_dump($result);
-// echo count($result);
+if($submittedQuiz != null){
+    if($result != null) $numberOfItems = count($submittedQuiz) / ($_GET["attempt"]);
+    else $numberOfItems = count($submittedQuiz) / ($_GET["attempt"] - 1);
+}
+
+
 
 // echo var_dump($submittedQuiz);  
 // if($submittedQuiz != null){

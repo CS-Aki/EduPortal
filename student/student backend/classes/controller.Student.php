@@ -158,8 +158,8 @@ class StudentController extends ClassRm{
         return $details;
     }
 
-    public function submitAnswers($userId, $postId, $classCode, $status, $answer, $questionId){
-        $result = $this->submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId);
+    public function submitAnswers($userId, $postId, $classCode, $status, $answer, $questionId, $attempt){
+        $result = $this->submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId, $attempt);
         if($result == false){
             echo "Error uploading answers to db";
             exit();
@@ -202,6 +202,25 @@ class StudentController extends ClassRm{
             // echo "THIS IS NULL";
          }
          return $result;
+    }
+
+    public function getTotalItems($postId){
+        return $this->getTotalItemsInDb($postId);
+    }
+
+    public function insertGrade($userId, $postId, $classCode, $contentType, $grade){
+        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade);
+        if($result == false){
+            echo "ERROR INSERTING GRADE";
+        }
+    }
+
+    public function getAnsweredQuizzes($classCode, $userId){
+        $result = $this->getAnsweredQuizInDb($classCode, $userId);
+        // if($result == null){
+        //     // echo "ERROR FETCHING ANSWERED QUIZ";
+        // }
+        return $result;
     }
 }
 

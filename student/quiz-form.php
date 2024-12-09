@@ -82,6 +82,7 @@ if (session_id() === "") session_start();
 
 <body>
     <?php if (isset($_GET["class"])) {
+        // $_SESSION[$_GET["class"]] = $_GET["attempt"];
         include("student backend/includes/view-quiz.php");
     } ?>
     <?php require('inc/header.php'); ?>
@@ -115,14 +116,29 @@ if (session_id() === "") session_start();
                     <div class="container mt-4 px-lg-5 px-sm-2">
                         <form id="quiz-answer-form">
                             <div class="form-container">
-                                <h1 class="h-font green1 fs-1 me-2 mb-3" id="material-title"><?php echo $quizDetails[0]["title"]; ?></h1>
+                                <!-- <h1 class="h-font green1 fs-1 me-2 mb-3" id="material-title"><?php echo $quizDetails[0]["title"]; ?></h1> -->
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="col-lg-9">
+                                        <h1 class="h-font green1 fs-1 me-2" id="material-title">
+                                            <?php echo $quizDetails[0]["title"]; ?>
+                                        </h1>
+                                        <p class="fw-semibold green2 fs-5 lh-sm">
+                                            <?php echo "ATTEMPT : " . $_GET["attempt"]; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-2 ms-auto">
+                                            <p class="fw-semibold green2 fs-5 lh-sm">SCORE: 
+                                                <?php echo"? / " . $numberOfItems; ?>
+                                            </p>
+                                    </div>
+                                </div>
                                 <!-- <input type="text" id="quiz-title" placeholder="Quiz Title" readonly><br><br> -->
                                 <?php
-
                                 $questionTitle = "";
                                 $questionCount = 1;
                                 $choiceCount = 1; // Pwedeng alisin 'to if pangit tignan, paki-alis nalang din nung mga variable na choiceCount below
-
+                                $j = 0;
+                                // echo count($result);
                                 for ($i = 0; $i < count($quizDetails); $i++) {
                                     if ($questionTitle == $quizDetails[$i]["question_text"]) {
                                         // For multiple-choice or true/false questions, add other choices to the existing question
@@ -138,6 +154,7 @@ if (session_id() === "") session_start();
                                     } else {
                                         // Close the previous question block if it's not the first question
                                         if ($i > 0) {
+                                                                                $j++;
                                             echo "</div>"; // Closing the row
                                             echo "</div>"; // Closing the question-container
                                         }
@@ -178,9 +195,11 @@ if (session_id() === "") session_start();
                                 }
 
                                 if (count($quizDetails) > 0) {
+                                    $j++;
                                     echo "</div>"; // Closing the row
                                     echo "</div>"; // Closing the question-container
                                 }
+
                                 ?>
                                 <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
                                     <button type="submit" class="btn green px-4 py-2">Submit Quiz</button>
@@ -196,6 +215,7 @@ if (session_id() === "") session_start();
 
     <div id="postIdValue" hidden><?php echo $postDetails[0]["post_id"]; ?></div>
     <div id="classCodeValue" hidden><?php echo $postDetails[0]["class_code"]; ?></div>
+    <!-- <div id="totalItems"><?php echo $j; ?>SASASASA</div> -->
 
     <script src="scripts/submit-quiz.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

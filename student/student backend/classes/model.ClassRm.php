@@ -506,11 +506,11 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchSubmissions($classCode){
-        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? ";
+        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($classCode))) {
+            if ($stmt->execute(array($classCode, "4"))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -551,12 +551,12 @@ class ClassRm extends DbConnection
         return null;
     }
 
-    protected function submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId){
-        $sql = "INSERT INTO `answers`(`user_id`, `post_id`, `class_code`, `status`, `answer_text`, `question_id`) VALUES (?, ?, ?, ?, ?, ?)";
+    protected function submitAnswersToQuiz($userId, $postId, $classCode, $status, $answer, $questionId, $attempt){
+        $sql = "INSERT INTO `answers`(`user_id`, `post_id`, `class_code`, `status`, `answer_text`, `question_id`, `attempt`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($userId, $postId, $classCode, $status, $answer, $questionId))) {
+            if ($stmt->execute(array($userId, $postId, $classCode, $status, $answer, $questionId, $attempt))) {
                 if ($stmt->rowCount() == 0) {
                     return false;
                 }
@@ -577,6 +577,28 @@ class ClassRm extends DbConnection
 
         try {
             if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
+
+    protected function getAnsweredQuizInDb($classCode, $userId){
+        // SELECT DISTINCT answers.post_id, answers.created FROM `answers` LEFT JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = 15 AND quiz.class_code = "3fCPK434" GROUP BY answers.post_id ORDER BY answers.post_id
+        $sql = "SELECT DISTINCT answers.post_id, answers.created FROM `answers` INNER JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = ? AND MD5(quiz.class_code) = ? GROUP BY answers.post_id ORDER BY answers.post_id";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $classCode))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -634,7 +656,7 @@ class ClassRm extends DbConnection
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error fetchQuizDetails: " . $e;
+            echo "Error getQuiz: " . $e;
             return null;
         }
     }
@@ -655,7 +677,7 @@ class ClassRm extends DbConnection
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error fetchQuizDetails: " . $e;
+            echo "Error getQuizAttemptDb: " . $e;
             return null;
         }
     }
@@ -681,8 +703,51 @@ class ClassRm extends DbConnection
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error fetchQuizDetails: " . $e;
+            echo "Error getQuizFormatInDb: " . $e;
             return null;
+        }
+    }
+
+    protected function getTotalItemsInDb($postId){
+        $sql = "SELECT COUNT(post_id) as totalItems FROM `questions` WHERE MD5(post_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getTotalItemsInDb: " . $e;
+            return null;
+        }
+    }
+
+    protected function insertGradeInDb($userId, $postId, $classCode, $contentType, $grade){
+        // INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`) VALUES ()
+        $sql = "INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $postId, $classCode, $contentType, $grade))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+               
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error insertGradeInDb: " . $e;
+            return false;
         }
     }
 }

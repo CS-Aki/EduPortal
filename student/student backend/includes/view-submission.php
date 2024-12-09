@@ -4,18 +4,28 @@ require_once("../log and reg backend/classes/connection.php");
 require_once("student backend/classes/model.ClassRm.php");
 require_once("student backend/classes/controller.Lists.php");
 require_once("student backend/classes/controller.Student.php");
+if (session_id() === "") session_start();
 
 if(isset($_GET["class"])){
 
 $classCode = $_GET["class"];
+
 // $classCode = str_replace("Class Code: ", "", $_GET["class"]);
 $stdController = new StudentController();
 $details = $stdController->getClassDetails1($classCode);
-$submissions = $stdController->getSubmissions($classCode);
+$submissions = $stdController->getSubmissions($classCode);  // Checks Uploaded Files of Student (Activity)
 $post = $stdController->getClassDetails($details[0]["class_code"]);
 
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
+
+$answeredQuiz = $stdController->getAnsweredQuizzes($classCode, $_SESSION["id"]);
+// echo var_dump($answeredQuiz);
+
+// $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); 
+
+// echo var_dump($quiz);
+
 
 if(isset($post[0]["content_type"])){
     $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");

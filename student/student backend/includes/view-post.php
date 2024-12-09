@@ -42,10 +42,11 @@ if(isset($_GET["post"])){
         $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
         $totalScore = 0;
         $totalCorrectAnsCount = array();
-
+        $j = 0;
         // echo var_dump($submittedQuiz);
         if($submittedQuiz != null){
             for ($i = 0; $i < count($submittedQuiz); $i++) {
+                // echo $currentAttempt;
                 if ($submittedQuiz[$i]["attempt"] != $currentAttempt) {
                     $totalScore = $submittedQuiz[$i]["score"];
                     $currentAttempt = $submittedQuiz[$i]["attempt"];
@@ -62,7 +63,7 @@ if(isset($_GET["post"])){
                     }
                 } else {
                     $totalScore += $submittedQuiz[$i]["score"];
-        
+                    $j++;
                     if (!isset($totalCorrectAnsCount[$currentAttempt])) {
                         $totalCorrectAnsCount[$currentAttempt] = 0;
                     }

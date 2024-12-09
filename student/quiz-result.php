@@ -126,8 +126,12 @@ if (session_id() === "") session_start();
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div class="col-lg-9">
                                         <h1 class="h-font green1 fs-1 me-2" id="material-title">
-                                            <?php echo $quizDetails[0]["title"]; ?>
+                                            <?php echo $quizDetails[0]["title"];                    
+                                            ?>
                                         </h1>
+                                        <p class="fw-semibold green2 fs-5 lh-sm">
+                                            <?php echo "ATTEMPT : " . $_GET["attempt"]; ?>
+                                        </p>
                                     </div>
                                     <div class="col-lg-2 ms-auto">
                                             <p class="fw-semibold green2 fs-5 lh-sm">SCORE: 
@@ -144,7 +148,8 @@ if (session_id() === "") session_start();
                              $correct = 0;
                              
                              // echo count($quizDetails);
-                            // echo count($result);
+                            // echo var_dump($result);
+                            // echo "<br>" . $result[2]["answer_text"];
                             // echo "<br>" .  $numberOfCorrect;
                              for ($i = 0; $i < count($quizDetails); $i++) {
                                  if ($questionTitle == $quizDetails[$i]["question_text"]) {
@@ -203,7 +208,7 @@ if (session_id() === "") session_start();
                                              ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i]['ans_key']}</label></div>"
                                              : "</div>";
                                              $correct = 1;
-                                        //  $j++;
+                                         $j++;
                                      } else {
                                          // New multiple-choice or true/false question
                                          $questionTitle = $quizDetails[$i]["question_text"];
@@ -251,7 +256,7 @@ if (session_id() === "") session_start();
     <div id="postIdValue" hidden><?php echo $postDetails[0]["post_id"]; ?></div>
     <div id="classCodeValue" hidden><?php echo $postDetails[0]["class_code"]; ?></div>
 
-    <script src="scripts/submit-quiz.js"></script>
+    <!-- <script src="scripts/submit-quiz.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
