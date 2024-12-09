@@ -21,6 +21,25 @@ $(document).ready(function () {
             cancelButtonText: "No, I want to keep my files",
         }).then((result) => {
             if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait while we delete the file.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Swal.fire({
+                //     title: 'Deleting...',
+                //     text: 'Please wait while we delete the file.',
+                //     allowOutsideClick: false,
+                //     onBeforeOpen: () => {
+                //         Swal.showLoading()
+                //     }
+                // });
+
                 $.ajax({
                     url: 'student backend/includes/delete-file.php',  // PHP script to handle form submission
                     type: 'POST',
@@ -28,10 +47,16 @@ $(document).ready(function () {
                         files : files
                     }, 
                     success: function(response) {
+
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'Your file has been successfully deleted.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+
                         console.log(response);
-                        $("#fileContainer").empty();
-                        $("#unsubmitFile").empty();
-                        $("#unsubmitFile").remove();
+ 
                     },
                     error: function(xhr, status, error) {
                         Swal.close();
@@ -57,6 +82,8 @@ $(document).ready(function () {
 
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 // User clicked "No"
+                console.table(files);
+
                 Swal.fire(
                     'Cancelled',
                     'Files Retained!',

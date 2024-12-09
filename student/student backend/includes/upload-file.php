@@ -27,7 +27,7 @@ if(isset($_GET["code"])){
 session_start();
 
 // If we have an access token, proceed with file handling or whatever your logic is
-echo var_dump($_SESSION['access_token']);
+// echo var_dump($_SESSION['access_token']);
 
 // $client = new Google_Client();
 
@@ -59,9 +59,42 @@ echo var_dump($_SESSION['access_token']);
 //     echo "Error: " . $e->getMessage();
 // }
 
+$jsonFile = '../../../log and reg backend/config/credentials.json';
+
+
+try {
+    // Load the JSON file
+    if (!file_exists($jsonFile)) {
+        throw new Exception("File not found: $jsonFile");
+    }
+    
+    $jsonData = file_get_contents($jsonFile);
+
+    // Decode the JSON file into an associative array
+    $data = json_decode($jsonData, true);
+
+    // Check for errors during decoding
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Error decoding JSON: " . json_last_error_msg());
+    }
+    // Check if the 'client_id' key exists
+    if (isset($data['web']['client_id'])) {
+        echo "client_id found: " . $data['web']['client_id'] . PHP_EOL;
+    } elseif (isset($data['client_id'])) {
+        echo "client_id found: " . $data['client_id'] . PHP_EOL;
+    } else {
+        echo "client_id not found in the JSON file." . PHP_EOL;
+        var_dump($data);
+    }
+} catch (Exception $e) {
+    // Handle any exceptions
+    echo "Error: " . $e->getMessage() . PHP_EOL;
+}
+
 
 try {
     $client = new Google_Client();
+    $client->setAuthConfig('../../../log and reg backend/config/credentials.json');
     // Set the access token
     $client->setAccessToken($_SESSION['access_token']);
     $token = $client->getAccessToken();

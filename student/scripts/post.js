@@ -3,54 +3,76 @@
 $(document).ready(function() {
     // console.log(io);
     console.log("test");
-
-    // console.log("This is the ", $("#token").val().length);
-    // // let hide = true;
-    //   const socket = io("https://eduportal-wgrc.onrender.com", {
-    //     transports: ["websocket"] // Ensure WebSocket transport
-    //   });
     
-    //   socket.on('connect_error', (err) => {
-    //       console.error("Connection error:", err);
-    //   });
+    function createUploadButton() {
+        return `
+            <a href="" id="uploadLink">
+                <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
+                    <div class="d-flex justify-content-start align-items-center text-center">
+                        <div class="me-2">
+                            <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
+                        </div>
+                        <div>
+                            <span class="green2 fw-bold mb-0">Add or create</span>
+                        </div>  
+                    </div> 
+                </div>
+            </a>
+        `;
+    }
     
-    //   socket.on('connect', () => {
-    //     console.log('Connected to Socket.IO server');
-    //   });
+    function createSubmitButton() {
+        return `
+            <a href="#" id="formSubmit">
+                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                    <div class="d-flex justify-content-center align-items-center p-2">
+                        <span class="submit-text white2 fw-semibold mb-0">Submit</span>
+                    </div> 
+                </div>
+            </a>
+        `;
+    }
+    
+    function createFileElement(data) {
+        return `
+            <div id="${data.file_id}">
+                <a href="https://drive.google.com/file/d/${data.google_drive_file_id}/view" target='_blank'>
+                    <div class="file-id" hidden>${data.google_drive_file_id}</div>
+                    <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2">
+                        <div class="d-flex justify-content-start">
+                            <div class="me-2 ms-2">
+                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                            </div>
+                            <div>
+                                <span class="green2 fw-bold mb-0">${data.file_name}</span>
+                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${data.file_size}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        `;
+    }
 
-    // var selectedValue = "material";
+    $(document).on('click', '#unsubmitFile', function () {
+        console.log("Unsubmit button clicked.");
+        console.log($(this).length + " is the length");
 
-    // $('#contentType').on('change', function() {
-    //     selectedValue = $(this).val();
-    //     console.log(selectedValue);
-    //     title = $('#title').val();
-    //     desc = $('#description').val();
-    //     date = $('#deadlineDate').val();
-    //     time = $('timeContainer').val();
-       
-    //     if(selectedValue == "material"){
-    //         $(".sub-title").text("Create Material");
-    //         $("#dateContainer").find('#deadlineDate').prop('required', false);
-    //         $("#timeContainer").find('#deadlineTime').prop('required', false);
-    //         $("#dateContainer").hide();
-    //         $("#timeContainer").hide();
-    //         $("#uploadContainer").show();
-    //     }else if(selectedValue == "quiz"){
-    //         $(".sub-title").text("Create Quiz");
-    //         $("#dateContainer").removeAttr("hidden");
-    //         $("#timeContainer").removeAttr("hidden");
-    //         $("#dateContainer").show();
-    //         $("#timeContainer").show();
-    //         $("#uploadContainer").hide();
-    //     }else{
-    //         $(".sub-title").text("Create Activity");
-    //         $("#dateContainer").removeAttr("hidden");
-    //         $("#timeContainer").removeAttr("hidden");
-    //         $("#dateContainer").show();
-    //         $("#timeContainer").show();
-    //         $("#uploadContainer").show();
-    //     }
+        if($(this).length == 1) return;
+        // $("#fileContainer").empty(); // Clear file list
+        // $("#add-container").empty(); // Clear buttons
+
+        // // Append "Add or Create" and "Submit" buttons
+        $("#add-container").append(createUploadButton());
+        $("#add-container").append(createSubmitButton());
+        // Perform unsubmit action here
+    });
+    
+    // $(document).on('click', '#formSubmit', function () {
+    //     console.log("Submit button clicked.");
+    //     // Perform submit action here
     // });
+
 
    $(document).off('click', '#uploadLink').on('click', '#uploadLink', function (event) {
         event.preventDefault(); // Prevent default link behavior
@@ -59,10 +81,6 @@ $(document).ready(function() {
         // Safely trigger file input click without causing a recursive loop
         $("#fileInput").trigger('click');
     });
-
-    // window.onerror = function (message, source, lineno, colno, error) {
-    //     console.error("Global Error Caught:", message, "at", source, "line:", lineno, "column:", colno);
-    // };
 
     $(document).on('change', '#fileInput', function (event) {
         $(".new-file").empty();
@@ -126,7 +144,9 @@ $(document).ready(function() {
           }
    });
 
-    $("#formSubmit").click(function (event) {
+   let files = [];
+
+   $(document).on('click', '#formSubmit', function () {
         console.log("clicked");
         event.preventDefault();
 
@@ -178,7 +198,7 @@ $(document).ready(function() {
                     Swal.showLoading();
                 }
             });
-            
+
             $.ajax({
                 method: "POST",
                 url: "student backend/includes/save-file-session.php",
@@ -222,38 +242,60 @@ $(document).ready(function() {
                                         text: 'File uploaded successfully!',
                                         icon: 'success'
                                     });
+                                    $("#fileContainer").empty();
 
-                                    $("#fileContainer").empty(); 
+                                    // $("#fileContainer").empty(); 
                                     console.log(response); 
                                     $(".fileCont").empty();
                                     const data = response; 
-                                    $(".new-file").empty();
+                                    // $(".new-file").empty();
+                                    // createFileElement(data);
+                                    data.forEach(file => {
+                                        $("#fileContainer").append(createFileElement(file));
+                                    });
 
-                                    for(let i = 0; i < data.length; i++){
-                                        console.log(data[i]["file_name"]);
-                                        $("#fileContainer").append(`
-                                            <div id='${data[i]["file_id"]}'></div>
-                                            <a href="https://drive.google.com/file/d/${data[i]["google_drive_file_id"]}/view" target='_blank'>
-                                                <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
-                                                    <div class='d-flex justify-content-start'>
-                                                        <div class='me-2 ms-2'>
-                                                            <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
-                                                        </div>
-                                                        <div>
-                                                            <span class='green2 fw-bold mb-0'>${data[i]["file_name"]}</span>
-                                                            <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>${data[i]["file_size"]}</span>
-                                                        </div>
+                                    // for(let i = 0; i < data.length; i++){
+                                    //     console.log(data[i]["file_name"]);
+                                    //     $("#fileContainer").append(`
+                                    //         <div id='${data[i]["file_id"]}'></div>
+                                    //         <a href="https://drive.google.com/file/d/${data[i]["google_drive_file_id"]}/view" target='_blank'>
+                                    //              <div class='file-id' hidden>${data[i]["google_drive_file_id"]}</div>
+                                    //             <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
+                                    //                 <div class='d-flex justify-content-start'>
+                                    //                     <div class='me-2 ms-2'>
+                                    //                         <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
+                                    //                     </div>
+                                    //                     <div>
+                                    //                         <span class='green2 fw-bold mb-0'>${data[i]["file_name"]}</span>
+                                    //                         <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>${data[i]["file_size"]}</span>
+                                    //                     </div>
+                                    //                 </div>
+                                    //             </div>
+                                    //         </a>
+                                    //     `);
+                                    
+                                    // }
+
+                                      $("#add-container").empty(); // Clear buttons
+
+                                        // Append "Unsubmit" button
+                                        $("#add-container").append(`
+                                            <a href="#" id="unsubmitFile">
+                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                    <div class="d-flex justify-content-center align-items-center p-2">
+                                                        <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
                                                     </div>
                                                 </div>
                                             </a>
                                         `);
-                                    }
 
+                                    
+                              
                                     // console.log( "Selected "+ selectedValue);
                                     // console.log("Title " + title);
                                             
                                     // socket.emit("serverRcvPost", data);
-                                    $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                                    // $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                                   
                                     // $('#title').val("");
                                     // $('#description').val("");
@@ -301,6 +343,99 @@ $(document).ready(function() {
             });
             
         }
+    });
+
+    console.log("File id size " + files.length);
+    $(document).on('click', '#unsubmitFile', function (e) {
+        $('.file-id').each(function () {
+            // Get the text content of the element and push it into the array
+            files.push($(this).text().trim());
+        });
+        console.log("unsubmt");
+        console.log($(this).find(".file-id").text());
+        Swal.fire({
+            title: "Unsubmit Files?",
+            text: "Files will be deleted upon continuing",
+            icon: "warning", // Use "icon" instead of "type"
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, continue",
+            cancelButtonText: "No, I want to keep my files",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait while we delete the file.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Swal.fire({
+                //     title: 'Deleting...',
+                //     text: 'Please wait while we delete the file.',
+                //     allowOutsideClick: false,
+                //     onBeforeOpen: () => {
+                //         Swal.showLoading()
+                //     }
+                // });
+
+                $.ajax({
+                    url: 'student backend/includes/delete-file.php',  // PHP script to handle form submission
+                    type: 'POST',
+                    data: {
+                        files : files
+                    }, 
+                    success: function(response) {
+
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'Your file has been successfully deleted.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        $("#fileContainer").empty();
+                        $("#add-container").empty();
+                        $("#add-container").append(createUploadButton());
+                        $("#add-container").append(createSubmitButton());
+                        console.log(response);
+ 
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.close();
+                        console.log(error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'There was an error submitting the form.',
+                            icon: 'error'
+                        });
+                    }
+                });
+
+                // User clicked "Yes"
+                // Swal.fire(
+                //     'Continued!',
+                //     'You chose to continue.',
+                //     'success'
+                // );
+
+                // Place your jQuery code here that you want to execute on confirmation
+                // Example:
+                // $('#someElement').fadeOut();
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // User clicked "No"
+                console.table(files);
+
+                Swal.fire(
+                    'Cancelled',
+                    'Files Retained!',
+                    'info'
+                );
+            }
+        });
     });
 
     // $("#fileForm").submit(function (event) {

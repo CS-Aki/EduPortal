@@ -486,7 +486,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                    <div class="new-file"></div>
                                                     <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
                                                 </div>
-                                                <div>
+                                                <div id="add-container">
                                                     <?php if($submissions == null){ ?>
                                                     <a href="" id="uploadLink">
                                                         <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
@@ -508,18 +508,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                         </div>
                                                     </a>
                                                     <?php }else{ ?>
-                                                        <a href="" id="uploadLink" style="display: none;">
-                                                            <div class="container-fluid bg-white white-btn shadow-elevation-dark-1 rounded-3">
-                                                                <div class="d-flex justify-content-start align-items-center text-center">
-                                                                    <div class="me-2">
-                                                                        <i class="bi bi-plus green1 fs-2 p-0 m-0"></i>
-                                                                    </div>
-                                                                    <div>
-                                                                        <span class="green2 fw-bold mb-0">Add or create</span>
-                                                                    </div>  
-                                                                </div> 
-                                                            </div>
-                                                        </a>
+                                                    
                                                         <a href="#" id="unsubmitFile">
                                                             <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
                                                                 <div class="d-flex justify-content-center align-items-center p-2">
@@ -632,7 +621,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
     <script src="scripts/post.js"></script>
-    <script src="scripts/delete-file.js"></script>
+    <!-- <script src="scripts/delete-file.js"></script> -->
 
     <?php require('inc/footer.php'); ?>
 
