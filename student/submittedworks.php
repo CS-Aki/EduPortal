@@ -199,6 +199,7 @@ if(isset($_SESSION["user_category"])){
                                                                 </div>
                                                                 <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                     <div class='mt-3'>
+                                                                        <?php if($answeredQuiz != null) {?>
                                                                         <?php if($j < count($answeredQuiz) && $qz["post_id"] == $answeredQuiz[$j]["post_id"]){ 
                                                                                 $date = new DateTime($answeredQuiz[$j]["created"]);
                                                                                 $formattedDate = $date->format('F d, Y');
@@ -212,6 +213,11 @@ if(isset($_SESSION["user_category"])){
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
                                                                             <!-- <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $month ." ". $day .", " .$year; ?></p>    -->
                                                                         <?php } ?> 
+                                                                      <?php }else{ ?>
+                                                                            <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
+                                                                        <?php }?>
                                                                     </div>                                           
                                                                 </div>
                                                             </div>
@@ -235,11 +241,11 @@ if(isset($_SESSION["user_category"])){
 
     <br><br><br>
     <?php require('inc/footer.php'); ?>
+    <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
-
         // Loop through each link and add click event listener
         navLinks.forEach(link => {
             link.addEventListener('click', function() {

@@ -105,11 +105,11 @@ unset($_SESSION["displayQuiz"]);
                                                                         <div class='row px-2'>"; for($j = 0; $j < count($studentList); $j++){?>
                                                                             <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>&user=<?php echo md5($studentList[$j]['user_id']); ?>' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                                         <?php echo"<div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' width:'95%;'>
-                                                                                            <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'></span>
-                                                                                            <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6' >{$studentList[$j]["name"]}</p>
-                                                                                        </div>
-                                                                                    </a>"; };
-                                                                      echo"</div>
+                                                                                        <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'></span>
+                                                                                        <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6' >{$studentList[$j]["name"]}</p>
+                                                                                    </div>
+                                                                            </a>"; };
+                                                                    echo"</div>
                                                                     </div>
                                                                     
                                                                 </div>

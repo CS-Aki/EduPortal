@@ -13,7 +13,7 @@ $classCode = $_GET["class"];
 // $classCode = str_replace("Class Code: ", "", $_GET["class"]);
 $stdController = new StudentController();
 $details = $stdController->getClassDetails1($classCode);
-$submissions = $stdController->getSubmissions($classCode);  // Checks Uploaded Files of Student (Activity)
+$submissions = $stdController->getSubmissions($classCode, $_SESSION["id"]);  // Checks Uploaded Files of Student (Activity)
 $post = $stdController->getClassDetails($details[0]["class_code"]);
 
 

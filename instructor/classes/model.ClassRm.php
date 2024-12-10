@@ -266,7 +266,7 @@ class ClassRm extends DbConnection
     }
 
     protected function getActsSubInDb($classCode){
-        $sql = "SELECT created, user_id, google_drive_file_id, file_size, file_name, created FROM files WHERE MD5(class_code) = ? AND user_category = ?";
+        $sql = "SELECT created, user_id, google_drive_file_id, file_size, file_name, created, post_id, class_code FROM files WHERE MD5(class_code) = ? AND user_category = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {

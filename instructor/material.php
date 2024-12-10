@@ -146,10 +146,11 @@ if(isset($_SESSION["user_category"])){
                             <div class="row">
                                 <div class="col-lg-9 col-md-12 mb-md-2">
                                     <div class="col-lg-9 col-md-12 mb-md-2">
-                                        <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
-                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>  
+                                        <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
+                                        <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
+                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
                                         <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
-                                        <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineDateTime; ?></p>    
+                                        <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
                                     </div>
 
                                     <div class="mt-3" id="material-description">
@@ -185,8 +186,23 @@ if(isset($_SESSION["user_category"])){
                     
                                         <form action="" class="h-100">
                                             <div class="d-flex justify-content-between flex-column h-100">
-                                                <div>
-                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2"><?php echo $firstName; ?>'s work<br>
+                                                <div class="container">
+                                                    <div class="d-flex align-items-center mt-2 mb-2">
+                                                          <p class="fw-semibold green2 fs-4 lh-sm mb-0"><?php echo $firstName; ?>'s work</p>
+                                                        <div class="act-status ms-2">
+                                                            <?php 
+                                                                if($status == "Late"){
+                                                                    echo '<span class="submit-status badge rounded-pill text-bg-danger done-badge">Late';
+                                                                } 
+                                                                else if($status == "On Time"){
+                                                                    echo '<span class="submit-status badge rounded-pill text-bg-success done-badge">On Time';
+                                                                } 
+                                                                else {
+                                                                    echo '<span class="submit-status badge rounded-pill text-bg-danger done-badge">Missing';
+                                                                }           
+                                                            ?></span>
+                                                        </div>
+                                                    </div>
                                                     <?php if($submittedFiles != null){ 
                                                             foreach($submittedFiles as $file){
                                                     ?>
@@ -204,33 +220,55 @@ if(isset($_SESSION["user_category"])){
                                                                     </div>
                                                                 </a>
                                                     <?php    }
-                                                         }?>
+                                                         ?>
                                                 </div>
                                                 <div id="pointsContainer">
                                                     <div class="d-flex col-2 align-items-center">
                                                         <span style="font-size: large;" class="ms-2 form-label green2">Point: </span>
                                                         <div class="form-floating ms-2" style="flex: 1;">
-                                                            <input type="number" class="rounded-2 ps-2" id="points" value="1" min="1" max="<?php echo $actContent[0]["points"]; ?>" placeholder="Enter number" required>
+                                                            <input type="number" class="rounded-2 ps-2" id="points" value="<?php echo ($grades != null) ? $grades[0]["grade"] : 1; ?>" min="1" max="<?php echo $actContent[0]["points"]; ?>" placeholder="Enter number" required>
                                                         </div>
                                                         <span style="font-size: medium;" class="ms-3 form-label d-flex align-items-center green2">
                                                             Max: <span class="ms-1 green2" id="max-points"><?php echo $actContent[0]["points"]; ?></span>
                                                         </span>
                                                     </div>
                                                 </div>
-
-                                                <div>
-                                                    <a href="#">
+                                                <div id="grading-container">
+                                                <?php  if($grades != null){?>       
+                                                        <a href="#" id="edit-grade">
+                                                            <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                                <div class="d-flex justify-content-center align-items-center p-2">
+                                                                    <span class="white2 fw-semibold mb-0">Edit Grade</span>
+                                                                </div> 
+                                                            </div>
+                                                        </a>
+                                                    
+                                                <?php }else{?>
+                                                        <a href="#" id="grade-btn">
+                                                            <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                                <div class="d-flex justify-content-center align-items-center p-2">
+                                                                    <span class="white2 fw-semibold mb-0">Submit Grade</span>
+                                                                </div> 
+                                                            </div>
+                                                        </a>
+                                                <?php } ?>
+                                                </div>
+                                        </form>
+                                    <?php }else{    ?>  
+                                        <!-- DISPLAY IF STUDENT HAS NO SUBMISSIONS YET -->
+                                                    <br><br>
                                                     <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
                                                         <div class="d-flex justify-content-center align-items-center p-2">
-                                                            <span class="white2 fw-semibold mb-0">GRADE</span>
+                                                            <span class="white2 fw-semibold mb-0">NO SUBMISSION YET</span>
                                                         </div> 
                                                     </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </form>
+
+                                        <?php      }
+                                    
+                                    } ?>
+
+                                        </div>
                                     </div>
-                                    <?php }?>
                                 </div>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
@@ -260,11 +298,14 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
+    <div class='user-id' hidden><?php echo $userId;?></div>
+    <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
+    <div class='class-code' hidden><?php echo $actSubmission[0]["class_code"];?></div>
     <?php require('inc/footer.php'); ?>   
 
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
-
+    <script src="scripts/grading.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>

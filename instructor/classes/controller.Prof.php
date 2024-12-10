@@ -261,4 +261,17 @@ class InstructorController extends Instructor
     public function deadlineAndPoints($postID, $classCode){
         return $this->deadlineAndPointsInDb($postID, $classCode);
     }
+
+    public function insertActivityGrade($classCode, $userId, $postId, $status, $grade){
+        $this->insertActGradeInDb($classCode, $userId, $postId, $status, $grade);
+    }
+
+    public function getActivityGrade($postId, $classCode, $userId){
+        // echo "test";
+        return $this->getActGradeInDb($postId, $classCode, $userId);
+    }
+
+    public function updateActivityGrade($classCode, $userId, $postId, $status, $grade){
+        return $this->updateActGradeInDb($postId, $classCode, $userId, $status, $grade);
+    }
 }

@@ -369,11 +369,11 @@ class Instructor extends DbConnection
     protected function getFIlesInDb($postId, $classCode){
         // echo $postId . "<br>";
         // echo $classCode;
-        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_category = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $classCode))) {
+            if ($stmt->execute(array($postId, $classCode, 3))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -393,7 +393,7 @@ class Instructor extends DbConnection
     protected function getIndivFIlesInDb($postId, $classCode, $userId){
         // echo $postId . "<br>";
         // echo $classCode;
-        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
+        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size, created FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -984,6 +984,73 @@ class Instructor extends DbConnection
         } catch (PDOException $e) {
             echo "Error in decryptQuestionId : ";
             return null;
+        }
+    }
+
+    protected function insertActGradeInDb($classCode, $userId, $postId, $status, $grade){
+        $sql = "INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $postId, $classCode, "Activity", $grade, $status))) {
+                if ($stmt->rowCount() > 0) {
+                    return true;
+                }
+
+                return false;
+                
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error in insertActGradeInDb : ";
+            return false;
+        }
+    }
+
+    protected function getActGradeInDb($postId, $classCode, $userId){
+        // echo "user : " . $postId . "<br>";
+        // echo "user : " . $classCode . "<br>";
+        // echo "user : " . $userId . "<br>";
+
+        $sql = "SELECT * FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId, "Activity"))) {
+                if ($stmt->rowCount() > 0) {
+                    // echo "no result";
+                    return $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+                return null;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in getActGradeInDb : ";
+            return null;
+        }
+    }
+
+    protected function updateActGradeInDb($postId, $classCode, $userId, $status, $grade){
+        $sql = "UPDATE `grades` SET `grade`= ? WHERE user_id = ? AND post_id = ? AND class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($grade, $userId, $postId, $classCode))) {
+                if ($stmt->rowCount() > 0) {
+                    return true;
+                }
+
+                return false;
+                
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error in updateActGradeInDb : ";
+            return false;
         }
     }
 

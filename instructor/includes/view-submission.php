@@ -39,9 +39,28 @@ if(isset($_GET["user"])){
 if(isset($postID) && $postID != null){
     $actContent = $instrCtrlr->deadlineAndPoints($postID, $classCode); // Get Deadline and Points of Activity
     $startingDateTime = date("F j, Y g:i A", strtotime($actContent[0]["starting_date"] . " " . $actContent[0]["starting_time"]));  
-    $deadlineDateTime = date("F j, Y g:i A", strtotime($actContent[0]["deadline_date"] . " " . $actContent[0]["deadline_time"]));  
+    $deadlineDateTime = strtotime($actContent[0]["deadline_date"] . " " . $actContent[0]["deadline_time"]);  
+
+    $submitTemp = strtotime($submittedFiles[0]["created"]);
+    $submitDateTime = date("F j, Y g:i A",  $submitTemp);
+    $deadlineTemp = date("F j, Y g:i A", $deadlineDateTime);
+    $status = "";
+    if($submitDateTime > $deadlineDateTime){
+        $status = "Late";
+        // echo "<br>LATE";
+    }else{
+        $status = "On Time";
+        // echo "<br>On time";
+    }
+    // echo "user" . $userId;
+    $grades = $instrCtrlr->getActivityGrade($postID, $classCode, $userId);
+
+    // echo $classCode;
+    // echo var_dump($grades);
 }
 
 
-  
-//  echo var_dump($actSubmission);
+
+//  echo var_dump($submittedFiles);
+//  echo "<br>";
+//  echo var_dump($actContent);

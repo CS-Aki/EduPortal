@@ -218,6 +218,10 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchSubmittedInPost($postId, $classCode, $userId){
+        // echo $classCode . "<br>";
+        // echo $postId . "<br>";
+        // echo $userId . "<br>";
+
         $sql = "SELECT * FROM files WHERE md5(class_code) = ? AND md5(post_id) = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
@@ -484,11 +488,11 @@ class ClassRm extends DbConnection
     protected function insertGdriveData($postId, $classCode, $fileName, $gdriveId, $fileSize, $userId){
         $newCode = $this->findSimilarCode($classCode);
         $newId = $this->findId($postId, $classCode);
-        echo $classCode;
-        echo "\n\nClass Code " . $newCode[0]["class_code"] . " <br>\n";
-        echo "\nPost Id " . $postId . " <br>\n";
-        echo "\nName " . $fileName . " <br>\n";
-        echo "\nID " . $gdriveId . " <br>\n";
+        // echo $classCode;
+        // echo "\n\nClass Code " . $newCode[0]["class_code"] . " <br>\n";
+        // echo "\nPost Id " . $postId . " <br>\n";
+        // echo "\nName " . $fileName . " <br>\n";
+        // echo "\nID " . $gdriveId . " <br>\n";
 
         $sql = "INSERT INTO `files` (`post_id`, `class_code`, `file_name`, `google_drive_file_id`, `file_size`, `user_category`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
@@ -505,12 +509,12 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function fetchSubmissions($classCode){
-        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ?";
+    protected function fetchSubmissions($classCode, $userId){
+        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ? AND files.user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($classCode, "4"))) {
+            if ($stmt->execute(array($classCode, "4", $userId))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }

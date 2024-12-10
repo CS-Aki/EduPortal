@@ -566,6 +566,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                     <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work<br>
                                                    
                                                     <?php 
+                                                        
                                                         $currentDateTime = new DateTime('now', $timezone);
                                                         $currentDateTime->format('Y-m-d H:i:s');
                                                         if($submissions != null){

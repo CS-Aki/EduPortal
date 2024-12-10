@@ -48,7 +48,6 @@ $(document).ready(function() {
             },
 
             success: function(response) {
-                 $(".form-message").html(response);
                 console.log(response);
                 if (response.includes("Login Successfully")) {
                     if(response.includes("3")){
@@ -62,6 +61,8 @@ $(document).ready(function() {
                     }
                     // $(".form-message").text("");
                     return;
+                }else{
+                    $(".form-message").html(response);
                 }
             },
             error: function(xhr, status, error) {
