@@ -37,6 +37,7 @@ if(isset($_GET["post"])){
     $postDetails = $instrCtrlr->getPostDetails($postID, $classCode);
     $comments = $instrCtrlr->getComments($postID, $classCode);
     $files = $instrCtrlr->getFiles($postID, $classCode);
+    // echo var_dump($postDetails);
     // echo var_dump($files);
     // echo var_dump($postDetails);
     // $postDetails = $stdController->getPostDetails($postTitle, $classCode);

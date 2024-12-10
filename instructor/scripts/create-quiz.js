@@ -704,10 +704,5 @@ $(document).ready(function () {
             questions = [];
         }
 
-        // Send to PHP
-
-        // $.post('includes/create-quiz.php', { title, questions: JSON.stringify(questions) }, function (response) {
-        //     alert(response.message);
-        // }, 'json');
     });
 });

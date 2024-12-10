@@ -90,7 +90,7 @@ if(isset($_SESSION["user_category"])){
                                                         </div>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-center">
-                                                        <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p>
+                                                        <!-- <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p> -->
                                                         <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($act["post_id"]); ?>'>
                                                             <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
                                                         </a>
@@ -157,6 +157,7 @@ if(isset($_SESSION["user_category"])){
                                 $j = 0;
                                 // echo var_dump($quiz);
                                 foreach ($quiz as $index => $qz) {
+                                    
                                     if ($qz['content_type'] === 'Quiz') {
                                         // $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
                                         // $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
@@ -181,7 +182,7 @@ if(isset($_SESSION["user_category"])){
                                                         </div>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-center">
-                                                        <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p>
+                                                        <!-- <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p> -->
                                                         <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($qz["post_id"]); ?>'>
                                                             <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
                                                         </a>

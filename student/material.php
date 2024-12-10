@@ -486,8 +486,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                             // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
                                                             $deadlineObj = new DateTime($submissions[0]["created"]);
                                                             // echo $currentDateTime . "<br>";
-
-                                                            if ($actDeadline <= $deadlineObj) {
+                                                        
+                                                            if ($submissions[0]["created"] <= $outputDateString) {
                                                                 echo '<div class="act-status"><span class="badge rounded-pill text-bg-success done-badge">Done</span></div>';
                                                             }else{
                                                                 echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Late</span></div>';
@@ -559,11 +559,34 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                 </div>
                                 <?php }else{ ?>       
 
-                                <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
+                                    <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
                                         <form class="h-100" id="uploadForm">
                                             <div class="d-flex justify-content-between flex-column h-100">
-                                                <div>
+                                                <div class="container">
                                                     <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work<br>
+                                                   
+                                                    <?php 
+                                                        $currentDateTime = new DateTime('now', $timezone);
+                                                        $currentDateTime->format('Y-m-d H:i:s');
+                                                        if($submissions != null){
+                                                            // echo "SUBMISSION DATE ".$submissions[0]["created"] . "<br>";
+                                                           // Current date and time
+                                                            // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
+                                                            $deadlineObj = new DateTime($submissions[0]["created"]);
+                                                            // echo $currentDateTime . "<br>";
+
+                                                            if ($submissions[0]["created"] <= $outputDateString) {
+                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-success done-badge">Done</span></div>';
+                                                            }else{
+                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Late</span></div>';
+                                                            }
+                                                   
+                                                        }else if($submissions == null && $currentDateTime->format('Y-m-d H:i:s') > $outputDateString){
+                                                            // echo $outputDateString . "<br>";
+                                                            // echo  $currentDateTime->format('Y-m-d H:i:s');
+                                                            echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Missing</span></div>';
+                                                        }
+                                                    ?>
                                                     <!-- <a href="#">
                                                         <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
                                                             <div class="d-flex justify-content-start">

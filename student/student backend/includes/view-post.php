@@ -92,9 +92,15 @@ if(isset($_GET["post"])){
         // echo $classCode;
         $actDetails = $stdController->actContent($postId, $classCode); // For now it gets the points from the activity
         $actDeadline = date("F j, Y g:i A", strtotime($actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"]));  
+        // echo $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"] . "<br>";
+        // $tempActDeadline = DateTime::createFromFormat('F d, Y h:i A', $actDeadline);
+        $outputDateString = $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"];
+
         // echo var_dump($actDetails);
         // echo var_dump($actDetails);
     }
+    // echo "UPLOAD ".$submissions[0]["created"] . "<br>";
+    // echo "DEADLINE ". $outputDateString;
     // echo var_dump($submissions);
     // echo var_dump($files);
     // echo var_dump($comments);

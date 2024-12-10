@@ -260,7 +260,7 @@ class Instructor extends DbConnection
 
     protected function fetchPostDetails($postID, $classCode){
         // echo $title;
-        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
+        $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -374,6 +374,30 @@ class Instructor extends DbConnection
 
         try {
             if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getIndivFIlesInDb($postId, $classCode, $userId){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
                 if ($stmt->rowCount() == 0) {
                     return $result = null;
                 }
@@ -943,5 +967,24 @@ class Instructor extends DbConnection
         }
     }
 
-    
+    protected function deadlineAndPointsInDb($postID, $classCode){
+        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, points FROM activity WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postID, $classCode))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+
 }

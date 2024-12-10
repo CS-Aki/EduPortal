@@ -253,4 +253,12 @@ class InstructorController extends Instructor
             echo "DELETION FAILED";
         }
     }
+
+    public function getIndivFIles($postId, $classCode, $userId){
+        return $this->getIndivFIlesInDb($postId, $classCode, $userId);
+    }
+
+    public function deadlineAndPoints($postID, $classCode){
+        return $this->deadlineAndPointsInDb($postID, $classCode);
+    }
 }

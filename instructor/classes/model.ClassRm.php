@@ -264,4 +264,25 @@ class ClassRm extends DbConnection
             return null;
         }
     }
+
+    protected function getActsSubInDb($classCode){
+        $sql = "SELECT created, user_id, google_drive_file_id, file_size, file_name, created FROM files WHERE MD5(class_code) = ? AND user_category = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, 4))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getActsSubInDb: " . $e->getMessage();
+            return null;
+        }
+    }
 }

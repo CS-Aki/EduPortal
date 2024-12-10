@@ -86,4 +86,8 @@ class ListController extends ClassRm
         return $this->fetchQuiz($classCode, $postId);
     }
 
+    public function getActSubmission($classCode){
+        return $this->getActsSubInDb($classCode);
+    }
+
 }

@@ -106,7 +106,7 @@ if(isset($_SESSION["user_category"])){
     </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-    <?php if(session_id() === "") session_start(); require('inc/links.php'); include("includes/view-post.php"); ?>
+    <?php if(session_id() === "") session_start(); require('inc/links.php'); include("includes/view-post.php"); if($postDetails[0]["content_type"] != "Material") include("includes/view-submission.php"); ?>
 
 </head>
 <body>
@@ -144,41 +144,94 @@ if(isset($_SESSION["user_category"])){
                             </div>
                             <div class="w-100">
                             <div class="row">
-                                <div>
-                                    <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
-                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
-                                </div>
-                                <div class="mt-3" id="material-description">
-                                    <p class="black3 fs-6 lh-sm">
-                                    <?php echo $postDetails[0]["content"]; ?>
-                                    </p>                         
-                                </div>
-                                
-                                <div class="w-100" id="material-download">
-                                    <div class="row gap-2 px-2">
-
-                                    <?php 
-                                        if($files != null){
-                                            for($i = 0 ; $i < count($files); $i++){
-                                                echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                                        <div class="d-flex justify-content-start ms-2">
-                                                            <div class="me-2 flex-shrink-0">
-                                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
-                                                            </div>
-                                                            <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
-                                                                 <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
-                                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>';
-                                            }
-                                        }
-                                    ?>
-                             
+                                <div class="col-lg-9 col-md-12 mb-md-2">
+                                    <div class="col-lg-9 col-md-12 mb-md-2">
+                                        <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
+                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>  
+                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
+                                        <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineDateTime; ?></p>    
                                     </div>
-                                  </div>
-                                </div>
+
+                                    <div class="mt-3" id="material-description">
+                                        <p class="black3 fs-6 lh-sm">
+                                        <?php echo $postDetails[0]["content"]; ?>
+                                        </p>                
+                                    </div>
                                 
+                                    <div class="w-100" id="material-download">
+                                        <div class="row gap-2 px-2">
+                                        <?php 
+                                            if($files != null){
+                                                for($i = 0 ; $i < count($files); $i++){
+                                                    echo '<a href="https://drive.google.com/file/d/'.$files[$i]["google_drive_file_id"].'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                                            <div class="d-flex justify-content-start ms-2">
+                                                                <div class="me-2 flex-shrink-0">
+                                                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                                </div>
+                                                                <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                    <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' . htmlspecialchars($files[$i]['file_name'], ENT_QUOTES, 'UTF-8') . '</span>
+                                                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'. $files[$i]["file_size"] .'</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>';
+                                                }
+                                            }
+                                        ?>
+                                        </div>    
+                                  </div>  
+                                </div>
+                                <?php if(isset($_GET["user"])){?>
+                                <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
+                    
+                                        <form action="" class="h-100">
+                                            <div class="d-flex justify-content-between flex-column h-100">
+                                                <div>
+                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2"><?php echo $firstName; ?>'s work<br>
+                                                    <?php if($submittedFiles != null){ 
+                                                            foreach($submittedFiles as $file){
+                                                    ?>
+                                                                <a href='https://drive.google.com/file/d/<?php echo $file["google_drive_file_id"]; ?>/view' target='_blank'>
+                                                                    <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
+                                                                        <div class="d-flex justify-content-start">
+                                                                            <div class="me-2 ms-2">
+                                                                                <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                                            </div>
+                                                                            <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                                <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo $file["file_name"]; ?></span>
+                                                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size"><?php echo $file["file_size"]; ?></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                    <?php    }
+                                                         }?>
+                                                </div>
+                                                <div id="pointsContainer">
+                                                    <div class="d-flex col-2 align-items-center">
+                                                        <span style="font-size: large;" class="ms-2 form-label green2">Point: </span>
+                                                        <div class="form-floating ms-2" style="flex: 1;">
+                                                            <input type="number" class="rounded-2 ps-2" id="points" value="1" min="1" max="<?php echo $actContent[0]["points"]; ?>" placeholder="Enter number" required>
+                                                        </div>
+                                                        <span style="font-size: medium;" class="ms-3 form-label d-flex align-items-center green2">
+                                                            Max: <span class="ms-1 green2" id="max-points"><?php echo $actContent[0]["points"]; ?></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <a href="#">
+                                                    <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                        <div class="d-flex justify-content-center align-items-center p-2">
+                                                            <span class="white2 fw-semibold mb-0">GRADE</span>
+                                                        </div> 
+                                                    </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <?php }?>
+                                </div>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
                                 <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
@@ -194,58 +247,11 @@ if(isset($_SESSION["user_category"])){
 
                                     <!-- DISPLAY COMMENTS -->
                                     <div class="ms-lg-3 mt-4" id="comments">
-                                        <!-- <?php 
-                                        if(isset($comments[0]["name"])){
-                                            for($i = 0 ; $i < count($comments); $i++){
-                                                $year = $comments[$i]["month"][0] . "" . $comments[$i]["month"][1] . $comments[$i]["month"][2] . "" . $comments[$i]["month"][3];
-                                                $month = $months[$comments[$i]["month"][5] . "" . $comments[$i]["month"][6] - 1];
-                                                $month = $month[0] . "" . $month[1] . "" . $month[2] ;
-                                                $day = $comments[$i]["month"][8] . "" . $comments[$i]["month"][9];
-                                                $comment = $comments[$i]["comment"];
-                                                $comment = str_replace("\n", "<br>", $comment);
-                                                echo "<div class='d-flex align-items-start mb-3' id='comment-container'>
-                                                        <div class='me-lg-3 d-flex align-items-center justify-content-center'>
-                                                            <img src='{$comments[$i]["image"]}' style='width: 35px;' class='rounded-5'></span>
-                                                        </div>
-    
-                                                        <div class=''>
-                                                        <div class='d-flex'>
-                                                            <p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>{$comments[$i]["name"]}</p>
-                                                            <p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>{$month} {$day}</p>                                              
-                                                        </div>
-    
-                                                        <div class='m-0 p-'>
-                                                            <p class='black2 m-0 p-0' id='comment'>{$comment}</p>
-                                                        </div>
-                                                        </div>
-                                                    </div>";
-                                            }
-                                            echo "<div id='appendNewComment'></div>";
-                                        } else{
-                                             echo "<div id='appendNewComment'></div>";
-                                        }          
-                                        ?> -->
-                                        <!-- <div class="d-flex align-content-center mb-3" id="comment-container">
-
-                                            <div class="me-lg-3 d-flex align-items-center justify-content-center">
-                                                <img src="images/mikmik.jpg" style="width: 35px;" class="rounded-5"></span>
-                                            </div>
-
-                                            <div class="">
-                                                <div class="d-flex">
-                                                    <p class="green2 fw-semibold lh-sm m-0 p-0 " id="comment-name">Jarmen A. Cachero </p>
-                                                    <p class="black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6" id="comment-date">Sep 18</p>                                              
-                                                </div>
-                                                <div class="m-0 p-0">
-                                                    <p class="black2 m-0 p-0" id="comment">Thanks for the lesson!</p>
-                                                </div>
-                                            </div>
-                                        </div>                                  -->
 
                                     </div>
                                   </div>
                                 </div>
-                       
+                            </div>
                         </div>
 
                     </div>
