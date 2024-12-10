@@ -195,7 +195,7 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchPostDetails($postID, $classCode){
-        // echo $title;
+        // echo $postID;
         $sql = "SELECT posts.post_id, posts.class_code, posts.content, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type FROM posts WHERE MD5(posts.post_id) = ? AND MD5(posts.class_code) = ? AND posts.visibility = ?";
         $stmt = $this->connect()->prepare($sql);
 
@@ -787,6 +787,30 @@ class ClassRm extends DbConnection
         } catch (PDOException $e) {
             echo "Error removeFilesFromDb: " . $e;
             return false;
+        }
+    }
+
+    protected function getActContent($postId, $classCode){
+        // echo $postId ."<br>" . $classCode;
+        $sql = "SELECT points, deadline_date, deadline_time, starting_date, starting_time FROM activity WHERE MD5(activity.post_id) = ? AND MD5(activity.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                    // return $result = $this->fetchNoComment($postId, $classCode);
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
         }
     }
 }

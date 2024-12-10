@@ -176,6 +176,10 @@ $(document).ready(function() {
                 formData.append("files[]", $("#fileInput")[0].files[i]); 
             }
         }
+        
+
+        let actDeadline = $("#actDeadline").text();
+        formData.append("deadline", actDeadline);
 
         // for (let pair of formData.entries()) {
         //     console.log(pair[0], pair[1]);
@@ -289,8 +293,7 @@ $(document).ready(function() {
                                             </a>
                                         `);
 
-                                    
-                              
+
                                     // console.log( "Selected "+ selectedValue);
                                     // console.log("Title " + title);
                                             
@@ -332,8 +335,6 @@ $(document).ready(function() {
                     });
                 }
             });
-
-
         }else{
             Swal.fire({
                 title: 'No File Selected',
@@ -397,7 +398,9 @@ $(document).ready(function() {
                             confirmButtonText: 'OK'
                         });
                         $("#fileContainer").empty();
+                        $('#fileInput').val('');
                         $("#add-container").empty();
+                        $(".fileCont").remove();
                         $("#add-container").append(createUploadButton());
                         $("#add-container").append(createSubmitButton());
                         console.log(response);

@@ -231,6 +231,10 @@ class StudentController extends ClassRm{
     public function removeFiles($files){
         $this->removeFilesFromDb($files);
     }
+
+    public function actContent($postId, $classCode){
+        return $this->getActContent($postId, $classCode);
+    }
 }
 
 ?>

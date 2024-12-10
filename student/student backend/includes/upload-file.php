@@ -128,6 +128,8 @@ try {
 if(isset($_POST["classCode"])){
     $_SESSION["classCode"] = $_POST["classCode"];
     $_SESSION["storedFile"] = $_FILES['files'];
+    $deadline = $_POST["deadline"];
+
 }
 // Create Google Drive service
 $service = new Google_Service_Drive($client);
@@ -145,7 +147,8 @@ if ($_SESSION['access_token']) {
     $uploadedFiles = [];
     $fileSizes = [];
     $folderName = "EduPortal";
-
+    $deadline = $_POST["deadline"];
+    echo "\n\nDEADLINE : " . $_SESSION["deadline"] . "\n\n\n";
     // Loop through each file in the uploaded files array
     foreach ($files['tmp_name'] as $index => $tmp_name) {
         $destination = '../../uploads/' . basename($files['name'][$index]);
@@ -254,11 +257,20 @@ if ($_SESSION['access_token']) {
     }
 
     unset($_SESSION["storedFile"]);
- 
+    
     // $instrCtrlr = new InstructorController();
     echo "\n\n\nPOST ID : " . $_SESSION["postId"];
     // Provide feedback to the user
     $stdController = new StudentController();
+    $currentDateTime = new DateTime(); 
+    $comparisonDateTime = new DateTime($_SESSION["deadline"]);
+    $status = "";
+
+    if ($currentDateTime <= $comparisonDateTime) {
+        $status = "On Time";
+    } elseif ($currentDateTime > $comparisonDateTime) {
+        $status = "Late";
+    } 
 
     if (count($uploadedFiles) > 0) {
         echo "\n\n\nFiles uploaded successfully!<br>";
@@ -269,10 +281,13 @@ if ($_SESSION['access_token']) {
             // echo "FILE NAME " . $fileNames[$i]. "\n";
             // echo "FILE ID " . htmlspecialchars($fileId). "\n";
             $stdController->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i], $_SESSION["id"]);
+            // $stdController->insertGrade($_SESSION["id"], $_SESSION["postId"], $_SESSION["storeCode"], "Activity", 0, $status);
             // $instrCtrlr->uploadGdriveData($_SESSION["postId"], $_SESSION["storeCode"], $fileNames[$i], htmlspecialchars($fileId), $fileSizes[$i]);
             $i++;
             // echo "File ID: " . htmlspecialchars($fileId) . "<br>";
         }
+
+        unset($_SESSION["deadline"]);
         // unset($_SESSION["postId"]);
         // Redirect or exit
         // header("location: ../post-form.php?class=" . $_SESSION["tmp"]);

@@ -1,7 +1,10 @@
 <!-- ORIGINAL Material -->
 
 
-<?php 
+<?php
+
+use phpseclib3\Crypt\EC;
+
 if (session_id() === "") session_start();
 
 
@@ -136,6 +139,17 @@ $_SESSION["storeCode"] =  $_GET["class"];
 
             width: 100% !important;
 
+        }
+
+        .container {
+            position: relative; /* Set the parent container to relative */
+        }
+
+        .done-badge {
+            position: absolute; /* Position the badge absolutely */
+            top: 0; /* Align to the top */
+            right: 0; /* Align to the right */
+            margin: 10px; /* Optional: Add some margin for spacing */
         }
 
     </style>
@@ -285,6 +299,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
 
                                 <div class="container-fluid p-0">
                                     <h1 class="h-font green2 text-center sub-title mb-0" id="material-title">Your Work</h1><br>
+                                    
                                     <div class="row justify-content-center"> 
                                         <div class="col-lg-3 col-md-12">
                                             <a class='<?php echo ($attemptNum >= $quizContent[0]["attempt"]) ? "disabled" : ""; ?>' href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo ($submittedQuiz != null) ? $attemptNum + 1 : "1"; ?>'>
@@ -317,6 +332,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                 // echo $yourScore[1];
                                                 // echo count($quizStatus);
                                                 $j = 0;
+                                                // echo var_dump($quizStatus);
+
                                                 if (count($yourScore) > 0) {
                                                     // echo $_SESSION["attempt"];
                                                     foreach ($yourScore as $attempt => $score) { 
@@ -414,7 +431,6 @@ $_SESSION["storeCode"] =  $_GET["class"];
      
                     else {?>
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
-
                 <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <div class="mt-2">
                         <div class="d-flex px-3">
@@ -426,7 +442,10 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                     <div class="col-lg-9 col-md-12 mb-md-2">
                                         <div>
                                             <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
-                                            <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p>   
+                                            <p class="fw-light green2 fs-6 d-flex m-0" ><?php echo $month . " ". $day . ", " . $year ?></p> 
+                                            <p class="fw-light green2 fs-6 d-flex m-0" >Points: <?php echo $actDetails[0]["points"]; ?></p>   
+                                            <p class="fw-light red fs-6 d-flex m-0" >Deadline Date: <?php echo $actDeadline; ?></p>   
+                                            <div id="actDeadline" hidden><?php echo $actDeadline; ?></div>   
                                         </div>
                                         <div class="mt-3" id="material-description">
                                             <p class="black3 fs-6 lh-sm">
@@ -453,14 +472,30 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                         ?>
                                         </div>
                                     </div>
-                                    <?php if(isset($_SESSION["authorized"])) {?>
+                                    <?php if(isset($_SESSION["authorized"])) { ?>
                                          
                                     <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
                                         <form class="h-100" id="uploadForm">
                                             <div class="d-flex justify-content-between flex-column h-100">
-                                                <div>
+                                                <div class="container">
+                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work</p>
+                                                    <?php if($submissions != null){
+                                                            // echo "SUBMISSION DATE ".$submissions[0]["created"] . "<br>";
 
-                                                    <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work<br>
+                                                            $currentDateTime = new DateTime('now', $timezone); // Current date and time
+                                                            // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
+                                                            $deadlineObj = new DateTime($submissions[0]["created"]);
+                                                            // echo $currentDateTime . "<br>";
+
+                                                            if ($actDeadline <= $deadlineObj) {
+                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-success done-badge">Done</span></div>';
+                                                            }else{
+                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Late</span></div>';
+                                                            }
+                                                            
+                                                        }
+                                                    ?>
+                                                    <!-- <div class='act-status'><span class="badge rounded-pill text-bg-danger done-badge">Missing</span></div> -->
                                                     <div id="fileContainer">
                                                         <?php if($submissions != null){ for($i = 0; $i < count($submissions); $i++){?>
                                                             <?php 

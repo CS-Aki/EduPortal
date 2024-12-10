@@ -16,11 +16,13 @@ $details = $stdController->getClassDetails1($classCode);
 $submissions = $stdController->getSubmissions($classCode);  // Checks Uploaded Files of Student (Activity)
 $post = $stdController->getClassDetails($details[0]["class_code"]);
 
+
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
 
+// echo $_SESSION["id"];
 $answeredQuiz = $stdController->getAnsweredQuizzes($classCode, $_SESSION["id"]);
-// echo var_dump($answeredQuiz);
+// echo var_dump($quiz);
 
 // $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); 
 

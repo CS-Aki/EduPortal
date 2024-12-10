@@ -20,19 +20,21 @@ if(isset($_GET["post"])){
     // }
     $_SESSION["storedId"] = $postId;
     $stdController = new StudentController();
+    $timezone =  new DateTimeZone('Asia/Manila');
+    date_default_timezone_set('Asia/Manila');
     if(isset($_GET["code"])) $classCode = $_GET["code"];
     else $classCode = $_GET["class"];
 
     // if(isset($_SESSION["storedCode"])){
     //     $classCode = $_SESSION["storedCode"];
     // }
-    
+    // echo $classCode;
     $postDetails = $stdController->getPostDetails($postId, $classCode);
     $comments = $stdController->getComments($postId, $classCode);
     $files = $stdController->getFiles($postId, $classCode);
-    
+    // echo var_dump($postDetails);
     $submissions = $stdController->getSubmittedFiles($postId, $classCode);
-    
+    // echo var_dump($postDetails);
     if($postDetails[0]["content_type"] == "Quiz"){
         $yourScore = array();
         $currentAttempt = 0;
@@ -84,6 +86,15 @@ if(isset($_GET["post"])){
         $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
         
     }
+// echo var_dump($submissions);
+    if($postDetails[0]["content_type"] == "Activity"){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $actDetails = $stdController->actContent($postId, $classCode); // For now it gets the points from the activity
+        $actDeadline = date("F j, Y g:i A", strtotime($actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"]));  
+        // echo var_dump($actDetails);
+        // echo var_dump($actDetails);
+    }
     // echo var_dump($submissions);
     // echo var_dump($files);
     // echo var_dump($comments);
@@ -102,6 +113,8 @@ if(isset($_GET["post"])){
 
     // echo var_dump($comments);
 }
+
+
 
 if(isset($_POST["displayFiles"])){
     if (session_id() === "") session_start();
