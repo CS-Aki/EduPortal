@@ -640,7 +640,7 @@ class ClassRm extends DbConnection
     }
 
     protected function getQuizInClass($classCode){
-        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND quiz.starting_date <= NOW() AND quiz.starting_time <= NOW()";
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW();";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute([$classCode]);
@@ -653,7 +653,7 @@ class ClassRm extends DbConnection
     }
 
     protected function getActsInClass($classCode){
-        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, activity.starting_date, activity.starting_time, activity.deadline_date, activity.deadline_time, activity.status FROM `posts` INNER JOIN activity ON activity.post_id = posts.post_id WHERE posts.class_code = ? AND activity.starting_date <= NOW()";
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, activity.starting_date, activity.starting_time, activity.deadline_date, activity.deadline_time, activity.status FROM `posts` INNER JOIN activity ON activity.post_id = posts.post_id WHERE posts.class_code = ? AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW();";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute([$classCode]);
@@ -713,7 +713,7 @@ class ClassRm extends DbConnection
         // echo "user id " . $userId . "<br>";
         // echo "ATTEMPT " . $attempt . "<br>";
 
-        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ? AND answers.attempt = ?";
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt, answers.question_id FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ? AND answers.attempt = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {

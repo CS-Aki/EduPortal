@@ -149,96 +149,86 @@ if (session_id() === "") session_start();
                              
                              // echo count($quizDetails);
                             // echo var_dump($result);
+                            // echo $quizDetails[0]["question_id"];
                             // echo "<br>" . $result[2]["answer_text"];
                             // echo "<br>" .  $numberOfCorrect;
-                             for ($i = 0; $i < count($quizDetails); $i++) {
-                                 if ($questionTitle == $quizDetails[$i]["question_text"]) {
-                                     // For multiple-choice or true/false questions, add other choices
-                                     $choiceCount++;
-                                     echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
-                                         <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}'
-                                               name='{$quizDetails[$i]['question_id']}' 
-                                               value='{$quizDetails[$i]["option_text"]}' disabled ";    
-                             
-                                     if ($j < count($result) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
-                                         echo "checked";
-                                         $j++;
-                                     }
-                             
-                                     echo ">
-                                         <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
-                                             {$quizDetails[$i]["option_text"]}
-                                         </label>
-                                     </div>";
-                                 } else {
-                    
-                                     if ($i > 0) {
-                                         echo ($correct != 1) 
-                                             ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
-                                             : "</div>";
-                                         echo "</div>";
-                                     }
-                             
-
-                                     if ($j < count($result) && $quizDetails[$i]["ans_key"] == $result[$j]["answer_text"]) {
-                                         $correct = 1;
-                                         echo "<div class='correct question-container quizborder mb-2 py-4 rounded-4 px-5 black2 question-id-{$quizDetails[$i]['question_id']}'>";
-                                     } else {
-                                         $correct = 0;
-                                         echo "<div class='wrong question-container quizborder mb-2 py-4 rounded-4 px-5 black2 question-id-{$quizDetails[$i]['question_id']}'>";
-                                     }
-                             
-                                     // Question Header
-                                     echo "<label class='fw-semibold'>Question Number {$questionCount} :</label>
-                                     <label class='fw-semibold green2'>Points : {$quizDetails[$i]["points"]}</label><br>
-                                     <label class='black2 fw-bold'>Question: <span class='fw-normal'>{$quizDetails[$i]['question_text']}</span></label><br><br>";
-                             
-                                     // Start the row for the choices
-                                     echo "<div class='row'>";
-                             
-                                     if ($quizDetails[$i]["question_type"] == "short-text") {
-                                         // Short-text question
-                                         echo "<div class='col-12'>
-                                             <input class='w-100 rounded-4 p-2' type='text' id='{$quizDetails[$i]['question_id']}' 
-                                                    name='{$quizDetails[$i]['question_id']}' value='" . 
-                                                    (isset($result[$j]["answer_text"]) ? $result[$j]["answer_text"] : "") . 
-                                                    "' disabled>
-                                           </div><br><br>";
-                                         echo ($correct != 1) 
-                                             ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i]['ans_key']}</label></div>"
-                                             : "</div>";
-                                             $correct = 1;
-                                         $j++;
-                                     } else {
-                                         // New multiple-choice or true/false question
-                                         $questionTitle = $quizDetails[$i]["question_text"];
-                                         $choiceCount = 1; 
-                                         echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
-                                             <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}' 
-                                                    name='{$quizDetails[$i]['question_id']}' 
-                                                    value='{$quizDetails[$i]["option_text"]}' ";
-                                         if ($j < count($result) && $quizDetails[$i]["option_text"] == $result[$j]["answer_text"]) {
-                                             echo "checked";
-                                             $j++;
-                                         }
-                             
-                                         echo " disabled>
-                                             <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
-                                                  {$quizDetails[$i]["option_text"]}
-                                             </label>                                
-                                           </div>";
-                                     }
-                             
-                                     $questionCount++; // Increment question number
-                                 }
-                             }
-                             
-                             if (count($quizDetails) > 0) {
+                            for ($i = 0; $i < count($quizDetails); $i++) {
+                                if ($i == 0 || $questionTitle != $quizDetails[$i]["question_text"]) {
+                                    if ($i > 0) {
+                                        echo ($correct != 1) 
+                                            ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
+                                            : "</div>";
+                                        echo "</div>";
+                                    }
+                            
+                                    $questionTitle = $quizDetails[$i]["question_text"];
+                                    $correct = 0; 
+                                    $questionCount++;
+                            
+                                    if (
+                                        $j < count($result) &&
+                                        $quizDetails[$i]["question_id"] == $result[$j]["question_id"] && 
+                                        $quizDetails[$i]["ans_key"] == $result[$j]["answer_text"] 
+                                    ) {
+                                        $correct = 1;
+                                        echo "<div class='correct question-container quizborder mb-2 py-4 rounded-4 px-5 black2 question-id-{$quizDetails[$i]['question_id']}'>";
+                                    } else {
+                                        echo "<div class='wrong question-container quizborder mb-2 py-4 rounded-4 px-5 black2 question-id-{$quizDetails[$i]['question_id']}'>";
+                                    }
+                            
+                                    // Display question header
+                                    echo "<label class='fw-semibold'>Question Number {$questionCount} :</label>
+                                          <label class='fw-semibold green2'>Points : {$quizDetails[$i]["points"]}</label><br>
+                                          <label class='black2 fw-bold'>Question: <span class='fw-normal'>{$quizDetails[$i]['question_text']}</span></label><br><br>
+                                          <div class='row'>";
+                            
+                                          if ($quizDetails[$i]["question_type"] == "short-text") {
+                                            echo "<div class='col-12'>
+                                                    <input class='w-100 rounded-4 p-2' type='text' id='{$quizDetails[$i]['question_id']}' 
+                                                           name='{$quizDetails[$i]['question_id']}' value='" . 
+                                                           (isset($result[$j]["answer_text"]) ? $result[$j]["answer_text"] : "") . 
+                                                           "' disabled>
+                                                  </div><br><br>";
+                                            $j++; // Increment answer index for short-text
+                                            continue; // Skip to the next question to avoid duplicate printing of the answer key
+                                        }
+                                        
+                            
+                                    $choiceCount = 0;
+                                }
+                            
+                                // Display multiple-choice or true/false options
+                                $choiceCount++;
+                                echo "<div class='col-lg-6 d-flex align-items-center gap-2 mb-1'>
+                                        <input type='radio' id='{$quizDetails[$i]['question_id']}_{$choiceCount}' 
+                                              name='{$quizDetails[$i]['question_id']}' 
+                                              value='{$quizDetails[$i]["option_text"]}' disabled";
+                            
+                                // Mark the option as checked if it matches the user's answer
+                                if (
+                                    $j < count($result) &&
+                                    $quizDetails[$i]["question_id"] == $result[$j]["question_id"] && 
+                                    $quizDetails[$i]["option_text"] == $result[$j]["answer_text"] 
+                                ) {
+                                    echo " checked";
+                                    $j++; 
+                                }
+                            
+                                echo ">
+                                      <label for='{$quizDetails[$i]['question_id']}_{$choiceCount}'> 
+                                          {$quizDetails[$i]["option_text"]}
+                                      </label>
+                                    </div>";
+                            }
+                            
+                            // Close the last question block
+                            if (count($quizDetails) > 0) {
                                 echo ($correct != 1) 
                                     ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
                                     : "</div>";
                                 echo "</div>";
-                                }
+                            }
+                            
                              
                                 ?>
                                 <div class="d-flex justify-content-end align-items-center gap-2 mt-3">

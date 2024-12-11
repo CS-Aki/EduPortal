@@ -355,12 +355,14 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                             </td>
                                                             <td><?php echo ceil($grade) . "%"; ?></td>
                                                             <td><?php 
-                                                                 if($quizStatus[$j]["status"] == "On Time"){
+                                                                
+                                                                 if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
+                                                                    $j++;
                                                                  }else{
                                                                     echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
                                                                  }
-                                                                 $j++;
+                                                                
                                                                 ?>
                                                             </td>
                                                             <td>
