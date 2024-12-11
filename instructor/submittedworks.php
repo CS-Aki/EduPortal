@@ -65,10 +65,11 @@ unset($_SESSION["displayQuiz"]);
                         <div>
                             <?php 
                                 if(isset($post[0]['content_type'])){
-                                    // echo var_dump($details);
+                                    // echo var_dump($post);
                                     // $j = 0;
                                     for($i = 0 ; $i < count($post); $i++){
                                         if($post[$i]['content_type'] == 'Activity'){
+
   
                                             echo "<div id='material'>
                                             <button data-bs-toggle='collapse' href='#{$i}' role='button' aria-expanded='false' aria-controls='collapseExample' class='btn container-fluid p-0 m-0'>
@@ -102,21 +103,53 @@ unset($_SESSION["displayQuiz"]);
                                                                 <div class='mt-0 pt-0 d-flex' id='card-container'>
                                                                     <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
                                                                         <p class='fs-6 h-font green2 me-2 mb-1'>Turned In</p>
-                                                                        <div class='row px-2'>"; for($j = 0; $j < count($studentList); $j++){?>
+                                                                        <div class='row px-2'>"; for($j = 0; $j < count($studentList); $j++){ 
+                                                                                                        $isUserUpload = $studentList[$j]["user_id"];
+                                                                                                        $checker = array_column($actSubmission, 'user_id');
+                                                            
+                                                                                                        if (in_array($isUserUpload, $checker)) {
+                                                                                                           
+                                                                            ?>
                                                                             <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>&user=<?php echo md5($studentList[$j]['user_id']); ?>' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                                         <?php echo"<div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' width:'95%;'>
                                                                                         <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'></span>
                                                                                         <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6' >{$studentList[$j]["name"]}</p>
                                                                                     </div>
-                                                                            </a>"; };
+                                                                            </a>"; } 
+                                                                        };
                                                                     echo"</div>
                                                                     </div>
-                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>";
+                                                echo "<div class='collapse mb-2' id='{$i}'>
+                                                        <div class='d-flex flex-column align-items-end justify-content-end' >
+                                                            <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                                <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                                    <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
+                                                                        <p class='fs-6 h-font black2 me-2 mb-1'>Pending</p>
+                                                                        <div class='row px-2'>"; for($j = 0; $j < count($studentList); $j++){
+                                                                            $isUserUpload = $studentList[$j]["user_id"];
+                                                                            $checker = array_column($actSubmission, 'user_id');
+                                
+                                                                            if (!in_array($isUserUpload, $checker)) {
+                                                                            ?>
+                                                                            <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($post[$i]['post_id']); ?>&user=<?php echo md5($studentList[$j]['user_id']); ?>' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                                                        <?php echo"<div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' width:'95%;'>
+                                                                                        <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'></span>
+                                                                                        <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6' >{$studentList[$j]["name"]}</p>
+                                                                                    </div>
+                                                                            </a>"; } 
+                                                                        };
+                                                                    echo"</div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>";
+                                                
                                         }
                                     }
                                 }

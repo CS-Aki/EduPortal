@@ -12,7 +12,18 @@ $details = $instrCtrlr->classDetails($classCode);
 $studentList = $listController->displayList($details[0]["class_code"]);
 $actSubmission = $listController->getActSubmission($classCode);
 $instrCtrlr = new InstructorController();
+$userId = 0;
 
+// echo var_dump($actSubmission);
+// $fileNameToCheck = "index.css";
+// $fileNames = array_column($actSubmission, 'file_name');
+
+// if (in_array($fileNameToCheck, $fileNames)) {
+//     echo "File name exists.";
+// } else {
+//     echo "File name does not exist.";
+// }
+$submittedFiles = null;
 if(isset($_GET["user"])){
     $urlId = $_GET["user"];
     $firstName = "";
@@ -41,22 +52,21 @@ if(isset($postID) && $postID != null){
     $startingDateTime = date("F j, Y g:i A", strtotime($actContent[0]["starting_date"] . " " . $actContent[0]["starting_time"]));  
     $deadlineDateTime = strtotime($actContent[0]["deadline_date"] . " " . $actContent[0]["deadline_time"]);  
 
-    $submitTemp = strtotime($submittedFiles[0]["created"]);
+    $submitTemp = strtotime($startingDateTime);
     $submitDateTime = date("F j, Y g:i A",  $submitTemp);
     $deadlineTemp = date("F j, Y g:i A", $deadlineDateTime);
     $status = "";
-    if($submitDateTime > $deadlineDateTime){
+    if($submitDateTime > $deadlineDateTime && $submittedFiles != null){
         $status = "Late";
         // echo "<br>LATE";
-    }else{
+    }else if($submittedFiles != null){
         $status = "On Time";
         // echo "<br>On time";
     }
     // echo "user" . $userId;
-    $grades = $instrCtrlr->getActivityGrade($postID, $classCode, $userId);
-
+    if($userId != 0) $grades = $instrCtrlr->getActivityGrade($postID, $classCode, $userId);
     // echo $classCode;
-    // echo var_dump($grades);
+    // echo var_dump($submittedFiles);
 }
 
 

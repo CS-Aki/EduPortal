@@ -20,10 +20,13 @@ if(isset($_POST["points"])){
     echo $postId . "\n";
     $isSubmit = $_POST["submit"];
     $instrCtrlr = new InstructorController();
+    echo $isSubmit;
 
-    if($isSubmit == true){
+    if($isSubmit == "true"){
+        echo "inserting";
         $instrCtrlr->insertActivityGrade($classCode, $userId, $postId, $status, $grade);
     }else{
+        echo "updating";
         $instrCtrlr->updateActivityGrade($classCode, $userId, $postId, $status, $grade);
     }
 

@@ -147,7 +147,7 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-9 col-md-12 mb-md-2">
                                     <div class="col-lg-9 col-md-12 mb-md-2">
                                         <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
-                                        <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
+                                        <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
                                         <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
                                         <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
                                         <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
@@ -242,7 +242,6 @@ if(isset($_SESSION["user_category"])){
                                                                 </div> 
                                                             </div>
                                                         </a>
-                                                    
                                                 <?php }else{?>
                                                         <a href="#" id="grade-btn">
                                                             <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
@@ -298,6 +297,7 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
+    <div class='point-temp' hidden><?php if($grades != null) echo $grades[0]["grade"];?></div>
     <div class='user-id' hidden><?php echo $userId;?></div>
     <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
     <div class='class-code' hidden><?php echo $actSubmission[0]["class_code"];?></div>
