@@ -18,6 +18,14 @@ if(isset($_SESSION["user_category"])){
     header("Location: ../");
     exit();
 }
+
+    
+if(isset($_GET["code"])){
+    // $_SESSION["authTemp"] = $_GET["code"];
+    // echo "test";
+   include("includes/auth2.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +118,8 @@ if(isset($_SESSION["user_category"])){
 
 </head>
 <body>
-    <?php require('inc/header.php'); ?>
+
+<?php require('inc/header.php');  ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row" >
@@ -143,16 +152,30 @@ if(isset($_SESSION["user_category"])){
                                 <i class="bi bi-bookmark-fill green1 fs-1 p-0 m-0 me-3"></i>
                             </div>
                             <div class="w-100">
-                            <div class="row">
+                        
+                            <div class="row">       
                                 <div class="col-lg-9 col-md-12 mb-md-2">
-                                    <div class="col-lg-9 col-md-12 mb-md-2">
-                                        <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
-                                        <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
-                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
-                                        <?php if ($startingDateTime != null){ ?>
-                                            <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
-                                            <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
-                                        <?php } ?>
+                                     <div class="d-flex justify-content-between align-items-center">
+
+                                        <div class="col-lg-9 col-md-12 mb-md-2">
+                                            <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
+                                            <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
+                                            <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
+                                            <?php if ($startingDateTime != null){ ?>
+                                                <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
+                                                <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
+                                            <?php } ?>
+                                        </div>
+
+                                        <div class="dropdown">
+                                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="me-2 bi bi-gear green2 fs-3 icon"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item h-font green2 fs-5" href="" data-bs-toggle="modal" data-bs-target="#editPostModal">Edit</a></li>
+                                                <li><a class="dropdown-item h-font green2 fs-5" href="=">Delete</a></li>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                     <div class="mt-3" id="material-description">
@@ -185,7 +208,6 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <?php if(isset($_GET["user"])){?>
                                 <div class="col-lg-3 container-fluid bg-body-tertiary rounded-4 py-lg-3 px-lg-3 mt-2">
-                    
                                         <form action="" class="h-100">
                                             <div class="d-flex justify-content-between flex-column h-100">
                                                 <div class="container">
@@ -286,6 +308,7 @@ if(isset($_SESSION["user_category"])){
 
                                     <!-- DISPLAY COMMENTS -->
                                     <div class="ms-lg-3 mt-4" id="comments">
+                                    <!-- <?php echo var_dump($postDetails); ?> -->
 
                                     </div>
                                   </div>
@@ -299,6 +322,161 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
+    <!-- EDIT POST MODAL -->
+    <div class="modal fade" id="editPostModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editPostLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">                       
+                <div class="modal-content rounded-4">
+                    <form action="includes/edit-post.php" method="post" id="editForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                            <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div>
+                                        <i class='bi bi-pencil-square fs-1 green1 title p-0 m-0'></i>
+                                    </div>
+                                    <div class="lh-sm">
+                                        <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1" id="className">Edit Post</h1>
+                                    </div>
+                                </div>
+                                <button clas="d-flex align-items-start" type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="row px-2">
+                                <div class="col-lg-12 mb-2">
+                                    <label class="form-label black3 mb-0">Title</label>
+                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="postTitle">
+                                </div>
+                                <div class="col-lg-12 mb-3">
+                                    <label class="form-label black3 mb-0">Description</label>
+                                    <textarea type="text" rows="4" class="form-control black3 shadow-elevation-light-3 container-fluid" value="" name="post_desc" id="postDesc"><?php echo $postDetails[0]["content"]; ?></textarea>
+                                </div>
+                                <?php if($postDetails[0]["content_type"] != "Material"){?>
+                                <div class="col-lg-1 col-sm-12 mb-2">
+                                    <label class="black3 mb-0">From</label>
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-2">
+                                    <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="startDate">
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-2">
+                                    <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="startTime">
+                                </div>
+                                <div class="col-lg-5 mb-2"></div>
+                                <div class="col-lg-1 col-sm-12 mb-2">
+                                    <label class="black3 mb-0">To</label>
+                                </div>
+                               
+                                <div class="col-lg-3 col-sm-6 mb-2">
+                                    <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="deadlineDate">
+                                </div>
+                                <div class="col-lg-3 col-sm-6 mb-2">
+                                    <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="deadlineTime">
+                                </div>
+                                <?php }?>
+                                <div class="col-lg-4 mb-2"></div>
+                                <div class="col-lg-12 mb-2">
+                                    <label class="form-label black3 mb-0">Files</label>
+                                    <div class="w-100" id="material-download">
+                                        <div class="row gap-2 px-2">
+                                        <!-- <a href="https://drive.google.com/file/d/1NhAcy-s6ESxqBbSlWJo_hprXxuyavetV/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 me-2 pe-5">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="me-2">
+                                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="green2 fw-bold mb-0">Click me.jpeg</span>
+                                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">253kb</span>
+                                                </div>
+                                            </div>
+                                        </a> -->
+                                        <!-- google_drive_file_id -->
+                                         <div id="fileContainer">
+                                        <?php 
+                                        // echo $_SESSION["postTemp"];
+                                        // echo var_dump($_SESSION["access_token"]);
+                                            // echo var_dump($files);
+                                            if($files != null){
+                                                for($i = 0 ; $i < count($files); $i++){
+                                                    echo '
+                                                    <a href="https://drive.google.com/file/d/'. $files[$i]["google_drive_file_id"] .'/view" target="_blank"class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                        <div class="d-flex justify-content-start ms-2 w-75">
+                                                            <div class="me-2 flex-shrink-0">
+                                                                 <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                            </div>
+                                                            <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'.$files[$i]["file_name"].'</span>
+                                                                <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">'.$files[$i]["file_size"].'</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                ';
+                                                }
+                                            }
+                                            ?>
+                                                                                    <!-- <div id="newFileContainer"></div> -->
+
+                                        </div>
+
+                                        <?php if(isset($_SESSION["access_token"])){
+                                                echo '
+                                                <a id="uploadFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                    <div class="d-flex justify-content-center align-items-center ms-2 w-75">
+                                                        <div class="me-2 flex-shrink-0">
+                                                            <i class="bi bi-plus-lg green1 fs-2 p-0 m-0"></i>
+                                                        </div>
+                                                        <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                            <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Add File</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                ';
+                                                if($files != null){
+                                                    echo '
+                                                    <a id="unsubmitFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                        <div class="d-flex justify-content-center align-items-center ms-2 w-75">
+                                                            <div class="me-2 flex-shrink-0">
+                                                                <i class="bi bi-plus-lg green1 fs-2 p-0 m-0"></i>
+                                                            </div>
+                                                            <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Unsubmit Files</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    ';
+                                                }
+                                            }else{
+                                            $_SESSION["postTemp"] = $_GET["post"];
+                                            $_SESSION["codeTemp"] = $_GET["class"];
+                                            echo '
+                                                <a href="includes/auth2.php" class="btn  bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                    <div class="d-flex justify-content-center align-items-center ms-2 w-75">
+                                                        <div class="me-2 flex-shrink-0">
+                                                            <i class="bi bi-google green1 fs-2 p-0 m-0"></i>
+                                                        </div>
+                                                        <div class="" style="min-width: 0;">
+                                                            <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate d-flex justify-content-start" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Login to Gdrive</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                ';
+                                            }
+                                            
+                                        ?>
+                                        <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
+                                        <div id="content-type" hidden><?php echo $postDetails[0]["content_type"];?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center gap-1 my-2">
+                                <button type="submit" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="edit_post_btn">Edit Post</button>
+                                <button class="btn bordergreen green1 rounded-5 px-4 py-2" type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                            </div>
+                            </form>   
+                        </div> 
+                    </div>
+ 
+                </div>             
+        </div>
+    </div>
+
     <div class='point-temp' hidden><?php if($grades != null) echo $grades[0]["grade"];?></div>
     <div class='user-id' hidden><?php echo $userId;?></div>
     <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
@@ -308,6 +486,7 @@ if(isset($_SESSION["user_category"])){
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <script src="scripts/comment.js"></script>
     <script src="scripts/grading.js"></script>
+    <script src="scripts/edit-post.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>

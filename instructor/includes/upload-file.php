@@ -32,7 +32,7 @@ $client->setAccessToken($_SESSION['access_token']);
 // Check if the access token is expired and refresh it
 if ($client->isAccessTokenExpired()) {
     $refreshToken = $client->getRefreshToken();
-    $client->fetchAccessTokenWithRefreshToken($refreshToken);
+    $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
     $_SESSION['access_token'] = $client->getAccessToken();
 }
 
@@ -42,9 +42,9 @@ if(isset($_POST["classCode"])){
 }
 // Create Google Drive service
 $service = new Google_Service_Drive($client);
-echo "RANDOM HERE";
+// echo "RANDOM HERE";
 // echo $_SESSION["postId"]["post_id"] . "\n\n\n\n";
-echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
+// echo var_dump($_SESSION["postId"]) . "\n\n\n\n";
 
 echo $_SESSION["postId"];
 
@@ -52,15 +52,37 @@ if ($_SESSION['access_token']) {
     $_SESSION["tmp"] = "<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>";
     $postId = $_SESSION["postId"];
     $files = $_SESSION["storedFile"];
-    echo var_dump($files); 
+    // echo var_dump($files); 
     $uploadedFiles = [];
     $fileSizes = [];
     $folderName = "EduPortal";
 
+    foreach ($files['error'] as $index => $error) {
+        if ($error !== UPLOAD_ERR_OK) {
+            echo "Error uploading file {$files['name'][$index]}: Error code $error\n\n";
+        }else{
+            echo "No error\n\n";
+        }
+    }
+
+    echo "CHANGES\n\n\n";
+    echo var_dump($files['tmp_name']);
+    // echo "TEMP HERE " . $files[0]['tmp_name'];
     // Loop through each file in the uploaded files array
     foreach ($files['tmp_name'] as $index => $tmp_name) {
         $destination = '../uploads/' . basename($files['name'][$index]);
-        echo "<br>Destination for file {$files['name'][$index]}: " . $destination;
+        // echo "<br>Destination for file {$files['name'][$index]}: " . $destination;
+
+        if (!file_exists($tmp_name)) {
+            echo "\n\nTemporary file {$tmp_name} does not exist.\n";
+            continue;
+        }else{echo "\nTEMP FILE EXIST\n";}
+        
+
+        if (!is_writable('../uploads/')) {
+            echo "\nUploads folder is not writable.<br>";
+            continue;
+        }
 
         $fileSizeBytes = $files['size'][$index]; // File size in bytes
         $size = 0;
@@ -75,7 +97,12 @@ if ($_SESSION['access_token']) {
         }
 
         $fileSizes[] = $size . " {$word}";
-
+        // echo "\n\n\nOLCATION ".realpath('../uploads/') . "\n\n\n";
+        // if(file_exists("../uploads")){
+        //     echo "\n\nFOUND\n\n";
+        // }else{
+        //     echo "\n\NOT FOUND\n\n";
+        // }
         // Move the uploaded file to the server
         if (move_uploaded_file($tmp_name, $destination)) {
             echo "File {$files['name'][$index]} moved to $destination<br>";
@@ -167,7 +194,7 @@ if ($_SESSION['access_token']) {
     unset($_SESSION["storedFile"]);
  
     $instrCtrlr = new InstructorController();
-    echo "POST ID : " . $_SESSION["postId"];
+    // echo "POST ID : " . $_SESSION["postId"];
     // Provide feedback to the user
     if (count($uploadedFiles) > 0) {
         echo "Files uploaded successfully!<br>";

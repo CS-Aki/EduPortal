@@ -63,7 +63,6 @@ $jsonFile = '../../../log and reg backend/config/credentials.json';
 
 
 try {
-    // Load the JSON file
     if (!file_exists($jsonFile)) {
         throw new Exception("File not found: $jsonFile");
     }

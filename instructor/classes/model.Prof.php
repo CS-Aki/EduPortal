@@ -1,5 +1,7 @@
 <?php
 
+use PgSql\Lob;
+
 class Instructor extends DbConnection
 {
     protected function fetchInstructorClass(){
@@ -1182,6 +1184,41 @@ class Instructor extends DbConnection
         } catch (PDOException $e) {
             echo "Error fetchQuizDetails: " . $e;
             return null;
+        }
+    }
+
+    protected function updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files){
+        switch($type){
+            case "Material":
+                $this->updateMaterial($classCode, $title, $postId, $files, $description);
+                break;
+            case "Activity":
+
+                break;
+            case "Quiz":
+                break; 
+            default:
+                echo "NO TYPE FOUND ERROR";
+                break;
+        }
+    }
+
+    protected function updateMaterial($classCode, $title, $postId, $files, $description){
+        $sql = "UPDATE posts SET title = ?, content = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($title, $description, $classCode, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error updateMaterial: " . $e;
+            return false;
         }
     }
 

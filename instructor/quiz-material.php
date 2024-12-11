@@ -14,78 +14,176 @@ if (session_id() === "") session_start();
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
 
-        .question {
-            margin-bottom: 15px;
-        }
+            .question {
+                margin-bottom: 15px;
+            }
 
-        .options,
-        .question-settings {
-            margin-top: 10px;
-        }
+            .options,
+            .question-settings {
+                margin-top: 10px;
+            }
 
-        button {
-            margin-top: 20px;
-        }
+            button {
+                margin-top: 20px;
+            }
 
-        textarea.form-control {
-            resize: none;
-        }
+            textarea.form-control {
+                resize: none;
+            }
 
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-        }
+            .btn-danger {
+                background-color: #dc3545;
+                border: none;
+            }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
+            .btn-secondary {
+                background-color: #6c757d;
+                border: none;
+            }
 
-        .options .form-floating {
-            margin-bottom: 10px;
-        }
+            .options .form-floating {
+                margin-bottom: 10px;
+            }
 
-        .d-flex.align-items-center {
-            display: flex;
-            align-items: center;
-        }
+            .d-flex.align-items-center {
+                display: flex;
+                align-items: center;
+            }
 
-        input[type="radio"] {
-            appearance: none;
-            /* Remove default styling */
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
+            input[type="radio"] {
+                appearance: none;
+                /* Remove default styling */
+                width: 20px;
+                height: 20px;
+                border: 2px solid #ccc;
+                border-radius: 50%;
+                outline: none;
+                cursor: pointer;
+                transition: border-color 0.3s, background-color 0.3s;
+            }
 
-        input[type="text"] {
-            border: 1px solid #989598 !important;
-            color: #989598 !important;
-        }
+            input[type="text"] {
+                border: 1px solid #989598 !important;
+                color: #989598 !important;
+            }
 
-        input[type="radio"]:checked {
-            background-color: #219E53 !important;
-            border-color: #219E53 !important;
-        }
+            input[type="radio"]:checked {
+                background-color: #219E53 !important;
+                border-color: #219E53 !important;
+            }
 
-        .quizborder {
-            border: 1px solid var(--black3);
-        }
-        .correct {
-            border: 1px solid var(--green1);
-        }
-        .wrong {
-            border: 1px solid var(--red);
-        }
+            .quizborder {
+                border: 1px solid var(--black3);
+            }
+            .correct {
+                border: 1px solid var(--green1);
+            }
+            .wrong {
+                border: 1px solid var(--red);
+            }
+
+            .gray-out {
+                background-color: gray; /* Change to your desired gray color */
+                color: white; /* Change text color if needed */
+                opacity: 0.5; /* Adjust opacity to make it look grayed out */
+                pointer-events: none; /* Disable interaction */
+            }
+
+            a.disabled {
+                pointer-events: none;
+                cursor: default;
+            }
+
+            .table thead th{
+
+                background-color: #219E53 !important; 
+
+                color: #FCFCFC !important; 
+
+                border: #219E53;
+
+            }
+
+            .table td {
+
+                font-weight: semibold;
+
+                color: #6B656B;
+
+            }
+
+            
+
+            .dataTables_info {
+
+                color: #989598 !important; /* Change color */
+
+            }
+
+            .active >.page-link {
+
+                background-color: #219E53 !important;
+
+                color: #FCFCFC !important;
+
+                border-color: #219E53 !important;
+
+            }
+
+            .page-link {
+
+                color: #219E53 !important;
+
+            }
+
+            #myTable_filter input {
+
+                border: 2px solid #4CAF50; /* Green border */
+
+                padding: 5px 1em;
+
+                color: #333;               /* Text color inside the input */
+
+                border-radius: 50px;
+
+            }
+
+            #myTable_filter label {
+
+                color: #56B37B; /* Change this color to whatever you prefer */
+
+            }
+
+            #editProfModal .dataTables_scroll {
+
+            width: 100% !important;
+
+            }
+
+            #editProfModal .dataTables_scrollHeadInner,
+
+            #editProfModal table.dataTable {
+
+                width: 100% !important;
+
+            }
+
+            .container {
+                position: relative; /* Set the parent container to relative */
+            }
+
+            .done-badge {
+                position: absolute; /* Position the badge absolutely */
+                top: 0; /* Align to the top */
+                right: 0; /* Align to the right */
+                margin: 10px; /* Optional: Add some margin for spacing */
+            }
+        
     </style>
     <?php require('inc/links.php'); ?>
 </head>

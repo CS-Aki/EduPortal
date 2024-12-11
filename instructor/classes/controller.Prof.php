@@ -301,4 +301,17 @@ class InstructorController extends Instructor
         }
         return $result;
    }
+
+   public function updatePost($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files){
+        if (session_id() === "") session_start();
+
+        $this->updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files);
+        if($files != null){
+            $userId = $this->decryptPostId1($postId, $classCode);
+            $_SESSION["postId"] = $userId[0]["post_id"];
+            // $_SESSION["storedFile"] = $files;
+            include("../includes/upload-file.php");
+            // header("location: ../includes/upload-file.php");
+        }
+   }
 }

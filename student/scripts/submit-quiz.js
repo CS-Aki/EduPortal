@@ -41,9 +41,9 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url: 'student backend/includes/submit-quiz.php',  // PHP script to handle form submission
+            url: 'student backend/includes/submit-quiz.php',  
             type: 'POST',
-            data: formData + `&postId=${postId}&classCode=${classCode}&attempt=${attempt}&date=${date}&time=${time}`, // Append extra data
+            data: formData + `&postId=${postId}&classCode=${classCode}&attempt=${attempt}&date=${date}&time=${time}`, 
             success: function(response) {
                 isQuizSubmitted = true;
                 console.log(response);
