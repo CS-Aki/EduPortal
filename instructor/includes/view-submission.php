@@ -11,10 +11,11 @@ $classCode = $_GET["class"];
 $details = $instrCtrlr->classDetails($classCode);
 $studentList = $listController->displayList($details[0]["class_code"]);
 $actSubmission = $listController->getActSubmission($classCode);
+$quizSubmission = $listController->getQuizSubmission($classCode);
 $instrCtrlr = new InstructorController();
 $userId = 0;
 
-// echo var_dump($actSubmission);
+// echo var_dump($quizSubmission);
 // $fileNameToCheck = "index.css";
 // $fileNames = array_column($actSubmission, 'file_name');
 

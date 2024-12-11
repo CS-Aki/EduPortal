@@ -90,4 +90,8 @@ class ListController extends ClassRm
         return $this->getActsSubInDb($classCode);
     }
 
+    public function getQuizSubmission($classCode){
+        return $this->getQuizSubmissionInDb($classCode);
+    }
+
 }

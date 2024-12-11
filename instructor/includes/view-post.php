@@ -37,12 +37,65 @@ if(isset($_GET["post"])){
     $postDetails = $instrCtrlr->getPostDetails($postID, $classCode);
     $comments = $instrCtrlr->getComments($postID, $classCode);
     $files = $instrCtrlr->getFiles($postID, $classCode);
+    $startingDateTime = null;
+    $deadlineDateTime = null;
     // echo var_dump($postDetails);
     // echo var_dump($files);
     // echo var_dump($postDetails);
     // $postDetails = $stdController->getPostDetails($postTitle, $classCode);
     // $comments = $stdController->getComments($postTitle, $classCode);
     // echo var_dump($comments);
+    // if($postDetails[0]["content_type"] == "Quiz"){
+    //     $yourScore = array();
+    //     $currentAttempt = 0;
+    //     $quizContent = $stdController->getQuizContent($postId, $classCode);
+    //     $quizStatus = $stdController->getQuizStatus($postId, $classCode, $_SESSION["id"]);
+    //     // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
+    //     $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
+    //     $totalScore = 0;
+    //     $totalCorrectAnsCount = array();
+    //     $j = 0;
+    //     // echo var_dump($submittedQuiz);
+    //     if($submittedQuiz != null){
+    //         for ($i = 0; $i < count($submittedQuiz); $i++) {
+    //             // echo $currentAttempt;
+    //             if ($submittedQuiz[$i]["attempt"] != $currentAttempt) {
+    //                 $totalScore = $submittedQuiz[$i]["score"];
+    //                 $currentAttempt = $submittedQuiz[$i]["attempt"];
+    //                 $yourScore[$currentAttempt] = 0;
+        
+    //                 // Initialize totalCorrectAnsCount for this attempt
+    //                 if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+    //                     $totalCorrectAnsCount[$currentAttempt] = 0;
+    //                 }
+        
+    //                 if ($submittedQuiz[$i]["status"] == 1) {
+    //                     $yourScore[$currentAttempt] = $submittedQuiz[$i]["score"];
+    //                     $totalCorrectAnsCount[$currentAttempt] = 1;
+    //                 }
+    //             } else {
+    //                 $totalScore += $submittedQuiz[$i]["score"];
+    //                 $j++;
+    //                 if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+    //                     $totalCorrectAnsCount[$currentAttempt] = 0;
+    //                 }
+        
+    //                 if ($submittedQuiz[$i]["status"] == 1) {
+    //                     $yourScore[$currentAttempt] += $submittedQuiz[$i]["score"];
+    //                     $totalCorrectAnsCount[$currentAttempt] += 1;
+    //                 }
+    //             }
+    //         }
+    //         $totalItems = count($submittedQuiz) / count($yourScore);
+    //         $attemptNum = count($totalCorrectAnsCount);
+    //         // echo "Attempt count " . count($totalCorrectAnsCount);
+    //     }
+
+    //     // echo var_dump($totalCorrectAnsCount);
+    //     $startingDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["starting_date"] . " " . $quizContent[0]["starting_time"]));
+    //     $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
+        
+    // }
 
     // if(isset($comments[0]["month"])){
         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");

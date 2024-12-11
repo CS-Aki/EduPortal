@@ -218,7 +218,7 @@ class InstructorController extends Instructor
     }
 
     public function getQuizDetails($postId, $classCode){
-        $details = $this->fetchQuizDetails($postId, $classCode);
+        $details = $this->fetchQuizDetailsWithTitle($postId, $classCode);
         if($details == null){
             // echo "No Quiz Yet";
         }
@@ -274,4 +274,31 @@ class InstructorController extends Instructor
     public function updateActivityGrade($classCode, $userId, $postId, $status, $grade){
         return $this->updateActGradeInDb($postId, $classCode, $userId, $status, $grade);
     }
+
+    public function getQuizContent($postId, $classCode){
+        $content = $this->getQuiz($postId, $classCode);
+        return $content;
+    }
+
+    public function getQuizStatus($postId, $classCode, $userId){
+        $result = $this->getQuizStatusFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getQuizResult($postId, $classCode, $userId){
+        $result = $this->getQuizResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getStudentName($userId){
+        return $this->getStudentNameInDb($userId);
+    }
+
+    public function getQuizResultFormat($postId, $classCode, $userId, $attempt){
+        $result = $this->getQuizFormatInDb($postId, $classCode, $userId, $attempt);
+        if($result == null){
+           // echo "THIS IS NULL";
+        }
+        return $result;
+   }
 }

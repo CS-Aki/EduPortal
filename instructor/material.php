@@ -149,8 +149,10 @@ if(isset($_SESSION["user_category"])){
                                         <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
                                         <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
                                         <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
-                                        <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
-                                        <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
+                                        <?php if ($startingDateTime != null){ ?>
+                                            <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
+                                            <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
+                                        <?php } ?>
                                     </div>
 
                                     <div class="mt-3" id="material-description">
