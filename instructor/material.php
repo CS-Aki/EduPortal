@@ -157,18 +157,17 @@ if(isset($_GET["code"])){
                         
                             <div class="row">       
                                 <div class="col-lg-9 col-md-12 mb-md-2">
-                                     <div class="d-flex justify-content-between align-items-center">
-
+                                    <div class="d-flex justify-content-between align-items-center">
                                         <div class="col-lg-9 col-md-12 mb-md-2">
                                             <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
                                             <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
                                             <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
                                             <?php if ($startingDateTime != null){ ?>
                                                 <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
-                                                <p class="fw-light red fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
+                                                <p class="fw-light red fs-6 d-flex m-0" id="material-end-date">Deadline Date: <?php echo $deadlineTemp; ?></p>    
                                             <?php } ?>
                                         </div>
-
+                                        <?php if(!isset($_GET["user"])){?>
                                         <div class="dropdown">
                                             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="me-2 bi bi-gear green2 fs-3 icon"></i>
@@ -178,6 +177,7 @@ if(isset($_GET["code"])){
                                                 <li><a class="dropdown-item h-font green2 fs-5" href="=">Delete</a></li>
                                             </ul>
                                         </div>
+                                        <?php } ?>
                                     </div>
 
                                     <div class="mt-3" id="material-description">
@@ -351,27 +351,60 @@ if(isset($_GET["code"])){
                                     <textarea type="text" rows="4" class="form-control black3 shadow-elevation-light-3 container-fluid" value="" name="post_desc" id="postDesc"><?php echo $postDetails[0]["content"]; ?></textarea>
                                 </div>
                                 <?php if($postDetails[0]["content_type"] != "Material"){?>
-                                <div class="col-lg-1 col-sm-12 mb-2">
-                                    <label class="black3 mb-0">From</label>
-                                </div>
-                                <div class="col-lg-3 col-sm-6 mb-2">
-                                    <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="startDate">
-                                </div>
-                                <div class="col-lg-3 col-sm-6 mb-2">
-                                    <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="startTime">
-                                </div>
-                                <div class="col-lg-5 mb-2"></div>
-                                <div class="col-lg-1 col-sm-12 mb-2">
-                                    <label class="black3 mb-0">To</label>
-                                </div>
-                               
-                                <div class="col-lg-3 col-sm-6 mb-2">
-                                    <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="deadlineDate">
-                                </div>
-                                <div class="col-lg-3 col-sm-6 mb-2">
-                                    <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="deadlineTime">
-                                </div>
+
+                                <?php if($postDetails[0]["content_type"] == "Activity"){ ?>
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">Points</label>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="number" class="points form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" min="1" value="<?php echo $actContent[0]["points"]; ?>" name="points" id="points">
+                                        </div>
+                                        <!-- <div class="col-lg-5 mb-2"></div> -->
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">From</label>
+                                        </div>
+
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_date"]; ?>" name="post_title" id="startDate">
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_time"]; ?>" name="post_title" id="startTime">
+                                        </div>
+
+                                        <div class="col-lg-4 mb-2"></div>
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">To</label>
+                                        </div>
+                            
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_date"]; ?>" name="post_title" id="deadlineDate">
+                                        </div>
+                                        
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_time"]; ?>" name="post_title" id="deadlineTime">
+                                        </div>
+                                        
+                                     <?php }else if($postDetails[0]["content_type"] == "Quiz"){ //Need to add quiz content var?> 
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_date"]; ?>" name="post_title" id="startDate">
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_time"]; ?>" name="post_title" id="startTime">
+                                        </div>
+                                        <div class="col-lg-5 mb-2"></div>
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">To</label>
+                                        </div>
+                                    
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_date"]; ?>" name="post_title" id="deadlineDate">
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_time"]; ?>" name="post_title" id="deadlineTime">
+                                        </div>
+                                     <?php  } ?>
                                 <?php }?>
+                                
                                 <div class="col-lg-4 mb-2"></div>
                                 <div class="col-lg-12 mb-2">
                                     <label class="form-label black3 mb-0">Files</label>
@@ -433,7 +466,7 @@ if(isset($_GET["code"])){
                                                     <a id="unsubmitFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
                                                         <div class="d-flex justify-content-center align-items-center ms-2 w-75">
                                                             <div class="me-2 flex-shrink-0">
-                                                                <i class="bi bi-plus-lg green1 fs-2 p-0 m-0"></i>
+                                                                <i class="bi bi-x-lg green1 fs-2 p-0 m-0"></i>
                                                             </div>
                                                             <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
                                                                 <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Unsubmit Files</span>

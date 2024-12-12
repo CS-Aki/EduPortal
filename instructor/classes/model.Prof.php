@@ -1185,15 +1185,16 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files){
+    protected function updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points){
         switch($type){
             case "Material":
                 $this->updateMaterial($classCode, $title, $postId, $files, $description);
                 break;
             case "Activity":
-
+                $this->updateActivity($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $points);
                 break;
             case "Quiz":
+                
                 break; 
             default:
                 echo "NO TYPE FOUND ERROR";
@@ -1219,6 +1220,30 @@ class Instructor extends DbConnection
             return false;
         }
     }
+
+    protected function updateActivity($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $points){
+        echo "\n\n" . $classCode."\n\n\n";
+        $sql = "START TRANSACTION;
+                    UPDATE posts SET title = ?, content = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?;
+                    UPDATE activity SET starting_date = ?, starting_time = ?, deadline_date = ?, deadline_time = ?, points = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?;
+                COMMIT;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($title, $description, $classCode, $postId, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $points, $classCode, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error updateMaterial: " . $e;
+            return false;
+        }
+    }
+    
 
     protected function removeFilesFromDb($files){
         $sql = "DELETE FROM files WHERE google_drive_file_id = ?";

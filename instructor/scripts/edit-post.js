@@ -69,6 +69,11 @@ $(document).ready(function() {
 
    let initialTitle = $("#postTitle").val();
    let initialDesc = $("#postDesc").val();
+   let initialSDate = $("#startDate").val();
+   let initialSTime = $("#startTime").val();
+   let initEndDate = $("#deadlineDate").val();
+   let initEndTime = $("#deadlineTime").val();
+   let initPoints = $("#points").val();
 
    $("#editForm").submit(function (event) {
         console.log("Edit Files");
@@ -86,8 +91,123 @@ $(document).ready(function() {
         let startingTime = "";
         let deadlineDate = "";
         let deadlineTime = "";
+        let points = 0;
+        let startingDateFormat1 = "";
+        let deadlineDateFormat = "";
+        
+        if(type != "Material"){
+             points = $("#points").val();
+             startingDate = $("#startDate").val();
+             startingTime = $("#startTime").val();
+             deadlineDate = $("#deadlineDate").val();
+             deadlineTime = $("#deadlineTime").val();
+             const startingDateTime = new Date(`${startingDate}T${startingTime}`);
+             const deadlineDateTime = new Date(`${deadlineDate}T${deadlineTime}`);
+             const currentDate = new Date();
 
-        if(initialDesc == description && initialTitle == title && $("#fileInput")[0].files.length == 0){
+            const startingDateTimeTemp = startingDate + " " +  startingTime;
+
+            // Convert the datetime string into a JavaScript Date object
+            const dateObject = new Date(startingDateTimeTemp);
+       
+            // Array of month names for formatting
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            // Extract date components
+            const month = monthNames[dateObject.getMonth()];
+            const day = dateObject.getDate();
+            const year = dateObject.getFullYear();
+
+            // Convert hours to 12-hour format and determine AM/PM
+            let hours = dateObject.getHours();
+            const minutes = dateObject.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? "PM" : "AM";
+            hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+
+            startingDateFormat1 = `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+
+            const deadlineDateTimeTemp = deadlineDate + " " +  deadlineTime;
+            
+            const dateObject1 = new Date(deadlineDateTimeTemp);
+            const month1 = monthNames[dateObject1.getMonth()];
+            const day1 = dateObject1.getDate();
+            const year1 = dateObject1.getFullYear();
+
+
+            let hours1 = dateObject1.getHours();
+            const minutes1 = dateObject1.getMinutes().toString().padStart(2, '0');
+            const ampm1 = hours1 >= 12 ? "PM" : "AM";
+            hours1 = hours1 % 12 || 12; // Convert 0 to 12 for 12-hour format
+
+            deadlineDateFormat = `${month1} ${day1}, ${year1} ${hours1}:${minutes1} ${ampm1}`;
+            console.log("DEADLINE DATE: "+deadlineDateFormat);
+             if (!startingDate || !startingTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Start Time',
+                    text: 'Start date and time should not be empty.',
+                });
+                return; 
+            }
+        
+            if (!deadlineDate || !deadlineTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Deadline Time',
+                    text: 'Deadline date and time should not be empty.',
+                });
+                return; 
+            }
+
+            if (deadlineDateTime <= currentDate) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Deadline Time',
+                    text: 'Deadline time and date should be greater than the current time and date.',
+                });
+                return; 
+            }
+        
+            if (startingDateTime < currentDate) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Starting Time',
+                    text: 'Starting time and date should not be less than the current time and date.',
+                });
+                return;
+            }
+        
+            if (startingDateTime > deadlineDateTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Starting Time',
+                    text: 'Starting time and date should not be greater than the deadline time and date.',
+                });
+                return; 
+            }
+        
+            if (startingDate === deadlineDate) {
+                if (startingDateTime >= deadlineDateTime) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Time Comparison',
+                        text: 'Starting time cannot be the same or later than the deadline time on the same day.',
+                    });
+                    return;
+                }
+            }
+        }
+
+        console.log("Starting Date " + startingDate);
+        console.log("Starting Time " + startingTime);
+        console.log("Deadline Date " + deadlineDate);
+        console.log("Deadline Time " + deadlineTime);
+
+
+        if(initialDesc == description && initialTitle == title && $("#fileInput")[0].files.length == 0 && initialSDate == startingDate && initialSTime == startingTime && initEndDate == deadlineDate && initEndTime == deadlineTime && initPoints == points){
             console.log("NO CHANGES");
             return;
         }
@@ -102,7 +222,11 @@ $(document).ready(function() {
         formData.append("deadlineDate", deadlineDate);
         formData.append("deadlineTime", deadlineTime);
         formData.append("type", type);
+        formData.append("points", points);
 
+        if(type != "Material"){
+
+        }
 
         if($("#fileInput")[0].files.length > 0){
             for (let i = 0; i < $("#fileInput")[0].files.length; i++) {
@@ -198,6 +322,8 @@ $(document).ready(function() {
 
                         $("#material-title").text(title);
                         $("#mat-desc-txt").text(description);
+                        $("#material-start-date").text("Starting Date: "+startingDateFormat1);
+                        $("#material-end-date").text("Deadline Date: "+ deadlineDateFormat);
 
                         Swal.fire({
                             title: 'Success!',

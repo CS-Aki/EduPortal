@@ -302,10 +302,10 @@ class InstructorController extends Instructor
         return $result;
    }
 
-   public function updatePost($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files){
+   public function updatePost($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points){
         if (session_id() === "") session_start();
 
-        $this->updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files);
+        $this->updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points);
         if($files != null){
             $userId = $this->decryptPostId1($postId, $classCode);
             $_SESSION["postId"] = $userId[0]["post_id"];

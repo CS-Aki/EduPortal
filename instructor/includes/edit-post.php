@@ -25,11 +25,12 @@ $startingTime = $_POST["startingTime"];
 $deadlineDate = $_POST["deadlineDate"];
 $deadlineTime = $_POST["deadlineTime"];
 $type = $_POST["type"];
+$points = $_POST["points"];
 
 // echo var_dump($_FILES['files']);
 
 $instrCtrlr = new InstructorController();
-$instrCtrlr->updatePost($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files);
+$instrCtrlr->updatePost($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points);
 
 //  echo "Title " .  $title . "\n";
 //  echo "postId " .  $postId . "\n";
