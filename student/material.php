@@ -46,6 +46,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
 // if(!isset($_SESSION['access_token'])){
 //     include("includes/auth.php");
 // }
+
+// echo var_dump($_SESSION['refresh_token']);
+
 ?>
 
 <!DOCTYPE html>

@@ -32,7 +32,7 @@ $client->setAccessToken($_SESSION['access_token']);
 // Check if the access token is expired and refresh it
 if ($client->isAccessTokenExpired()) {
     $refreshToken = $client->getRefreshToken();
-    $client->fetchAccessTokenWithRefreshToken($_SESSION['refresh_token']);
+    $client->fetchAccessTokenWithRefreshToken($refreshToken);
     $_SESSION['access_token'] = $client->getAccessToken();
 }
 

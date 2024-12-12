@@ -26,6 +26,8 @@ if(isset($_GET["code"])){
    include("includes/auth2.php");
 }
 
+// echo var_dump($_SESSION['refresh_token']);
+
 ?>
 
 <!DOCTYPE html>
@@ -179,13 +181,13 @@ if(isset($_GET["code"])){
                                     </div>
 
                                     <div class="mt-3" id="material-description">
-                                        <p class="black3 fs-6 lh-sm">
+                                        <p class="black3 fs-6 lh-sm" id="mat-desc-txt">
                                         <?php echo $postDetails[0]["content"]; ?>
                                         </p>                
                                     </div>
                                 
                                     <div class="w-100" id="material-download">
-                                        <div class="row gap-2 px-2">
+                                        <div class="row gap-2 px-2" id='mat-dl-container'>
                                         <?php 
                                             if($files != null){
                                                 for($i = 0 ; $i < count($files); $i++){
@@ -387,7 +389,7 @@ if(isset($_GET["code"])){
                                             </div>
                                         </a> -->
                                         <!-- google_drive_file_id -->
-                                         <div id="fileContainer">
+                                        <div id="fileContainer">
                                         <?php 
                                         // echo $_SESSION["postTemp"];
                                         // echo var_dump($_SESSION["access_token"]);
@@ -395,7 +397,8 @@ if(isset($_GET["code"])){
                                             if($files != null){
                                                 for($i = 0 ; $i < count($files); $i++){
                                                     echo '
-                                                    <a href="https://drive.google.com/file/d/'. $files[$i]["google_drive_file_id"] .'/view" target="_blank"class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                    <a href="https://drive.google.com/file/d/'. $files[$i]["google_drive_file_id"] .'/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                        <div class="file-id" hidden>'.$files[$i]["google_drive_file_id"].'</div>
                                                         <div class="d-flex justify-content-start ms-2 w-75">
                                                             <div class="me-2 flex-shrink-0">
                                                                  <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
@@ -410,10 +413,8 @@ if(isset($_GET["code"])){
                                                 }
                                             }
                                             ?>
-                                                                                    <!-- <div id="newFileContainer"></div> -->
-
                                         </div>
-
+                                        
                                         <?php if(isset($_SESSION["access_token"])){
                                                 echo '
                                                 <a id="uploadFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
@@ -445,7 +446,7 @@ if(isset($_GET["code"])){
                                             $_SESSION["postTemp"] = $_GET["post"];
                                             $_SESSION["codeTemp"] = $_GET["class"];
                                             echo '
-                                                <a href="includes/auth2.php" class="btn  bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                <a href="includes/auth2.php" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
                                                     <div class="d-flex justify-content-center align-items-center ms-2 w-75">
                                                         <div class="me-2 flex-shrink-0">
                                                             <i class="bi bi-google green1 fs-2 p-0 m-0"></i>

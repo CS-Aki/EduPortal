@@ -9,8 +9,9 @@ if(isset($_GET["code"])){
     require_once("../../vendor/autoload.php");
 }
 
-
 $client = new Google_Client();
+$client->setAccessType('offline'); // Request offline access
+$client->setPrompt('consent'); 
 
 if(isset($_GET["code"])){
     $client->setAuthConfig('../log and reg backend/config/credentials.json');
@@ -33,7 +34,8 @@ if (isset($_GET['code'])) {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
     $_SESSION['access_token'] = $token;
     $_SESSION["refresh_token"] = $token["refresh_token"];
-    echo var_dump($_SESSION['access_token']);
+    echo "test<br><br>";
+    echo var_dump($token);
     // $_SESSION["classCode"] = $_POST["classCode"];
     // $_SESSION["storedFile"] = $_FILES['files'];
     
@@ -41,7 +43,6 @@ if (isset($_GET['code'])) {
     echo "<br><br>". $_SESSION["codeTemp"];
     echo $_SESSION["postTemp"];
     header('location: http://localhost/EduPortal/instructor/material.php?class='.$_SESSION["codeTemp"].'&post='.$_SESSION["postTemp"]);
-    
     exit;
 }
 

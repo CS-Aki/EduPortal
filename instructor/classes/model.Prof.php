@@ -369,8 +369,6 @@ class Instructor extends DbConnection
     }
 
     protected function getFIlesInDb($postId, $classCode){
-        // echo $postId . "<br>";
-        // echo $classCode;
         $sql = "SELECT file_id, file_name, google_drive_file_id, file_size FROM files WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_category = ?";
         $stmt = $this->connect()->prepare($sql);
 
@@ -1221,5 +1219,24 @@ class Instructor extends DbConnection
             return false;
         }
     }
+
+    protected function removeFilesFromDb($files){
+        $sql = "DELETE FROM files WHERE google_drive_file_id = ?";
+       $stmt = $this->connect()->prepare($sql);
+
+       try {
+           if ($stmt->execute(array($files))) {
+               if ($stmt->rowCount() == 0) {
+                   return false;
+               }
+               return true;
+           } else {
+               return false;
+           }
+       } catch (PDOException $e) {
+           echo "Error removeFilesFromDb: " . $e;
+           return false;
+       }
+   }
 
 }

@@ -210,7 +210,7 @@ class InstructorController extends Instructor
         $content = $this->getFIlesInDb($postId, $classCode);
 
         if($content == null){
-            // echo "Controller error";
+            // echo "null";
             return;
         }
 
@@ -314,4 +314,8 @@ class InstructorController extends Instructor
             // header("location: ../includes/upload-file.php");
         }
    }
+
+    public function removeFiles($files){
+        $this->removeFilesFromDb($files);
+    }
 }

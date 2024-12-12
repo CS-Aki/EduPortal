@@ -127,6 +127,7 @@ $(document).ready(function() {
       },
      
       success: function(response) {
+        console.log(response);
         if(response == null) return;
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         let temp =  response[response.length - 1]["month"].charAt(5) +  response[response.length - 1]["month"].charAt(6);
