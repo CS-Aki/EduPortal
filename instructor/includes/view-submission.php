@@ -15,6 +15,8 @@ $quizSubmission = $listController->getQuizSubmission($classCode);
 $instrCtrlr = new InstructorController();
 $userId = 0;
 
+// echo var_dump($studentList);
+
 // echo var_dump($quizSubmission);
 // $fileNameToCheck = "index.css";
 // $fileNames = array_column($actSubmission, 'file_name');
@@ -75,4 +77,4 @@ if(isset($postID) && $postID != null){
 
 //  echo var_dump($submittedFiles);
 //  echo "<br>";
-//  echo var_dump($actContent);
+//  echo var_dump($quizSubmission);

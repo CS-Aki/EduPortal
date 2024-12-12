@@ -94,14 +94,6 @@ $(document).ready(function () {
                 if($(".post-id").text() != "" || $(".post-id").text() != null){
                     Swal.fire({
                         title: 'Deleted!',
-                        text: 'Your file has been successfully deleted.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-
-                }else{
-                    Swal.fire({
-                        title: 'Deleted!',
                         text: "Your file has been successfully deleted. Going Back To Class",
                         icon: 'success',
                         allowOutsideClick: false,
@@ -112,7 +104,15 @@ $(document).ready(function () {
                     setTimeout(function() {
                         window.location.href = `class.php?class=${classCode}`;
                     }, 3000);
-    
+  
+                }else{
+                     
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Your file has been successfully deleted.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
                 }
                 // Swal.close();
   
