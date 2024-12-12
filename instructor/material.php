@@ -26,7 +26,7 @@ if(isset($_GET["code"])){
    include("includes/auth2.php");
 }
 
-// echo var_dump($_SESSION['refresh_token']);
+// echo var_dump($_SESSION['access_token']);
 
 ?>
 
@@ -174,7 +174,7 @@ if(isset($_GET["code"])){
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item h-font green2 fs-5" href="" data-bs-toggle="modal" data-bs-target="#editPostModal">Edit</a></li>
-                                                <li><a class="dropdown-item h-font green2 fs-5" href="=">Delete</a></li>
+                                                <li><a class="delete-btn dropdown-item h-font green2 fs-5" href="" id="delete-btn">Delete</a></li>
                                             </ul>
                                         </div>
                                         <?php } ?>
@@ -521,6 +521,7 @@ if(isset($_GET["code"])){
     <script src="scripts/comment.js"></script>
     <script src="scripts/grading.js"></script>
     <script src="scripts/edit-post.js"></script>
+    <script src="scripts/delete-post.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>

@@ -937,34 +937,35 @@ class Instructor extends DbConnection
     }
 
     protected function removeQuizInDb($postId){
-        $sql = "DELETE FROM posts WHERE post_id = ?";
-        $stmt = $this->connect()->prepare($sql);
-        
         try {
-            if ($stmt->execute(array($postId))) {
-                if ($stmt->rowCount() > 0) {
-                    $sql = "DELETE FROM quiz WHERE post_id = ?";
-                    $stmt = $this->connect()->prepare($sql);  
-                    try {
-                        if ($stmt->execute(array($postId))) {
-                            if ($stmt->rowCount() > 0) {
-                                
-                            }
-                        } else {
-                            return false;
-                        }
-                    } catch (PDOException $e) {
-                        echo "Error: " . $e;
-                        return false;
-                    }
-                }
-            } else {
-                return false;
+            $conn = $this->connect();
+            $conn->beginTransaction(); // Start transaction
+        
+            $sqlQuiz = "DELETE FROM quiz WHERE post_id = ?";
+            $stmtQuiz = $conn->prepare($sqlQuiz);
+            $stmtQuiz->execute([$postId]);
+        
+            $sqlPosts = "DELETE FROM posts WHERE post_id = ?";
+            $stmtPosts = $conn->prepare($sqlPosts);
+            $stmtPosts->execute([$postId]);
+        
+            $sqlGrades = "DELETE FROM grades WHERE post_id = ?";
+            $stmtGrades = $conn->prepare($sqlGrades);
+            $stmtGrades->execute([$postId]);
+        
+            $conn->commit(); // Commit transaction
+        
+            if ($stmtQuiz->rowCount() > 0 || $stmtPosts->rowCount() > 0 || $stmtGrades->rowCount() > 0) {
+                echo "Success";
+                return true;    
             }
+            return false;
         } catch (PDOException $e) {
-            echo "Error: " . $e;
+            $this->connect()->rollBack(); // Rollback on error
+            echo "Error: " . $e->getMessage();
             return false;
         }
+        
     }
 
     protected function deadlineAndPointsInDb($postID, $classCode){
@@ -1203,17 +1204,16 @@ class Instructor extends DbConnection
     }
 
     protected function updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts){
-        echo "\n\nInside Update Quiz\n\n";
-        echo "class code " . $classCode . "\n";
-        echo "title " . $title . "\n";
-        echo "postId " . $postId . "\n";
-        echo "description " . $description . "\n";
-        echo "startingDate " . $startingDate . "\n";
-        echo "startingTime " . $startingTime . "\n";
-        echo "deadlineTime  " . $deadlineDate . "\n";
-        echo "deadlineTime " . $deadlineTime . "\n";
-        echo "attempts " . $attempts . "\n";
-
+        // echo "\n\nInside Update Quiz\n\n";
+        // echo "class code " . $classCode . "\n";
+        // echo "title " . $title . "\n";
+        // echo "postId " . $postId . "\n";
+        // echo "description " . $description . "\n";
+        // echo "startingDate " . $startingDate . "\n";
+        // echo "startingTime " . $startingTime . "\n";
+        // echo "deadlineTime  " . $deadlineDate . "\n";
+        // echo "deadlineTime " . $deadlineTime . "\n";
+        // echo "attempts " . $attempts . "\n";
 
         $sql = "START TRANSACTION;
                     UPDATE posts SET title = ?, content = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?;
@@ -1224,7 +1224,6 @@ class Instructor extends DbConnection
         try {
         if ($stmt->execute(array($title, $description, $classCode, $postId, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts, $classCode, $postId))) {
             if ($stmt->rowCount() == 0) {
-                
                 return false;
             }
             return true;
@@ -1281,7 +1280,7 @@ class Instructor extends DbConnection
     
 
     protected function removeFilesFromDb($files){
-        $sql = "DELETE FROM files WHERE google_drive_file_id = ?";
+       $sql = "DELETE FROM files WHERE google_drive_file_id = ?";
        $stmt = $this->connect()->prepare($sql);
 
        try {
@@ -1298,5 +1297,51 @@ class Instructor extends DbConnection
            return false;
        }
    }
+
+   protected function removeActivityInDb($postId){
+        $sql = "START TRANSACTION;
+                      DELETE FROM activity WHERE MD5(post_id) = ?;
+                      DELETE from posts WHERE MD5(post_id) = ?;
+                      DELETE from grades WHERE MD5(post_id) = ?;
+                      DELETE from comments WHERE MD5(post_id) = ?;
+                COMMIT;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $postId, $postId, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error removeFilesFromDb: " . $e;
+            return false;
+        }
+   }
+
+   protected function removeMaterialInDb($postId){
+    $sql = "START TRANSACTION;
+                DELETE from posts WHERE MD5(post_id) = ?;
+                DELETE from comments WHERE MD5(post_id) = ?;
+            COMMIT;";    
+    $stmt = $this->connect()->prepare($sql);
+
+    try {
+        if ($stmt->execute(array($postId, $postId))) {
+            if ($stmt->rowCount() == 0) {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    } catch (PDOException $e) {
+        echo "Error removeFilesFromDb: " . $e;
+        return false;
+    }
+}
 
 }

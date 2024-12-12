@@ -388,6 +388,7 @@ if (session_id() === "") session_start();
     <?php require('inc/footer.php'); ?>
     <script src="scripts/edit-post.js"></script>
     <script src="scripts/create-quiz.js"></script>
+    <script src="scripts/delete-post.js"></script>
 
     <!-- You can see the question format inside here, try to preserve the div names and element hierarchy -->
     <!-- Check check niyo nalang din kung working siya and walang error habang ginagawa, sa console log niyo mkaikita yung messages -->

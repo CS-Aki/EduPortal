@@ -318,4 +318,12 @@ class InstructorController extends Instructor
     public function removeFiles($files){
         $this->removeFilesFromDb($files);
     }
+
+    public function removeActivity($postId){
+        $this->removeActivityInDb($postId);
+    }
+
+    public function removeMaterial($postId){
+        $this->removeMaterialInDb($postId);
+    }
 }

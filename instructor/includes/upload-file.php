@@ -25,6 +25,37 @@ if(isset($_GET["code"])){
 
 session_start();
 
+$jsonFile = '../../log and reg backend/config/credentials.json';
+
+try {
+    if (!file_exists($jsonFile)) {
+        throw new Exception("File not found: $jsonFile");
+    }
+    
+    $jsonData = file_get_contents($jsonFile);
+
+    // Decode the JSON file into an associative array
+    $data = json_decode($jsonData, true);
+
+    // Check for errors during decoding
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Error decoding JSON: " . json_last_error_msg());
+    }
+    // Check if the 'client_id' key exists
+    if (isset($data['web']['client_id'])) {
+        echo "client_id found: " . $data['web']['client_id'] . PHP_EOL;
+    } elseif (isset($data['client_id'])) {
+        echo "client_id found: " . $data['client_id'] . PHP_EOL;
+    } else {
+        echo "client_id not found in the JSON file." . PHP_EOL;
+        var_dump($data);
+    }
+} catch (Exception $e) {
+    // Handle any exceptions
+    echo "Error: " . $e->getMessage() . PHP_EOL;
+}
+
+
 $client = new Google_Client();
 // If we have an access token, proceed with file handling or whatever your logic is
 $client->setAccessToken($_SESSION['access_token']);
@@ -32,7 +63,7 @@ $client->setAccessToken($_SESSION['access_token']);
 // Check if the access token is expired and refresh it
 if ($client->isAccessTokenExpired()) {
     $refreshToken = $client->getRefreshToken();
-    $client->fetchAccessTokenWithRefreshToken($refreshToken);
+    $client->fetchAccessTokenWithRefreshToken($_SESSION["refresh_token"]);
     $_SESSION['access_token'] = $client->getAccessToken();
 }
 
@@ -179,9 +210,10 @@ if ($_SESSION['access_token']) {
                         unlink($destination);
                         echo "Temporary file {$files['name'][$index]} deleted from server.<br>";
                     }
-
                 } catch (Exception $e) {
                     echo "Error uploading file {$files['name'][$index]} to Google Drive: " . $e->getMessage() . "<br>";
+                    header("Location : ../../includes/auth.php");
+                    exit();
                 }
             } else {
                 echo "File {$files['name'][$index]} does not exist at $destination. Cannot proceed with Google Drive upload.<br>";
