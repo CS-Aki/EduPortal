@@ -326,7 +326,7 @@ if(isset($_GET["code"])){
     </div>
     <!-- EDIT POST MODAL -->
     <div class="modal fade" id="editPostModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editPostLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">                       
+        <div class="modal-dialog modal-dialog-centered modal-lg">                       
                 <div class="modal-content rounded-4">
                     <form action="includes/edit-post.php" method="post" id="editForm" enctype="multipart/form-data">
                     <div class="modal-body">

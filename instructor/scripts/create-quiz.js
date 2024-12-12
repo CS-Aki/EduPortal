@@ -518,8 +518,7 @@ $(document).ready(function () {
                     isAddQuestionClicked = false; // Reset the flag
                     return;
                 }
-                const target = event.target;
-
+                const target = event.target.closest('a, button');
                 // Check if the clicked element has any of the exempt classes
                 if (
                     target.dataset.exempt === 'true' || // Custom exempt logic
@@ -535,7 +534,18 @@ $(document).ready(function () {
                     target.classList.contains("booleanSelect") ||
                     target.classList.contains("select_ans_key") ||
                     target.classList.contains("remove-choice") ||
-                    target.classList.contains("btn-success")
+                    target.classList.contains("btn-success") ||
+                    target.classList.contains("dropdown-menu") ||
+                    target.classList.contains("dropdown-menu show") ||
+                    target.classList.contains("nav-link dropdown-menu show") ||
+                    target.classList.contains("nav-link dropdown-menu") ||
+                    target.classList.contains("dropdown") ||
+                    target.id === "edit_quiz" ||
+                    target.id === "close_code" ||
+                    target.id === "menu-btn" ||
+                    target.classList.contains("dropdown-item") ||
+                    target.classList.contains("dropdown-menu dropdown-menu-end show") ||
+                    target.classList.contains("dropdown-menu dropdown-menu-end")
                 ) {
                     // If any of the conditions are met, do not show the alert
                     return;

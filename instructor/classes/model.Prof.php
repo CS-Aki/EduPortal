@@ -221,10 +221,10 @@ class Instructor extends DbConnection
             $_SESSION["postId"] = $connection->lastInsertId();
 
             $stmt = null;
-            $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`, `starting_date`, `starting_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
             
-            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, "Pending"))) {
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, "Pending", $startingDate, $startingTime))) {
                 return true;
                 exit();
             }else{
@@ -1185,7 +1185,7 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points){
+    protected function updatePostInDb($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $type, $files, $points, $attempts){
         switch($type){
             case "Material":
                 $this->updateMaterial($classCode, $title, $postId, $files, $description);
@@ -1194,11 +1194,46 @@ class Instructor extends DbConnection
                 $this->updateActivity($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $points);
                 break;
             case "Quiz":
-                
+                $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
                 break; 
             default:
                 echo "NO TYPE FOUND ERROR";
                 break;
+        }
+    }
+
+    protected function updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts){
+        echo "\n\nInside Update Quiz\n\n";
+        echo "class code " . $classCode . "\n";
+        echo "title " . $title . "\n";
+        echo "postId " . $postId . "\n";
+        echo "description " . $description . "\n";
+        echo "startingDate " . $startingDate . "\n";
+        echo "startingTime " . $startingTime . "\n";
+        echo "deadlineTime  " . $deadlineDate . "\n";
+        echo "deadlineTime " . $deadlineTime . "\n";
+        echo "attempts " . $attempts . "\n";
+
+
+        $sql = "START TRANSACTION;
+                    UPDATE posts SET title = ?, content = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?;
+                    UPDATE quiz SET starting_date = ?, starting_time = ?, deadline_date = ?, deadline_time = ?, attempt = ? WHERE MD5(class_code) = ? AND MD5(post_id) = ?;
+                COMMIT;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($title, $description, $classCode, $postId, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts, $classCode, $postId))) {
+            if ($stmt->rowCount() == 0) {
+                
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+        } catch (PDOException $e) {
+        echo "Error updateMaterial: " . $e;
+        return false;
         }
     }
 

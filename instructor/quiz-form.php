@@ -53,6 +53,13 @@ if (session_id() === "") session_start();
             display: flex;
             align-items: center;
         }
+        
+        .dropdown-menu1 {
+            position: absolute;
+            right: 0; /* Align to the right edge of the screen */
+            
+        }
+       
     </style>
     <?php require('inc/links.php'); ?>
 </head>
@@ -87,17 +94,23 @@ if (session_id() === "") session_start();
                             </ul>
                         </div>
                     </div>
+                    
                 </nav>
-
-                <?php 
-            
-                ?>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-menu1" href="#" id="menu-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="me-2 bi bi-gear green2 fs-3 icon"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item h-font green2 fs-5" href="" data-bs-toggle="modal" data-bs-target="#editPostModal">Edit</a></li>
+                        <li><a class="dropdown-item h-font green2 fs-5" href="">Delete</a></li>
+                    </ul>
+                </div>
 
                 <div>
-                    <h1><?php echo $title; ?></h1>
-                    <label>STARTING DATE: <?php echo $startingDateTime; ?></label><br>
-                    <label>DEADLINE: <?php echo $deadlineDateTime; ?></label><br>
-                    <label>ATTEMPT(S): <?php echo $attempt; ?></label>
+                    <h1 id="material-title"><?php echo $title; ?></h1>
+                    <label id="material-start-date">Starting Date: <?php echo $startingDateTime; ?></label><br>
+                    <label id="material-end-date">Deadline Date: <?php echo $deadlineDateTime; ?></label><br>
+                    <label>Attempt(s): </label><label  id="attempt-text"> <?php echo $attempt; ?></label>
                 </div>
 
                 <form id="quiz-form">
@@ -282,7 +295,6 @@ if (session_id() === "") session_start();
                         } ?>
                     </div>
                     
-           
             <button type="button" id="add-question" class="btn btn-secondary">Add Question</button><br><br>
             <input type="submit" class="btn btn-info" id="saveQuiz" value="Save Quiz">
             </form>
@@ -294,9 +306,87 @@ if (session_id() === "") session_start();
 
             <br><br><br>
         </div>
-
     </div>
+
+       <!-- EDIT POST MODAL -->
+       <div class="modal fade" id="editPostModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editPostLabel" >
+        <div class="modal-dialog modal-dialog-centered modal-lg">                       
+                <div class="modal-content rounded-4">
+                    <form method="post" id="editForm">
+                    <div class="modal-body">
+                            <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div>
+                                        <i class='bi bi-pencil-square fs-1 green1 title p-0 m-0'></i>
+                                    </div>
+                                    <div class="lh-sm">
+                                        <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1" id="className">Edit Post</h1>
+                                    </div>
+                                </div>
+                                <button clas="d-flex align-items-start" type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="row px-2">
+                                <div class="col-lg-12 mb-2">
+                                    <label class="form-label black3 mb-0">Title</label>
+                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="<?php echo $postDetails[0]["title"]; ?>" name="post_title" id="postTitle">
+                                </div>
+                                <div class="col-lg-12 mb-3">
+                                    <label class="form-label black3 mb-0">Description</label>
+                                    <textarea type="text" rows="4" class="form-control black3 shadow-elevation-light-3 container-fluid" value="" name="post_desc" id="postDesc"><?php echo $postDetails[0]["content"]; ?></textarea>
+                                </div>
+
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">Attempts</label>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="number" class="attempts form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" min="1" value="<?php echo $quizContent1[0]["attempt"]; ?>" name="attempts" id="attempts">
+                                        </div>
+                                        <!-- <div class="col-lg-5 mb-2"></div> -->
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">From</label>
+                                        </div>
+
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $quizContent1[0]["starting_date"]; ?>" name="post_title" id="startDate">
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $quizContent1[0]["starting_time"]; ?>" name="post_title" id="startTime">
+                                        </div>
+
+                                        <div class="col-lg-4 mb-2"></div>
+                                        <div class="col-lg-1 col-sm-12 mb-2">
+                                            <label class="black3 mb-0">To</label>
+                                        </div>
+                            
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $quizContent1[0]["deadline_date"]; ?>" name="post_title" id="deadlineDate">
+                                        </div>
+                                        
+                                        <div class="col-lg-3 col-sm-6 mb-2">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $quizContent1[0]["deadline_time"]; ?>" name="post_title" id="deadlineTime">
+                                        </div>
+                                
+                                <div class="col-lg-4 mb-2"></div>
+                                <div class="col-lg-12 mb-2">
+                                    
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center gap-1 my-2">
+                                <button type="submit" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="edit_quiz">Edit Post</button>
+                                <button class="btn bordergreen green1 rounded-5 px-4 py-2" type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                            </div>
+                            <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
+                            </form>   
+                        </div> 
+                    </div>
+ 
+                </div>             
+        </div>
+    </div>
+    <div id="content-type" hidden><?php echo $postDetails[0]["content_type"];?></div>
+
     <?php require('inc/footer.php'); ?>
+    <script src="scripts/edit-post.js"></script>
     <script src="scripts/create-quiz.js"></script>
 
     <!-- You can see the question format inside here, try to preserve the div names and element hierarchy -->

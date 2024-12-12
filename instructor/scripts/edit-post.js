@@ -7,9 +7,9 @@ $(document).ready(function() {
         $("#fileInput").trigger('click');
     });
 
-    // $(document).on('click', '#uploadFile', function (event) {
+    // $(document).on('click', '#edit_quiz', function (event) {
     //     event.preventDefault();
-    //     console.log("Upload File");
+    //     console.log("Edit Quiz");
     // });
 
     
@@ -74,11 +74,12 @@ $(document).ready(function() {
    let initEndDate = $("#deadlineDate").val();
    let initEndTime = $("#deadlineTime").val();
    let initPoints = $("#points").val();
+   let initAttempt = $("#attempt-text").text();
 
    $("#editForm").submit(function (event) {
         console.log("Edit Files");
         event.preventDefault();
-
+        // let files = null;
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
         const postId = urlParams.get('post');
@@ -94,8 +95,10 @@ $(document).ready(function() {
         let points = 0;
         let startingDateFormat1 = "";
         let deadlineDateFormat = "";
+        let attempts = 0;
         
         if(type != "Material"){
+             attempts = $("#attempts").val();
              points = $("#points").val();
              startingDate = $("#startDate").val();
              startingTime = $("#startTime").val();
@@ -144,7 +147,7 @@ $(document).ready(function() {
 
             deadlineDateFormat = `${month1} ${day1}, ${year1} ${hours1}:${minutes1} ${ampm1}`;
             console.log("DEADLINE DATE: "+deadlineDateFormat);
-             if (!startingDate || !startingTime) {
+            if (!startingDate || !startingTime) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Invalid Start Time',
@@ -169,15 +172,6 @@ $(document).ready(function() {
                     text: 'Deadline time and date should be greater than the current time and date.',
                 });
                 return; 
-            }
-        
-            if (startingDateTime < currentDate) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Starting Time',
-                    text: 'Starting time and date should not be less than the current time and date.',
-                });
-                return;
             }
         
             if (startingDateTime > deadlineDateTime) {
@@ -207,7 +201,7 @@ $(document).ready(function() {
         console.log("Deadline Time " + deadlineTime);
 
 
-        if(initialDesc == description && initialTitle == title && $("#fileInput")[0].files.length == 0 && initialSDate == startingDate && initialSTime == startingTime && initEndDate == deadlineDate && initEndTime == deadlineTime && initPoints == points){
+        if(initialDesc == description && initialTitle == title && $("#fileInput")[0].files.length == 0 && initialSDate == startingDate && initialSTime == startingTime && initEndDate == deadlineDate && initEndTime == deadlineTime && initPoints == points && initAttempt == attempts){
             console.log("NO CHANGES");
             return;
         }
@@ -223,12 +217,13 @@ $(document).ready(function() {
         formData.append("deadlineTime", deadlineTime);
         formData.append("type", type);
         formData.append("points", points);
+        formData.append("attempts", attempts);
 
         if(type != "Material"){
 
         }
-
-        if($("#fileInput")[0].files.length > 0){
+        
+        if(files != null && $("#fileInput")[0].files.length > 0){
             for (let i = 0; i < $("#fileInput")[0].files.length; i++) {
                 // Append each file to the FormData object
                 formData.append("files[]", $("#fileInput")[0].files[i]); 
@@ -242,14 +237,13 @@ $(document).ready(function() {
                 }
             });
 
-
             $.ajax({
                 method: "POST",
                 url: "includes/save-file-session.php",
                 data: formData,
                 processData: false,
                 contentType: false,
-        
+
                 success: function (response) {
                     console.table("this is ",response);
                 }
@@ -264,7 +258,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 // isQuizSubmitted = true;
-                console.log(response);
+                console.log("edit post " + response);
                 // Swal.close();
                 // Swal.fire({
                 //     title: 'Success!',
@@ -288,35 +282,38 @@ $(document).ready(function() {
                         // console.table(response);
                         $("#mat-dl-container").empty();
                         $("#fileContainer").empty();
-                        
-                        console.table(response);
-                        response.forEach(element => {
-                            $("#mat-dl-container").append(`<a href="https://drive.google.com/file/d/${element["google_drive_file_id"]}/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                                            <div class="d-flex justify-content-start ms-2">
-                                                                <div class="me-2 flex-shrink-0">
-                                                                    <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                        $("#attempt-text").empty();
+                        // console.table(response);
+                        console.log("THIS IS THE RESPONES "+response);
+                        if(response != null){
+                            response.forEach(element => {
+                                $("#mat-dl-container").append(`<a href="https://drive.google.com/file/d/${element["google_drive_file_id"]}/view" target="_blank" class="btn bg-body-tertiary shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                                                <div class="d-flex justify-content-start ms-2">
+                                                                    <div class="me-2 flex-shrink-0">
+                                                                        <i class="bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0"></i>
+                                                                    </div>
+                                                                    <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                        <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${element["file_name"]}</span>
+                                                                        <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${element["file_size"]}</span>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
-                                                                    <span class="green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${element["file_name"]}</span>
-                                                                    <span class="fw-light green2 fs-6 d-flex mt-0" id="material-size">${element["file_size"]}</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>`);
-                        });
+                                                            </a>`);
+                            });
 
-                        if($("#fileInput")[0].files.length > 0){
-                            $('#uploadFile').after(`<a id="unsubmitFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
-                                                            <div class="d-flex justify-content-center align-items-center ms-2 w-75">
-                                                                <div class="me-2 flex-shrink-0">
-                                                                    <i class="bi bi-plus-lg green1 fs-2 p-0 m-0"></i>
+                            if($("#fileInput")[0].files.length > 0){
+                                $('#uploadFile').after(`<a id="unsubmitFile" href="" class="btn bordergreen shadow-elevation-dark-1 rounded-4 white-btn p-2 col-lg-4 col-md-12 col-sm-12 mb-1">
+                                                                <div class="d-flex justify-content-center align-items-center ms-2 w-75">
+                                                                    <div class="me-2 flex-shrink-0">
+                                                                        <i class="bi bi-plus-lg green1 fs-2 p-0 m-0"></i>
+                                                                    </div>
+                                                                    <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
+                                                                        <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Unsubmit Files</span>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="text-truncate" style="min-width: 0; flex-grow: 1;">
-                                                                    <span class="green2 fw-bold mb-0 fs-6 d-block text-truncate pe-lg-3 d-flex justify-content-start" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Unsubmit Files</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>`);
+                                                            </a>`);
+                            }
+                            displayFilesInModal();
                         }
-                        displayFilesInModal();
 
                         $("#fileInput").val("");
 
@@ -324,6 +321,7 @@ $(document).ready(function() {
                         $("#mat-desc-txt").text(description);
                         $("#material-start-date").text("Starting Date: "+startingDateFormat1);
                         $("#material-end-date").text("Deadline Date: "+ deadlineDateFormat);
+                        $("#attempt-text").text(attempts);
 
                         Swal.fire({
                             title: 'Success!',
@@ -356,7 +354,7 @@ $(document).ready(function() {
         });
    });
 
-   let files = [];
+     let files = [];
 
      $(document).on('click', '#unsubmitFile', function (event) {
         $('.file-id').each(function () {

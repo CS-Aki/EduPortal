@@ -108,5 +108,10 @@ if(isset($_GET["user"])){
                 }
             }
         }
+}else{
+    $quizContent1 = $instrCtrlr->getQuizContent($postId, $classCode);
 }
+
+
+
 //  echo var_dump($groupedQuestions);

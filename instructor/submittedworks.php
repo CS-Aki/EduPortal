@@ -227,6 +227,7 @@ unset($_SESSION["displayQuiz"]);
                                                         </div>
                                                     </div>
                                                 </div>";
+                                                
                                                 echo "<div class='collapse mb-2' id='{$i}'>
                                                         <div class='d-flex flex-column align-items-end justify-content-end' >
                                                             <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
@@ -252,7 +253,7 @@ unset($_SESSION["displayQuiz"]);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>";
+                                                ";
                                         }
                                     }
                                 }

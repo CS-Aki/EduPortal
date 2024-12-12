@@ -62,6 +62,7 @@ if(isset($_GET["post"])){
     // echo var_dump($comments);
 }
 
+
 if(isset($_POST["fromEdit"])){
     require_once("../../log and reg backend/classes/connection.php");
     require_once("../classes/model.Prof.php");
