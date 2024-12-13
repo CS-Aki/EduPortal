@@ -79,7 +79,7 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Instructor Code:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="********" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                             </div>
                             <div class="row">
@@ -89,13 +89,11 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                             </div>
                             <div class="mt-3 text-end">
-                                <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0">Save</button>
+                                <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0" id="save-changes" disabled>Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                
             </div>
         </div>
     </div>

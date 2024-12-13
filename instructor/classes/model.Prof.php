@@ -1324,25 +1324,41 @@ class Instructor extends DbConnection
    }
 
    protected function removeMaterialInDb($postId){
-    $sql = "START TRANSACTION;
-                DELETE from posts WHERE MD5(post_id) = ?;
-                DELETE from comments WHERE MD5(post_id) = ?;
-            COMMIT;";    
-    $stmt = $this->connect()->prepare($sql);
+        $sql = "START TRANSACTION;
+                    DELETE from posts WHERE MD5(post_id) = ?;
+                    DELETE from comments WHERE MD5(post_id) = ?;
+                COMMIT;";    
+        $stmt = $this->connect()->prepare($sql);
 
-    try {
-        if ($stmt->execute(array($postId, $postId))) {
-            if ($stmt->rowCount() == 0) {
+        try {
+            if ($stmt->execute(array($postId, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
                 return false;
             }
-            return true;
-        } else {
+        } catch (PDOException $e) {
+            echo "Error removeFilesFromDb: " . $e;
             return false;
         }
-    } catch (PDOException $e) {
-        echo "Error removeFilesFromDb: " . $e;
-        return false;
     }
-}
+
+    protected function getUserCreateDateInDb($userId){
+        $sql = "SELECT created FROM users WHERE user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
 
 }

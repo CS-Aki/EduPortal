@@ -32,6 +32,14 @@ if($email == ""){
     session_start();
 }
 
+// require_once("classes/connection.php");
+// require_once("classes/model.Prof.php");
+// require_once("classes/controller.Prof.php");
+
+// $instrCtrlr = new InstructorController();
+
+// echo strlen($_SESSION["id"]);s
+
 
 // session_write_close();
 // session_name("test");

@@ -326,4 +326,8 @@ class InstructorController extends Instructor
     public function removeMaterial($postId){
         $this->removeMaterialInDb($postId);
     }
+
+    public function getUserCreateDate($userId){
+        return $this->getUserCreateDateInDb($userId);
+    }
 }
