@@ -90,9 +90,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $url .= $_SERVER['REQUEST_URI'];
             if($url == "http://localhost/EduPortal/student/student-dashboard.php"){
         ?>
+        
         <button type="button" class="btn bg-transparent p-0 m-0" data-bs-toggle="modal" data-bs-target="#joinClassModal">
-            <i class="bi bi-plus-lg icon fs-1 me-2"></i>
+            <i class="bi bi-plus-lg icon fs-3 me-2 d-md-inline d-sm-block"></i>
+            <!-- <i class="bi bi-plus-lg icon fs-1 me-2"></i> -->
         </button>
+
         <?php } ?>
         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <!-- <i class="me-2 bi bi-person-circle fs-1 icon"></i> -->

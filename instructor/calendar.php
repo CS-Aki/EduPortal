@@ -41,6 +41,8 @@ if (isset($_SESSION["user_category"])) {
     <link href='https://unpkg.com/@fullcalendar/daygrid/main.css' rel='stylesheet' />
     <script src='https://unpkg.com/@fullcalendar/rrule/main.js'></script> <!-- Include rrule -->
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
     </head>
 
 <body class="bg-white">

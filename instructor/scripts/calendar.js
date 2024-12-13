@@ -1,9 +1,22 @@
 $(document).ready(function () {
-    let className = [];
-    let classCode = [];
-    let day = [];
-    let startTime = [];
-    let endTime = [];
+    var calendarEl = document.getElementById('calendar');
+    if (!calendarEl) {
+        console.error("Calendar element not found");
+    } else {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: getInitialView(),
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            height: 'auto',
+        });
+
+        calendar.render();
+    }
+
+    var addedEvents = new Set();
 
     $.ajax({
         url: "includes/calendar.php",
@@ -15,65 +28,74 @@ $(document).ready(function () {
 
             console.table(response);
 
-            for (let i = 0; i < response.length; i++) {
-                var parts = response[i]["class_schedule"].match(/\((.*?)\)\s(.*?)\-(.*)/);
-                startTime.push(parts[2]); 
-                endTime.push(parts[3]);
-                className.push(response[i]["class_name"]);
-                classCode.push(response[i]["class_code"]);
-
-                let wordDay = response[i]["class_schedule"].substring(1, 4);
-                switch (wordDay) {
-                    case "Mon": day.push(1); break;
-                    case "Tue": day.push(2); break;
-                    case "Wed": day.push(3); break;
-                    case "Thu": day.push(4); break;
-                    case "Fri": day.push(5); break;
-                    case "Sat": day.push(6); break;
-                    case "Sun": day.push(0); break;
+            response.forEach((eventData) => {
+                if (!eventData["class_code"] || !eventData["post id"]) {
+                    console.error("Missing class_code or post id:", eventData);
+                    return; 
                 }
-            }
 
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: getInitialView(), // Determine the initial view based on screen size
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,listWeek'
-                },
-                height: 'auto',
-                events: [], 
+                const classHash = md5(String(eventData["class_code"]));
+                const postHash = md5(String(eventData["post id"]));
+                const eventUrl = `material.php?class=${classHash}&post=${postHash}`;
+
+                if (eventData["content type"] === "Activity") {
+                    if (eventData["act start date"] && eventData["act start time"]) {
+                        const actStart = `${eventData["act start date"]}T${eventData["act start time"]}`;
+                        if (!addedEvents.has(actStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Activity Start)`,
+                                start: actStart,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actStart); 
+                        }
+                    }
+                    if (eventData["act deadline date"] && eventData["act deadline time"]) {
+                        const actEnd = `${eventData["act deadline date"]}T${eventData["act deadline time"]}`;
+                        if (!addedEvents.has(actEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Activity Deadline)`,
+                                start: actEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actEnd); 
+                        }
+                    }
+                }
+
+                if (eventData["content type"] === "Quiz") {
+                    if (eventData["quiz start date"] && eventData["quiz start time"]) {
+                        const quizStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
+                        if (!addedEvents.has(quizStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Quiz Start)`,
+                                start: quizStart,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizStart); 
+                        }
+                    }
+                    if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
+                        const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
+                        if (!addedEvents.has(quizEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Quiz Deadline)`,
+                                start: quizEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizEnd); 
+                        }
+                    }
+                }
             });
-
-            calendar.render();
-
-            // Adjust view on window resize
-            $(window).on('resize', function () {
-                const newView = getInitialView();
-                if (calendar.view.type !== newView) {
-                    calendar.changeView(newView);
-                }
-            });
-
-            for (let i = 0; i < day.length; i++) {
-                const convertedStartTime = convertTo24Hour(startTime[i]);
-                const convertedEndTime = convertTo24Hour(endTime[i]);
-
-                if (!convertedStartTime || !convertedEndTime) {
-                    console.error(`Invalid time format for event ${i}:`, {
-                        originalStartTime: startTime[i],
-                        originalEndTime: endTime[i],
-                    });
-                    continue;
-                }
-
-                addWeeklyEventWithMinutes(calendar, className[i], "2024-11-01", "2024-12-31", day[i], convertedStartTime, convertedEndTime, classCode[i]);
-            }
         },
         error: function (xhr, status, error) {
             console.log("Error:", status, error);
-        },
+        }
     });
 
     function getInitialView() {
@@ -85,47 +107,4 @@ $(document).ready(function () {
             return 'dayGridMonth';
         }
     }
-
-    function convertTo24Hour(time) {
-        const timeParts = time.match(/(\d+):(\d+)\s?(AM|PM)/);
-        if (!timeParts) return null;
-
-        let hours = parseInt(timeParts[1]);
-        const minutes = timeParts[2];
-        const period = timeParts[3];
-
-        if (period === "PM" && hours !== 12) {
-            hours += 12;
-        } else if (period === "AM" && hours === 12) {
-            hours = 0;
-        }
-
-        return `${hours.toString().padStart(2, "0")}:${minutes}`;
-    }
-
-    function addWeeklyEventWithMinutes(calendar, title, startDate, endDate, weekday, startTime, endTime, classCode) {
-        var start = new Date(startDate);
-        var end = new Date(endDate);
-        var classCodeLink = "class.php?class=" + md5(classCode);
-
-        while (start.getDay() !== weekday) {
-            start.setDate(start.getDate() + 1);
-        }
-
-        while (start <= end) {
-            const startDateTime = `${start.toISOString().split("T")[0]}T${startTime}`;
-            const endDateTime = `${start.toISOString().split("T")[0]}T${endTime}`;
-
-            calendar.addEvent({
-                title: title,
-                url: classCodeLink,
-                start: startDateTime,
-                end: endDateTime,
-                allDay: false
-            });
-
-            start.setDate(start.getDate() + 7);
-        }
-    }
-
 });

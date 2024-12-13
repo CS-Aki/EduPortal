@@ -330,4 +330,8 @@ class InstructorController extends Instructor
     public function getUserCreateDate($userId){
         return $this->getUserCreateDateInDb($userId);
     }
+
+    public function getAllQuizAndAct($userId){
+        return $this->getAllQuizAndActInDb($userId);
+    }
 }

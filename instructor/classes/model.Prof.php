@@ -1361,4 +1361,27 @@ class Instructor extends DbConnection
         }
     }
 
+    protected function getAllQuizAndActInDb($userId){
+        if (session_id() === "") session_start();
+
+        $sql = "SELECT classes.class_code, activity.starting_date as 'act start date', activity.starting_time as 'act start time', activity.deadline_date as 'act deadline date', activity.deadline_time as 'act deadline time', quiz.starting_date as 'quiz start date', quiz.starting_time as 'quiz start time', quiz.deadline_date as 'quiz deadline date', quiz.deadline_time as 'quiz deadline time', posts.post_id as 'post id', posts.content_type as 'content type', posts.title as 'post title' FROM `classes` 
+        INNER JOIN posts ON posts.class_code = classes.class_code 
+        INNER JOIN activity ON activity.class_code = classes.class_code 
+        INNER JOIN quiz ON quiz.class_code = classes.class_code 
+        WHERE classes.user_id = ? AND posts.content_type = ? OR posts.content_type = ? GROUP BY posts.post_id";
+
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, "Quiz", "Activity"))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
 }

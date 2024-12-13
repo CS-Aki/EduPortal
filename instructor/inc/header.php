@@ -93,9 +93,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $url .= $_SERVER['REQUEST_URI'];
             if($url == "http://localhost/EduPortal/instructor/instructor-dashboard.php"){
         ?>
-        <button type="button" class="btn bg-transparent p-0 m-0" data-bs-toggle="modal" data-bs-target="#joinClassModal">
-            <i class="bi bi-plus-lg icon fs-1 me-2"></i>
-        </button>
+
         <?php } ?>
         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <!-- <i class="me-2 bi bi-person-circle fs-1 icon"></i> -->
@@ -105,34 +103,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="includes/logout.inc.php">Log Out</a></li>
         </ul>
-    </div>
-</div>
-
-<!-- Join Class Modal -->
-
-<div class="modal fade" id="joinClassModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="joinClassLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
-                    <h1 class="modal-title fs-2 h-font ms-3 green1" id="staticBackdropLabel">Join Class</h1>
-                    <button type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="includes/join-class.php" method="post" id="joinClassForm">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-10">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Enter Class Code..." name="classCode" id="class_code" required>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" name="joinClassBtn" class="btn btn-primary green shadow-none rounded-5 px-5" id="join_class_btn">Join</button>
-                        </div>
-                    </div>
-                    <div class="join-class-msg"></div>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 

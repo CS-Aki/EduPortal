@@ -855,7 +855,7 @@ class ClassRm extends DbConnection
         INNER JOIN activity ON activity.class_code = join_class.class_code 
         INNER JOIN quiz ON quiz.class_code = join_class.class_code 
         INNER JOIN posts ON posts.class_code = join_class.class_code 
-        WHERE join_class.user_id = ? AND posts.content_type = ? OR posts.content_type = ? GROUP BY posts.title";
+        WHERE join_class.user_id = ? AND posts.content_type = ? OR posts.content_type = ?";
 
         $stmt = $this->connect()->prepare($sql);
 

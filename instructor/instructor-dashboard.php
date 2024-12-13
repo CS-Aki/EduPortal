@@ -46,7 +46,7 @@ if(isset($_GET["class"])){
     <div class="container-fluid px-4 py-3" id="main-content">
         <div class="row">
             <div class="col-lg-10 ms-auto">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="d-flex align-items-center justify-content-between">
                         <h3 class="h-font green3 me-2">All Classes</h3>
                         <div class="line-h"></div> <!-- Ensure the line grows to fill the space -->
