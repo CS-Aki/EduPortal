@@ -112,19 +112,26 @@ if(isset($_SESSION["user_category"])){
                                                                                 $date = new DateTime($submissions[$j]["created"]);
                                                                                 $formattedDate = $date->format('F d, Y');
                                                                         ?>
-                                                                  
                                                                         <i class='bi bi-check-circle green2 fs-1'></i>
                                                                         <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                        <?php if($actGrades != null){ foreach($actGrades as $grade){
+                                                                                if($grade["post_id"] == $act["post_id"]){
+                                                                                    echo "<p class='fs-6 green2 fw-bold mb-0' id='material-status'>Grade: {$grade["grade"]}%</p>";
+                                                                                }else{
+                                                                                    echo '<p class="fs-6 green2 fw-bold mb-0" id="material-status">Not Yet Graded</p>';
+                                                                                }
+                                                                            } 
+                                                                        }?>
                                                                         <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
                                                                         <?php } else{   ?>
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
-                                                                         <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                        <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
+                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
                                                                 <?php           }
                                                                         }else {?>
                                                                         <i class="bi bi-three-dots green2 fs-1"></i>
                                                                         <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                        <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
+                                                                        <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
                                                                         <!-- <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $month ." ". $day .", " .$year; ?></p>    -->
 
                                                                         <?php } ?>
@@ -210,13 +217,13 @@ if(isset($_SESSION["user_category"])){
                                                                             <?php } else {?>
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
+                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
                                                                             <!-- <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $month ." ". $day .", " .$year; ?></p>    -->
                                                                         <?php } ?> 
                                                                       <?php }else{ ?>
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">N/A</p>
+                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
                                                                         <?php }?>
                                                                     </div>                                           
                                                                 </div>

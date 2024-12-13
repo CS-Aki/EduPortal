@@ -817,4 +817,36 @@ class ClassRm extends DbConnection
             return null;
         }
     }
+
+    protected function getUserCreateDateInDb($userId){
+        $sql = "SELECT created FROM users WHERE user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getGradesActInDb($userId, $classCode){
+        $sql = "SELECT post_id, grade, status FROM grades WHERE user_id = ? AND class_code = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $classCode, "Activity"))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
 }

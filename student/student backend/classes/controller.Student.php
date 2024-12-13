@@ -235,6 +235,14 @@ class StudentController extends ClassRm{
     public function actContent($postId, $classCode){
         return $this->getActContent($postId, $classCode);
     }
+    
+    public function getUserCreateDate($userId){
+        return $this->getUserCreateDateInDb($userId);
+    }
+
+    public function getGradesAct($userId, $classCode){
+        return $this->getGradesActInDb($userId, $classCode);
+    }
 }
 
 ?>

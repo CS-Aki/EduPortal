@@ -15,7 +15,8 @@ $stdController = new StudentController();
 $details = $stdController->getClassDetails1($classCode);
 $submissions = $stdController->getSubmissions($classCode, $_SESSION["id"]);  // Checks Uploaded Files of Student (Activity)
 $post = $stdController->getClassDetails($details[0]["class_code"]);
-
+$actGrades = $stdController->getGradesAct($_SESSION["id"], $details[0]["class_code"]);
+// echo var_dump($actGrades);
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
 
