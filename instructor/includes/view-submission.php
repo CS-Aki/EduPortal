@@ -59,17 +59,19 @@ if(isset($postID) && $postID != null){
     $submitDateTime = date("F j, Y g:i A",  $submitTemp);
     $deadlineTemp = date("F j, Y g:i A", $deadlineDateTime);
     $status = "";
-    if($submitDateTime > $deadlineDateTime && $submittedFiles != null){
+    
+    if($submitDateTime > $deadlineTemp){
         $status = "Late";
-        // echo "<br>LATE";
     }else if($submittedFiles != null){
         $status = "On Time";
-        // echo "<br>On time";
     }
-    // echo "user" . $userId;
-    if($userId != 0) $grades = $instrCtrlr->getActivityGrade($postID, $classCode, $userId);
+
+    $grades = $instrCtrlr->getActivityGrade($postID, $classCode, $userId);
+    if($userId != 0 && $grades != null){
+        $currentPoint = ($grades[0]["grade"] / 100) * $actContent[0]["points"];
+    } 
     // echo $classCode;
-    // echo var_dump($submittedFiles);
+    // echo var_dump($grades);
 }
 
 // echo $actContent[0]["starting_date"];

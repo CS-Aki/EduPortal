@@ -24,6 +24,7 @@ $(document).ready(function () {
         const userId = $(".user-id").text();
         const status = $(".submit-status").text();
         let submitGrade = true;
+        console.log(points);
         e.preventDefault();
         console.log("Grade click");
         // console.log( "status"+status);
@@ -77,7 +78,8 @@ $(document).ready(function () {
         let submitGrade = false;
         const currentGrade = $(".point-temp").text();
         e.preventDefault();
-        console.log("points " + points);
+        console.log("GRADE IN CONSOLE " + (points / maxPoints) * 100);
+        let newGrade = (points / maxPoints) * 100;
         // console.log( "status"+status);
         // console.log(userId);
         // console.log(classCode);

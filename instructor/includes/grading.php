@@ -13,8 +13,8 @@ if(isset($_POST["points"])){
     $grade = ($points / $maxPoints) * 100;
     echo "Grade " . $grade;
 // echo $status;
-    // echo $points . "\n";
-    // echo $maxPoints . "\n";
+    echo $points . "\n";
+    echo $maxPoints . "\n";
     echo $classCode . "\n";
     echo $userId . "\n";
     echo $postId . "\n";

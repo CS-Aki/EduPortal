@@ -315,7 +315,7 @@ if (session_id() === "") session_start();
                                             </tr> -->
                                             <?php if($submittedQuiz == null){ ?>
                                             <tr>
-                                                <td colspan="5">No record</td>
+                                                <td colspan="6">No record</td>
                                             </tr> 
                                             <?php }?>
                                         </tbody>

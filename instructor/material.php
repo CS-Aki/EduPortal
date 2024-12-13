@@ -252,7 +252,7 @@ if(isset($_GET["code"])){
                                                     <div class="d-flex col-2 align-items-center">
                                                         <span style="font-size: large;" class="ms-2 form-label green2">Point: </span>
                                                         <div class="form-floating ms-2" style="flex: 1;">
-                                                            <input type="number" class="rounded-2 ps-2" id="points" value="<?php echo ($grades != null) ? $grades[0]["grade"] : 1; ?>" min="1" max="<?php echo $actContent[0]["points"]; ?>" placeholder="Enter number" required>
+                                                            <input type="number" class="rounded-2 ps-2" id="points" value="<?php echo ($grades != null) ?  $currentPoint : 1; ?>" min="1" max="<?php echo $actContent[0]["points"]; ?>" required>
                                                         </div>
                                                         <span style="font-size: medium;" class="ms-3 form-label d-flex align-items-center green2">
                                                             Max: <span class="ms-1 green2" id="max-points"><?php echo $actContent[0]["points"]; ?></span>
@@ -493,6 +493,7 @@ if(isset($_GET["code"])){
                                             }
                                             
                                         ?>
+                                        
                                         <input type="file" id="fileInput" name="files[]" style="display: none;" multiple>
                                         <div id="content-type" hidden><?php echo $postDetails[0]["content_type"];?></div>
                                         </div>
@@ -510,8 +511,7 @@ if(isset($_GET["code"])){
                 </div>             
         </div>
     </div>
-
-    <div class='point-temp' hidden><?php if($grades != null) echo $grades[0]["grade"];?></div>
+    <div class='point-temp' hidden><?php if($grades != null) echo $currentPoint;?></div>
     <div class='user-id' hidden><?php echo $userId;?></div>
     <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
     <div class='class-code' hidden><?php echo $actSubmission[0]["class_code"];?></div>

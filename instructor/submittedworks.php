@@ -82,7 +82,7 @@ unset($_SESSION["displayQuiz"]);
                                                             </div>
                                                         </div>
                                                         <div class='d-flex align-items-center justify-content-center'>
-                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'>6/10</p>
+                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-student-count'></p>
                                                             <a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "'>
                                                                 <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
                                                             </a>
@@ -90,7 +90,6 @@ unset($_SESSION["displayQuiz"]);
                                                     </div>
                                                 </button>";
 
-                                                // Group students into "Turned In" and "Pending"
                                                 $turnedIn = [];
                                                 $pending = [];
                                                 foreach ($studentList as $student) {
@@ -121,7 +120,7 @@ unset($_SESSION["displayQuiz"]);
                                                 foreach ($turnedIn as $student) {
                                                     echo "<a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                             <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'>
+                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
                                                                 <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
                                                             </div>
                                                         </a>";
@@ -142,7 +141,7 @@ unset($_SESSION["displayQuiz"]);
                                                 foreach ($pending as $student) {
                                                     echo "<a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                             <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'>
+                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
                                                                 <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
                                                             </div>
                                                         </a>";
@@ -170,7 +169,7 @@ unset($_SESSION["displayQuiz"]);
                         </div>
                         <div>
                             <?php 
-    // echo var_dump($post);
+
                                 if(isset($post[0]['content_type'])){
                                     for($i = 0 ; $i < count($post); $i++){
                                         if($post[$i]['content_type'] == 'Quiz'){
@@ -187,7 +186,7 @@ unset($_SESSION["displayQuiz"]);
                                                             </div>
                                                         </div>
                                                         <div class='d-flex align-items-center justify-content-center'>
-                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'>6/10</p>
+                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'></p>
                                                             <a href='quiz-form.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "'>
                                                                 <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
                                                             </a>
@@ -199,6 +198,7 @@ unset($_SESSION["displayQuiz"]);
                                                 $turnedIn = [];
                                                 $pending = [];
                                                 foreach ($studentList as $student) {
+                                               
                                                     $submitted = false;
                                                     if ($quizSubmission != null) {
                                                         foreach ($quizSubmission as $submission) {
@@ -226,7 +226,7 @@ unset($_SESSION["displayQuiz"]);
                                                 foreach ($turnedIn as $student) {
                                                     echo "<a href='quiz-material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                             <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'>
+                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
                                                                 <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
                                                             </div>
                                                         </a>";
@@ -247,7 +247,7 @@ unset($_SESSION["displayQuiz"]);
                                                 foreach ($pending as $student) {
                                                     echo "<a href='quiz-material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                             <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='images/profile.png' style='width: 20px;' class='rounded-5 me-3'>
+                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
                                                                 <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
                                                             </div>
                                                         </a>";

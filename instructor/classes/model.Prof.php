@@ -1035,6 +1035,7 @@ class Instructor extends DbConnection
     }
 
     protected function updateActGradeInDb($postId, $classCode, $userId, $status, $grade){
+        echo "\n\n\nGRADE : " . $grade . "\n\n\n";
         $sql = "UPDATE `grades` SET `grade`= ? WHERE user_id = ? AND post_id = ? AND class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 

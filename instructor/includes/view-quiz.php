@@ -111,7 +111,7 @@ if(isset($_GET["user"])){
 }else{
     $quizContent1 = $instrCtrlr->getQuizContent($postId, $classCode);
 }
-
+echo $firstName;
 
 
 //  echo var_dump($groupedQuestions);
