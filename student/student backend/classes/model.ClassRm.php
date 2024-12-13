@@ -851,7 +851,7 @@ class ClassRm extends DbConnection
     }
 
     protected function getAllActsAndQuizInDb($userId){
-        $sql = "SELECT join_class.class_code, activity.starting_date as 'act start date', activity.starting_time as 'act start time', activity.deadline_date as 'act deadline date', activity.deadline_time as 'act deadline time', posts.title as 'post title', posts.post_id as 'post id', quiz.starting_date as 'quiz start date', quiz.starting_time as 'quiz start time', quiz.deadline_date as 'quiz deadline date', quiz.deadline_time as 'quiz deadline time' FROM join_class 
+        $sql = "SELECT join_class.class_code, activity.starting_date as 'act start date', activity.starting_time as 'act start time', activity.deadline_date as 'act deadline date', activity.deadline_time as 'act deadline time', posts.title as 'post title', posts.content_type as 'content type' , posts.post_id as 'post id', quiz.starting_date as 'quiz start date', quiz.starting_time as 'quiz start time', quiz.deadline_date as 'quiz deadline date', quiz.deadline_time as 'quiz deadline time' FROM join_class 
         INNER JOIN activity ON activity.class_code = join_class.class_code 
         INNER JOIN quiz ON quiz.class_code = join_class.class_code 
         INNER JOIN posts ON posts.class_code = join_class.class_code 
