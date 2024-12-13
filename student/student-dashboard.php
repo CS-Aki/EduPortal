@@ -104,12 +104,6 @@ if(isset($_GET["class"])){
 
     <?php require('inc/footer.php'); ?>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar-menu');
-            sidebar.classList.toggle('active');
-        }
-    </script>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
 
     <script>

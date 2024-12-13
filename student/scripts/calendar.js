@@ -13,14 +13,11 @@ $(document).ready(function () {
             height: 'auto',
         });
 
-        // Render the calendar to attach it to the DOM
         calendar.render();
     }
 
-    // Set to track added events by start date-time
     var addedEvents = new Set();
 
-    // Assuming the response is already in JSON format
     $.ajax({
         url: "student backend/includes/calendar.php",
         type: "POST",
@@ -32,23 +29,18 @@ $(document).ready(function () {
             console.table(response);
 
             response.forEach((eventData) => {
-                // Ensure class_code and post id are valid
                 if (!eventData["class_code"] || !eventData["post id"]) {
                     console.error("Missing class_code or post id:", eventData);
-                    return; // Skip this iteration
+                    return; 
                 }
 
-                // Convert inputs to strings and hash them
                 const classHash = md5(String(eventData["class_code"]));
                 const postHash = md5(String(eventData["post id"]));
                 const eventUrl = `material.php?class=${classHash}&post=${postHash}`;
 
-                // Activity event handling (based on content type)
                 if (eventData["content type"] === "Activity") {
-                    // Add event for Activity Start and Deadline
                     if (eventData["act start date"] && eventData["act start time"]) {
                         const actStart = `${eventData["act start date"]}T${eventData["act start time"]}`;
-                        // Check if the event has already been added for this start time
                         if (!addedEvents.has(actStart)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Activity Start)`,
@@ -56,12 +48,11 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(actStart); // Mark as added
+                            addedEvents.add(actStart); 
                         }
                     }
                     if (eventData["act deadline date"] && eventData["act deadline time"]) {
                         const actEnd = `${eventData["act deadline date"]}T${eventData["act deadline time"]}`;
-                        // Check if the event has already been added for this end time
                         if (!addedEvents.has(actEnd)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Activity Deadline)`,
@@ -69,17 +60,14 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(actEnd); // Mark as added
+                            addedEvents.add(actEnd); 
                         }
                     }
                 }
 
-                // Quiz event handling (based on content type)
                 if (eventData["content type"] === "Quiz") {
-                    // Add event for Quiz Start and Deadline
                     if (eventData["quiz start date"] && eventData["quiz start time"]) {
                         const quizStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
-                        // Check if the event has already been added for this start time
                         if (!addedEvents.has(quizStart)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Quiz Start)`,
@@ -87,12 +75,11 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(quizStart); // Mark as added
+                            addedEvents.add(quizStart); 
                         }
                     }
                     if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
                         const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
-                        // Check if the event has already been added for this end time
                         if (!addedEvents.has(quizEnd)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Quiz Deadline)`,
@@ -100,7 +87,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(quizEnd); // Mark as added
+                            addedEvents.add(quizEnd); 
                         }
                     }
                 }
@@ -111,7 +98,6 @@ $(document).ready(function () {
         }
     });
 
-    // Determine initial calendar view based on screen size
     function getInitialView() {
         if (window.innerWidth <= 768) {
             return 'listWeek';
