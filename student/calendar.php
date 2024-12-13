@@ -19,6 +19,7 @@ if(isset($_SESSION["user_category"])){
     exit();
 }
 
+// include("student backend/includes/calendar.php");
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +32,9 @@ if(isset($_SESSION["user_category"])){
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
 
 </head>
 <body class="bg-white">

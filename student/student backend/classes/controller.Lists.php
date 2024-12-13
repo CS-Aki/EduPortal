@@ -78,5 +78,8 @@ class ListController extends ClassRm
     //     return getScheduleData();
     // }
     
+    public function getAllActsAndQuiz($userId){
+        return $this->getAllActsAndQuizInDb($userId);
+    }
 
 }

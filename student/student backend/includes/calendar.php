@@ -7,7 +7,9 @@ require_once("../classes/controller.Lists.php");
 require_once("../classes/controller.Student.php");
 
 $list = new ListController();
-$classList = $list->getAllClass($_SESSION["id"]);
+// $classList = $list->getAllClass($_SESSION["id"]);
+$taskList = $list->getAllActsAndQuiz($_SESSION["id"]);
 
+// echo var_dump($taskList);
 header('content-type: application/json');
-echo json_encode($classList);
+echo json_encode($taskList);

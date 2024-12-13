@@ -476,6 +476,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                 }
                                             }
                                         ?>
+                                        
                                         </div>
                                     </div>
                                     <?php if(isset($_SESSION["authorized"])) { ?>
@@ -576,11 +577,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                         $currentDateTime = new DateTime('now', $timezone);
                                                         $currentDateTime->format('Y-m-d H:i:s');
                                                         if($submissions != null){
-                                                            // echo "SUBMISSION DATE ".$submissions[0]["created"] . "<br>";
-                                                           // Current date and time
-                                                            // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
+
                                                             $deadlineObj = new DateTime($submissions[0]["created"]);
-                                                            // echo $currentDateTime . "<br>";
 
                                                             if ($submissions[0]["created"] <= $outputDateString) {
                                                                 echo '<div class="act-status"><span class="badge rounded-pill text-bg-success done-badge">Done</span></div>';
@@ -594,6 +592,28 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                             echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Missing</span></div>';
                                                         }
                                                     ?>
+                                                                                                        <div id="fileContainer">
+                                                        <?php if($submissions != null){ for($i = 0; $i < count($submissions); $i++){?>
+                                                            <?php 
+                                                        echo "<div class='fileCont'>
+                                                                <a href='https://drive.google.com/file/d/{$submissions[$i]['google_drive_file_id']}/view' target='_blank'>
+                                                                    <div class='file-id' hidden>{$submissions[$i]['google_drive_file_id']}</div>
+                                                                    <div class='container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2'>
+                                                                        <div class='d-flex justify-content-start'>
+                                                                            <div class='me-2 ms-2'>
+                                                                                <i class='bi bi-file-earmark-text-fill green1 fs-2 p-0 m-0'></i>
+                                                                            </div>
+                                                                            <div class='text-truncate' style='min-width: 0; flex-grow: 1;'>
+                                                                                <span class='green2 fw-bold mb-0 d-block text-truncate pe-lg-3 d-flex justify-content-start' style-'max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>{$submissions[$i]["file_name"]}</span>
+                                                                                <span class='fw-light green2 fs-6 d-flex mt-0' id='material-size'>{$submissions[$i]["file_size"]}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>";
+                                                            ?>
+                                                        <?php } } ?>
+                                                   </div>
                                                     <!-- <a href="#">
                                                         <div class="container-fluid bg-white white-btn rounded-3 p-1 shadow-elevation-dark-1 mb-2" id="file">
                                                             <div class="d-flex justify-content-start">
