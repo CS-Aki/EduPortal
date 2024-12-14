@@ -851,16 +851,23 @@ class ClassRm extends DbConnection
     }
 
     protected function getAllActsAndQuizInDb($userId){
-        $sql = "SELECT join_class.class_code, activity.starting_date as 'act start date', activity.starting_time as 'act start time', activity.deadline_date as 'act deadline date', activity.deadline_time as 'act deadline time', posts.title as 'post title', posts.content_type as 'content type' , posts.post_id as 'post id', quiz.starting_date as 'quiz start date', quiz.starting_time as 'quiz start time', quiz.deadline_date as 'quiz deadline date', quiz.deadline_time as 'quiz deadline time' FROM join_class 
-        INNER JOIN activity ON activity.class_code = join_class.class_code 
-        INNER JOIN quiz ON quiz.class_code = join_class.class_code 
-        INNER JOIN posts ON posts.class_code = join_class.class_code 
-        WHERE join_class.user_id = ? AND posts.content_type = ? OR posts.content_type = ?";
+        $sql = "SELECT join_class.class_code, activity.starting_date AS 'act start date', activity.starting_time AS 'act start time', activity.deadline_date AS 'act deadline date', activity.deadline_time AS 'act deadline time', quiz.starting_date AS 'quiz start date', quiz.starting_time AS 'quiz start time', quiz.deadline_date AS 'quiz deadline date', quiz.deadline_time AS 'quiz deadline time', posts.post_id AS 'post id', posts.content_type AS 'content type', posts.title AS 'post title' FROM posts
+                INNER JOIN join_class 
+                ON posts.class_code = join_class.class_code
+                INNER JOIN users 
+                ON users.user_id = join_class.user_id
+                LEFT JOIN activity 
+                ON posts.post_id = activity.post_id  
+                LEFT JOIN quiz 
+                ON posts.post_id = quiz.post_id          
+                WHERE (posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ? 
+                AND ((quiz.starting_date IS NOT NULL AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW())
+                OR (activity.starting_date IS NOT NULL AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW()));";
 
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($userId, "Quiz", "Activity"))) {
+            if ($stmt->execute(array("Quiz", "Activity", $userId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;

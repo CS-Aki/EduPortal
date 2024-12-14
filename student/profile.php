@@ -85,7 +85,7 @@ if(isset($_SESSION["user_category"])){
                             <div class="row">
                                 <div class="col-lg-12 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Address:</label>
-                                    <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="<?php if(isset($_SESSION["address"])) echo $_SESSION["address"]; else echo "test";?>"></textarea>
+                                    <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="<?php if(isset($_SESSION["address"])) echo $_SESSION["address"]; else echo "test";?>" readonly></textarea>
                                 </div>
                             </div>
                             <div class="mt-3 text-end">
