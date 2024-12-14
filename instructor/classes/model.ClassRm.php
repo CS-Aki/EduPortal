@@ -306,24 +306,5 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function getQuiz($postId, $classCode){
-        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, attempt FROM quiz WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
-        $stmt = $this->connect()->prepare($sql);
 
-        try {
-            if ($stmt->execute(array($postId, $classCode))) {
-                if ($stmt->rowCount() == 0) {
-                    return null;
-                }
-                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                return $result;
-            } else {
-                return null;
-            }
-        } catch (PDOException $e) {
-            echo "Error getQuiz: " . $e;
-            return null;
-        }
-    }
 }

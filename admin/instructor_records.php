@@ -346,7 +346,7 @@ if(isset($_SESSION["user_category"])){
                     targets: 0, // First column (Instructor Code)
                     visible: false, // Hide the column
                 }
-                  ]
+                ]
                 
             });
         });

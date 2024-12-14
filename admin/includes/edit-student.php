@@ -16,7 +16,7 @@ if(isset($_POST["studentName"])){
     $birthdate = $_POST["birthdate"];
 
     $stdController = new StudentController();
-    $result = $stdController->changeStudentDetails($studentName, $status,  $email,  $gender, $address, $oldName, $id, $birthdate );
+    $result = $stdController->changeStudentDetails($studentName, $status,  $email,  $gender, $address, $oldName, $id, $birthdate);
 
     if($result){
         echo "Update Success";

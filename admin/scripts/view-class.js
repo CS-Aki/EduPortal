@@ -48,7 +48,7 @@ $(document).ready(function() {
                 $("#class_name").val(response.class[0]["class_name"]);
                 $("#class_code").val(response.class[0]["class_code"]);
                 $("#class_status").val(response.class[0]["class_status"]);
-                $("#class_instructor").val(response.class[0]["user_id"]); 
+                $("#class_instructor").val(response.class[0]["user_id"]) ; 
                 $("#daySched").val(daySched);
                 $("#startingHourSched").val(startHours);
                 $("#startingMinuteSched").val(startMinutes);

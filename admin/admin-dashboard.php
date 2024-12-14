@@ -189,7 +189,6 @@ if(isset($_SESSION["user_category"])){
                             </div>
                           </div>
                  
-                
                           <div class="container-fluid border-bottom border-secondary-subtle border-2 rounded-3 py-3 px-lg-3 d-flex align-items-center p-2 mb-2">
                             <div>
                               <p class="black3 lh-1 fs-5 mb-0 pb-0 me-4">4</p>
