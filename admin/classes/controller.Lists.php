@@ -93,4 +93,8 @@ class ListController extends ClassRm
         return $list;
     }
 
+    public function getAllProf(){
+        return $this->getAllProfInDb();
+    }
+
 }

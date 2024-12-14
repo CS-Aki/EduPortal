@@ -38,7 +38,7 @@ class StudentController extends Student{
         return $studentDetail;
     }
 
-    public function changeStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode){
+    public function changeStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate){
         if($this->invalidInput($instructorName)){
             echo "Special Characters aren't allowed, please try again";
             return;
@@ -49,7 +49,7 @@ class StudentController extends Student{
             return;
         } 
 
-        $result = $this->updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode);
+        $result = $this->updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate);
 
         if($result == false || $result == null){
             echo "Error changeProfDetails";
@@ -61,11 +61,11 @@ class StudentController extends Student{
 
     private function invalidInput($instructorName)
     {
-        if (!preg_match("/^[a-zA-Z ]*$/", $instructorName)) {
+        if (!preg_match("/^[a-zA-Z. ]*$/", $instructorName)) {
             return true;
         }
 
-        if (!preg_match("/^[a-zA-Z0-9 ]*$/", $instructorName)) {
+        if (!preg_match("/^[a-zA-Z0-9. ]*$/", $instructorName)) {
             return true;
         }
 

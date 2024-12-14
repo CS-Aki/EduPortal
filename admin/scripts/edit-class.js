@@ -8,6 +8,18 @@ $(document).ready(function() {
         $("#message").empty();
     });
 
+    var classProfId = 0;
+    var classProf = "";
+
+    $('#class_instructor').change(function() {
+        var selectedOption = $(this).find('option:selected');
+        
+        classProfId = selectedOption.val(); 
+        classProf = selectedOption.text();
+
+    });
+
+
     $("#editClassModal").on("shown.bs.modal", function () {
         // Capture the initial values of modal fields
         tempClassName = $("#class_name").val();
@@ -66,8 +78,8 @@ $(document).ready(function() {
         let className = $("#class_name").val();
         let classCode = $("#class_code").val();
         let classStatus = $("#class_status").val();
-        let classProf = $("#class_instructor").val();
-        
+        let classProf = $("#class_instructor").find('option:selected').text();
+        let classProfId = $("#class_instructor").val();
         let daySched = $("#daySched").val();
         let startingHour = $("#startingHourSched").val();
         let startingMin = $("#startingMinuteSched").val();
@@ -75,7 +87,7 @@ $(document).ready(function() {
         let endingHour = $("#endingHourSched").val();
         let endingMin = $("#endingMinuteSched").val();
         let endingPeriod = $("#endingPeriodSched").val();
-        
+
         if(isChange != false){
             $.ajax({
                 url: "includes/edit-class.php",
@@ -85,7 +97,8 @@ $(document).ready(function() {
                     tempClassName : tempClassName,
                     classCode : classCode,
                     classStatus : classStatus,
-                    classProf : classProf,
+                    classProfId : classProfId,
+                    classProf : classProf,               
                     daySched : daySched,
                     startingHourSched : startingHour,
                     startingMinSched : startingMin,
@@ -113,21 +126,7 @@ $(document).ready(function() {
                             endingMin: $("#endingMinuteSched").val(),
                             endingPeriod: $("#endingPeriodSched").val(),
                         };
-                        // $.ajax({
-                        //     url: "includes/class-list.php",
-                        //     type: "POST",
-                        //     data: {
-                        //         displayClass : "tempValueHere",
-                        //     },
-                            
-                        //     success: function(response) {
-                        //        console.table(response);
-                        //     },
-                        //     error: function(xhr, status, error) {
-                        //         console.log("error here");
-                        //         console.log(error);
-                        //     }
-                        // });
+
                         console.log(classCode);
 
                         var row = table.rows().every(function() {
@@ -154,14 +153,6 @@ $(document).ready(function() {
                     
                         $("#message").append("<div class='alert alert-danger' role='alert'><span>"+response+"</span></div>");
                     }
-
-                    // console.log(tempClassName);
-                    // console.log(response);
-                    
-
-
-                    // console.log("inside");
-                    // console.table(response);      
                 
                 },
                 error: function(xhr, status, error) {

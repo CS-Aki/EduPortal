@@ -10,6 +10,8 @@ if (isset($_POST['className'])) {
     $classCode = generateClassCode();
     $className = $_POST["className"];
     $status = $_POST["classStatus"];
+    $userId = $_POST["classProfId"];
+
     $classSchedule = array(
         "day" => $_POST["daySched"],
         "startingHour" => $_POST["startingHourSched"],
@@ -33,7 +35,7 @@ if (isset($_POST['className'])) {
     // $_SESSION['endingMinSched'] = $classSchedule["endingMin"];
     // $_SESSION['endTimePeriod'] = $classSchedule["endTimePeriod"];
     // $_SESSION['status'] = $status;
-    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status, "");
+    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status, "", $userId);
     $classController->addClass();
 }
 

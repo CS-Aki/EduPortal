@@ -3,12 +3,12 @@
 class ClassRm extends DbConnection
 {
 
-    protected function addNewClass($classCode, $className, $classSchedule, $classProf, $status)
+    protected function addNewClass($classCode, $className, $classSchedule, $classProf, $status, $userId)
     {
-        $sql = "INSERT INTO classes (`class_code`, `class_name`, `class_teacher`, `class_schedule`, `class_status`) VALUES (?, ? ,?, ?, ?)";
+        $sql = "INSERT INTO classes (`class_code`, `class_name`, `class_teacher`, `class_schedule`, `class_status`, `user_id`) VALUES (?, ? ,?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if ($stmt->execute(array($classCode, $className, $classProf, $classSchedule, $status))) {
+        if ($stmt->execute(array($classCode, $className, $classProf, $classSchedule, $status, $userId))) {
             return true;
         } else {
             return false;
@@ -44,7 +44,7 @@ class ClassRm extends DbConnection
     protected function getClasses()
     {
         // WHERE class_num > ? AND class_num <= ?
-        $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status FROM classes";
+        $sql = "SELECT class_code, class_name, class_teacher, class_schedule, class_status, user_id FROM classes";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -56,7 +56,7 @@ class ClassRm extends DbConnection
 
     protected function fetchClassFromCode($classCode)
     {
-        $sql = "SELECT class_num, class_code, class_name, class_teacher, class_schedule, class_status from classes WHERE class_code = ?";
+        $sql = "SELECT class_num, class_code, class_name, class_teacher, class_schedule, class_status, user_id from classes WHERE class_code = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$classCode]);
 
@@ -93,14 +93,14 @@ class ClassRm extends DbConnection
         return $total = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    protected function editClassInfo($classCode, $className, $classSchedule, $classProf, $status)
+    protected function editClassInfo($classCode, $className, $classSchedule, $classProf, $status, $userId)
     {
         //   var_dump($classCode, $className, $classSchedule, $classProf, $status);
-        $sql = "UPDATE classes SET class_name = ?, class_teacher = ?, class_schedule = ?, class_status = ? WHERE class_code = ?";
+        $sql = "UPDATE classes SET class_name = ?, class_teacher = ?, class_schedule = ?, class_status = ?, user_id = ? WHERE class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($className, $classProf, $classSchedule, $status, $classCode))) {
+            if ($stmt->execute(array($className, $classProf, $classSchedule, $status, $userId, $classCode))) {
                 return true;
             } else {
                 return false;
@@ -119,6 +119,23 @@ class ClassRm extends DbConnection
 
         try {
             if ($stmt->execute(array($classCode))) {
+                return $studentList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            // Log the error message
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    protected function getAllProfInDb(){
+        $sql = "SELECT user_id, name FROM users WHERE user_category = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array(3))) {
                 return $studentList = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;

@@ -12,9 +12,11 @@ if(isset($_POST["instructorName"])){
     $gender = $_POST["gender"];
     $address = $_POST["address"];
     $oldName = $_POST["oldName"];
+    $birthdate = $_POST["birthdate"];
+    $userId = $_POST["userId"];
     // echo $instructorName;
     $instController = new InstructorController();
-    $result = $instController->changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName);
+    $result = $instController->changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId);
 
     if($result){
         echo "Update Success";

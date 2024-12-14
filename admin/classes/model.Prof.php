@@ -4,7 +4,7 @@ class Instructor extends DbConnection
 {
     protected function fetchAllInstructor()
     {
-        $sql = "SELECT user_id, name, email, status FROM users WHERE user_category = 3";
+        $sql = "SELECT user_id, name, email, status, created FROM users WHERE user_category = 3";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -19,13 +19,13 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function findInstructor($profName)
+    protected function findInstructor($profName, $userId)
     {
-        $sql = "SELECT user_id, name, email, gender, image, status, address FROM users WHERE user_category = 3 AND name = ?";
+        $sql = "SELECT user_id, name, email, gender, image, status, address, created, birthdate FROM users WHERE user_category = 3 AND name = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute([$profName])) {
+            if ($stmt->execute([$profName, $userId])) {
                 return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;
@@ -38,7 +38,7 @@ class Instructor extends DbConnection
 
     protected function fetchAllProfClass($profName, $userId)
     {
-        $sql = "SELECT classes.class_teacher, classes.class_code, classes.class_name, classes.class_schedule, classes.class_status, users.email, users.gender, users.address, users.image, users.status, classes.class_status FROM classes INNER JOIN users ON users.user_id = classes.user_id WHERE classes.class_teacher = ? AND classes.user_id = ?";
+        $sql = "SELECT classes.class_teacher, classes.class_code, classes.class_name, classes.class_schedule, classes.class_status, users.email, users.gender, users.address, users.image, users.status, classes.class_status, users.created, users.birthdate FROM classes INNER JOIN users ON users.user_id = classes.user_id WHERE classes.class_teacher = ? AND classes.user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -54,13 +54,13 @@ class Instructor extends DbConnection
     }
 
     // Update the name in users table
-    protected function updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName){
+    protected function updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
 
-        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ? WHERE name = ?";
+        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $oldName])) {
+            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $birthdate, $oldName, $userId])) {
                 $stmt = null;
                 $this->updProfNameInClass($instructorName, $oldName);
                 $this->updProfNameInPost($instructorName, $oldName);

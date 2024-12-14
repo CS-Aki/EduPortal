@@ -8,8 +8,9 @@ class ClassRmController extends ClassRm
     private $classProf;
     private $status;
     private $tempClassName;
+    private $userId;
 
-    function __construct($classCode, $className, $classSchedule, $classProf, $status, $tempClassName)
+    function __construct($classCode, $className, $classSchedule, $classProf, $status, $tempClassName, $userId)
     {
         $this->classCode = $classCode;
         $this->className = $className;
@@ -17,6 +18,7 @@ class ClassRmController extends ClassRm
         $this->classProf = $classProf;
         $this->status = $status;
         $this->tempClassName = $tempClassName;
+        $this->userId = $userId;
         //   if(session_id() === "") session_start();
         if (isset($_SESSION["msg"])) unset($_SESSION["msg"]);
 
@@ -81,7 +83,7 @@ class ClassRmController extends ClassRm
         // Add validator to compare to and from schedule, value should be greater than the TO schedule
         $fullSched = "(" . $this->classSchedule["day"] . ") " . $this->classSchedule["startingHour"] . ":" . $this->classSchedule["startingMin"] . " " . $this->classSchedule["startTimePeriod"] . "-" . $this->classSchedule["endingHour"] . ":" . $this->classSchedule["endingMin"] . " " . $this->classSchedule["endTimePeriod"];
 
-        $result = $this->addNewClass($this->classCode, $this->className, $fullSched, $this->classProf, $this->status);
+        $result = $this->addNewClass($this->classCode, $this->className, $fullSched, $this->classProf, $this->status, $this->userId);
 
         if ($result == true) {
             echo "New Class Successfully Added";
@@ -153,7 +155,7 @@ class ClassRmController extends ClassRm
         // echo $this->className . "<br>" . $this->status;
         $fullSched = "(" . $this->classSchedule["day"] . ") " . $this->classSchedule["startingHour"] . ":" . $this->classSchedule["startingMin"] . " " . $this->classSchedule["startTimePeriod"] . "-" . $this->classSchedule["endingHour"] . ":" . $this->classSchedule["endingMin"] . " " . $this->classSchedule["endTimePeriod"];
 
-        $result = $this->editClassInfo($this->classCode, $this->className, $fullSched, $this->classProf, $this->status);
+        $result = $this->editClassInfo($this->classCode, $this->className, $fullSched, $this->classProf, $this->status, $this->userId);
         if ($result == true) {
             echo "Edit Successfully";
             $_SESSION["msg"] = "Edit Successfully";

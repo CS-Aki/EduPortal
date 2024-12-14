@@ -11,7 +11,8 @@ $(document).ready(function() {
             status : $("#instructor_status").val(),
             email : $("#prof_email").val(),
             gender :  $("#profGender").val(),
-            address : $("#prof_address").val()
+            address : $("#prof_address").val(),
+            birthdate : $("#date_of_birth1").val()
         };
     });
 
@@ -27,7 +28,8 @@ $(document).ready(function() {
             status : $("#instructor_status").val(),
             email : $("#prof_email").val(),
             gender :  $("#profGender").val(),
-            address : $("#prof_address").val()
+            address : $("#prof_address").val(),
+            birthdate : $("#date_of_birth1").val()
         };
 
         let isChanged = false;
@@ -46,6 +48,8 @@ $(document).ready(function() {
         let gender =  $("#profGender").val();
         let address = $("#prof_address").val();
         let id =  $("#profCode").val();
+        let birthdate = $("#date_of_birth1").val();
+
         console.log(id);
         // console.log($("#title_name").text());
 
@@ -59,7 +63,9 @@ $(document).ready(function() {
                     status : status,
                     email : email,
                     gender : gender,
-                    address, address
+                    address, address,
+                    userId : id,
+                    birthdate : birthdate
                 },
                 
                 success: function(response) {
@@ -84,9 +90,9 @@ $(document).ready(function() {
                             var rowData = this.data();  // Get data for the current row
                             
                             if (rowData[0] === id) {  // Assuming class_code is in the first column (index 0)
-                                rowData[1] = instructorName;
-                                rowData[2] = email;
-                                rowData[3] = status;
+                                rowData[2] = instructorName;
+                                rowData[3] = email;
+                                rowData[4] = status;
 
                                 this.data(rowData).draw(false);
                                 // Once the row is found, stop further iterations
@@ -126,7 +132,8 @@ $(document).ready(function() {
             email : $("#student_email").val(),
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
-            address : $("#student_address").val()
+            address : $("#student_address").val(),
+            birthdate : $("#date_of_birth1").val()
         };
     });
 
@@ -139,7 +146,9 @@ $(document).ready(function() {
             email : $("#student_email").val(),
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
-            address : $("#student_address").val()
+            address : $("#student_address").val(),
+            birthdate : $("#date_of_birth1").val()
+
         };
 
         let isChanged = false;
@@ -158,6 +167,8 @@ $(document).ready(function() {
         let studentCode = $("#studentCode").val();
         let gender = $("#studentGender").val();
         let address = $("#student_address").val();
+        let birthdate = $("#date_of_birth1").val()
+
         studentCode = studentCode.trim();
         const match = studentCode.match(/2024(\d+)-S$/);
 
@@ -177,7 +188,8 @@ $(document).ready(function() {
                     email : email,
                     gender : gender,
                     address, address,
-                    id : studentCode
+                    id : studentCode,
+                    birthdate : birthdate
                 },
                 
                 success: function(response) {
@@ -205,9 +217,9 @@ $(document).ready(function() {
                             var rowData = this.data();  // Get data for the current row
                             
                             if (rowData[0] === studentCode) {  // Assuming class_code is in the first column (index 0)
-                                rowData[1] = studentName;
-                                rowData[2] = gender;
-                                rowData[3] = email;
+                                rowData[2] = studentName;
+                                rowData[3] = status;
+                                rowData[4] = email;
 
                                 this.data(rowData).draw(false);
                                 // Once the row is found, stop further iterations

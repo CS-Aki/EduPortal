@@ -43,9 +43,9 @@ class ClassRm extends DbConnection
 
     protected function getClasses($userId)
     {
-        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ?";
+        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.status = ?";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute(array($userId));
+        $stmt->execute(array($userId, "Active"));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         //Note this one
@@ -841,8 +841,7 @@ class ClassRm extends DbConnection
         try {
             if ($stmt->execute(array($userId, $classCode, "Activity"))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                return null;
+            } else {                return null;
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();

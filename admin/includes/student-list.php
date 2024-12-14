@@ -12,13 +12,26 @@ function displayAllStudent()
     $studentList = $stdController->getAllStudents();
 
     for ($i = 0; $i < count($studentList); $i++) {
-        echo "<tr><td class='student_id'>" . $studentList[$i]["user_id"] . "</td>";
+        $profId = getStudentIdFormat($studentList[$i]["user_id"], $studentList[$i]["created"]);
+        echo "<tr><td class='student_id' hidden>" . $studentList[$i]["user_id"] . "</td>";
+        echo "<td class='student_id_text'>" . $profId . "</td>";
         echo "<td class='student_name'>" . $studentList[$i]["name"] . "</td>";
-        echo "<td class='student_gender'>" . $studentList[$i]["gender"] . "</td>";
+        echo "<td class='student_status'>" . $studentList[$i]["status"] . "</td>";
         echo "<td class='student_email'>" . $studentList[$i]["email"] . "</td>";
         echo "<td><a href='' class='view_student_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
     }
 
+}
+
+function getStudentIdFormat($userId, $created){
+    $year = substr($created, 0, 4);
+
+    for($i = strlen($userId); $i < 4; $i++){
+        $year .= "0";
+    }
+    
+    $year .= $userId . "-S";
+    return $year;
 }
 
 if(isset($_POST["userId"])){

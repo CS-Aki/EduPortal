@@ -10,12 +10,25 @@ function displayAllInstructor()
     $instructorList = $instController->getAllProf();
 
     for ($i = 0; $i < count($instructorList); $i++) {
-        echo "<tr><td class='instructor_id'>" . $instructorList[$i]["user_id"] . "</td>";
-        echo "<td class='instructor_name'>" . $instructorList[$i]["name"] . "</td>";
-        echo "<td class='instructor_email'>" . $instructorList[$i]["email"] . "</td>";
-        echo "<td class='instructor_gender'>" . $instructorList[$i]["status"] . "</td>";
-        echo "<td><a href='' class='view_instructor_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
+        $profId = getInstructorIdFormat($instructorList[$i]["user_id"], $instructorList[$i]["created"]);
+        echo "<tr><td class='instructor_id' hidden data-label='Instructor Code'>" . $instructorList[$i]["user_id"] . "</td>";
+        echo "<td class='instructor_id_text' data-label='Instructor Code'>" . $profId . "</td>";
+        echo "<td class='instructor_name' data-label='Instructor Name'>" . $instructorList[$i]["name"] . "</td>";
+        echo "<td class='instructor_email' data-label='Email'>" . $instructorList[$i]["email"] . "</td>";
+        echo "<td class='instructor_gender' data-label='Status'>" . $instructorList[$i]["status"] . "</td>";
+        echo "<td data-label='Edit'><a href='' class='view_instructor_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
     }
+}
+
+function getInstructorIdFormat($userId, $created){
+    $year = substr($created, 0, 4);
+
+    for($i = strlen($userId); $i < 4; $i++){
+        $year .= "0";
+    }
+    
+    $year .= $userId . "-S";
+    return $year;
 }
 
 if(isset($_POST["userId"])){

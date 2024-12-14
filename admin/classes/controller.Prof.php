@@ -33,14 +33,14 @@ class InstructorController extends Instructor
         $list = $this->fetchAllProfClass($profName, $userId);
 
         if($list == 0 || $list == null){
-            $profDetails = $this->findInstructor($profName);
+            $profDetails = $this->findInstructor($profName, $userId);
             return $profDetails;
         }
 
         return $list;
     }
 
-    public function changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName){
+    public function changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
         if($this->invalidInput($instructorName)){
             echo "Special Characters aren't allowed, please try again";
             return;
@@ -51,7 +51,7 @@ class InstructorController extends Instructor
             return;
         } 
 
-        $result = $this->updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName);
+        $result = $this->updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId);
 
         if($result == false || $result == null){
             // echo "Error changeProfDetails";
@@ -63,11 +63,11 @@ class InstructorController extends Instructor
 
     private function invalidInput($instructorName)
     {
-        if (!preg_match("/^[a-zA-Z ]*$/", $instructorName)) {
+        if (!preg_match("/^[a-zA-Z. ]*$/", $instructorName)) {
             return true;
         }
 
-        if (!preg_match("/^[a-zA-Z0-9 ]*$/", $instructorName)) {
+        if (!preg_match("/^[a-zA-Z0-9. ]*$/", $instructorName)) {
             return true;
         }
 

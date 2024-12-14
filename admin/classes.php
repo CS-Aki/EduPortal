@@ -126,6 +126,7 @@ if(isset($_SESSION["user_category"])){
                                         </div>
                                         <div class="container-fluid">
                                             <div class="row mb-3">
+                                            <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" name="teacherId" id="teacher-id" hidden>
                                                 <div class="col-lg-8">
                                                     <label class="form-label black3 mb-0">Class Name</label>
                                                     <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Algorithm and Complexity" name="className" id="class_name" required>
@@ -148,7 +149,11 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-3">
                                                 <div class="col-lg-12">
                                                     <label class="form-label black3 mb-0">Instructor</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Jessie Alamil" name="classInstructor" id="class_instructor" required>
+                                                    <!-- <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" name="classInstructor" id="class_instructor" required> -->
+                                                    <select class="form-select shadow-elevation-light-3 black3" id="class_instructor" required>
+                                                        <?php displayInstructorSelection(); ?>
+                                                                <!-- Value should be user id -->
+                                                    </select>  
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
@@ -330,10 +335,11 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-3">
                                                 <div class="col-lg-12">
                                                         <label class="form-label black3 mb-0">Class Instructor</label>
-                                                        <select class="form-select shadow-elevation-light-3 black3" id="create_status">
+                                                        <select class="form-select shadow-elevation-light-3 black3" id="create_instructor" required>
                                                                 <option value=""></option>
-                                                                <option value="Sir Victor D. Aquino">Sir Victor D. Aquino</option>
-                                                                <option value="Christian Mojica">Christian Mojica</option>
+                                                                <?php displayInstructorSelection(); ?>
+                                                                <!-- Value should be user id -->
+
                                                         </select>                         
                                                     </div>
                                                  </div>

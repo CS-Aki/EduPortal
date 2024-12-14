@@ -31,7 +31,7 @@ if(isset($_SESSION["user_category"])){
           <div class="col-lg-10 ms-auto">
               <div class="container">
                   <div class="d-flex align-items-center justify-content-between">
-                      <h3 class="h-font green3 me-2">Dashboard</h3>
+                      <h3 class="h-font green3 me-2">Admin Dashboard</h3>
                       <div class="line-h"></div> <!-- Ensure the line grows to fill the space --> 
                   </div>
     

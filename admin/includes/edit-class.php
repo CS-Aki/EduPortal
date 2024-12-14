@@ -9,6 +9,7 @@ if (isset($_POST["className"])) {
     $classCode = $_POST['classCode'];
     // $_SESSION['num'] = $num -  $_SESSION["min"] - 1;
     $className = $_POST["className"];
+    $userId = $_POST["classProfId"];
     $classSchedule = array(
         "day" => $_POST["daySched"],
         "startingHour" => $_POST["startingHourSched"],
@@ -24,7 +25,7 @@ if (isset($_POST["className"])) {
     $status = $_POST["classStatus"];
     //echo $classCode . "<br>" . $classProf . "<br>" . $status;
 
-    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status, $tempClassName);
+    $classController = new ClassRmController($classCode, $className, $classSchedule, $classProf, $status, $tempClassName, $userId);
     $classController->editClass();
     
 }

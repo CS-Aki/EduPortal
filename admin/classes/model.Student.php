@@ -4,7 +4,7 @@ class Student extends DbConnection{
 
     protected function fetchAllStudent(){
         
-        $sql = "SELECT user_id, name, email, address, gender FROM users WHERE user_category = 4";
+        $sql = "SELECT user_id, name, email, address, gender, status, created FROM users WHERE user_category = 4";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -36,7 +36,7 @@ class Student extends DbConnection{
     }
 
     protected function fetchStudentDetails($studentName, $studentId){
-        $sql = "SELECT name, status, email, user_id, gender, address, image FROM users WHERE name = ? AND user_id = ?";
+        $sql = "SELECT name, status, email, user_id, gender, address, image, birthdate, created FROM users WHERE name = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -51,13 +51,13 @@ class Student extends DbConnection{
         }
     }
 
-    protected function updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode){
+    protected function updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate){
 
-        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ? WHERE name = ? AND user_id = ?";
+        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode])) {
+            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $birthdate, $oldName, $studentCode])) {
                 $stmt = null;
                 $this->updtStudentJoinClass($instructorName, $oldName, $studentCode);
                 $this->updStudentNameInComments($instructorName, $oldName, $studentCode);

@@ -59,6 +59,8 @@ if(isset($_SESSION["user_category"])){
         #editProfModal table.dataTable {
             width: 100% !important;
         }
+
+        
     </style>
     <?php require('inc/links.php'); ?>
     
@@ -89,28 +91,26 @@ if(isset($_SESSION["user_category"])){
                         </div>
                     </div>
                 </nav>
+
                 <div class="container mt-2" style="width: 80%;">
-                 
+                    <div class="d-flex justify-content-end mb-3"> 
+                        <button type="button" class="btn fs-5 green shadow-none white2 d-flex align-items-center justify-content-center py-0 px-4 rounded-5" data-bs-toggle="modal" data-bs-target="#signUpModal">
+                            <i class="bi bi-plus-lg white2 me-1 fs-2"></i>Register New Instructor Account
+                        </button>
+                    </div>
                     <table id="myTable" class="table table-bordered text-center align-middle">
                         <thead>
                             <tr>
-                            <th scope="col">Instructor Code</th>
-                            <th scope="col">Instructor</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Edit</th>
+                                <th scope="col">Instructor Code</th>
+                                <th scope="col" hidden></th> 
+                                <th scope="col">Instructor</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php displayAllInstructor(); ?>
-                            <!-- <tr>
-                                <td>9e35fd</td>
-                                <td>Jessie Alamil</td>
-                                <td>Active</td>
-                                <td class="d-flex align-items-center justify-content-center">
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#editProfModal"><i class="bi bi-pencil-square green1 me-2 fs-6"></i></a>
-                            </tr> -->
-                            
                         </tbody>
                     </table>
                 </div>
@@ -131,7 +131,7 @@ if(isset($_SESSION["user_category"])){
                                                     <p class="black3 fs-6 ms-3 m-0 p-0">Instructor</p>
                                                 </div>
                                             </div>
-                                            <button clas="d-flex align-items-start" type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button clas="d-flex align-items-start" type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="container-fluid">
                                             <div class="row mb-2">
@@ -141,7 +141,7 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Date of Birth</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="08-08-08" name="dateOfBirth" id="date_of_birth" readonly>
+                                                    <input type="date" class="form-control black3 shadow-elevation-light-3" name="dateOfBirth" id="date_of_birth1">
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Status</label>
@@ -159,8 +159,9 @@ if(isset($_SESSION["user_category"])){
                                                     <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="jessiealamil@ucc.edu.ph" name="profEmail" id="prof_email" required>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <label class="form-label black3 mb-0">Code</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="90edf14" name="profCode" id="profCode" readonly>
+                                                    <label class="form-label black3 mb-0">Instructor's Code</label>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="90edf14" name="profCode" id="profCode" readonly hidden>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" name="profCode" id="profCodeText" readonly>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Gender</label>
@@ -235,9 +236,83 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
+
+        <!-- Prof Registration Modal -->
+        <div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg w-70">
+                        <div class="modal-content rounded p-2">
+                            <div class="modal-body">
+                                <div class="container-fluid mb-3 d-flex justify-content-between align-items-center">
+                                    <h1 class="modal-title fs-1 h-font" id="staticBackdropLabel">Register Instructor</h1>
+                                    <button type="button" id="close_btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="includes/register-instructor.php" class="row g-3 needs-validation" novalidate method="post" id="signUpForm">
+                                    <div class="container-fluid">
+                                        <div class="row mb-1">
+                                            <div class="col-lg-4">
+                                                <label class="form-label black2 mb-0">First Name</label>
+                                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" required>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label class="form-label black2 mb-0">Last Name</label>
+                                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" required>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label class="form-label black2 mb-0">Middle Name (optional)</label>
+                                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Middle Name" name="middleName" id="middle_name">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-lg-6">
+                                                <label class="form-label black2 mb-0">Email</label>
+                                                <input type="email" class="form-control black2 shadow-sm" placeholder="Enter Email" name="email" id="email" required>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <label class="form-label black2 mb-0">Date of Birth</label>
+                                                <input type="date" class="form-control black2 shadow-sm" value="" name="birthdate" id="date_of_birth" max="<?= date('Y-m-d'); ?>" required>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <label class="form-label black2 mb-0">Gender</label>
+                                                <select class="form-select shadow-elevation-light-3 black2" id="gender" name="gender" required>
+                                                    <option value="blank"></option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Rather not say">Rather not say</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-12 mb-1">
+                                                <label class="form-label black2 mb-0">Address</label>
+                                                <textarea class="form-control black2 container-fluid shadow-sm" rows="2" placeholder="Enter Address" id="address" name="address" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                                            </div>
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="justify-content-center">
+                                            <button type="submit" name="registerBtn" id="register_btn" class="w-100 btn green shadow-none rounded-5 px-5 py-2">Register</button>
+                                        </div>
+                                        <br>
+                                        <div id="registerModalMsg"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     <br><br>
     <?php require('inc/footer.php'); ?>   
 
+    <script src="scripts/register-instructor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </script>
     <script>

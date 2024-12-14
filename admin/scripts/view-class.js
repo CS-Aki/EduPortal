@@ -48,7 +48,7 @@ $(document).ready(function() {
                 $("#class_name").val(response.class[0]["class_name"]);
                 $("#class_code").val(response.class[0]["class_code"]);
                 $("#class_status").val(response.class[0]["class_status"]);
-                $("#class_instructor").val(response.class[0]["class_teacher"]);
+                $("#class_instructor").val(response.class[0]["user_id"]); 
                 $("#daySched").val(daySched);
                 $("#startingHourSched").val(startHours);
                 $("#startingMinuteSched").val(startMinutes);
@@ -56,7 +56,9 @@ $(document).ready(function() {
                 $("#endingHourSched").val(endHours);
                 $("#endingMinuteSched").val(endMinutes);
                 $("#endingPeriodSched").val(endPeriod);
-
+                $("#teacher-id").val(response.class[0]["user_id"]);
+                console.log("ID " + response.class[0]["user_id"]);
+                console.table(response);
                 var dataTable = $("#studentTable").DataTable();
                 // Clear existing table rows
                 dataTable.clear().draw();

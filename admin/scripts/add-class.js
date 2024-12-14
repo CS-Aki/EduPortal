@@ -19,14 +19,23 @@ $(document).ready(function() {
         // console.log("display");
     });
 
+    var classProfId = 0;
+    var classProf = "";
+
+    $('#create_instructor').change(function() {
+        var selectedOption = $(this).find('option:selected');
+        
+        classProfId = selectedOption.val(); 
+        classProf = selectedOption.text();
+
+    });
+
     $("#createForm").submit(function(event) {
         event.preventDefault();
         console.log("click");
         let classCode = $("#create_code").val();
         let classStatus = $("#create_status").val();
         let className = $("#create_name").val();
-        let classProf = $("#create_instructor").val();
-
         let daySched = $("#createDay").val();
         let startingHour = $("#createStartingHourSched").val();
         let startingMin = $("#createStartingMinuteSched").val();
@@ -34,7 +43,9 @@ $(document).ready(function() {
         let endingHour = $("#createEndingHourSched").val();
         let endingMin = $("#createEndingMinuteSched").val();
         let endingPeriod = $("#createEndingPeriodSched").val();
-        
+        console.log(classProfId);
+        console.log(classProf);
+
         $.ajax({
             url: "includes/add-class.php",
             type: "POST",
@@ -42,6 +53,7 @@ $(document).ready(function() {
                 classCode : classCode,
                 classStatus : classStatus,
                 className : className,
+                classProfId : classProfId,
                 classProf : classProf,
                 daySched : daySched,
                 startingHourSched : startingHour,
