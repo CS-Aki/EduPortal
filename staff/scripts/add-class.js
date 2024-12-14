@@ -66,48 +66,8 @@ $(document).ready(function() {
             
             success: function(response) {
                 if(response.includes("New Class Successfully Added")){
-                    $.ajax({
-                        url: "includes/class-list.php",
-                        type: "POST",
-                        data: {
-                            createClass : "true"
-                        },
-                        success: function(response) {
-                            var table = $('#myTable').DataTable();
-
-                            // Clear all existing rows from the table
-                            table.clear().draw();
-                            
-                            // Parse response into individual rows
-                            var newRows = $(response).filter('tr'); // Extract the rows from the response
-                            
-                            // Add each row dynamically
-                            newRows.each(function() {
-                                var row = $(this);  // Get the entire row (including classes, ids, etc.)
-                            
-                                // Extract and reorder columns using class names (optional, if needed for data)
-                                var rowData = [];
-                                rowData.push(row.find('.class_code').html());  // Instructor Code (First column)
-                                rowData.push(row.find('.class_name').html());  // Instructor Code (First column)
-                                rowData.push(row.find('.class_teacher').html());     // Instructor Name
-                                rowData.push(row.find('.class_schedule').html());    // Email
-                                rowData.push(row.find('.class_status').html());   // Status
-                                rowData.push(row.find('.view_class').parent().html()); // Edit action
-                            
-                                // Add the full row with classes and data to the DataTable
-                                table.row.add(row[0]).draw(false);  // Add the entire row, not just the data
-                            });
-                            
-                            $("#create_message").empty();
-                            $("#create_message").append("<div class='alert alert-success' role='alert'><span>SUCCESS</span></div>"); 
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.log("error here");
-                            console.log(error);
-                        }
-                    });
-
+                    $("#create_message").empty();
+                    $("#create_message").append("<div class='alert alert-success' role='alert'><span>"+response+"</span></div>"); 
                 }else{
                     $("#create_message").empty();
                     $("#create_message").append("<div class='alert alert-danger' role='alert'><span>"+response+"</span></div>");   

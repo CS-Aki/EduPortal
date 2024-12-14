@@ -138,6 +138,7 @@ $(document).ready(function() {
                                 rowData[2] = classProf;
                                 rowData[3] = "(" + daySched + ")" + " " + startingHour + ":" + startingMin + " " + startingPeriod + "-" + endingHour + ":" + endingMin + " " + endingPeriod;
                                 rowData[4] = classStatus;
+
     
                                 this.data(rowData).draw(false);
                                 // Once the row is found, stop further iterations

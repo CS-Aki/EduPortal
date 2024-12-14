@@ -93,6 +93,7 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
                         header('Location: admin/admin-dashboard.php');
                         break;
                     case 2:
+                        header('Location: staff/staff-dashboard.php');
                         break;
                     case 3:
                         header('Location: instructor/instructor-dashboard.php');

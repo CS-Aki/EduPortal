@@ -39,7 +39,7 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-9">
                                     <h2 class="h-font green1 me-2 title mb-0 pb-0">EduPortal Admin</h2>
                                     <p class="lh-base fw-semibold black3 fs-5 pt-0 mt-0 mb-2">
-                                        Admin
+                                        Staff
                                     </p>
                                     <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0" data-bs-toggle="modal" data-bs-target="#changeProfile">
                                         <i class="bi bi-pencil-square white2 me-2"></i>Change Profile

@@ -190,24 +190,13 @@ if(isset($_SESSION["user_category"])){
                           </div>
                  
                 
-                          <div class="container-fluid border-bottom border-secondary-subtle border-2 rounded-3 py-3 px-lg-3 d-flex align-items-center p-2 mb-2">
+                          <div class="container-fluid  border-secondary-subtle border-2 rounded-3 py-3 px-lg-3 d-flex align-items-center p-2 mb-2">
                             <div>
                               <p class="black3 lh-1 fs-5 mb-0 pb-0 me-4">4</p>
                             </div>
                             <div>
                               <p class="black3 fw-bold lh-1 fs-5 mb-0 pb-0" id="material-title">
                               <?= htmlspecialchars($topSubjects['top4']) ?>
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="container-fluid  border-secondary-subtle border-2 rounded-3 py-3 px-lg-3 d-flex align-items-center p-2 mb-2">
-                            <div>
-                              <p class="black3 lh-1 fs-5 mb-0 pb-0 me-4">5</p>
-                            </div>
-                            <div>
-                              <p class="black3 fw-bold lh-1 fs-5 mb-0 pb-0" id="material-title">
-                              <?= htmlspecialchars($topSubjects['top5']) ?>
                               </p>
                             </div>
                           </div>
@@ -273,7 +262,7 @@ if(isset($_SESSION["user_category"])){
   </div>
 
   <!-- CREATE ANNOUNCEMENT MODAL -->
-  <div class="modal fade" id="announcementModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+  <div class="modal fade" id="announcementModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editProfLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-xl">                       
               <div class="modal-content rounded-4 px-2">
                   <div class="modal-body">
@@ -312,10 +301,10 @@ if(isset($_SESSION["user_category"])){
                                   <div class="col-lg-4 d-flex align-items-center">
                                       <label class="form-label black3 mb-0 me-3">Type</label>
                                       <div class="input-group">
-                                          <select class="form-select shadow-elevation-light-3 black3" id="msg_type">
+                                          <select class="form-select shadow-elevation-light-3 black3" id="statusInputGroup">
                                               <option value="1">General</option>
                                               <option value="2">Maintenance</option>
-                                              <!-- <option value="3">Examination</option> -->
+                                              <option value="3">Examination</option>
                                           </select>
                                       </div>
                                   </div>
@@ -326,7 +315,7 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-3 d-flex align-items-center">
                                     <div class="input-group">
-                                        <select class="form-select shadow-elevation-light-3 black3" id="audience_visible">
+                                        <select class="form-select shadow-elevation-light-3 black3" id="statusInputGroup">
                                             <option value="1">All</option>
                                             <option value="2">Instructors</option>
                                             <option value="3">Students</option>
@@ -338,7 +327,7 @@ if(isset($_SESSION["user_category"])){
                               <div class="row mb-2">
                                 <div class="col-lg-12 d-flex ">
                                     <label class="form-label black3 mb-0 me-3">Message</label>
-                                    <textarea rows="10" class="form-control black3 shadow-elevation-light-3" value="" name="message" id="message-content" required></textarea>
+                                    <textarea rows="10" class="form-control black3 shadow-elevation-light-3" value="" name="toDate" id="to_date" required></textarea>
                                 </div>
                               </div>
                               <div class="d-flex justify-content-end gap-1 mt-4">

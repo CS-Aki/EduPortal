@@ -55,7 +55,7 @@ $(document).ready(function() {
                     }else if(response.includes("4")){
                         window.location.href = "student/student-dashboard.php";
                     }else if(response.includes("2")){
-
+                        window.location.href = "staff/staff-dashboard.php";
                     }else if(response.includes("1")){
                         window.location.href = "admin/admin-dashboard.php";
                     }

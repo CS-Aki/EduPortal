@@ -5,18 +5,11 @@ if(isset($_POST["displayClass"])){
 }
 
 function displayClassList(){
-    if(isset($_POST["createClass"])){
-        require_once("../classes/connection.php");
-        require_once("../classes/model.ClassRm.php");
-        require_once("../classes/controller.ClassRm.php");
-        require_once("../classes/controller.Lists.php");
-    }
-    else{
-        require_once("classes/connection.php");
-        require_once("classes/model.ClassRm.php");
-        require_once("classes/controller.ClassRm.php");
-        require_once("classes/controller.Lists.php");
-    }
+    require_once("classes/connection.php");
+    require_once("classes/model.ClassRm.php");
+    require_once("classes/controller.ClassRm.php");
+    require_once("classes/controller.Lists.php");
+
     $listController = new ListController();
     $listOfClasses = $listController->getAllClass();
     // header('content-type: application/json');
@@ -33,10 +26,6 @@ function displayClassList(){
         // echo "<td><a href='#' class='btn btn-success btn-sm view_class'>View Class</a></td></tr>";
         // <a href=""><i class="bi bi-eye green1 fs-6"></i></a>
     } 
-}
-
-if(isset($_POST["createClass"])){
-    displayClassList();
 }
 
 function updatedClassDetails(){
