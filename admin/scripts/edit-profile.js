@@ -85,15 +85,13 @@ $(document).ready(function() {
                             address : $("#prof_address").val()
                         };
 
-
                         var row = table.rows().every(function() {
                             var rowData = this.data();  // Get data for the current row
-                            
                             if (rowData[0] === id) {  // Assuming class_code is in the first column (index 0)
                                 rowData[2] = instructorName;
                                 rowData[3] = email;
                                 rowData[4] = status;
-
+                                console.log("changed here");
                                 this.data(rowData).draw(false);
                                 // Once the row is found, stop further iterations
                                 return false;  // This will break out of the loop
@@ -243,5 +241,137 @@ $(document).ready(function() {
         }
 
     });
+
+    $("#editStaffModal").on("shown.bs.modal", function () {
+        // Capture the initial values of modal fields
+        // tempClassName = $("#class_name").val();
+        window.initialFormValues = {
+            oldName : $("#title_staff").text(),
+            staffName : $("#staff_name").val(),
+            status : $("#staff_status").val(),
+            email : $("#staff_email").val(),
+            staffCode : $("#staffCode").val(),
+            gender : $("#staffGender").val(),
+            address : $("#staff_address").val(),
+            birthdate : $("#date_of_birth1").val()
+        };
+    });
+
+    $("#editStaffForm").submit(function(event) {
+        event.preventDefault();
+
+        let currentValues = {
+            staffName : $("#staff_name").val(),
+            status : $("#staff_status").val(),
+            email : $("#staff_email").val(),
+            staffCode : $("#staffCode").val(),
+            gender : $("#staffGender").val(),
+            address : $("#staff_address").val(),
+            birthdate : $("#date_of_birth1").val()
+
+        };
+
+        let isChanged = false;
+        for (let key in currentValues) {
+            if (currentValues[key] !== window.initialFormValues[key]) {
+                isChanged = true;
+                // isChange = true;
+                // console.log(`Field "${key}" has changed from "${window.initialFormValues[key]}" to "${currentValues[key]}"`);
+            }
+        }
+
+        let oldName = $("#title_staff").text();
+        let staffName = $("#staff_name").val();
+        let status = $("#staff_status").val();
+        let email = $("#staff_email").val();
+        let staffCode = $("#staffCode").val();
+        let gender = $("#staffGender").val();
+        let address = $("#staff_address").val();
+        let birthdate = $("#date_of_birth1").val()
+
+      
+        // const match = staffCode.match(/2024(\d+)-S$/);
+        console.log("Staff Code " + staffCode);
+        console.log("Staff oLD nAME " +oldName);
+        console.log("Staff new name " +staffName);
+        console.log("Staff status " +status);
+        console.log("Staff email " +email);
+        console.log("Staff gender " +gender);
+        console.log("Staff address " +address);
+        console.log("Staff bday " +birthdate);
+
+        // if (match) {
+        // const number = match[1].replace(/^0+/, ""); // Remove leading zeros
+        // staffCode = number;
+        // } 
+
+        if(isChanged){
+            $.ajax({
+                url: "includes/edit-staff.php",
+                type: "POST",
+                data: {
+                    staffName : staffName,
+                    oldName : oldName,
+                    status : status,
+                    email : email,
+                    gender : gender,
+                    address, address,
+                    id : staffCode,
+                    birthdate : birthdate
+                },
+                
+                success: function(response) {
+                    // console.log("inside");
+                    // console.table(response);     
+                    if(response.includes("Update Success")){
+                        console.log("inside success");
+                        $("#staffModalMsg").empty();
+                        $("#staffModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
+                    
+                        window.initialFormValues = {
+                            oldName : $("#title_staff").text(),
+                            staffName : $("#staff_name").val(),
+                            status : $("#staff_status").val(),
+                            email : $("#staff_email").val(),
+                            staffCode : $("#staffCode").val(),
+                            gender : $("#staffGender").val(),
+                            address : $("#staff_address").val()
+                        };
+
+                        $("#title_staff").text(staffName);
+
+                        var row = table.rows().every(function() {
+                            var rowData = this.data();  // Get data for the current row
+                            
+                            if (rowData[0] === staffCode) {  // Assuming class_code is in the first column (index 0)
+                                rowData[2] = staffName;
+                                rowData[3] = email;
+                                rowData[4] = status;
+
+                                this.data(rowData).draw(false);
+                                // Once the row is found, stop further iterations
+                                return false;  // This will break out of the loop
+                            }
+                        });
+
+                    }else{
+                        
+                        $("#staffModalMsg").empty();
+                        $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        // console.log("Error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("error here");
+                    console.log(error);
+                }
+            });
+        }else{
+            $("#staffModalMsg").empty();
+        }
+
+    });
+
+
 
 });

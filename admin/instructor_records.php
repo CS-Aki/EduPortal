@@ -101,8 +101,8 @@ if(isset($_SESSION["user_category"])){
                     <table id="myTable" class="table table-bordered text-center align-middle">
                         <thead>
                             <tr>
+                                <th scope="col"></th> 
                                 <th scope="col">Instructor Code</th>
-                                <th scope="col" hidden></th> 
                                 <th scope="col">Instructor</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Status</th>
@@ -165,7 +165,6 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Gender</label>
-                                                    <!-- <input type="text" class="form-control black3 shadow-elevation-light-3" value="Male" name="profGender" id="profGender" required> -->
                                                     <select class="form-select shadow-elevation-light-3 black3" id="profGender">
                                                         <option value="Male">Male</option>
                                                         <option value="Female">Female</option>
@@ -341,7 +340,14 @@ if(isset($_SESSION["user_category"])){
                         className: 'btn btn-info',
                         text: 'Print'
                     }
-                ]
+                ],
+                columnDefs: [
+                { 
+                    targets: 0, // First column (Instructor Code)
+                    visible: false, // Hide the column
+                }
+                  ]
+                
             });
         });
         $(document).ready(function () {

@@ -1,12 +1,18 @@
 $(document).ready(function() {
 
+    var table = $('#myTable').DataTable();
+
     $(document).on('click', '.view_instructor_profile', function (e) {
         e.preventDefault();
-        var userId = $(this).closest('tr').find('.instructor_id').text();
+
+        var row = $(this).closest('tr');  
+        var rowData = table.row(row).data();  
+        var userId = rowData[0];
+        // var userId = $(this).closest('tr').find('.instructor_id').text();
         
         var userName =  $(this).closest('tr').find('.instructor_name').text();
         console.log(userId);
-
+        console.log(userName);
         $.ajax({
             url: "includes/instructor-list.php",
             type: "POST",
@@ -16,14 +22,19 @@ $(document).ready(function() {
             },
             
             success: function(response) {
-                $("#title_name").text(response[0]["class_teacher"]);
+                console.table(response);
+
                 // console.log(response[0]["image"]);
                 $("#instructor_img").attr("src", (response[0]["image"]));
             
                 if(response[0]["class_teacher"] == undefined){
                     $("#prof_name").val(response[0]["name"]);
+                    $("#title_name").text(response[0]["name"]);
+
                 }else{
                     $("#prof_name").val(response[0]["class_teacher"]);
+                    $("#title_name").text(response[0]["class_teacher"]);
+
                 }
 
                 $("#instructor_status").val(response[0]["status"]);
@@ -78,10 +89,16 @@ $(document).ready(function() {
 
     $(document).on('click', '.view_student_profile', function (e) {
         e.preventDefault();
-        var userId = $(this).closest('tr').find('.student_id').text();
-        var userName =  $(this).closest('tr').find('.student_name').text();
-        // console.log(userName);
+        var table = $('#myTable').DataTable();
 
+        var row = $(this).closest('tr');  
+        var rowData = table.row(row).data();  
+        var userId = rowData[0];
+        // var userId = $(this).closest('tr').find('.instructor_id').text();
+        
+        var userName =  $(this).closest('tr').find('.student_name').text();
+        console.log(userId);
+        console.log(userName);
         $.ajax({
             url: "includes/student-list.php",
             type: "POST",
@@ -204,5 +221,72 @@ $(document).ready(function() {
                 console.log(error);
             }
         });
+    });
+
+    $(document).on('click', '.view_staff_profile', function (e) {
+        e.preventDefault();
+        var table = $('#myTable').DataTable();
+
+        var row = $(this).closest('tr');  
+        var rowData = table.row(row).data();  
+        var userId = rowData[0];
+        // var userId = $(this).closest('tr').find('.instructor_id').text();
+        
+        var userName =  $(this).closest('tr').find('.staff_name').text();
+        console.log(userId);
+        console.log(userName);
+        // $('#editStaffModal').modal('show');  
+        
+        $.ajax({
+            url: "includes/staff-list.php",
+            type: "POST",
+            data: {
+                userId : userId,
+                userName : userName
+            },
+            
+            success: function(response) {
+                console.table(response);
+                // console.log(response[0]["status"]);
+                console.log(response[0]["name"]);
+
+                var dataTable = $("#staffTable").DataTable();
+                
+                // Clear existing table rows
+                dataTable.clear().draw();
+
+                var year = response[0]["created"].substr(0, 4);
+
+                for(let i = userId.length; i < 4; i++){
+                    year += "0";
+                }
+
+                year += userId + "-S";
+
+                $("#date_of_birth1").val(response[0]["birthdate"]);
+                $("#title_staff").text(response[0]["name"]);
+                $("#staff_image").attr("src", (response[0]["image"]));    
+                $("#staff_name").val(response[0]["name"]);
+                $("#staff_status").val(response[0]["status"]);
+                $("#staff_email").val(response[0]["email"]);
+                let paddedId = "2024" + userId.toString().padStart(4, '0');
+                $("#staffCode").val(userId.toString());
+                $("#staffCodeText").val(year);
+
+                $("#staffGender").val(response[0]["gender"]);
+                $("#staff_address").val(response[0]["address"]);
+            
+
+                dataTable.draw();
+
+                $('#editStaffModal').modal('show');          
+
+            },
+            error: function(xhr, status, error) {
+                // console.log("error here");
+                console.log(error);
+            }
+        });
+
     });
 });

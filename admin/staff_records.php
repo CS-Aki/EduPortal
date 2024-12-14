@@ -7,7 +7,7 @@ if(isset($_SESSION["user_category"])){
         // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         // case 2: header("Location: ../instructor/instructor-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: staff/staff-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
@@ -64,7 +64,7 @@ if(isset($_SESSION["user_category"])){
     
 </head>
 <body>
-    <?php require('inc/header.php'); ?>
+    <?php require('inc/header.php'); require_once("includes/staff-list.php"); ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
@@ -100,25 +100,15 @@ if(isset($_SESSION["user_category"])){
                         <thead>
                             <tr>
                                 <th scope="col">Code</th>
-                                <th scope="col" hidden>Code</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Middle Name</th>
-                                <th scope="col">Departent</th>
+                                <th scope="col">Staff Code</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>56wdi4</td>
-                                <td hidden>Lipa</td>
-                                <td>Lipa</td>
-                                <td>Dua</td>
-                                <td>Margareth</td>
-                                <td>CSD</td>
-                                <td class="d-flex align-items-center justify-content-center">
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#editStaffModal"><i class="bi bi-pencil-square green1 me-2 fs-6"></i></a>
-                            </tr> 
+                            <?php displayAllStaff(); ?>
                         </tbody>
                     </table>
                 </div>
@@ -128,14 +118,14 @@ if(isset($_SESSION["user_category"])){
                     <div class="modal-dialog modal-dialog-centered modal-xl">                       
                             <div class="modal-content rounded-4 px-2">
                                 <div class="modal-body">
-                                    <form action="">
+                                    <form action="includes/edit-staff.php" method="post" id="editStaffForm">
                                         <div class="container-fluid d-flex justify-content-between align-items-center">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <div>
-                                                    <img src="images/testimage.jpg" class="rounded-pill" style="width: 6rem;"alt="">
+                                                    <img src="" class="rounded-pill" style="width: 6rem;"alt="" id="staff_image">
                                                 </div>
                                                 <div class="lh-sm">
-                                                    <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1" id="className">Dua Lipa</h1>
+                                                    <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1" id="title_staff">Dua Lipa</h1>
                                                     <p class="black3 fs-6 ms-3 m-0 p-0">Staff</p>
                                                 </div>
                                             </div>
@@ -145,19 +135,18 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-2">
                                                 <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Name</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Jarmen Cachero" name="studentName" id="student_name" required>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Jarmen Cachero" name="staffName" id="staff_name" required>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Date of Birth</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="08-08-08" name="dateOfBirth" id="date_of_birth" readonly>
+                                                    <input type="date" class="form-control black3 shadow-elevation-light-3" name="dateOfBirth" id="date_of_birth1" readonly>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Status</label>
                                                     <div class="input-group">
-                                                        <select class="form-select shadow-elevation-light-3 black3" id="statusInputGroup">
-                                                            <option value="1">Active</option>
-                                                            <option value="2">Inactive</option>
-                                                            <option value="3">Archived</option>
+                                                        <select class="form-select shadow-elevation-light-3 black3" id="staff_status">
+                                                            <option value="Active">Active</option>
+                                                            <option value="Archived">Archived</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -165,41 +154,43 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-2">
                                                 <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Email</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="jarmencachero@ucc.edu.ph" name="studentEmail" id="student_email" required>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="jarmencachero@ucc.edu.ph" name="staffEmail" id="staff_email" required>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <label class="form-label black3 mb-0">Department</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="Computer Studies" name="studentCode" id="studentCode" required>
+                                                    <label class="form-label black3 mb-0">Staff Code</label>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="20220141-S" name="staffCode" id="staffCode" readonly hidden>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" name="staffCode" id="staffCodeText" readonly>
                                                 </div>
+                                                <!-- <div class="col-lg-3">
+                                                    <label class="form-label black3 mb-0">Department</label>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="Computer Studies" name="staffCode" id="staffCode" required>
+                                                </div> -->
                                                 <div class="col-lg-3">
                                                     <label class="form-label black3 mb-0">Gender</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3" value="Male" name="studentGender" id="studentGender" required>
+                                                    <select class="form-select shadow-elevation-light-3 black3" id="staffGender">
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-lg-12">
                                                     <label class="form-label black3 mb-0">Address</label>
-                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Blk 33 Lot 28 Bangayngay St. Dagat-dagatan Caloocan City" name="studentAddress" id="student_address" required>
+                                                    <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Blk 33 Lot 28 Bangayngay St. Dagat-dagatan Caloocan City" name="staffAddress" id="staff_address" required>
                                                 </div>
                                             </div>
-                                           
                                             
+                                            <div class="d-flex justify-content-end gap-1 mt-2">
+                                                <button type="submit" name="saveClassBtn" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="save_staff_btn">Save</button>
+                                                <button class="btn bordergreen green1 rounded-5 px-4 py-2" type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                                            </div>
+
                                         </div>
                                     </form>
-                                    <!-- <form action="includes/join-class.php" method="post" id="joinClassForm">
-                                        <div class="row d-flex justify-content-center">
-                                            <div class="col-10">
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control" value="Enter Class Code..." name="classCode" id="class_code" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <button type="submit" name="joinClassBtn" class="btn btn-primary green shadow-none rounded-5 px-5" id="join_class_btn">Join</button>
-                                            </div>
-                                        </div>
-                                        <div class="join-class-msg"></div>
-                                    </form> -->
+
                                 </div>
+                                <div id="staffModalMsg"></div>
                             </div>                
                     </div>
                 </div>
@@ -209,7 +200,6 @@ if(isset($_SESSION["user_category"])){
         </div>
     </div>
     <br><br>
-
                 <!-- Sign Up Modal -->
                 <div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg w-70">
@@ -219,7 +209,7 @@ if(isset($_SESSION["user_category"])){
                                         <h1 class="modal-title fs-1 h-font" id="staticBackdropLabel">Register Staff</h1>
                                         <button type="button" id="close_btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form action="includes/register-student.php" class="row g-3 needs-validation" novalidate method="post" id="signUpForm">
+                                    <form action="includes/register-staff.php" class="row g-3 needs-validation" novalidate method="post" id="signUpForm">
                                         <div class="container-fluid">
                                             <div class="row mb-1">
                                                 <div class="col-lg-4">
@@ -285,11 +275,17 @@ if(isset($_SESSION["user_category"])){
 
     <?php require('inc/footer.php'); ?>   
     <script src="scripts/register-staff.js"></script>
+    <script src="scripts/view-profile.js"></script>
+    <script src="scripts/edit-profile.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </script>
     <script>
         $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('#myTable')) {
+                $('#myTable').DataTable().destroy();
+            }
+
             $('#myTable').DataTable({
                 paging: true,
                 lengthChange: true,
@@ -314,11 +310,17 @@ if(isset($_SESSION["user_category"])){
                         className: 'btn btn-info',
                         text: 'Print'
                     }
+                ],
+                columnDefs: [
+                { 
+                    targets: 0, // First column (Instructor Code)
+                    visible: false, // Hide the column
+                }
                 ]
             });
         });
         $(document).ready(function () {
-            $('#studentTable').DataTable({
+            $('#staffTable').DataTable({
                 paging: false,          // Disable pagination
                 searching: false,       // Disable search
                 ordering: true,         // Allow column sorting
@@ -328,7 +330,7 @@ if(isset($_SESSION["user_category"])){
                 autoWidth: true,  
                 fixedHeader: true,      // Enable fixed headers
                 language: {
-                    emptyTable: "No students available",
+                    emptyTable: "No staffs available",
                 },
             });
         });

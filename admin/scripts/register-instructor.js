@@ -37,6 +37,48 @@ $(document).ready(function() {
                        
                         $("#signUpForm")[0].reset();
                        
+                        $.ajax({
+                            url: "includes/instructor-list.php",
+                            type: "POST",
+                            data: {
+                                updatedProf : "true"
+                            },
+                            success: function(response) {
+                                var table = $('#myTable').DataTable();
+
+                                // Clear all existing rows from the table
+                                table.clear().draw();
+                                
+                                // Parse response into individual rows
+                                var newRows = $(response).filter('tr'); // Extract the rows from the response
+                                
+                                // Add each row dynamically
+                                newRows.each(function() {
+                                    var row = $(this);  // Get the entire row (including classes, ids, etc.)
+                                
+                                    // Extract and reorder columns using class names (optional, if needed for data)
+                                    var rowData = [];
+                                    rowData.push(row.find('.instructor_id').html());  // Instructor Code (First column)
+                                    rowData.push(row.find('.instructor_id_text').html());  // Instructor Code (First column)
+                                    rowData.push(row.find('.instructor_name').html());     // Instructor Name
+                                    rowData.push(row.find('.instructor_email').html());    // Email
+                                    rowData.push(row.find('.instructor_status').html());   // Status
+                                    rowData.push(row.find('.view_instructor_profile').parent().html()); // Edit action
+                                
+                                    // Add the full row with classes and data to the DataTable
+                                    table.row.add(row[0]).draw(false);  // Add the entire row, not just the data
+                                });
+                                
+                                // Hide the first column if necessary (using DataTables)
+                                table.columns([0]).visible(false);
+                                
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.log("error here");
+                                console.log(error);
+                            }
+                        });
 
                     }else{
                         $("#registerModalMsg").empty();

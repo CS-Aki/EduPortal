@@ -4,7 +4,7 @@ class Instructor extends DbConnection
 {
     protected function fetchAllInstructor()
     {
-        $sql = "SELECT user_id, name, email, status, created FROM users WHERE user_category = 3";
+        $sql = "SELECT user_id, name, email, status, created, birthdate FROM users WHERE user_category = 3";
         $stmt = $this->connect()->prepare($sql);
 
         try {

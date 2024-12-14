@@ -2,25 +2,36 @@
 
 function displayAllStudent()
 {
-    require_once("classes/connection.php");
-    require_once("classes/model.ClassRm.php");
-    require_once("classes/model.Student.php");
-    require_once("classes/controller.ClassRm.php");
-    require_once("classes/controller.Student.php");
+    if(isset($_POST["updatedStudent"])){
+        require_once("../classes/connection.php");
+        require_once("../classes/model.ClassRm.php");
+        require_once("../classes/model.Student.php");
+        require_once("../classes/controller.ClassRm.php");
+        require_once("../classes/controller.Student.php");
+    }else{
+        require_once("classes/connection.php");
+        require_once("classes/model.ClassRm.php");
+        require_once("classes/model.Student.php");
+        require_once("classes/controller.ClassRm.php");
+        require_once("classes/controller.Student.php");
+    }
 
     $stdController = new StudentController();
     $studentList = $stdController->getAllStudents();
 
     for ($i = 0; $i < count($studentList); $i++) {
         $profId = getStudentIdFormat($studentList[$i]["user_id"], $studentList[$i]["created"]);
-        echo "<tr><td class='student_id' hidden>" . $studentList[$i]["user_id"] . "</td>";
+        echo "<tr><td class='student_id'>" . $studentList[$i]["user_id"] . "</td>";
         echo "<td class='student_id_text'>" . $profId . "</td>";
         echo "<td class='student_name'>" . $studentList[$i]["name"] . "</td>";
         echo "<td class='student_status'>" . $studentList[$i]["status"] . "</td>";
         echo "<td class='student_email'>" . $studentList[$i]["email"] . "</td>";
         echo "<td><a href='' class='view_student_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
     }
+}
 
+if(isset($_POST["updatedStudent"])){
+    displayAllStudent();
 }
 
 function getStudentIdFormat($userId, $created){
@@ -33,6 +44,7 @@ function getStudentIdFormat($userId, $created){
     $year .= $userId . "-S";
     return $year;
 }
+
 
 if(isset($_POST["userId"])){
     require_once("../classes/connection.php");
@@ -55,8 +67,5 @@ if(isset($_POST["userId"])){
         echo json_encode($studentDetail);
     }
 
-    // $listOfClass = $studentList->getAllProfClasses();
-    // //echo $name;
-    // header('content-type: application/json');
-    // echo json_encode($listOfClass);
+
 }
