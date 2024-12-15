@@ -2,9 +2,9 @@
 
 class DbConnection{
     private $db_server = "localhost";
-    private $db_user = "u227551606_classroom_user";
-    private $db_password = "Eduportal052898";
-    private $db_name = "u227551606_classroom_db";
+    private $db_user = "root";
+    private $db_password = "";
+    private $db_name = "classroom_db";
 
     protected function connect(){
         $dsn = 'mysql:host=' . $this->db_server . ';dbname='. $this->db_name;

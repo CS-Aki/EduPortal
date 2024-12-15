@@ -43,7 +43,8 @@ class ClassRm extends DbConnection
 
     protected function getClasses($userId)
     {
-        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.status = ?";
+        // echo $userId;
+        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.class_status = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute(array($userId, "Active"));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
