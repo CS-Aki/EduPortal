@@ -202,5 +202,6 @@ function displayAnnouncements(){
     }
 
 }
+
 ?>
 

@@ -71,7 +71,7 @@ function getActiveSubjectCount() {
     return $result['unique_class_count'] ?? 0; // Return the count or 0 if no results
 }
 
-function getTopClassesWithEnrollment($limit = 4) {
+function getTopClassesWithEnrollment($limit = 5) {
     $db = new DbConnection(); // Assuming you already have a DbConnection class
     $pdo = $db->getConnection(); // Use the connect() method to get the PDO instance
 
@@ -98,6 +98,7 @@ function getTopClassesWithEnrollment($limit = 4) {
         'top2' => $results[1]['class_name'] ?? 'No Data',
         'top3' => $results[2]['class_name'] ?? 'No Data',
         'top4' => $results[3]['class_name'] ?? 'No Data',
+        'top5' => $results[4]['class_name'] ?? 'No Data',
     ];
 
     return $topSubjects; // Return the formatted array
@@ -183,6 +184,23 @@ function getMonthlyPassFail($months = 4) {
     ];
 }
 
+function displayAnnouncements(){
+    require_once("classes/model.Announce.php");
+    require_once("classes/controller.Announce.php");
 
+    $announceController = new AnnounceController();
+    $list = $announceController->getAllAnnouncement();
+    if($list != null){
+        for($i = 0; $i < count($list); $i++){
+            echo "<a href='' class='view-announcement'>";
+            echo "<div class='announce-id' hidden>{$list[$i]["id"]}</div>";
+            echo "<div class='container-fluid bg-body-secondary rounded-3 px-lg-3 d-flex align-items-center p-2 mb-2'>";
+            echo "<div><i class='bi bi-megaphone-fill green1 me-3 fs-2'></i></div>";
+            echo "<div><p class='black3 fw-bold lh-1 fs-6 mb-0 pb-0' id='material-title'>{$list[$i]['title']}<span class='fw-light black3 fs-6 d-flex mt-1' id='material-date'></p></div>";
+            echo "</div></a>";
+        }
+    }
+
+}
 ?>
 

@@ -473,3 +473,16 @@ font: 'Inter', sans-serif;
 .wrong {
     border: 1px solid var(--red);
 }
+.general {
+    background-color: var(--green1);
+    height: 20px;
+}
+.maintenance {
+    background-color: #A63133;
+    height: 20px;
+}
+
+.exam {
+    background-color: #216C9E;
+    height: 20px;
+}

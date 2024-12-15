@@ -159,7 +159,7 @@ unset($_SESSION["displayQuiz"]);
                             </div>
                         </div>
                     </div>
-                    
+                                </div>
                 <?php if($actSubmission != null) echo "</div>"; ?>
 
                 <div class="container mt-4 px-lg-5 px-sm-2">

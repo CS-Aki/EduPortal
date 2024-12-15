@@ -41,7 +41,7 @@ $(document).ready(function() {
                             // console.log(response);
                             $("#announce-container").empty();
                             $("#announce-container").html(response);
-                            
+
                             $("#subject").val("");
                             $("#from_date").val("");
                             $("#to_date").val("");
