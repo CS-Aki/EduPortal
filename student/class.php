@@ -187,6 +187,8 @@ if(isset($_SESSION["user_category"])){
                                                 ?>
                                                 <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
                                              <?php
+                                            $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
                                             $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];
                                             $month = $months[$quiz[0]["month"][5] . "" . $quiz[0]["month"][6] - 1];
                                             $day = $quiz[$i]["month"][8] . "" . $quiz[$i]["month"][9];

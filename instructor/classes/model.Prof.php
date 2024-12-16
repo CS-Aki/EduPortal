@@ -1,6 +1,5 @@
 <?php
 
-use PgSql\Lob;
 
 class Instructor extends DbConnection
 {
@@ -696,6 +695,8 @@ class Instructor extends DbConnection
             // echo $type . "\n";
             // echo $questionText . "\n";
             // echo $questionText . "\n";
+            $this->updateQuizStatus($realCode[0]["class_code"], $newPostId[0]["post_id"]);
+
             $qTextResult = $this->isQuestionTextInDb($questionText, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
             if($qTextResult == true){
                 echo "\nQuestion Text Already in database\n";
@@ -761,9 +762,34 @@ class Instructor extends DbConnection
                         return false;
                     }
                 }
+
             }
         }
         return true;
+    }
+
+    protected function updateQuizStatus($classCode, $postId){
+        echo $classCode;
+        echo "POST ID " . $postId;
+        echo "\n\nINSIDE UPDATING QUIZ\n";
+        $sql = "UPDATE quiz SET status = ? WHERE class_code = ? AND post_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array("Active", $classCode, $postId))) {
+                if ($stmt->rowCount() > 0) {
+                    echo "STATUS UPDATED SUCCESS\n\n";
+                    return true;
+                }
+                echo "STATUS UPDATED Failed\n\n";
+                return false;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error in updateQuizStatus : ";
+            return null;
+        }
     }
 
     protected function removingElementsInDb($postId, $removedElements, $id){

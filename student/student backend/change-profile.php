@@ -75,5 +75,4 @@ function imageAlreadyInFolder($filePath, $id){
             unlink($img);
         }
     }
-  
 }

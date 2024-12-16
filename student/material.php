@@ -377,9 +377,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                     }
                                                 } 
                                                 
-                                                if(isset($_SESSION[$_GET["class"]])){ ?>
-                                                        <!-- <td><?php echo $_SESSION["attempt"]; ?></td>
-                                                            <td> ? / <?php echo $totalItems; ?></td>
+                                                if(isset($_SESSION[$_GET["post"]])){ ?>
+                                                        <td><?php echo $_SESSION[$_GET["post"]]; ?></td>
+                                                            <td> ? / <?php echo $_SESSION["total" . $_GET["post"]]; ?></td>
                                                             <td>
                                                                 Your Score: ? <br> 
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
@@ -393,9 +393,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                                 <span class="badge rounded-pill text-bg-secondary">Answering</span>
                                                             </td>
                                                             <td>
-                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION["attempt"]; ?>' class="green2">View</a>
+                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION[$_GET["post"]]; ?>' class="green2">View</a>
                                                             </td>
-                                                        </tr> -->
+                                                        </tr>
                                         <?php    }
                                                 ?>
                                               <!--<tr>

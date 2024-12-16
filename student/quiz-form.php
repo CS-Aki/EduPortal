@@ -1,6 +1,7 @@
 <?php
 if (session_id() === "") session_start();
 
+$_SESSION[$_GET["post"]] = $_GET["attempt"];
 ?>
 
 <!DOCTYPE html>
@@ -159,7 +160,7 @@ if (session_id() === "") session_start();
                                     } else {
                                         // Close the previous question block if it's not the first question
                                         if ($i > 0) {
-                                                                                $j++;
+                                            $j++;
                                             echo "</div>"; // Closing the row
                                             echo "</div>"; // Closing the question-container
                                         }
@@ -224,7 +225,7 @@ if (session_id() === "") session_start();
     <div id="time" hidden><?php echo $quizDetails[0]["deadline_time"]; ?></div>
 
     <!-- <div id="totalItems"><?php echo $j; ?>SASASASA</div> -->
-    <?php require('inc/footer.php'); ?>
+    <?php require('inc/footer.php'); $_SESSION["total" . $_GET["post"]] = $numberOfItems; ?>
 
     <script src="scripts/submit-quiz.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

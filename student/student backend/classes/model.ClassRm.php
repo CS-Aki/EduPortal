@@ -641,10 +641,11 @@ class ClassRm extends DbConnection
     }
 
     protected function getQuizInClass($classCode){
-        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW();";
+        // echo $classCode;
+        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND quiz.status = ? AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW();";
         $stmt = $this->connect()->prepare($sql);
 
-        $stmt->execute([$classCode]);
+        $stmt->execute([$classCode, "Active"]);
 
         if ($stmt->rowCount() == 0) {
             return null;
@@ -851,30 +852,50 @@ class ClassRm extends DbConnection
     }
 
     protected function getAllActsAndQuizInDb($userId){
-        $sql = "SELECT join_class.class_code, activity.starting_date AS 'act start date', activity.starting_time AS 'act start time', activity.deadline_date AS 'act deadline date', activity.deadline_time AS 'act deadline time', quiz.starting_date AS 'quiz start date', quiz.starting_time AS 'quiz start time', quiz.deadline_date AS 'quiz deadline date', quiz.deadline_time AS 'quiz deadline time', posts.post_id AS 'post id', posts.content_type AS 'content type', posts.title AS 'post title' FROM posts
-                INNER JOIN join_class 
+            $sql = "SELECT 
+                join_class.class_code, 
+                activity.starting_date AS 'act start date', 
+                activity.starting_time AS 'act start time', 
+                activity.deadline_date AS 'act deadline date', 
+                activity.deadline_time AS 'act deadline time', 
+                quiz.starting_date AS 'quiz start date', 
+                quiz.starting_time AS 'quiz start time', 
+                quiz.deadline_date AS 'quiz deadline date', 
+                quiz.deadline_time AS 'quiz deadline time', 
+                posts.post_id AS 'post id', 
+                posts.content_type AS 'content type', 
+                posts.title AS 'post title' 
+            FROM posts
+            INNER JOIN join_class 
                 ON posts.class_code = join_class.class_code
-                INNER JOIN users 
+            INNER JOIN users 
                 ON users.user_id = join_class.user_id
-                LEFT JOIN activity 
+            LEFT JOIN activity 
                 ON posts.post_id = activity.post_id  
-                LEFT JOIN quiz 
+            LEFT JOIN quiz 
                 ON posts.post_id = quiz.post_id          
-                WHERE (posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ? 
-                AND ((quiz.starting_date IS NOT NULL AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW())
-                OR (activity.starting_date IS NOT NULL AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW()));";
+            WHERE (posts.content_type = ? OR posts.content_type = ?) 
+                AND users.user_id = ?
+                AND (quiz.status = ? OR quiz.status IS NULL)
+                AND (
+                    (quiz.starting_date IS NOT NULL 
+                        AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW()
+                    )
+                    OR (activity.starting_date IS NOT NULL 
+                        AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW()
+                    )
+                );";
 
-        $stmt = $this->connect()->prepare($sql);
+            $stmt = $this->connect()->prepare($sql);
 
-        try {
-            if ($stmt->execute(array("Quiz", "Activity", $userId))) {
+            try {
+                $params = array("Quiz", "Activity", $userId, "Active");
+                $stmt->execute($params);
+
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
+            } catch (PDOException $e) {
+                echo "SQL Error: " . $e->getMessage();
                 return null;
             }
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return null;
         }
-    }
 }

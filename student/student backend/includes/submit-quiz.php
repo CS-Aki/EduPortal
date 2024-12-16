@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Wrong Answer for Question ID $questionId: $answer\n\n";
         }
         $totalItems++;
-
+        unset($_SESSION[md5($postId)]);
     }
 
     $grade = ($yourScore / $totalItems) * 100;
