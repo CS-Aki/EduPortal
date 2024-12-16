@@ -334,4 +334,12 @@ class InstructorController extends Instructor
     public function getAllQuizAndAct($userId){
         return $this->getAllQuizAndActInDb($userId);
     }
+
+    public function getGradingSystem($classCode){
+        return $this->getGradingSystemDB($classCode);
+    }
+
+    public function editGradeSystem($classCode, $actWg, $quizWg, $examWg, $deduction){
+        return $this->editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction);
+    }
 }

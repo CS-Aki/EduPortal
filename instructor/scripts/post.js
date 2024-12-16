@@ -84,8 +84,7 @@ $(document).ready(function() {
             $("#uploadContainer").hide();
             $("#attemptCont").removeAttr("hidden");
             $("#attemptCont").show();
-
-        }else{
+        }else if(selectedValue == "activity"){
             $(".sub-title").text("Create Activity");
             $('#pointsContainer').removeAttr("hidden");
             $("#dateContainer").removeAttr("hidden");
@@ -96,7 +95,19 @@ $(document).ready(function() {
             $("#uploadContainer").show();
             $(".quiz-list-container").hide();
             $("#attemptCont").hide();
-
+        }else{
+            $(".sub-title").text("Create Exam");
+            $('#pointsContainer').removeAttr("hidden");
+            $("#dateContainer").removeAttr("hidden");
+            $("#timeContainer").removeAttr("hidden");
+            $("#dateContainer").show();
+            $("#timeContainer").show();
+            $(".quiz-list-container").removeAttr("hidden");
+            $(".quiz-list-container").show();
+            $('#pointsContainer').hide();
+            $("#uploadContainer").hide();
+            $("#attemptCont").removeAttr("hidden");
+            $("#attemptCont").show();
         }
     });
 
@@ -265,7 +276,6 @@ $(document).ready(function() {
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
-            
             $.ajax({
                 method: "POST",
                 url: "includes/save-file-session.php",

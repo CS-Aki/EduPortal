@@ -94,4 +94,23 @@ class ListController extends ClassRm
         return $this->getQuizSubmissionInDb($classCode);
     }
 
+    public function getExamTitle($classCode, $postId){
+        return $this->getExamTitleDb($classCode, $postId);
+    }
+
+    public function getExamSubmission($classCode){
+        return $this->getExamSubmissionDb($classCode);
+    }
+
+    public function getAllGrades($classCode){
+        return $this->getAllGradesDb($classCode);
+    }
+
+    public function getGradingSystem($classCode){
+        return $this->getGradingSystemDb($classCode);
+    }
+
+    public function totalActCount($classCode){
+        return $this->totalActCountDb($classCode);
+    }
 }

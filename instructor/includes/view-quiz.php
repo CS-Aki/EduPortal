@@ -13,7 +13,7 @@ $quizContent = $instrCtrlr->getQuizDetails($postId, $classCode);
 $postDetails = $instrCtrlr->getPostDetails($postId, $classCode);
 
 // echo var_dump($quizContent);
-// echo var_dump($quizContent);
+// echo var_dump($postDetails);
 
 
 if($quizContent != null && $quizContent[0]["question_id"] != null){
@@ -110,6 +110,16 @@ if(isset($_GET["user"])){
     $quizContent1 = $instrCtrlr->getQuizContent($postId, $classCode);
 }
 // echo $firstName;
+
+
+if(!isset($_GET["user"])){
+    if($postDetails[0]["content_type"] == "Exam"){
+        // echo $_GET["class"];
+        $examTitle = $listController->getExamTitle($_GET["class"], $_GET["post"]);
+        // echo var_dump($examTitle);
+    }
+}
+
 
 
 //  echo var_dump($groupedQuestions);

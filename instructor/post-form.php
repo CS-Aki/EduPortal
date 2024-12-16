@@ -112,16 +112,16 @@ $_SESSION["classCode"] = $_GET["class"];
                 </nav>
 
                 <!-- <div id="dispQuiz"></div> -->
-
+                
                 <?php $toCreate = "Material" ?> <!-- ausin pa para ma save ung clicked sa prev dropdown as variable para ma show, or if may easier paraan ka -->
-
                 <h1 style="margin: 15px 0px 0px 15px;" class="h-font green1 me-2 sub-title">Create <?php echo $toCreate; ?></h1>
                 <div style="padding: 1% 2%; position: relative;" id="postContainer">
                     <!-- <label class="labelText" >Content Type:</label> -->
                     <select style="position: absolute; z-index: 20;" id="contentType">
                         <option class="green2" value="material">Material</option>
                         <option class="green2" value="activity">Activity</option>
-                        <option class="green2" value="quiz">Quiz</option>
+                        <option class="green2" value="quiz">Quiz</option> 
+                        <option class="green2" value="exam">Exam</option>      <!-- CHANGES HERE -->
                     </select><span> <br>
                     </span>
 

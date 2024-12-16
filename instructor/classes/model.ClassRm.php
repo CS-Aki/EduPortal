@@ -42,7 +42,7 @@ class ClassRm extends DbConnection
     }
     
     protected function fetchStudentList($classCode){
-        $sql = "SELECT join_class.user_id, join_class.name, users.image FROM join_class INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.class_code = ?";
+        $sql = "SELECT join_class.user_id, join_class.name, users.image, users.created FROM join_class INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -306,5 +306,108 @@ class ClassRm extends DbConnection
         }
     }
 
+    protected function getExamTitleDb($classCode, $postId){
+
+        $sql = "SELECT * FROM posts WHERE MD5(class_code) = ? AND MD5(post_id) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, $postId))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+
+    protected function getExamSubmissionDb($classCode){
+        $sql = "SELECT * FROM grades WHERE MD5(class_code) = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, "Exam"))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+    
+    protected function getAllGradesDb($classCode){
+        $sql = "SELECT DISTINCT(grade), content_type, post_id, user_id FROM `grades` WHERE MD5(class_code) = ? ORDER BY grade DESC";    
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($classCode))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+        echo "Error getAllGradesDb: " . $e;
+        return null;
+        }
+    }
+
+    protected function getGradingSystemDb($classCode){
+        $sql = "SELECT * FROM grading_system WHERE MD5(class_code) = ?";    
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($classCode))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+        echo "Error getAllGradesDb: " . $e;
+        return null;
+        }
+    }
+
+    protected function totalActCountDb($classCode){
+        $sql = "SELECT 
+                content_type, 
+                COUNT(DISTINCT post_id) AS total_posts
+                FROM grades
+                WHERE MD5(class_code) = ?
+                GROUP BY content_type;";    
+
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($classCode))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+        echo "Error getAllGradesDb: " . $e;
+        return null;
+        }
+    }
 
 }

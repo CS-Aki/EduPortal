@@ -121,7 +121,7 @@ if(isset($_GET["code"])){
 </head>
 <body>
 
-<?php require('inc/header.php');  ?>
+<?php require('inc/header.php'); ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row" >
@@ -160,7 +160,7 @@ if(isset($_GET["code"])){
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="col-lg-9 col-md-12 mb-md-2">
                                             <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
-                                            <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
+                                            <p class="fw-light green1 blue fs-6 d-flex m-0" id="graded-text"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
                                             <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
                                             <?php if ($startingDateTime != null){ ?>
                                                 <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
@@ -260,7 +260,7 @@ if(isset($_GET["code"])){
                                                     </div>
                                                 </div>
                                                 <div id="grading-container">
-                                                <?php  if($grades != null){?>       
+                                                <?php if($grades != null){?>       
                                                         <a href="#" id="edit-grade">
                                                             <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
                                                                 <div class="d-flex justify-content-center align-items-center p-2">
@@ -297,7 +297,7 @@ if(isset($_GET["code"])){
                                 </div>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
-                                <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
+                                <p id="post-id" hidden><?php echo $legitPostId; ?></p>
 
                                     <!-- FOR COMMENT -->
                                     <div class="input-group mt-lg-2">
@@ -513,7 +513,7 @@ if(isset($_GET["code"])){
     </div>
     <div class='point-temp' hidden><?php if($grades != null) echo $currentPoint;?></div>
     <div class='user-id' hidden><?php echo $userId;?></div>
-    <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
+    <div class='post-id' hidden><?php echo $legitPostId;?></div>
     <div class='class-code' hidden><?php echo $actSubmission[0]["class_code"];?></div>
     <?php require('inc/footer.php'); ?>   
 

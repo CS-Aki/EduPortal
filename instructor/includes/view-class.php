@@ -36,7 +36,6 @@ if(isset($_GET["class"])){
         $day = $post[0]["month"][8] . "" . $post[0]["month"][9];
     }
 
-
     $currentDate = date("F j, Y");
         // $today = $currentDate->format("m-d-Y");
 

@@ -231,6 +231,22 @@ class Instructor extends DbConnection
                 return false;
             }
             exit();
+        }else if($type == "exam"){
+            $type = ucfirst($type);
+            $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
+            $_SESSION["postId"] = $connection->lastInsertId();
+
+            $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+           
+            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `attempt`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $connection->prepare($sql);
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $attempt, $startingDate, $startingTime, "Pending"))) {
+                // echo "trueee";
+                return true;
+            }else{
+                echo "Error statement";
+                return false;
+            }
         }else{
             $type = ucfirst($type);
             if ($stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"))) {
@@ -1061,7 +1077,14 @@ class Instructor extends DbConnection
     }
 
     protected function updateActGradeInDb($postId, $classCode, $userId, $status, $grade){
-        echo "\n\n\nGRADE : " . $grade . "\n\n\n";
+        // echo "\n\n\nGRADE : " . $grade . "\n\n\n";
+        if($status == "Late"){
+            echo "\n\nLate submission deducting grade\n\n Orig Grade" . $grade;
+            $gradeSys = $this->getGradingSystemDB(md5($classCode));
+            $grade -= $gradeSys[0]["deduction"];
+            echo "\nNew Grade " . $grade . "\n\n";
+        }
+
         $sql = "UPDATE `grades` SET `grade`= ? WHERE user_id = ? AND post_id = ? AND class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
@@ -1410,5 +1433,41 @@ class Instructor extends DbConnection
             return null;
         }
     }
+
+    protected function getGradingSystemDB($classCode){
+        $sql = "SELECT * FROM grading_system WHERE MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction){
+        $sql = "UPDATE `grading_system` SET `act_wg`= ?,`quiz_wg`= ?,`exam_wg`= ?,`deduction`= ? WHERE MD5(class_code) = ?";    
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($actWg, $quizWg, $examWg, $deduction, $classCode))) {
+            if ($stmt->rowCount() > 0) {
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+        } catch (PDOException $e) {
+        echo "Error removeFilesFromDb: " . $e;
+        return false;
+        }
+    }
+
 
 }

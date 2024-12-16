@@ -69,6 +69,8 @@ if (session_id() === "") session_start();
         include("includes/view-class.php");
         include("includes/view-quiz-list.php");
         include("includes/view-quiz.php");
+
+        
     } ?>
 
     <?php require('inc/header.php'); ?>
@@ -107,7 +109,7 @@ if (session_id() === "") session_start();
                 </div>
 
                 <div>
-                    <h1 id="material-title"><?php echo $title; ?></h1>
+                    <h1 id="material-title"><?php if($postDetails[0]["content_type"] == "Exam") echo $examTitle[0]["title"]; else echo $title; ?></h1>
                     <label id="material-start-date">Starting Date: <?php echo $startingDateTime; ?></label><br>
                     <label id="material-end-date">Deadline Date: <?php echo $deadlineDateTime; ?></label><br>
                     <label>Attempt(s): </label><label  id="attempt-text"> <?php echo $attempt; ?></label>

@@ -697,7 +697,22 @@ $(document).ready(function () {
                 },
 
                 success: function (response) {
-                    alert("QUIZ SAVED SUCCESSFULLY");
+                    if($("#content-type").text() == "Exam"){
+                        Swal.fire({
+                            title: 'Exam Saved!',
+                            text: 'Your Exam has been Saved.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }else{
+                        Swal.fire({
+                            title: 'Quiz Saved!',
+                            text: 'Your Quiz has been Saved.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
                     isQuizSaved = true;
                     console.log(response);
                 },
@@ -706,7 +721,6 @@ $(document).ready(function () {
                 }
             });
         } else {
-            console.log("insideeeee");
             alert(listOfNoAns.substring(0, listOfNoAns.length - 2));
             noAnswerKey = false;
             options = [];
