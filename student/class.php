@@ -218,7 +218,6 @@ if(isset($_SESSION["user_category"])){
                         <div id="examContent">
                             
                         <?php 
-                                    if(isset($post[0]["content_type"])){
                                         if($exam != null){
                                             for($i = 0 ; $i < count($exam); $i++){
                                                 if($exam[$i]["content_type"] == "Exam"){
@@ -242,7 +241,7 @@ if(isset($_SESSION["user_category"])){
                                                 }
                                             }
                                         }
-                                    }
+                                    
                             ?>
                         </div>
                     </div>

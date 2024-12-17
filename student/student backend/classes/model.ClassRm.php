@@ -1116,4 +1116,24 @@ class ClassRm extends DbConnection
             return null;
             }
         }
+
+        
+    protected function getExamGradesDb($postId, $userId){
+        $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($postId, $userId, "Exam"))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+            echo "Error getExamGradesDb: " . $e;
+            return null;
+        }
+    }
 }

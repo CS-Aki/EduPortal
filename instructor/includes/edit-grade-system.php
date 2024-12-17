@@ -10,9 +10,10 @@ $actWg = $_POST["actWg"];
 $quizWg = $_POST["quizWg"];
 $examWg = $_POST["examWg"];
 $deduction = $_POST["deduction"];
+$oldDeduction = $_POST["oldDeduct"];
 
 $instrCtrlr = new InstructorController();
-$result = $instrCtrlr->editGradeSystem($classCode, $actWg, $quizWg, $examWg, $deduction);
+$result = $instrCtrlr->editGradeSystem($classCode, $actWg, $quizWg, $examWg, $deduction, $oldDeduction);
 
 if($result == true){
     echo "Success";

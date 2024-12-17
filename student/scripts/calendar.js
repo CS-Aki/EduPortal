@@ -135,6 +135,7 @@ $(document).ready(function () {
                             addedEvents.add(quizStart);
                         }
                     }
+                    
                     if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
                         const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
                         if (!addedEvents.has(quizEnd)) {

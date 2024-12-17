@@ -37,5 +37,6 @@ if(isset($_GET["class"])){
     // echo var_dump($post);
  
     // echo "<br>";
-    // echo var_dump($details);
+    // echo var_dump($exam);
+    echo var_dump($post);
 }

@@ -1453,13 +1453,14 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction){
+    protected function editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction, $oldDeduction){
         $sql = "UPDATE `grading_system` SET `act_wg`= ?,`quiz_wg`= ?,`exam_wg`= ?,`deduction`= ? WHERE MD5(class_code) = ?";    
         $stmt = $this->connect()->prepare($sql);
 
         try {
         if ($stmt->execute(array($actWg, $quizWg, $examWg, $deduction, $classCode))) {
             if ($stmt->rowCount() > 0) {
+                $this->updateLateGrades($classCode, $oldDeduction, $deduction);
                 return true;
             }
             return false;
@@ -1470,6 +1471,33 @@ class Instructor extends DbConnection
         echo "Error removeFilesFromDb: " . $e;
         return false;
         }
+    }
+
+    protected function updateLateGrades($classCode, $oldDeduction, $newDeduction){
+        if($oldDeduction < $newDeduction){
+            $sql = "UPDATE `grades` SET `grade`= (grade + $oldDeduction - $newDeduction) WHERE MD5(class_code) = ?";    
+            echo "\nMINUS\n";
+        }else{
+            $sql = "UPDATE `grades` SET `grade`= (grade - $newDeduction + $oldDeduction) WHERE MD5(class_code) = ?";  
+            echo "\PLUS\n";
+  
+        }
+
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($classCode))) {
+            if ($stmt->rowCount() > 0) {
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+        } catch (PDOException $e) {
+        echo "Error updateLateGrades: " . $e;
+        return false;
+        }  
     }
 
     protected function getExam($postId, $classCode){

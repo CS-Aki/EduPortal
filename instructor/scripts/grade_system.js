@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+    let initDeduction =  0;
     // Remove existing click handlers before attaching a new one
     $(document).off('click', '#setting-button').on('click', '#setting-button', function (event) {
         event.preventDefault();
@@ -21,6 +23,7 @@ $(document).ready(function () {
                     $("#quiz_wg").val(element["quiz_wg"]);
                     $("#exam_wg").val(element["exam_wg"]);
                     $("#deduction").val(element["deduction"]);
+                    initDeduction = element["deduction"];
                     updateOptions();
                 });
  
@@ -73,7 +76,11 @@ $(document).ready(function () {
         }
     });
 
+
+
     $('#editGradeForm').off('submit').on('submit', function (e) {
+        console.log("DEDUCTION INITIAL " + initDeduction);
+
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
@@ -117,11 +124,13 @@ $(document).ready(function () {
                 quizWg : quizWg,
                 examWg : examWg,
                 deduction : deduction,
+                oldDeduct : initDeduction
             },
       
             success: function(response) {
                 console.log(response);
                 if(response.includes("Success")){
+                    initDeduction = deduction;
                     Swal.fire({
                         title: 'Success!',
                         text: 'Edit Success',

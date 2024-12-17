@@ -30,6 +30,8 @@ if(isset($_GET["post"])){
     // }
     // echo $classCode;
     $postDetails = $stdController->getPostDetails($postId, $classCode);
+    echo "test";
+    echo var_dump($postDetails);
     $comments = $stdController->getComments($postId, $classCode);
     $files = $stdController->getFiles($postId, $classCode);
     // echo var_dump($postDetails);
@@ -124,6 +126,9 @@ if(isset($_GET["post"])){
 
 if($postDetails != null){
     if($postDetails[0]["content_type"] == "Exam"){
+        $listController = new ListController();
+        $examGrades = $listController->getExamGrades($_GET["post"], $_SESSION["user_id"]);
+        // echo var_dump($examGrades);
         $yourScore = array();
         $currentAttempt = 0;
         $quizContent = $stdController->getExamContent($postId, $classCode);
