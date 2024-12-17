@@ -81,6 +81,17 @@ $(document).ready(function () {
         let quizWg = $("#quiz_wg").val();
         let examWg = $("#exam_wg").val();
         let deduction = $("#deduction").val();
+
+        if(actWg <= 0 || quizWg <= 0 || quizWg <= 0 || deduction <= 0){
+            Swal.fire({
+                title: 'Invalid Input!',
+                text: 'Weighted Grades should be above 0',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
         let sum = parseInt(actWg) + parseInt(examWg) + parseInt(quizWg);
         console.log(sum);
         if(sum != 100){

@@ -50,4 +50,42 @@ class Staff extends DbConnection{
             return null;
         }
     }
+
+    protected function fetchStudentProfile($name, $email){
+        $sql = "SELECT user_id FROM users WHERE name = ? AND email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($name, $email))) {
+                // Add conditional statement if rowCount == 0 then call a function
+                return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return null;
+        }
+        return null;
+    }
+
+    protected function updateProfilePicture($userId, $profile){
+        $profile = "../profiles/" . $profile;
+        $sql = "UPDATE users SET image = ? WHERE user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($profile, $userId))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return false;
+        }
+        return false;
+    }
 }

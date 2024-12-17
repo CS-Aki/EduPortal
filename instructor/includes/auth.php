@@ -21,7 +21,7 @@ if(isset($_GET["code"])){
 // }
 
 $client->addScope(Google_Service_Drive::DRIVE_FILE);
-$client->setRedirectUri('https://cs-devops.com/EduPortal/instructor/post-form.php');
+$client->setRedirectUri('http://localhost/EduPortal/instructor/post-form.php');
 
 // Check if we have an authorization code in the query string
 if (isset($_GET['code'])) {
@@ -34,7 +34,7 @@ if (isset($_GET['code'])) {
     // $_SESSION["storedFile"] = $_FILES['files'];
     
     // Redirect back to the page to ensure everything is set
-    header('Location: https://cs-devops.com/EduPortal/instructor/post-form.php?class='.$_SESSION["storeCode"]);
+    header('Location: http://localhost/EduPortal/instructor/post-form.php?class='.$_SESSION["storeCode"]);
     exit;
 }
 

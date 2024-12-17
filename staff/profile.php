@@ -1,6 +1,10 @@
 <?php 
 if (session_id() === "") session_start();
-// echo "test " . $_SESSION["address"];
+
+if(!isset($_SESSION["user_category"])){
+    header("Location: ../index.php");
+}
+
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
@@ -13,6 +17,7 @@ if(isset($_SESSION["user_category"])){
     header("Location: ../");
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -20,30 +25,35 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <?php require('inc/links.php'); ?>
+    <title>Staff Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <?php require('inc/links.php'); include("includes/view-profile.php"); ?>
 </head>
 <body>
     <?php require('inc/header.php'); ?>
-
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
-            <div class="col-lg-10 col-sm-12 ms-auto">
+            <div class="col-lg-10 col-sm-12 ms-auto ">
                 <div class="container px-lg-5 px-sm-2 d-flex align-items-center justify-content-center">
-                    <div class="rounded-5 bg-body-tertiary w-100 mt-2 px-4 py-4">
+                    <div class="rounded-5 bg-body-tertiary w-100 mt-5 px-4 py-4">
                         <div class="p-3 d-flex align-content-center" id="profile-content">
                             <div class="row container-fluid">
                                 <div class="col-lg-3">
-                                    <img src="../profiles/profile.png" style="width: 160px;" class="rounded-pill">
+                                    <!-- <i class='me-2 bi bi-person-circle fs-1 icon' style="font-size: 3rem;"></i> -->
+                                    <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" id="imageProfile" style="width: 160px;" class="rounded-pill">
                                 </div>
                                 <div class="col-lg-9">
-                                    <h2 class="h-font green1 me-2 title mb-0 pb-0">EduPortal Admin</h2>
+                                    <h2 class="h-font green1 me-2 title mb-0 pb-0"><?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?></h2>
                                     <p class="lh-base fw-semibold black3 fs-5 pt-0 mt-0 mb-2">
                                         Staff
                                     </p>
-                                    <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0" data-bs-toggle="modal" data-bs-target="#changeProfile">
-                                        <i class="bi bi-pencil-square white2 me-2"></i>Change Profile
-                                    </button>
+                                    <form enctype="multipart/form-data" id="changeProfileForm">
+                                        <input type="file" id="file" style="display: none;" name="file">
+                                        <button type="submit" name="changeBtn" id="changeProfileBtn" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0">
+                                            <i class="bi bi-pencil-square white2 me-2"></i>Change Profile
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -51,35 +61,35 @@ if(isset($_SESSION["user_category"])){
                             <div class="row">
                                 <div class="col-lg-8 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Name:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="Jarmen A. Cachero" name="first_name" id="first_name_inp">
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Date of Birth:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="08-24-04" name="first_name" id="first_name_inp">
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["birthdate"])) echo $_SESSION["birthdate"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Sex:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="Male" name="first_name" id="first_name_inp">
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Email:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="cachero.jarmen.bscs2022@gmail.com" name="first_name" id="first_name_inp">
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Student Number:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="20220141-S" name="first_name" id="first_name_inp">
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php echo $userId; ?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Address:</label>
-                                    <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="Leave a comment..."></textarea>
+                                    <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="<?php if(isset($_SESSION["address"])) echo $_SESSION["address"]; else echo "test";?>" readonly></textarea>
                                 </div>
                             </div>
                             <div class="mt-3 text-end">
-                                <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0">Save</button>
+                                <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0" id="save-changes" disabled>Save</button>
                             </div>
                         </div>
                     </div>
@@ -89,8 +99,9 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
- 
-    <?php require('inc/footer.php'); ?> 
+    <?php require('inc/footer.php'); ?>
+    <script src="scripts/change-profile.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         const navLinks = document.querySelectorAll('.nav-link');

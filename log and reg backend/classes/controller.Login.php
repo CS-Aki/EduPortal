@@ -46,12 +46,15 @@ class LoginController extends User{
         $num = $user[0]["user_id"];
         $_SESSION["user_id"] = $user[0]["user_id"];
         $_SESSION["user_category"] = $user[0]["user_category"];
-        // $_SESSION["email"] = $user[0]["email"];
+        $_SESSION["email"] = $user[0]["email"];
         // $_SESSION["name"] = $user[0]["name"];
+        $_SESSION["name"] = $user[0]["name"];
         $_SESSION["address"] = $user[0]["address"];
         $_SESSION['google_loggedin'] = true;
         $_SESSION['google_email'] = $user[0]["email"];
-        $_SESSION['google_name'] = $user[0]["name"];;
+        $_SESSION['google_name'] = $user[0]["name"];
+        $_SESSION["birthdate"] = $user[0]["birthdate"];
+        $_SESSION["gender"] = $user[0]["gender"];
      //   $google_picture = $_SESSION['google_picture'];
         $userId = $this->getUserId($_SESSION['google_email'], $_SESSION['google_name']);
         $_SESSION['user_id'] = $userId[0]['user_id'];

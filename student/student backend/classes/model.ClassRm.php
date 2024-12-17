@@ -344,7 +344,6 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchStudentProfile($name, $email){
-            // Will add more columns here
             $sql = "SELECT user_id FROM users WHERE name = ? AND email = ?";
             $stmt = $this->connect()->prepare($sql);
 
@@ -934,7 +933,7 @@ class ClassRm extends DbConnection
                 ON posts.post_id = activity.post_id  
             LEFT JOIN quiz 
                 ON posts.post_id = quiz.post_id          
-            WHERE (posts.content_type = ? OR posts.content_type = ?) 
+            WHERE (posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ?) 
                 AND users.user_id = ?
                 AND (quiz.status = ? OR quiz.status IS NULL)
                 AND (
@@ -949,7 +948,7 @@ class ClassRm extends DbConnection
             $stmt = $this->connect()->prepare($sql);
 
             try {
-                $params = array("Quiz", "Activity", $userId, "Active");
+                $params = array("Quiz", "Activity", "Exam", $userId, "Active");
                 $stmt->execute($params);
 
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);

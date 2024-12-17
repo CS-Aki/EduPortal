@@ -66,7 +66,7 @@ $(document).ready(function () {
 
                 const classHash = md5(String(eventData["class_code"]));
                 const postHash = md5(String(eventData["post id"]));
-                const eventUrl = `material.php?class=${classHash}&post=${postHash}`;
+                let eventUrl = `material.php?class=${classHash}&post=${postHash}`;
 
                 if (eventData["content type"] === "Activity") {
                     if (eventData["act start date"] && eventData["act start time"]) {
@@ -121,6 +121,34 @@ $(document).ready(function () {
                         }
                     }
                 }
+
+                if (eventData["content type"] === "Exam") {
+                    if (eventData["quiz start date"] && eventData["quiz start time"]) {
+                        const quizStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
+                        if (!addedEvents.has(quizStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Quiz Start)`,
+                                start: quizStart,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizStart);
+                        }
+                    }
+                    if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
+                        const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
+                        if (!addedEvents.has(quizEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Quiz Deadline)`,
+                                start: quizEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizEnd);
+                        }
+                    }
+                }
+
             });
         },
         error: function (xhr, status, error) {

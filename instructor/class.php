@@ -293,8 +293,8 @@ unset($_SESSION["displayQuiz"]);
                                             <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Activity Weighted Grade</label>
                                                     <select class="form-select shadow-elevation-light-3 black3" name="daySched" id="act_wg" required>
-                                                         <option value="0">0</option>
-                                                         <option value="5">5</option>
+                                                        <option value="0">0</option>
+                                                        <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
                                                         <option value="20">20</option>
@@ -302,12 +302,21 @@ unset($_SESSION["displayQuiz"]);
                                                         <option value="30">30</option>
                                                         <option value="35">35</option>
                                                         <option value="40">40</option>
+                                                        <option value="45">45</option>
+                                                        <option value="50">55</option>
+                                                        <option value="60">60</option>
+                                                        <option value="65">65</option>
+                                                        <option value="70">70</option>
+                                                        <option value="75">75</option>
+                                                        <option value="80">80</option>
+                                                        <option value="85">85</option>
+                                                        <option value="90">90</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Quiz Weighted Grade</label>
                                                     <select class="form-select shadow-elevation-light-3 black3" name="daySched" id="quiz_wg" required>
-                                                    <option value="0">0</option>
+                                                        <option value="0">0</option>
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
@@ -316,13 +325,22 @@ unset($_SESSION["displayQuiz"]);
                                                         <option value="30">30</option>
                                                         <option value="35">35</option>
                                                         <option value="40">40</option>
+                                                        <option value="45">45</option>
+                                                        <option value="50">55</option>
+                                                        <option value="60">60</option>
+                                                        <option value="65">65</option>
+                                                        <option value="70">70</option>
+                                                        <option value="75">75</option>
+                                                        <option value="80">80</option>
+                                                        <option value="85">85</option>
+                                                        <option value="90">90</option>
+
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Exam Weighted Grade</label>
                                                     <select class="form-select shadow-elevation-light-3 black3" name="daySched" id="exam_wg" required>
-                                                    <option value="0">0</option>
-
+                                                        <option value="0">0</option>
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
@@ -331,6 +349,15 @@ unset($_SESSION["displayQuiz"]);
                                                         <option value="30">30</option>
                                                         <option value="35">35</option>
                                                         <option value="40">40</option>
+                                                        <option value="45">45</option>
+                                                        <option value="50">55</option>
+                                                        <option value="60">60</option>
+                                                        <option value="65">65</option>
+                                                        <option value="70">70</option>
+                                                        <option value="75">75</option>
+                                                        <option value="80">80</option>
+                                                        <option value="85">85</option>
+                                                        <option value="90">90</option>
                                                     </select>
                                                 </div>
 

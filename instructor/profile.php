@@ -65,21 +65,21 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Date of Birth:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="08-24-04" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["birthdate"])) echo $_SESSION["birthdate"];?>" name="birthdate" id="birthdate" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Sex:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="Female" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"];?>" name="gender" id="gender" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Email:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="email" id="email" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Instructor Code:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"];?>" name="prof-code" id="prof-code" readonly>
                                 </div>
                             </div>
                             <div class="row">

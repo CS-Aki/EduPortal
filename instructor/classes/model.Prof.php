@@ -1421,12 +1421,12 @@ class Instructor extends DbConnection
                 INNER JOIN users ON users.user_id = classes.user_id
                 LEFT JOIN activity ON posts.post_id = activity.post_id  
                 LEFT JOIN quiz ON posts.post_id = quiz.post_id          
-                WHERE (posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ?;";
+                WHERE (posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ?;";
 
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array("Quiz", "Activity", $userId))) {
+            if ($stmt->execute(array("Quiz", "Activity", "Exam",$userId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;

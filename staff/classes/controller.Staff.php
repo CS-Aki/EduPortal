@@ -54,4 +54,14 @@ class StaffController extends Staff{
 
         return false;
     }
+
+    public function getProfileDetails($name, $email){
+        $profile = $this->fetchStudentProfile($name, $email);
+    
+        return $profile;
+    }
+
+    public function updatePicture($userId, $profile){
+        return $this->updateProfilePicture($userId, $profile);
+    }
 }
