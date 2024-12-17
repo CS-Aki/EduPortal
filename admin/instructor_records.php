@@ -5,9 +5,9 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        // case 2: header("Location: ../instructor/instructor-dashboard.php"); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
@@ -30,6 +30,7 @@ if(isset($_SESSION["user_category"])){
         .table td {
             font-weight: semibold;
             color: #6B656B;
+            word-wrap: break-word;
         }
         
         .dataTables_info {
@@ -92,13 +93,13 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </nav>
 
-                <div class="container mt-2" style="width: 80%;">
+                <div class="container-fluid mt-2 p-0 p-lg-4" style="width: 100%;">
                     <div class="d-flex justify-content-end mb-3"> 
                         <button type="button" class="btn fs-5 green shadow-none white2 d-flex align-items-center justify-content-center py-0 px-4 rounded-5" data-bs-toggle="modal" data-bs-target="#signUpModal">
                             <i class="bi bi-plus-lg white2 me-1 fs-2"></i>Register New Instructor Account
                         </button>
                     </div>
-                    <table id="myTable" class="table table-bordered text-center align-middle">
+                    <table id="myTable" class="table table-bordered text-center align-middle" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th scope="col"></th> 
@@ -346,7 +347,7 @@ if(isset($_SESSION["user_category"])){
                     targets: 0, // First column (Instructor Code)
                     visible: false, // Hide the column
                 }
-                ]
+                  ]
                 
             });
         });

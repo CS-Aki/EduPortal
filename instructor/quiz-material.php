@@ -1,6 +1,18 @@
 <?php
 if (session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        // case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -189,7 +201,7 @@ if (session_id() === "") session_start();
 </head>
 
 <body>
-    <?php if (isset($_GET["class"])) {include("includes/view-quiz.php");
+    <?php if (isset($_GET["class"])) {include("includes/view-quiz.php"); 
     } ?>
     <?php require('inc/header.php');  ?>
 
@@ -282,19 +294,24 @@ if (session_id() === "") session_start();
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
                                                                 Result: 
                                                                 <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
-                                                                    <?php echo ($grade >= 70) ? "Passed" : "Failed"; ?>
+                                                                    <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                           else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                    ?>
                                                                 </span>
                                                             </td>
-                                                            <td><?php echo ceil($grade) . "%"; ?></td>
+                                                            <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                      else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                    </td>
                                                             <td><?php 
                                                                 
                                                                  if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
-                                                                    $j++;
+                                                                
                                                                  }else{
                                                                     echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
+                                                          
                                                                  }
-                                                                
+                                                                 $j++;
                                                                 ?>
                                                             </td>
                                                             <td>

@@ -47,6 +47,9 @@
 .green {
     background-color: var(--green1);
 }
+.greenbg {
+    background-color: var(--green1);  
+}
 
 .green:hover {
     background-color: var(--green1_hover);
@@ -62,6 +65,11 @@
 .line {
     height: 1px; /* Adjust the height (thickness) of the line */
     background-color: var(--black3); /* Use your desired color */
+}
+
+.greenline {
+    height: 1px; /* Adjust the height (thickness) of the line */
+    background-color: var(--green3); /* Use your desired color */
 }
 
 li, a {
@@ -84,16 +92,93 @@ button {
 
 .h-font2 {
     font-family: 'Source Sans 3', cursive;
-    font-weight: 800px;
+    font-weight: 700;
+    font-size: 6rem;
 }
 
 .logo {
     max-width: 200px;
     max-height: 81px;
-
 }
 
 .navbar {
     max-height: 143px;
 }
 
+.shadow-elevation-light-3 {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-elevation-dark-1 {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.2); 
+}
+
+.signlink {
+    display: none;
+}
+
+.link {
+    word-wrap: break-word; /* Allows the text to wrap if it's too long */
+    overflow-wrap: break-word; /* Breaks words across lines */
+    display: inline-block; /* Ensures proper wrapping */
+    max-width: 100%; /* Restricts the width */
+    white-space: normal; /* Ensures wrapping occurs */
+}
+
+.testimonial-container {
+    background-color: #f8f9fa; /* Light grey */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+.carousel-indicators li {
+    background-color: #6c757d; /* Neutral grey */
+}
+.carousel-indicators .active {
+    background-color: #0d6efd; /* Bootstrap primary */
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-image: none; /* Remove default Bootstrap arrow icons */
+}
+.carousel-control-prev-icon::before, .carousel-control-next-icon::before {
+    color: var(--green1);
+}
+a {
+    text-decoration: none;
+    color: var(--white2);
+}
+
+@media screen and (max-width: 992px) {
+    .h-font2 {
+        font-size: 4rem;
+    }
+
+    #carouselExample {
+        height: 700px !important;
+    }
+    .carousel-inner {
+        height: 700px !important;
+    }
+    .carousel-item {
+        height: 700px !important;
+    }
+    .testimonial-container p, .testimonial-container h5 {
+        font-size: 1.3rem !important;
+    }
+    .testimonial-container i {
+        font-size: 5rem !important;
+    }
+    .testimonial-container {
+        padding: 1rem !important;
+    }
+    .signlink {
+        display: block;
+    }
+    .buttonMenu {
+        display: none !important;
+    }
+    #logoabout {
+        width: 15rem !important;
+    }
+}

@@ -208,8 +208,8 @@ class StudentController extends ClassRm{
         return $this->getTotalItemsInDb($postId);
     }
 
-    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status){
-        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status);
+    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status, $type){
+        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type);
         if($result == false){
             echo "ERROR INSERTING GRADE";
         }
@@ -242,6 +242,32 @@ class StudentController extends ClassRm{
 
     public function getGradesAct($userId, $classCode){
         return $this->getGradesActInDb($userId, $classCode);
+    }
+
+    public function listOfExams($classCode){
+        return $this->listOfExamsDb($classCode);
+    }
+
+    public function getExamContent($postId, $classCode){
+        return $this->getExam($postId, $classCode);
+    }
+
+    public function getExamStatus($postId, $classCode, $userId){
+        $result = $this->getExamStatusFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getExamResult($postId, $classCode, $userId){
+        $result = $this->getExamResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getAnsweredExams($classCode, $userId){
+        $result = $this->getAnsweredExamsInDb($classCode, $userId);
+        // if($result == null){
+        //     // echo "ERROR FETCHING ANSWERED QUIZ";
+        // }
+        return $result;
     }
 }
 

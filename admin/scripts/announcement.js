@@ -10,12 +10,12 @@ $(document).ready(function() {
         let audience = $("#audience_visible").val();
         let message = $("#message-content").val();
 
-        // console.log("Subject " + subject);
-        // console.log("From date " + fromDate);
-        // console.log("To date " + toDate);
-        // console.log("Message type " + msgType);
-        // console.log("Audience " + audience);
-        // console.log("Message " + message);
+        console.log("Subject " + subject);
+        console.log("From date " + fromDate);
+        console.log("To date " + toDate);
+        console.log("Message type " + msgType);
+        console.log("Audience " + audience);
+        console.log("Message " + message);
 
         $.ajax({
             url: "includes/announcement.php",
@@ -39,6 +39,12 @@ $(document).ready(function() {
                         },
                         success: function(response) {
                             // console.log(response);
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Announcement Created!',
+                                icon: 'success'
+                            });
+
                             $("#announce-container").empty();
                             $("#announce-container").html(response);
                             
@@ -48,8 +54,14 @@ $(document).ready(function() {
                             $("#msg_type").val("");
                             $("#audience_visible").val("");
                             $("#message-content").val("");
+                            
                         },
                         error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error Encountered!',
+                                text: error,
+                                icon: 'error'
+                            });
                             console.log("error here");
                             console.log(error);
                         }
@@ -57,6 +69,11 @@ $(document).ready(function() {
 
             },
             error: function(xhr, status, error) {
+                Swal.fire({
+                    title: 'Error Encountered!',
+                    text: error,
+                    icon: 'error'
+                });
                 console.log("error here");
                 console.log(error);
             }

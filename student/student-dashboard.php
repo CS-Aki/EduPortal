@@ -6,7 +6,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }

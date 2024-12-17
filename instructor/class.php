@@ -229,11 +229,11 @@ unset($_SESSION["displayQuiz"]);
 
                     <div class="mt-2">
                         <div class="d-flex align-items-center justify-content-between">
-                            <h1 class="h-font green1 me-2 sub-title">Exam</h1>
+                            <h1 class="h-font green1 me-2 sub-title">Exams</h1>
                             <div class="line-h"></div>
                         </div>
-                        <div id="quizContent">
-                        <?php
+                        <div id="examContent">
+                        <?php 
                                     if(isset($post[0]["content_type"])){
                                         for($i = 0 ; $i < count($post); $i++){
                                             if($post[$i]["content_type"] == "Exam"){

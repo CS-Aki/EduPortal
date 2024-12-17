@@ -40,11 +40,11 @@ class StudentController extends Student{
 
     public function changeStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate){
         if($this->invalidInput($instructorName)){
-            echo "Special Characters aren't allowed, please try again";
+            echo "Special Characters Are Not Allowed!";
             return;
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
             echo "Invalid email address.";
             return;
         } 

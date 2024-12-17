@@ -64,10 +64,21 @@ unset($_SESSION["displayQuiz"]);
                 <div class="container mt-4 px-lg-5 px-sm-2">
                     <?php
                     // Function to display material (Activity/Quiz/Exam)
+                    // if($contentType == "Exam"){
+                    //     echo "Submission student id " . $submission["user_id"] . "<br>";
+                    //     echo "user student id " . $student["user_id"] . "<br>";
+                    //     echo "submission id " . $submission["post_id"] . "<br>";
+                    //     echo "post id " . $post[$i]["post_id"] . "<br><br>";
+                    // }
+
                     function displayMaterial($post, $contentType, $studentList, $submissionList, $classCode) {
+                        // echo var_dump($submissionList) . "<br><br><br>"; 
                         if (isset($post[0]['content_type'])) {
+                            // echo var_dump($studentList);
+
                             for ($i = 0; $i < count($post); $i++) {
                                 if ($post[$i]['content_type'] == $contentType) {
+                                 
                                     $turnedIn = [];
                                     $pending = [];
 
@@ -80,7 +91,9 @@ unset($_SESSION["displayQuiz"]);
                                         $submitted = false;
                                         if ($submissionList != null) {
                                             foreach ($submissionList as $submission) {
+                                    
                                                 if ($submission['user_id'] == $student['user_id'] && $submission['post_id'] == $post[$i]['post_id']) {
+                                                    // if($contentType == "Exam") echo "STUDENT SUBMITT FOUND";
                                                     $submitted = true;
                                                     break;
                                                 }
@@ -108,7 +121,8 @@ unset($_SESSION["displayQuiz"]);
                                                         </p>
                                                     </div>
                                                 </div>";
-                                                if($contentType == "Quiz"){
+                                                if($contentType == "Quiz" || $contentType == "Exam"){
+                                                if($contentType == "Exam") $contentTemp = "quiz";
 
                                                 echo"<div class='d-flex align-items-center justify-content-center'>
                                                     <a href='{$contentTemp}-form.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "'>
@@ -131,9 +145,12 @@ unset($_SESSION["displayQuiz"]);
                                                         <div class='pe-lg-3' style='width: 100%;'>
                                                             <p class='fs-6 h-font green2 me-2 mb-1'>Turned In</p>
                                                             <div class='row px-2'>";
+
                                     foreach ($turnedIn as $student) {
-                                        if($contentType == "Quiz"){
-                                            echo "<a href='{$contentType}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                        if($contentType == "Quiz" || $contentType == "Exam"){
+                                            if($contentType == "Exam") $contentTemp = "quiz";
+
+                                            echo "<a href='{$contentTemp}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                 <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
                                                     <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
                                                     <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
@@ -162,9 +179,10 @@ unset($_SESSION["displayQuiz"]);
                                                         <p class='fs-6 h-font black2 me-2 mb-1'>Pending</p>
                                                         <div class='row px-2'>";
                                     foreach ($pending as $student) {
-                                        if($contentType == "Quiz"){
+                                        if($contentType == "Quiz" || $contentType == "Exam"){
+                                        if($contentType == "Exam") $contentTemp = "quiz";
 
-                                        echo "<a href='{$contentType}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                        echo "<a href='{$contentTemp}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
                                                 <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
                                                     <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
                                                     <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
@@ -214,7 +232,7 @@ unset($_SESSION["displayQuiz"]);
                                 <h1 class='h-font green1 me-2 sub-title'>Exams</h1>
                                 <div class='line-h'></div>
                             </div>";
-                    displayMaterial($post, 'Exam', $studentList, $quizSubmission, $details[0]['class_code']);
+                    displayMaterial($post, 'Exam', $studentList, $examSubmission, $details[0]['class_code']);
                     echo "</div>";
                     ?>
                 </div>

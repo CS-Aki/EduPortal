@@ -72,9 +72,15 @@ $(document).ready(function() {
                     // console.log("inside");
                     console.table(response);     
                     if(response.includes("Update Success")){
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Profile Updated!',
+                            icon: 'success'
+                        });
+
                         console.log("inside success");
-                        $("#profModalMsg").empty();
-                        $("#profModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
+                        // $("#profModalMsg").empty();
+                        // $("#profModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
                         $("#title_name").text(instructorName);
 
                         window.initialFormValues = {
@@ -99,12 +105,22 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        $("#profModalMsg").empty();
-                        $("#profModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+                        // $("#profModalMsg").empty();
+                        // $("#profModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error Encountered!',
+                        text: error,
+                        icon: 'error'
+                    });
                     console.log("error here");
                     console.log(error);
                 }
@@ -194,9 +210,16 @@ $(document).ready(function() {
                     // console.log("inside");
                     console.table(response);     
                     if(response.includes("Update Success")){
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Profile Updated!',
+                            icon: 'success'
+                        });
+
                         console.log("inside success");
-                        $("#studentModalMsg").empty();
-                        $("#studentModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
+                        // $("#studentModalMsg").empty();
+                        // $("#studentModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
                     
 
                         window.initialFormValues = {
@@ -226,12 +249,24 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        $("#studentModalMsg").empty();
-                        $("#studentModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+
+                        // $("#studentModalMsg").empty();
+                        // $("#studentModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error Encountered!',
+                        text: error,
+                        icon: 'error'
+                    });
                     console.log("error here");
                     console.log(error);
                 }
@@ -324,9 +359,16 @@ $(document).ready(function() {
                     // console.log("inside");
                     // console.table(response);     
                     if(response.includes("Update Success")){
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Profile Updated!',
+                            icon: 'success'
+                        });
+
                         console.log("inside success");
-                        $("#staffModalMsg").empty();
-                        $("#staffModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
+                        // $("#staffModalMsg").empty();
+                        // $("#staffModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
                     
                         window.initialFormValues = {
                             oldName : $("#title_staff").text(),
@@ -355,13 +397,24 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        
-                        $("#staffModalMsg").empty();
-                        $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+
+                        // $("#staffModalMsg").empty();
+                        // $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error Encountered!',
+                        text: error,
+                        icon: 'error'
+                    });
+
                     console.log("error here");
                     console.log(error);
                 }

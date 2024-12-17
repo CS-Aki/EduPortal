@@ -1,30 +1,37 @@
 <!-- HEADER -->
-<nav class="navbar navbar-expand-lg bg-white shadow-lg px-lg-3 py-lg-3 z-3">
-    <div class="container-fluid">
-        <a class="navbar-brand h-font me-5 ms-3 fw-bold fs-3 pt-1" href="#"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
+<nav class="navbar navbar-expand-lg bg-white shadow-elevation-dark-1 px-lg-3 py-lg-3 z-3 sticky-top">
+    <div class="container-fluid bg-white">
+        <a class="navbar-brand h-font me-5 ms-3 fw-bold fs-3 pt-1" href="index.php"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
         <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="ms-auto d-flex">
-                <ul class="navbar-nav mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-4">
 
                     <li class="nav-item">
-                        <a class="nav-link green1 active me-2 h-font" aria-current="page" href="rooms.php">Contacts</a>
+                        <a class="nav-link green1 active me-2 h-font" aria-current="page" href="contacts.php">Contacts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link green1 active me-4 h-font" aria-current="page" href="facilities.php">About Us</a>
+                        <a class="nav-link green1 active me-4 h-font" aria-current="page" href="about.php">About Us</a>
+                    </li>
+                    <li class="nav-item signlink">
+                        <a class="nav-link green1 active me-4 h-font" href="google-oauth.php" aria-current="page" id="signUpBtn">Sign Up</a>
+                    </li>
+                    <li class="nav-item signlink">
+                        <a class="nav-link green1 active me-4 h-font" aria-current="page" data-bs-toggle="modal" data-bs-target="#signInModal" href="#">Sign in</a>
                     </li>
                 </ul>
                 <!-- <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signUpModal"> -->
-                <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" id="signUpBtn">
-                    Sign Up
-                </button>
-                
-                <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signInModal">
-                    Sign In
-                </button>
-
+                <div class="buttonMenu d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" id="signUpBtn">
+                        <a href="google-oauth.php" class="fs-6">Sign Up</a>
+                    </button>
+                    
+                    <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signInModal">
+                        Sign In
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -203,7 +210,7 @@
                                 <input type="password" class="form-control black2 shadow-sm" placeholder="" name="password" id="password1" required>
                             </div>
                             <div class="col-12 d-flex justify-content-center align-content-center mt-3">
-                                <p class="black3">Don't have an account?</p> <a href="google-oauth.php" class="green2 fs-6 ms-2" id="goSignUp">Sign Up</a>
+                                <p class="black3">Don't have an account?</p> <a data-target="#signUpModal" data-bs-toggle="modal" href="#signUpModal" class="green2 fs-6 ms-2" id="goSignUp">Sign Up</a>
                             </div>
                             <div class="justify-content-center">
                                 <button type="submit" name="loginBtn" class="w-100 btn green shadow-none rounded-5 px-5 py-2" id="login_btn">Sign In</button>

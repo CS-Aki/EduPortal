@@ -1,6 +1,19 @@
 <?php 
 
 if (session_id() === "") session_start();
+
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        // case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +96,9 @@ if (session_id() === "") session_start();
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
                             </ul>
                         </div>

@@ -23,11 +23,11 @@ class StaffController extends Staff{
 
     public function changeStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate){
         if($this->invalidInput($staffName)){
-            echo "Special Characters aren't allowed, please try again";
+            echo "Special Characters Are Not Allowed!";
             return;
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
             echo "Invalid email address.";
             return;
         } 

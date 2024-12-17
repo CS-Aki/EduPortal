@@ -88,6 +88,8 @@ $(document).ready(function() {
         let title = $("#postTitle").val();
         let description = $("#postDesc").val();
         let type = $("#content-type").text();
+        console.log(type);
+
         let startingDate = "";
         let startingTime = "";
         let deadlineDate = "";

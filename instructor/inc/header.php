@@ -65,7 +65,7 @@
 // Get the current file name
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-<div class="container-fluid greenbg vh-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
+<div class="container-fluid greenbg h-100 w-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
     <a href="instructor-dashboard.php" class="fs-3 white1"><i class="bi bi-house-door-fill me-2 white1"></i>Home</a>
     <a href="calendar.php" class="fs-3 white1"><i class="bi bi-calendar-week me-2 white1"></i>Calendar</a>
     <a href="instructor-dashboard.php" class="fs-3 white1"><i class="bi bi-mortarboard-fill me-2 white1"></i>Enrolled</a>
@@ -119,7 +119,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="accordion accordion-flush mt-3" id="accordionFlushExample">
         <div class="accordion-item">
-            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php') ? 'activesidebar' : ''; ?>">
+            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php' || $current_page == 'grades.php') ? 'activesidebar' : ''; ?>">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Teaching</div>
             </h2>

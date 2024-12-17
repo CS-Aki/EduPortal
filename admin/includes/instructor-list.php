@@ -19,10 +19,10 @@ function displayAllInstructor()
     for ($i = 0; $i < count($instructorList); $i++) {
         $profId = getInstructorIdFormat($instructorList[$i]["user_id"], $instructorList[$i]["created"]);
         echo "<tr><td class='instructor_id' data-label='Instructor Code'>" . $instructorList[$i]["user_id"] . "</td>";
-        echo "<td class='instructor_id_text' data-label='Instructor Code'>" . $profId . "</td>";
-        echo "<td class='instructor_name' data-label='Instructor Name'>" . $instructorList[$i]["name"] . "</td>";
-        echo "<td class='instructor_email' data-label='Email'>" . $instructorList[$i]["email"] . "</td>";
-        echo "<td class='instructor_status' data-label='Status'>" . $instructorList[$i]["status"] . "</td>";
+        echo "<td class='instructor_id_text text-break' data-label='Instructor Code'>" . $profId . "</td>";
+        echo "<td class='instructor_name text-break' data-label='Instructor Name'>" . $instructorList[$i]["name"] . "</td>";
+        echo "<td class='instructor_email text-break' data-label='Email'>" . $instructorList[$i]["email"] . "</td>";
+        echo "<td class='instructor_status text-break' data-label='Status'>" . $instructorList[$i]["status"] . "</td>";
         echo "<td data-label='Edit'><a href='' class='view_instructor_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
     }
 }

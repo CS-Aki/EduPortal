@@ -1246,7 +1246,10 @@ class Instructor extends DbConnection
                 break;
             case "Quiz":
                 $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
-                break; 
+                break;
+            case "Exam":
+                $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
+                break;
             default:
                 echo "NO TYPE FOUND ERROR";
                 break;
@@ -1466,6 +1469,69 @@ class Instructor extends DbConnection
         } catch (PDOException $e) {
         echo "Error removeFilesFromDb: " . $e;
         return false;
+        }
+    }
+
+    protected function getExam($postId, $classCode){
+        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, attempt FROM quiz WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuiz: " . $e;
+            return null;
+        }
+    }
+
+    protected function getExamStatusFromDb($postId, $classCode, $userId){
+        $sql = "SELECT grade, status FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuizStatusFromDb: " . $e;
+            return null;
+        }
+    }
+
+    protected function getExamResultFromDb($postId, $classCode, $userId){
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuizResultFromDb: " . $e;
+            return null;
         }
     }
 

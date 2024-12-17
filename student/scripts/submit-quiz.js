@@ -62,7 +62,7 @@ $(document).ready(function () {
         const formData = $('#quiz-answer-form').serialize();
         const date = $("#date").text();
         const time = $("#time").text();
-
+        const type = $("#contentType").text();
         // Swal.fire({
         //     title: 'Submitting...',
         //     text: 'Please wait while we submit your answers.',
@@ -79,7 +79,7 @@ $(document).ready(function () {
         $.ajax({
             url: 'student backend/includes/submit-quiz.php',
             type: 'POST',
-            data: formData + `&postId=${decryptPostId}&classCode=${decryptclassCode}&attempt=${attempt}&date=${date}&time=${time}`,
+            data: formData + `&postId=${decryptPostId}&classCode=${decryptclassCode}&attempt=${attempt}&date=${date}&time=${time}&type=${type}`,
             success: function (response) {
                 isQuizSubmitted = true;
                 console.log(response);

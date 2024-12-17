@@ -380,7 +380,7 @@ class ClassRm extends DbConnection
             return null;
         }
         } catch (PDOException $e) {
-        echo "Error getAllGradesDb: " . $e;
+        echo "Error getGradingSystemDb: " . $e;
         return null;
         }
     }
@@ -389,7 +389,7 @@ class ClassRm extends DbConnection
         $sql = "SELECT 
                 content_type, 
                 COUNT(DISTINCT post_id) AS total_posts
-                FROM grades
+                FROM posts
                 WHERE MD5(class_code) = ?
                 GROUP BY content_type;";    
 
@@ -405,9 +405,46 @@ class ClassRm extends DbConnection
             return null;
         }
         } catch (PDOException $e) {
-        echo "Error getAllGradesDb: " . $e;
-        return null;
+            echo "Error totalActCountDb: " . $e;
+            return null;
         }
     }
 
+    protected function getExamGradesDb($postId, $userId){
+        $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND MD5(user_id) = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($postId, $userId, "Exam"))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+            echo "Error getExamGradesDb: " . $e;
+            return null;
+        }
+    }
+
+    protected function getQuizGradesDb($postId, $userId){
+        $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND MD5(user_id) = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($postId, $userId, "Quiz"))) {
+            if ($stmt->rowCount() > 0) {
+                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        } else {
+            return null;
+        }
+        } catch (PDOException $e) {
+            echo "Error getExamGradesDb: " . $e;
+            return null;
+        }
+    }
 }

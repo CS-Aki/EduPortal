@@ -17,7 +17,8 @@ $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["i
 $temp = $stdController->getTotalItems($postId);                                             
 $numberOfItems = $temp[0]["totalItems"];
 $score = 0;
-$totalPoints = 0;          
+$totalPoints = 0;            
+
 
 $time = $quizDetails[0]["deadline_time"];
 $dateTime = DateTime::createFromFormat('H:i:s', $time);
@@ -52,7 +53,7 @@ if(isset($_GET["attempt"])){
 // echo var_dump($result);
 if($submittedQuiz != null){
     if($result != null) $numberOfItems = count($submittedQuiz) / ($_GET["attempt"]);
-    else $numberOfItems = count($submittedQuiz) / ($_GET["attempt"] - 1);
+    // else $numberOfItems = count($submittedQuiz) / ($_GET["attempt"] - 1);
 }
 
 

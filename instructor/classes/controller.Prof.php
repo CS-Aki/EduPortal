@@ -342,4 +342,18 @@ class InstructorController extends Instructor
     public function editGradeSystem($classCode, $actWg, $quizWg, $examWg, $deduction){
         return $this->editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction);
     }
+
+    public function getExamContent($postId, $classCode){
+        return $this->getExam($postId, $classCode);
+    }
+
+    public function getExamStatus($postId, $classCode, $userId){
+        $result = $this->getExamStatusFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getExamResult($postId, $classCode, $userId){
+        $result = $this->getExamResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
 }

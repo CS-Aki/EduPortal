@@ -106,6 +106,9 @@ $_SESSION["classCode"] = $_GET["class"];
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

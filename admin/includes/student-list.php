@@ -21,11 +21,11 @@ function displayAllStudent()
 
     for ($i = 0; $i < count($studentList); $i++) {
         $profId = getStudentIdFormat($studentList[$i]["user_id"], $studentList[$i]["created"]);
-        echo "<tr><td class='student_id'>" . $studentList[$i]["user_id"] . "</td>";
-        echo "<td class='student_id_text'>" . $profId . "</td>";
-        echo "<td class='student_name'>" . $studentList[$i]["name"] . "</td>";
-        echo "<td class='student_status'>" . $studentList[$i]["status"] . "</td>";
-        echo "<td class='student_email'>" . $studentList[$i]["email"] . "</td>";
+        echo "<tr><td class='student_id text-break'>" . $studentList[$i]["user_id"] . "</td>";
+        echo "<td class='student_id_text text-break'>" . $profId . "</td>";
+        echo "<td class='student_name text-break'>" . $studentList[$i]["name"] . "</td>";
+        echo "<td class='student_status text-break'>" . $studentList[$i]["status"] . "</td>";
+        echo "<td class='student_email text-break'>" . $studentList[$i]["email"] . "</td>";
         echo "<td><a href='' class='view_student_profile'><i class='bi bi-pencil-square green1 me-2 fs-6'></i></a></td></tr>";
     }
 }

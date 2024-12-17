@@ -39,8 +39,11 @@ if ($total != null) {
     }
 }
 
-$legitPostId = 0;
+// echo "Total act " . $totalAct . "<br>";
+// echo "Total quiz " . $totalQuiz . "<br>";
+// echo "Total exam " . $totalExam . "<br>";
 
+$legitPostId = 0;
 
 if(isset($_GET["post"])){
     if($actSubmission != null){
@@ -52,8 +55,6 @@ if(isset($_GET["post"])){
         }
     }
 }
-
-
 
 $actScores = array();
 $quizScores = array();
@@ -87,8 +88,11 @@ if ($grades1 != null) {
 // Debug output
 // print_r($actScores);
 // print_r($quizScores);
+// print_r($examScores);
 
 $actGSys = $gradingSystem[0]["act_wg"] / 100;
+
+// echo var_dump($gradingSystem);
 
 foreach ($actScores as $user_id => $score) {
     $calculatedScore = ($score / $totalAct) * $actGSys;

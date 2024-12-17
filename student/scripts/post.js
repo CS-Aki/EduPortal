@@ -280,20 +280,21 @@ $(document).ready(function() {
                                     
                                     // }
 
+                                    console.log("\n\n THIS IS THE CREATED " + response[0]["created"]);
                                       $("#add-container").empty(); // Clear buttons
 
-                                        // Append "Unsubmit" button
-                                        $("#add-container").append(`
-                                            <a href="#" id="unsubmitFile">
-                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
-                                                    <div class="d-flex justify-content-center align-items-center p-2">
-                                                        <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
-                                                    </div>
+                                    // Append "Unsubmit" button
+                                    $("#add-container").append(`
+                                        <a href="#" id="unsubmitFile">
+                                            <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                <div class="d-flex justify-content-center align-items-center p-2">
+                                                    <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
                                                 </div>
-                                            </a>
-                                        `);
+                                            </div>
+                                        </a>
+                                    `);
 
-
+                                    
                                     // console.log( "Selected "+ selectedValue);
                                     // console.log("Title " + title);
                                             

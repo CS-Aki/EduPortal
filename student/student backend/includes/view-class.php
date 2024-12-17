@@ -20,6 +20,7 @@ if(isset($_GET["class"])){
     $post = $stdController->getClassDetails($details[0]["class_code"]);
     $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
     $activity = $stdController->listOfActs($details[0]["class_code"]);
+    $exam = $stdController->listOfExams($details[0]["class_code"]);
 
     if(isset($post[0]["content_type"])){
         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");

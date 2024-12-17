@@ -26,7 +26,6 @@ $shownIds = array_column($shownAnnouncements, 'announcement_id');
 
 $toDisplay = [];
 
-// Compare against active announcements
 foreach ($activeAnnouncements as $announcement) {
     if (!in_array($announcement['id'], $shownIds)) {
         $toDisplay[] = $announcement;

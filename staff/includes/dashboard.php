@@ -1,9 +1,9 @@
 <?php
 class DbConnection {
     private $db_server = "localhost";
-    private $db_user = "root";
-    private $db_password = "";
-    private $db_name = "classroom_db";
+    private $db_user = "u227551606_classroom_user";
+    private $db_password = "Eduportal052898";
+    private $db_name = "u227551606_classroom_db";
 
     protected function connect() {
         $dsn = 'mysql:host=' . $this->db_server . ';dbname=' . $this->db_name;
@@ -71,7 +71,7 @@ function getActiveSubjectCount() {
     return $result['unique_class_count'] ?? 0; // Return the count or 0 if no results
 }
 
-function getTopClassesWithEnrollment($limit = 5) {
+function getTopClassesWithEnrollment($limit = 4) {
     $db = new DbConnection(); // Assuming you already have a DbConnection class
     $pdo = $db->getConnection(); // Use the connect() method to get the PDO instance
 
@@ -98,7 +98,6 @@ function getTopClassesWithEnrollment($limit = 5) {
         'top2' => $results[1]['class_name'] ?? 'No Data',
         'top3' => $results[2]['class_name'] ?? 'No Data',
         'top4' => $results[3]['class_name'] ?? 'No Data',
-        'top5' => $results[4]['class_name'] ?? 'No Data',
     ];
 
     return $topSubjects; // Return the formatted array
@@ -202,5 +201,7 @@ function displayAnnouncements(){
     }
 
 }
+
+
 ?>
 

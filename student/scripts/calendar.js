@@ -2,22 +2,52 @@ $(document).ready(function () {
     var calendarEl = document.getElementById('calendar');
     if (!calendarEl) {
         console.error("Calendar element not found");
-    } else {
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: getInitialView(),
-            headerToolbar: {
+        return;
+    }
+
+    // Determine the initial view and header toolbar based on screen size
+    function getInitialView() {
+        return window.innerWidth <= 768 ? 'listWeek' : 'dayGridMonth';
+    }
+
+    function getHeaderToolbar() {
+        if (window.innerWidth <= 768) {
+            return {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'listWeek' // Only show the list button on mobile
+            };
+        } else {
+            return {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,listWeek'
-            },
-            height: 'auto',
-        });
-
-        calendar.render();
+            };
+        }
     }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: getInitialView(),
+        headerToolbar: getHeaderToolbar(),
+        height: 'auto',
+    });
+
+    calendar.render();
+
+    // Dynamically adjust the calendar view and toolbar on window resize
+    $(window).on('resize', function () {
+        const newView = getInitialView();
+        const newToolbar = getHeaderToolbar();
+
+        if (calendar.view.type !== newView) {
+            calendar.changeView(newView);
+        }
+        calendar.setOption('headerToolbar', newToolbar);
+    });
 
     var addedEvents = new Set();
 
+    // Fetch events via AJAX
     $.ajax({
         url: "student backend/includes/calendar.php",
         type: "POST",
@@ -31,7 +61,7 @@ $(document).ready(function () {
             response.forEach((eventData) => {
                 if (!eventData["class_code"] || !eventData["post id"]) {
                     console.error("Missing class_code or post id:", eventData);
-                    return; 
+                    return;
                 }
 
                 const classHash = md5(String(eventData["class_code"]));
@@ -48,7 +78,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(actStart); 
+                            addedEvents.add(actStart);
                         }
                     }
                     if (eventData["act deadline date"] && eventData["act deadline time"]) {
@@ -60,7 +90,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(actEnd); 
+                            addedEvents.add(actEnd);
                         }
                     }
                 }
@@ -75,7 +105,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(quizStart); 
+                            addedEvents.add(quizStart);
                         }
                     }
                     if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
@@ -87,7 +117,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(quizEnd); 
+                            addedEvents.add(quizEnd);
                         }
                     }
                 }
@@ -97,14 +127,4 @@ $(document).ready(function () {
             console.log("Error:", status, error);
         }
     });
-
-    function getInitialView() {
-        if (window.innerWidth <= 768) {
-            return 'listWeek';
-        } else if (window.innerWidth <= 1024) {
-            return 'timeGridWeek';
-        } else {
-            return 'dayGridMonth';
-        }
-    }
 });

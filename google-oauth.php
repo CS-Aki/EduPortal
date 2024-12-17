@@ -6,6 +6,16 @@ require_once("log and reg backend/config/config.php");
 
 if(session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: admin/admin-dashboard.php"); break;
+        case 2: header("Location: staff/staff-dashboard.php"); break;
+        case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: student/student-dashboard.php"); break;
+    }
+}
+
 // Update the following variables
 $google_oauth_client_id = GOOGLE_CLIENT_ID;
 $google_oauth_client_secret = GOOGLE_CLIENT_SECRET;

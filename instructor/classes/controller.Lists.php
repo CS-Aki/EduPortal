@@ -113,4 +113,12 @@ class ListController extends ClassRm
     public function totalActCount($classCode){
         return $this->totalActCountDb($classCode);
     }
+
+    public function getExamGrades($postId, $userId){
+        return $this->getExamGradesDb($postId, $userId);
+    }
+
+    public function getQuizGrades($postId, $userId){
+        return $this->getQuizGradesDb($postId, $userId);
+    }
 }

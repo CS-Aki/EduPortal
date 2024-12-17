@@ -19,14 +19,16 @@ $actGrades = $stdController->getGradesAct($_SESSION["id"], $details[0]["class_co
 // echo var_dump($actGrades);
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
+$exams = $stdController->listOfExams($details[0]["class_code"]);
 
 // echo $_SESSION["id"];
 $answeredQuiz = $stdController->getAnsweredQuizzes($classCode, $_SESSION["id"]);
-// echo var_dump($quiz);
+// echo var_dump($exams);
+$answeredExam = $stdController->getAnsweredExams($classCode, $_SESSION["id"]);
 
 // $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); 
 
-// echo var_dump($quiz);
+// echo var_dump($answeredExam);
 
 
 if(isset($post[0]["content_type"])){

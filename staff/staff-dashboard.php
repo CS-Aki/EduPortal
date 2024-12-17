@@ -1,20 +1,20 @@
 <?php 
 if (session_id() === "") session_start();
 // echo "test " . $_SESSION["address"];
+
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
-        // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         // case 2:  break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
     exit();
 }
 
-// echo $_SESSION["user_id"];
 ?>
 
 <!DOCTYPE html>
@@ -519,6 +519,7 @@ if(isset($_SESSION["user_category"])){
     }
   </script>
    <script src="scripts/announcement.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>

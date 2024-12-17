@@ -126,7 +126,7 @@ include("includes/view-submission.php");
                                         foreach ($actScores as $user_id => $score) {
                                             if($user_id == $studentList[$i]["user_id"]){
                                                 $calculatedActScore = ($score / $totalAct) * $actGSys;
-                                                break;
+                                                    break;
                                             }
                                         }
                                         
@@ -135,6 +135,15 @@ include("includes/view-submission.php");
                                         foreach ($quizScores as $user_id => $score) {
                                             if($user_id == $studentList[$i]["user_id"]){
                                                 $calculatedQuizScore = ($score / $totalQuiz) * $quizGSys;
+                                                break;
+                                            }
+                                        }
+
+                                        $examGSys = $gradingSystem[0]["exam_wg"] / 100;;
+
+                                        foreach ($examScores as $user_id => $score) {
+                                            if($user_id == $studentList[$i]["user_id"]){
+                                                $calculatedExamScore = ($score / $totalExam) * $examGSys;
                                                 break;
                                             }
                                         }

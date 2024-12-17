@@ -42,12 +42,12 @@ class InstructorController extends Instructor
 
     public function changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
         if($this->invalidInput($instructorName)){
-            echo "Special Characters aren't allowed, please try again";
+            echo "Special Characters Are Not Allowed!";
             return;
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "Invalid email address.";
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
+            echo "Invalid email address";
             return;
         } 
 

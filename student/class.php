@@ -61,6 +61,7 @@ if(isset($_SESSION["user_category"])){
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
+                              
                             </ul>
                         </div>
                     </div>
@@ -180,7 +181,7 @@ if(isset($_SESSION["user_category"])){
                             <div class="line-h"></div>
                         </div>
                         <div id="quizContent">
-                        <?php
+                        <?php   
                                     if($quiz != null){
                                         for($i = 0 ; $i < count($quiz); $i++){
                                             if($quiz[$i]["content_type"] == "Quiz"){
@@ -208,6 +209,45 @@ if(isset($_SESSION["user_category"])){
                             ?>
                         </div>
                     </div>
+
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Exams</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div id="examContent">
+                            
+                        <?php 
+                                    if(isset($post[0]["content_type"])){
+                                        if($exam != null){
+                                            for($i = 0 ; $i < count($exam); $i++){
+                                                if($exam[$i]["content_type"] == "Exam"){
+                                                    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                                    $year = $exam[$i]["month"][0] . "" . $exam[$i]["month"][1] . $exam[$i]["month"][2] . "" . $exam[$i]["month"][3];
+                                                    $month = $months[$exam[0]["month"][5] . "" . $exam[0]["month"][6] - 1];
+                                                    $day = $exam[$i]["month"][8] . "" . $exam[$i]["month"][9];
+                                                    ?>
+                                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($exam[$i]['post_id']); ?>'>             
+                                                <?php
+                                                echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
+                                                        <div><i class='bi bi-question-circle-fill green1 fs-2 p-0 m-0'></i></div>
+                                                        <div class='ms-3 mt-1'> 
+                                                            <p id='material-id' hidden>{$exam[$i]['post_id']}</p>
+                                                            <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$exam[$i]['title']}<br>
+                                                                <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>";
+                                                }
+                                            }
+                                        }
+                                    }
+                            ?>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

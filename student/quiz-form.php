@@ -1,7 +1,21 @@
 <?php
 if (session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
+        // case 4: header("Location: student/student-dashboard.php"); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
+
 $_SESSION[$_GET["post"]] = $_GET["attempt"];
+
 ?>
 
 <!DOCTYPE html>
@@ -145,6 +159,7 @@ $_SESSION[$_GET["post"]] = $_GET["attempt"];
                                 $choiceCount = 1; // Pwedeng alisin 'to if pangit tignan, paki-alis nalang din nung mga variable na choiceCount below
                                 $j = 0;
                                 // echo count($result);
+
                                 for ($i = 0; $i < count($quizDetails); $i++) {
                                     if ($questionTitle == $quizDetails[$i]["question_text"]) {
                                         // For multiple-choice or true/false questions, add other choices to the existing question
@@ -160,7 +175,7 @@ $_SESSION[$_GET["post"]] = $_GET["attempt"];
                                     } else {
                                         // Close the previous question block if it's not the first question
                                         if ($i > 0) {
-                                            $j++;
+                                                                                $j++;
                                             echo "</div>"; // Closing the row
                                             echo "</div>"; // Closing the question-container
                                         }
@@ -221,6 +236,7 @@ $_SESSION[$_GET["post"]] = $_GET["attempt"];
 
     <div id="postIdValue" hidden><?php echo $postDetails[0]["post_id"]; ?></div>
     <div id="classCodeValue" hidden><?php echo $postDetails[0]["class_code"]; ?></div>
+    <div id="contentType" hidden><?php echo $postDetails[0]["content_type"]; ?></div>
     <div id="date" hidden><?php echo $quizDetails[0]["deadline_date"]; ?></div>
     <div id="time" hidden><?php echo $quizDetails[0]["deadline_time"]; ?></div>
 
