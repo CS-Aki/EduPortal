@@ -78,7 +78,7 @@ if(isset($_SESSION["user_category"])){
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
-                                    <label class="form-label black2 mb-0 ps-2">Student Number:</label>
+                                    <label class="form-label black2 mb-0 ps-2">Staff Number:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php echo $userId; ?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                             </div>

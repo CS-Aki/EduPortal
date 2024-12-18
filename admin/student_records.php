@@ -64,43 +64,7 @@ if(isset($_SESSION["user_category"])){
         #editStudentsModal table.dataTable {
             width: 100% !important;
         }
-        @media (max-width: 768px) {
-            table,
-            thead,
-            tbody,
-            th,
-            td,
-            tr {
-                display: block;
-            }
-
-            /* Hide table headers on small screens */
-            thead tr {
-                display: none;
-            }
-
-            /* Table rows become cards */
-            tr {
-                margin-bottom: 1rem;
-                border: 1px solid #ddd;
-            }
-
-            /* Style individual cells */
-            td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0.5rem;
-            }
-
-            /* Add labels for each cell */
-            td::before {
-                content: attr(data-label);
-                font-weight: bold;
-                text-transform: uppercase;
-                color: #6c757d;
-            }
-        }
+        
     </style>
     <?php require('inc/links.php'); ?>
     
@@ -229,6 +193,16 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                             </div>
                                             </div>
+                                            <div class="row mb-1">
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password">
+                                            </div>
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass">
+                                            </div>
+                                        </div>
                                                 <label class="form-label black3 mb-0">Classes</label>
                                                 <table id="studentTable" class="table table-bordered text-center align-middle" width="100%">
                                                     <thead class="w-100">
@@ -335,11 +309,11 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-1">
                                                 <div class="col-lg-6 mb-1">
                                                     <label class="form-label black2 mb-0">Password</label>
-                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password1" required>
                                                 </div>
                                                 <div class="col-lg-6 mb-1">
                                                     <label class="form-label black2 mb-0">Confirm Password</label>
-                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass1" required>
                                                 </div>
                                             </div>
                                             

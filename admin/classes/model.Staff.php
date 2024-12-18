@@ -33,19 +33,28 @@ class Staff extends DbConnection{
         }
     }
 
-    protected function updateStaffDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate){
+     protected function updateStaffDetails($instructorName, $status, $email, $gender, $address, $oldName, $staffCode, $birthdate, $password = null) {
 
-        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+        // Base SQL query without password
+        $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+        $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $oldName, $staffCode];
+    
+        // Add password logic if provided
+        if ($password) {
+            $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ?, password = ? WHERE name = ? AND user_id = ?";
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $hashedPassword, $oldName, $staffCode];
+        }
+    
         $stmt = $this->connect()->prepare($sql);
-
+    
         try {
-            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $birthdate, $oldName, $staffCode])) {
+            if ($stmt->execute($params)) {
                 return true;
             } else {
                 return false;
             }
         } catch (PDOException $e) {
-
             echo "Error inside staff Model (updateStaffDetails): " . $e->getMessage();
             return null;
         }

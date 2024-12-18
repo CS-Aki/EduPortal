@@ -210,7 +210,7 @@
                                 <input type="password" class="form-control black2 shadow-sm" placeholder="" name="password" id="password1" required>
                             </div>
                             <div class="col-12 d-flex justify-content-center align-content-center mt-3">
-                                <p class="black3">Don't have an account?</p> <a data-target="#signUpModal" data-bs-toggle="modal" href="#signUpModal" class="green2 fs-6 ms-2" id="goSignUp">Sign Up</a>
+                                <p class="black3">Don't have an account?</p> <a href="google-oauth.php" class="green2 fs-6 ms-2" id="goSignUp">Sign Up</a>
                             </div>
                             <div class="justify-content-center">
                                 <button type="submit" name="loginBtn" class="w-100 btn green shadow-none rounded-5 px-5 py-2" id="login_btn">Sign In</button>

@@ -21,24 +21,27 @@ class StaffController extends Staff{
         return $this->getStaffDetailInDb($userId, $userName);
     }
 
-    public function changeStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate){
-        if($this->invalidInput($staffName)){
-            echo "Special Characters Are Not Allowed!";
+     public function changeStaffDetails($staffName, $status, $email, $gender, $address, $oldName, $staffCode, $birthdate, $password = null) {
+        // Input validation for staff name
+        if ($this->invalidInput($staffName)) {
+            echo "Special characters aren't allowed, please try again";
             return;
         }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
+    
+        // Validate email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
-        } 
-
-        $result = $this->updateStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate);
-
-        if($result == false || $result == null){
-            echo "Error changeProfDetails";
+        }
+    
+        // Call the model's method and pass the password (optional)
+        $result = $this->updateStaffDetails($staffName, $status, $email, $gender, $address, $oldName, $staffCode, $birthdate, $password);
+    
+        if ($result === false || $result === null) {
+            echo "Error: Unable to update staff details.";
             return;
         }
-
+    
         return $result;
     }
 

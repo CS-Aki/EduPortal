@@ -32,6 +32,14 @@ class RegisterInstructorController extends UserInstructor
   {
     
     if ($this->isEmptyInput() == true) {
+      echo   $this->name . "\n";
+      echo   $this->email . "\n";
+      echo   $this->password . "\n";
+      echo   $this->repeatPass . "\n";
+      echo   $this->birthdate . "\n";
+      echo   $this->gender . "\n";
+      echo   $this->address . "\n";
+
       echo "Fill in all fields!";
       
       //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");

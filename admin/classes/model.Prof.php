@@ -54,13 +54,22 @@ class Instructor extends DbConnection
     }
 
     // Update the name in users table
-    protected function updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
-
-        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+    protected function updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $userId, $birthdate, $password = null){
+         // Base SQL query without password
+          // Base SQL query without password
+        $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+        $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $oldName, $userId];
+    
+        // Add password logic if provided
+        if ($password) {
+            $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ?, password = ? WHERE name = ? AND user_id = ?";
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $hashedPassword, $oldName, $userId];
+        }
+    
         $stmt = $this->connect()->prepare($sql);
-
         try {
-            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $birthdate, $oldName, $userId])) {
+            if ($stmt->execute($params)) {
                 $stmt = null;
                 $this->updProfNameInClass($instructorName, $oldName);
                 $this->updProfNameInPost($instructorName, $oldName);

@@ -81,7 +81,7 @@ class RegisterStudentController extends UserStudent
 
     if ($this->isUserRegistered($this->name, $this->email) == true) {
      
-      echo "<span>User Already registered!</span>";
+      echo "User Already registered!";
      
       // echo $view->showRegistrationErrorMsg("User Already registered");
       // header("Location: index.php?error=userAlreadyRegistered");
@@ -90,7 +90,7 @@ class RegisterStudentController extends UserStudent
 
     if ($this->isPasswordMatch() != true) {
       
-      echo "<span>Password Does Not Match</span>";
+      echo "Password Does Not Match";
      
       // echo $view->showRegistrationErrorMsg("Password Mismatch");
       // header("Location: index.php?error=passwordMismatch");
@@ -123,7 +123,7 @@ class RegisterStudentController extends UserStudent
 
   private function invalidName()
   {
-    if (!preg_match("/^[a-zA-Z ]*$/", $this->name)) {
+    if (!preg_match("/^[a-zA-Z. ]*$/", $this->name)) {
       return true;
     } else {
       return false;
@@ -132,7 +132,7 @@ class RegisterStudentController extends UserStudent
 
   private function invalidEmail()
   {
-    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL || strpos($this->email, '@gmail.com') === false)) {
       return true;
     } else {
       return false;

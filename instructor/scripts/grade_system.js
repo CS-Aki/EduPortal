@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    let noChanges = true;
     let initDeduction =  0;
     // Remove existing click handlers before attaching a new one
     $(document).off('click', '#setting-button').on('click', '#setting-button', function (event) {
@@ -57,6 +57,7 @@ $(document).ready(function () {
     }
 
     $('#act_wg, #quiz_wg, #exam_wg').change(function() {
+        noChanges = false;
         updateOptions();
     });
 
@@ -77,17 +78,23 @@ $(document).ready(function () {
     });
 
 
-
     $('#editGradeForm').off('submit').on('submit', function (e) {
         console.log("DEDUCTION INITIAL " + initDeduction);
 
         e.preventDefault();
+        
+        if(noChanges == true){
+        
+            return;
+        }
+        
         const urlParams = new URLSearchParams(window.location.search);
         const classCode = urlParams.get('class');
         let actWg = $("#act_wg").val();
         let quizWg = $("#quiz_wg").val();
         let examWg = $("#exam_wg").val();
         let deduction = $("#deduction").val();
+
 
         if(actWg <= 0 || quizWg <= 0 || quizWg <= 0 || deduction <= 0){
             Swal.fire({

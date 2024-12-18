@@ -51,25 +51,32 @@ class Student extends DbConnection{
         }
     }
 
-    protected function updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate){
-
-        $sql = "UPDATE users SET name = ?, status= ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+  protected function updateStudentDetails($instructorName, $status, $email, $gender, $address, $oldName, $studentCode, $birthdate, $password = null) {
+        // Base SQL query without password
+        $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ? WHERE name = ? AND user_id = ?";
+        $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $oldName, $studentCode];
+    
+        // Add password logic if provided
+        if ($password) {
+            $sql = "UPDATE users SET name = ?, status = ?, email = ?, gender = ?, address = ?, birthdate = ?, password = ? WHERE name = ? AND user_id = ?";
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $params = [$instructorName, $status, $email, $gender, $address, $birthdate, $hashedPassword, $oldName, $studentCode];
+        }
+    
         $stmt = $this->connect()->prepare($sql);
-
+    
         try {
-            if ($stmt->execute([$instructorName, $status,  $email,  $gender, $address, $birthdate, $oldName, $studentCode])) {
+            if ($stmt->execute($params)) {
+                // Update related tables as before
                 $stmt = null;
                 $this->updtStudentJoinClass($instructorName, $oldName, $studentCode);
                 $this->updStudentNameInComments($instructorName, $oldName, $studentCode);
-                // $this->updProfNameInClass($instructorName, $oldName);
-                // $this->updProfNameInPost($instructorName, $oldName);
-                // $this->updProfNameInComments($instructorName, $oldName);
+    
                 return true;
             } else {
                 return false;
             }
         } catch (PDOException $e) {
-
             echo "Error inside Student Model (updateStudentDetails): " . $e->getMessage();
             return null;
         }

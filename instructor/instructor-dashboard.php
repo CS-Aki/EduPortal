@@ -38,6 +38,11 @@ if(isset($_GET["class"])){
     <!-- <script src="scripts/view-class.js"></script> -->
 
     <?php require('inc/links.php');?>
+    <style>
+    .card-body{
+        min-height:10rem !important;
+    }
+    </style>
 </head>
 
 <body>

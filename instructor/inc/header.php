@@ -107,7 +107,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </div>
 
 
-<div class="col-lg-2 shadow-sm" id="sidebar-menu">
+<div class="col-lg-2 shadow-sm h-100" id="sidebar-menu">
     <ul>
         <a href="instructor-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'instructor-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
         <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
@@ -124,7 +124,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Teaching</div>
             </h2>
 
-            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1">
+            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1" style="overflow-y: auto !important; max-height: 60vh;">
 
 
                     <?php 
@@ -154,7 +154,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </a>
                         </div> -->
                    
-                
+                <br><br>
             </div>
         </div>
     </div>

@@ -7,7 +7,6 @@ use phpseclib3\Crypt\EC;
 
 if (session_id() === "") session_start();
 
-
 if(!isset($_SESSION["user_category"])){
     header("Location: ../index.php");
 }
@@ -159,7 +158,6 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <?php if(session_id() === "") session_start(); require('inc/links.php'); include("student backend/includes/view-post.php"); 
-    //   echo var_dump($postDetails);
     ?>
 </head>
 <body>
@@ -353,13 +351,17 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                                 Your Points: <?php echo $score; ?> <br> 
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
                                                                 Result: 
-                                                                <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
-                                                                    <?php echo ($grade >= 70) ? "Passed" : "Failed"; ?>
-                                                                </span>
-                                                            </td>
-                                                            <td><?php echo ceil($grade) . "%"; ?></td>
-                                                            <td><?php 
-                                                                
+                                                                  <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
+                                                                        <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                            else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                        ?>
+                                                                    </span>
+                                                                </td>
+                                                                <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                        else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                        </td>
+                                                                <td><?php 
+                                                
                                                                  if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
                                                                     $j++;
@@ -775,12 +777,12 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                                                 Result: 
                                                                                 <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
                                                                                         <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
-                                                                                            else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                                            else echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
                                                                                         ?>
                                                                                     </span>
                                                                                 </td>
                                                                                 <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
-                                                                                        else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                                        else echo ceil($examGrades[$j]["grade"]) . "%" ?>
                                                                                         </td>
                                                                                 <td><?php 
                                                                                 

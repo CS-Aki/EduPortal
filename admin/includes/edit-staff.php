@@ -14,9 +14,10 @@ if(isset($_POST["staffName"])){
     $oldName = $_POST["oldName"];
     $id = $_POST["id"];
     $birthdate = $_POST["birthdate"];
+    $password = isset($_POST['password']) && !empty($_POST['password']) ? $_POST['password'] : null;
 
     $staffController = new StaffController();
-    $result = $staffController->changeStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $id, $birthdate);
+    $result = $staffController->changeStaffDetails($staffName, $status, $email, $gender, $address, $oldName, $id, $birthdate, $password);
 
     if($result){
         echo "Update Success";

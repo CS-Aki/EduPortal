@@ -38,24 +38,28 @@ class StudentController extends Student{
         return $studentDetail;
     }
 
-    public function changeStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate){
-        if($this->invalidInput($instructorName)){
-            echo "Special Characters Are Not Allowed!";
+     public function changeStudentDetails($instructorName, $status, $email, $gender, $address, $oldName, $studentCode, $birthdate, $password = null) {
+        // Check for invalid inputs in the name
+        if ($this->invalidInput($instructorName)) {
+            echo "Special characters aren't allowed, please try again.";
             return;
         }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
+    
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
-        } 
-
-        $result = $this->updateStudentDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $studentCode, $birthdate);
-
-        if($result == false || $result == null){
-            echo "Error changeProfDetails";
+        }
+    
+    
+        // Call the model's update method, including the password
+        $result = $this->updateStudentDetails($instructorName, $status, $email, $gender, $address, $oldName, $studentCode, $birthdate, $password);
+    
+        if ($result === false || $result === null) {
+            echo "Error updating student details.";
             return;
         }
-
+    
         return $result;
     }
 

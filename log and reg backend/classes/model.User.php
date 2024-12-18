@@ -7,10 +7,10 @@ class User extends DbConnection
 
     protected function insertUser($name, $email, $password, $birthdate, $gender, $address)
     {
-        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`, `birthdate`, `gender`, `address`) VALUES (? ,?, ?, ?, ? ,?, ?, ?)";
+        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`, `birthdate`, `gender`, `address`, `status`) VALUES (? ,?, ?, ?, ? ,?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png", $birthdate, $gender, $address))) {
+        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png", $birthdate, $gender, $address, "Active"))) {
             return true;
         } else {
             return false;

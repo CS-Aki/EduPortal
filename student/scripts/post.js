@@ -2,8 +2,8 @@
 
 $(document).ready(function() {
     // console.log(io);
-    console.log("test");
-    
+    //console.log("test");
+  
     function createUploadButton() {
         return `
             <a href="" id="uploadLink">
@@ -130,7 +130,6 @@ $(document).ready(function() {
                 </div>
             `);
             
- 
             // console.log('File name: ' + file.name);
             // console.log('File type: ' + file.type);
             // console.log('File size: ' + file.size + ' bytes');
@@ -195,9 +194,10 @@ $(document).ready(function() {
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
             
-            Swal.fire({
+           Swal.fire({
                 title: 'Uploading...',
                 text: 'Please wait while we upload your file.',
+                allowOutsideClick: false, 
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -239,13 +239,13 @@ $(document).ready(function() {
                                     displayFiles : "temp"
                                 },
                                 success: function (response) {
-                                    console.log(response);
-
+                                 //   console.log(response);
                                     Swal.fire({
                                         title: 'Success!',
                                         text: 'File uploaded successfully!',
                                         icon: 'success'
                                     });
+                                    
                                     $("#fileContainer").empty();
 
                                     // $("#fileContainer").empty(); 
@@ -280,21 +280,39 @@ $(document).ready(function() {
                                     
                                     // }
 
-                                    console.log("\n\n THIS IS THE CREATED " + response[0]["created"]);
                                       $("#add-container").empty(); // Clear buttons
 
-                                    // Append "Unsubmit" button
-                                    $("#add-container").append(`
-                                        <a href="#" id="unsubmitFile">
-                                            <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
-                                                <div class="d-flex justify-content-center align-items-center p-2">
-                                                    <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
+                                        // Append "Unsubmit" button
+                                        $("#add-container").append(`
+                                            <a href="#" id="unsubmitFile">
+                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
+                                                    <div class="d-flex justify-content-center align-items-center p-2">
+                                                        <span class="submit-text white2 fw-semibold mb-0">Unsubmit</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                    `);
+                                            </a>
+                                        `);
+                                        
+                                        
+                                        $(".act-status").empty();
 
-                                    
+                                        var givenDateStr = $("#actDeadline").text();
+
+                                        var givenDate = new Date(givenDateStr);
+                                
+                                        var currentDate = new Date();
+                                
+                                        if (currentDate > givenDate) {
+                                            $(".act-status").append(`<span class="badge rounded-pill text-bg-danger done-badge">Late</span>`);
+                                            console.log("Testtt.");
+                                        } else if (currentDate < givenDate) {
+                                            $(".act-status").append(`<span class="badge rounded-pill text-bg-success done-badge">Done</span>`);
+                                            console.log("Theeqweqwe.");
+                                        } 
+                                        
+
+
+
                                     // console.log( "Selected "+ selectedValue);
                                     // console.log("Title " + title);
                                             
@@ -398,6 +416,7 @@ $(document).ready(function() {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
+                        
                         $("#fileContainer").empty();
                         $('#fileInput').val('');
                         $("#add-container").empty();
@@ -406,6 +425,8 @@ $(document).ready(function() {
                         $("#add-container").append(createSubmitButton());
                         console.log(response);
  
+                                         $(".act-status").empty();
+
                     },
                     error: function(xhr, status, error) {
                         Swal.close();

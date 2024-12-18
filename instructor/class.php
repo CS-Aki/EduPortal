@@ -292,7 +292,7 @@ unset($_SESSION["displayQuiz"]);
                                             <div class="row mb-3">
                                             <div class="col-lg-6">
                                                     <label class="form-label black3 mb-0">Activity Weighted Grade</label>
-                                                    <select class="form-select shadow-elevation-light-3 black3" name="daySched" id="act_wg" required>
+                                                       <select class="form-select shadow-elevation-light-3 black3" name="daySched" id="act_wg" required>
                                                         <option value="0">0</option>
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>

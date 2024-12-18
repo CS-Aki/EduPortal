@@ -344,6 +344,7 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchStudentProfile($name, $email){
+            // Will add more columns here
             $sql = "SELECT user_id FROM users WHERE name = ? AND email = ?";
             $stmt = $this->connect()->prepare($sql);
 
@@ -1116,24 +1117,44 @@ class ClassRm extends DbConnection
             return null;
             }
         }
-
         
-    protected function getExamGradesDb($postId, $userId){
-        $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
-        $stmt = $this->connect()->prepare($sql);
+        protected function getExamGradesDb($postId, $userId){
 
-        try {
-        if ($stmt->execute(array($postId, $userId, "Exam"))) {
-            if ($stmt->rowCount() > 0) {
-                return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+            if ($stmt->execute(array($postId, $userId, "Exam"))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
             }
-            return null;
-        } else {
-            return null;
+            } catch (PDOException $e) {
+                echo "Error getExamGradesDb: " . $e;
+                return null;
+            }
         }
-        } catch (PDOException $e) {
-            echo "Error getExamGradesDb: " . $e;
-            return null;
+        
+        protected function getQuizGradesDb($postId, $userId){
+            $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+        
+            try {
+            if ($stmt->execute(array($postId, $userId, "Quiz"))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+                echo "Error getExamGradesDb: " . $e;
+                return null;
+            }
         }
-    }
+        
 }

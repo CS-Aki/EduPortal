@@ -22,16 +22,4 @@ class AnnounceController extends Announcement
     public function getAnnouncement($announceId){
         return $this->getAnnouncementInDb($announceId);
     }
-
-    public function getActiveAnnounce($currentDate){
-        return $this->getActiveAnnounceInDb($currentDate);
-    }
-
-    public function getAlreadyDisplayed($userId, $currentDate){
-        return $this->getAlreadyDisplayedInDb($userId, $currentDate);
-    }
-
-    public function insertAnnounceLog($userId, $announceId, $currentDate){
-        $this->insertAnnounceLogDb($userId, $announceId, $currentDate);
-    }
 }

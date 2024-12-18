@@ -1460,6 +1460,7 @@ class Instructor extends DbConnection
         try {
         if ($stmt->execute(array($actWg, $quizWg, $examWg, $deduction, $classCode))) {
             if ($stmt->rowCount() > 0) {
+                echo "editing";
                 $this->updateLateGrades($classCode, $oldDeduction, $deduction);
                 return true;
             }
@@ -1488,6 +1489,7 @@ class Instructor extends DbConnection
         try {
         if ($stmt->execute(array($classCode))) {
             if ($stmt->rowCount() > 0) {
+                echo "error";
                 return true;
             }
             return false;
@@ -1495,7 +1497,7 @@ class Instructor extends DbConnection
             return false;
         }
         } catch (PDOException $e) {
-        echo "Error updateLateGrades: " . $e;
+        echo "Error removeFilesFromDb: " . $e;
         return false;
         }  
     }

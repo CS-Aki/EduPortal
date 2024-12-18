@@ -14,9 +14,10 @@ if(isset($_POST["studentName"])){
     $oldName = $_POST["oldName"];
     $id = $_POST["id"];
     $birthdate = $_POST["birthdate"];
+    $password = isset($_POST['password']) && !empty($_POST['password']) ? $_POST['password'] : null;
 
     $stdController = new StudentController();
-    $result = $stdController->changeStudentDetails($studentName, $status,  $email,  $gender, $address, $oldName, $id, $birthdate );
+    $result = $stdController->changeStudentDetails($studentName, $status, $email, $gender, $address, $oldName, $id, $birthdate, $password);
 
     if($result){
         echo "Update Success";

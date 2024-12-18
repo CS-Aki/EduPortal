@@ -123,13 +123,13 @@ if(isset($_SESSION["user_category"])){
 
                             <td><label class="fw-semibold">Check All</label></td><td></td><td><input type="checkbox" id="checkAllPresent" name="checkAll" value="Present"></td><td><input type="checkbox" id="checkAllAbsent" name="checkAll" value="Absent"></td><td><input type="checkbox" name="checkAll" id="checkAllLate" value="Late"></td>
                             
-                           <?php
+                           <?php //echo var_dump($studentList);
                                 if(isset($studentList[0]["status"])){
                                     for($i = 0 ; $i < count($studentList); $i++){
                                         echo "<tr>
                                                 <td>
                                                     <div class='d-flex align-items-center mb-2'>
-                                                        <img src='images/profile.png' style='width: 40px;' class='rounded-5 me-3'>
+                                                        <img src='{$studentList[$i]["image"]}' style='width: 40px;' class='rounded-5 me-3'>
                                                         <p class='green2 fw-semibold lh-sm m-0 p-0 fs-5 student-name'>{$studentList[$i]["name"]} </p>
                                                     </div>
                                                 </td>

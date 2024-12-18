@@ -93,9 +93,13 @@ class ListController extends ClassRm
     public function getGradingSystem($userId){
         return $this->getAllGradingSystemDB($userId);
     }
-
+    
     public function getExamGrades($postId, $userId){
         return $this->getExamGradesDb($postId, $userId);
+    }
+    
+    public function getQuizGrades($postId, $userId){
+        return $this->getQuizGradesDb($postId, $userId);
     }
 
 }

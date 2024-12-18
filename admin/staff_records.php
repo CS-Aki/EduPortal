@@ -90,13 +90,13 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </nav>
 
-                <div class="container mt-2" style="width: 80%;">
+                <div class="container mt-2 p-0 p-lg-4" style="width: 100%;">
                     <div class="d-flex justify-content-end mb-3"> 
                         <button type="button" class="btn fs-5 green shadow-none white2 d-flex align-items-center justify-content-center py-0 px-4 rounded-5" data-bs-toggle="modal" data-bs-target="#signUpModal">
                             <i class="bi bi-plus-lg white2 me-1 fs-2"></i>Register New Staff Account
                         </button>
                     </div>
-                    <table id="myTable" class="table table-bordered text-center align-middle">
+                    <table id="myTable" class="table table-bordered text-center align-middle" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th scope="col">Code</th>
@@ -180,6 +180,16 @@ if(isset($_SESSION["user_category"])){
                                                     <input type="text" class="form-control black3 shadow-elevation-light-3 container-fluid" value="Blk 33 Lot 28 Bangayngay St. Dagat-dagatan Caloocan City" name="staffAddress" id="staff_address" required>
                                                 </div>
                                             </div>
+                                            <div class="row mb-1">
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password">
+                                            </div>
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass">
+                                            </div>
+                                        </div>
                                             
                                             <div class="d-flex justify-content-end gap-1 mt-2">
                                                 <button type="submit" name="saveClassBtn" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="save_staff_btn">Save</button>
@@ -253,11 +263,11 @@ if(isset($_SESSION["user_category"])){
                                             <div class="row mb-1">
                                                 <div class="col-lg-6 mb-1">
                                                     <label class="form-label black2 mb-0">Password</label>
-                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password1" required>
                                                 </div>
                                                 <div class="col-lg-6 mb-1">
                                                     <label class="form-label black2 mb-0">Confirm Password</label>
-                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                                                    <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass1" required>
                                                 </div>
                                             </div>
                                             

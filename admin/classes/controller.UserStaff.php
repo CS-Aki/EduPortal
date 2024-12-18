@@ -130,9 +130,9 @@ class RegisterStaffController extends UserStaff
     }
   }
 
-  private function invalidEmail()
+ private function invalidEmail()
   {
-    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL || strpos($this->email, '@gmail.com') === false)) {
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL) || strpos($this->email, '@gmail.com') === false) {
       return true;
     } else {
       return false;

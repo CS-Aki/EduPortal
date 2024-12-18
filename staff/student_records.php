@@ -229,6 +229,16 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                             </div>
                                             </div>
+                                             <div class="row mb-1">
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                                            </div>
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                                            </div>
+                                        </div>
                                                 <label class="form-label black3 mb-0">Classes</label>
                                                 <table id="studentTable" class="table table-bordered text-center align-middle" width="100%">
                                                     <thead class="w-100">

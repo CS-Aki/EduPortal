@@ -60,7 +60,11 @@ if(isset($_GET["class"])){
     
     <?php require('inc/links.php'); ?>
     <script src="scripts/announce.js"></script>
-
+<style>
+    .card-body{
+        min-height:10rem !important;
+    }
+    </style>
 </head>
 
 <body>

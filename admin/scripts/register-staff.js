@@ -16,8 +16,8 @@ $(document).ready(function() {
             birthdate: $("#date_of_birth").val(),
             gender: $("#gender").val(),
             address: $("#address").val(),
-            password: $("#password").val(),
-            repeatPass: $("#repeat_pass").val()
+            password: $("#password1").val(),
+            repeatPass: $("#repeat_pass1").val()
         };
 
             $.ajax({
@@ -26,14 +26,14 @@ $(document).ready(function() {
                 data: formData,
                 
                 success: function(response) {
-                    // console.log("inside");
+                    console.log("inside");
                     response = response.trim();
                     console.table(response);     
                     if(response === "Registration Success"){
 
                         Swal.fire({
                             title: 'Success!',
-                            text: 'New Instructor Account Created!',
+                            text: 'New Staff Account Created!',
                             icon: 'success'
                         });
 

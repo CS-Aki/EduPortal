@@ -40,24 +40,28 @@ class InstructorController extends Instructor
         return $list;
     }
 
-    public function changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
-        if($this->invalidInput($instructorName)){
-            echo "Special Characters Are Not Allowed!";
+   public function changeProfDetails($instructorName, $status, $email, $gender, $address, $oldName, $userId, $birthdate, $password = null) {
+        // Check for invalid inputs in the name
+        if ($this->invalidInput($instructorName)) {
+            echo "Special characters aren't allowed, please try again.";
             return;
         }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, '@gmail.com') === false) {
-            echo "Invalid email address";
-            return;
-        } 
-
-        $result = $this->updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId);
-
-        if($result == false || $result == null){
-            // echo "Error changeProfDetails";
+    
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "Invalid email address.";
             return;
         }
-
+    
+    
+        // Call the model's update method, including the password
+        $result = $this->updateProfDetails($instructorName, $status, $email, $gender, $address, $oldName, $userId, $birthdate, $password);
+    
+        if ($result === false || $result === null) {
+            echo "Error updating professor details.";
+            return;
+        }
+    
         return $result;
     }
 

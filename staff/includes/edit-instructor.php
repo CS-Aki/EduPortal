@@ -14,9 +14,10 @@ if(isset($_POST["instructorName"])){
     $oldName = $_POST["oldName"];
     $birthdate = $_POST["birthdate"];
     $userId = $_POST["userId"];
+    $password = isset($_POST['password']) && !empty($_POST['password']) ? $_POST['password'] : null;
     // echo $instructorName;
     $instController = new InstructorController();
-    $result = $instController->changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId);
+    $result = $instController->changeProfDetails($instructorName, $status, $email, $gender, $address, $oldName, $userId, $birthdate, $password);
 
     if($result){
         echo "Update Success";

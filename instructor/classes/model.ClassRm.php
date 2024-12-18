@@ -65,7 +65,7 @@ class ClassRm extends DbConnection
         date_default_timezone_set('Asia/Manila');
         $currentDate = date("Y/m/d");
         
-        $sql = "SELECT users.user_id, users.name, attendance.status FROM users INNER JOIN attendance ON attendance.user_id = users.user_id WHERE attendance.class_code = ? AND attendance.date = ?";
+        $sql = "SELECT users.user_id, users.name, attendance.status, users.image FROM users INNER JOIN attendance ON attendance.user_id = users.user_id WHERE attendance.class_code = ? AND attendance.date = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -79,7 +79,7 @@ class ClassRm extends DbConnection
                         $attendanceMap[$record["user_id"]] = $record["status"];
                     }
 
-                    $sql = "SELECT user_id, name FROM join_class WHERE class_code = ?";
+                    $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $stmt = $this->connect()->prepare($sql);
                     
                     if ($stmt->execute(array($classCode))) {
@@ -97,7 +97,7 @@ class ClassRm extends DbConnection
                     }
 
                 }else{
-                    $sql = "SELECT user_id, name FROM join_class WHERE class_code = ?";
+                    $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $stmt = $this->connect()->prepare($sql);
                     if ($stmt->execute(array($classCode))) {
                          $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);

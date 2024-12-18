@@ -209,7 +209,7 @@ if(isset($_SESSION["user_category"])){
                                                                 </div>
                                                                 <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                     <div class='mt-3'>
-                                                                        <?php if($answeredQuiz != null) {?>
+                                                                    <?php if($answeredQuiz != null) {?>
                                                                         <?php if($j < count($answeredQuiz) && $qz["post_id"] == $answeredQuiz[$j]["post_id"]){ 
                                                                                 $date = new DateTime($answeredQuiz[$j]["created"]);
                                                                                 $formattedDate = $date->format('F d, Y');
@@ -227,7 +227,7 @@ if(isset($_SESSION["user_category"])){
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
                                                                             <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
-                                                                        <?php }?>
+                                                                         <?php }?>
                                                                     </div>                                           
                                                                 </div>
                                                             </div>
@@ -256,7 +256,6 @@ if(isset($_SESSION["user_category"])){
                        <?php 
                          if ($exams != null) { 
                                 $j = 0;
-                                // echo var_dump($quiz);
                                 foreach ($exams as $index => $qz) {
                                     
                                     if ($qz['content_type'] === 'Exam') {
@@ -269,6 +268,7 @@ if(isset($_SESSION["user_category"])){
                                         $year = substr($qz["month"], 0, 4);
                                         $month = $months[intval(substr($qz["month"], 5, 2)) - 1];
                                         $day = substr($qz["month"], 8, 2);
+                                        // echo var_dump($answeredExam);
                                         ?>
 
                                         <div id="exam-<?php echo $index; ?>">
@@ -293,7 +293,7 @@ if(isset($_SESSION["user_category"])){
                                                     </div>
                                                 </div>
                                             </button>
-
+                       
                                             <div class="collapse mb-2" id="exam-collapse-<?php echo $index; ?>">
                                                 <div class='d-flex flex-column align-items-end justify-content-end' >
                                                         <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
@@ -306,13 +306,13 @@ if(isset($_SESSION["user_category"])){
                                                                     <div class='mt-3'>
                                                                         <?php if($answeredExam != null) {?>
                                                                         <?php if($j < count($answeredExam) && $qz["post_id"] == $answeredExam[$j]["post_id"]){ 
-                                
                                                                                 $date = new DateTime($answeredExam[$j]["created"]);
                                                                                 $formattedDate = $date->format('F d, Y');
                                                                         ?>
                                                                             <i class='bi bi-check-circle green2 fs-1'></i>
                                                                             <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
                                                                             <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
+                                                                            
                                                                             <?php } else {?>
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>

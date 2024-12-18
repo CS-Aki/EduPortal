@@ -15,6 +15,7 @@ if(isset($_POST["newClass"])){
 if(isset($_GET["class"])){
     $classCode = $_GET["class"];
     // $classCode = str_replace("Class Code: ", "", $_GET["class"]);
+    date_default_timezone_set('Asia/Manila');
     $stdController = new StudentController();
     $details = $stdController->getClassDetails1($classCode);
     $post = $stdController->getClassDetails($details[0]["class_code"]);
@@ -37,6 +38,5 @@ if(isset($_GET["class"])){
     // echo var_dump($post);
  
     // echo "<br>";
-    // echo var_dump($exam);
-    echo var_dump($post);
+    // echo var_dump($details);
 }

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    console.log("test");
     $('#signUpModal').on('hidden.bs.modal', function () {
         $("#signUpForm")[0].reset();
         $("#profModalMsg").empty(); // Clear any messages
@@ -16,8 +16,8 @@ $(document).ready(function() {
             birthdate: $("#date_of_birth").val(),
             gender: $("#gender").val(),
             address: $("#address").val(),
-            password: $("#password").val(),
-            repeatPass: $("#repeat_pass").val()
+            password: $("#password1").val(),
+            repeatPass: $("#repeat_pass1").val()
         };
 
             $.ajax({
@@ -25,7 +25,10 @@ $(document).ready(function() {
                 type: "POST",
                 data: formData,
                 
+                
                 success: function(response) {
+                    console.log($("#password").val());
+                    console.log($("#repeat_pass").val());
                     // console.log("inside");
                     response = response.trim();
                     console.table(response);     
@@ -93,7 +96,6 @@ $(document).ready(function() {
                             text: response,
                             icon: 'error'
                         });
-
                         // console.log("Error");
                     }
                 },
