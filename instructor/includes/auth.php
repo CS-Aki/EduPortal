@@ -47,6 +47,7 @@ if (!isset($_SESSION['access_token'])) {
     // }
     // echo $authUrl;
      header("location: " .$authUrl);
+     header("location: " .$authUrl);
     // echo json_encode(['authUrl' => $authUrl]);
     exit();
 }

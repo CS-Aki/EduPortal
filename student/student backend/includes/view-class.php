@@ -16,6 +16,7 @@ if(isset($_GET["class"])){
     $classCode = $_GET["class"];
     // $classCode = str_replace("Class Code: ", "", $_GET["class"]);
     date_default_timezone_set('Asia/Manila');
+    date_default_timezone_set('Asia/Manila');
     $stdController = new StudentController();
     $details = $stdController->getClassDetails1($classCode);
     $post = $stdController->getClassDetails($details[0]["class_code"]);

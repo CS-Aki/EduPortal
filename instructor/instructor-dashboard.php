@@ -7,6 +7,7 @@ if(isset($_SESSION["user_category"])){
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         // case 3: header("Location: instructor/instructor-dashboard.php"); break;
         case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
     }
@@ -38,6 +39,11 @@ if(isset($_GET["class"])){
     <!-- <script src="scripts/view-class.js"></script> -->
 
     <?php require('inc/links.php');?>
+    <style>
+    .card-body{
+        min-height:10rem !important;
+    }
+    </style>
     <style>
     .card-body{
         min-height:10rem !important;
@@ -147,6 +153,7 @@ if(isset($_GET["class"])){
     </div>
     
     <?php require('inc/footer.php'); ?>   
+    <script src="scripts/announce.js"></script>
     <script src="scripts/announce.js"></script>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <!-- <script src="../server/socket.js"></script> -->

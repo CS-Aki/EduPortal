@@ -442,8 +442,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                 </div>
                     <?php }            
      
-                 else if($postDetails[0]["content_type"] == "Activity" || $postDetails[0]["content_type"] == "Assignment" || $postDetails[0]["content_type"] == "Seatwork"){ ?>
-                    <?php $_SESSION["post-type"] = $postDetails[0]["content_type"];?>
+                    else {?>
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
                 <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <div class="mt-2">

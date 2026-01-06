@@ -11,6 +11,8 @@ class DbConnection{
         $pdo->setAttribute(PDO:: ATTR_DEFAULT_FETCH_MODE, PDO:: FETCH_ASSOC);
         $pdo->exec("SET time_zone = '+08:00'");
 
+        $pdo->exec("SET time_zone = '+08:00'");
+
         return $pdo;
     }
 }

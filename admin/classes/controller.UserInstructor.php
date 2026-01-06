@@ -90,6 +90,7 @@ class RegisterInstructorController extends UserInstructor
     if ($this->isUserRegistered($this->name, $this->email) == true) {
      
       echo "User Already registered!>";
+      echo "User Already registered!>";
      
       // echo $view->showRegistrationErrorMsg("User Already registered");
       // header("Location: index.php?error=userAlreadyRegistered");
@@ -103,6 +104,7 @@ class RegisterInstructorController extends UserInstructor
 
     if ($this->isPasswordMatch() != true) {
       
+      echo "Password Does Not Match";
       echo "Password Does Not Match";
      
       // echo $view->showRegistrationErrorMsg("Password Mismatch");
@@ -154,6 +156,7 @@ class RegisterInstructorController extends UserInstructor
 
   private function invalidEmail()
   {
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL) || strpos($this->email, '@gmail.com') === false) {
     if (!filter_var($this->email, FILTER_VALIDATE_EMAIL) || strpos($this->email, '@gmail.com') === false) {
       return true;
     } else {

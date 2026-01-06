@@ -62,6 +62,7 @@ if(isset($_SESSION["user_category"])){
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
                               
+                              
                             </ul>
                         </div>
                     </div>
@@ -183,12 +184,15 @@ if(isset($_SESSION["user_category"])){
                         </div>
                         <div id="quizContent">
                         <?php   
+                        <?php   
                                     if($quiz != null){
                                         for($i = 0 ; $i < count($quiz); $i++){
                                             if($quiz[$i]["content_type"] == "Quiz"){
                                                 ?>
                                                 <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
                                              <?php
+                                            $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
                                             $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
                                             $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];

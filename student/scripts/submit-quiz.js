@@ -1,5 +1,8 @@
 $(document).ready(function () {
+$(document).ready(function () {
     let isQuizSubmitted = false;
+    console.log("test");
+
     console.log("test");
 
     window.addEventListener('beforeunload', function (e) {
@@ -173,3 +176,4 @@ $(document).ready(function () {
         }
     });
 });
+

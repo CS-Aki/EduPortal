@@ -252,6 +252,22 @@ class Instructor extends DbConnection
                 echo "Error statement";
                 return false;
             }
+        }else if($type == "exam"){
+            $type = ucfirst($type);
+            $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
+            $_SESSION["postId"] = $connection->lastInsertId();
+
+            $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+           
+            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `attempt`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $connection->prepare($sql);
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $attempt, $startingDate, $startingTime, "Pending"))) {
+                // echo "trueee";
+                return true;
+            }else{
+                echo "Error statement";
+                return false;
+            }
         }else{
             $type = ucfirst($type);
             if ($stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"))) {
@@ -718,6 +734,8 @@ class Instructor extends DbConnection
             // echo $questionText . "\n";
             $this->updateQuizStatus($realCode[0]["class_code"], $newPostId[0]["post_id"]);
 
+            $this->updateQuizStatus($realCode[0]["class_code"], $newPostId[0]["post_id"]);
+
             $qTextResult = $this->isQuestionTextInDb($questionText, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
             if($qTextResult == true){
                 echo "\nQuestion Text Already in database\n";
@@ -784,9 +802,34 @@ class Instructor extends DbConnection
                     }
                 }
 
+
             }
         }
         return true;
+    }
+
+    protected function updateQuizStatus($classCode, $postId){
+        echo $classCode;
+        echo "POST ID " . $postId;
+        echo "\n\nINSIDE UPDATING QUIZ\n";
+        $sql = "UPDATE quiz SET status = ? WHERE class_code = ? AND post_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array("Active", $classCode, $postId))) {
+                if ($stmt->rowCount() > 0) {
+                    echo "STATUS UPDATED SUCCESS\n\n";
+                    return true;
+                }
+                echo "STATUS UPDATED Failed\n\n";
+                return false;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error in updateQuizStatus : ";
+            return null;
+        }
     }
 
     protected function updateQuizStatus($classCode, $postId){
@@ -1263,6 +1306,10 @@ class Instructor extends DbConnection
                 break;
             case "Exam":
                 $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
+                break;
+            case "Exam":
+                $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
+                break;
                 break;
             default:
                 echo "NO TYPE FOUND ERROR";

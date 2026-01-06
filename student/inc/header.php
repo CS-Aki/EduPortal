@@ -105,6 +105,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <ul class="dropdown-menu">
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="grades.php">Grades</a></li>
+            <li><a class="dropdown-item h-font green1 fs-4" href="grades.php">Grades</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="student backend/includes/logout.inc.php">Log Out</a></li>
         </ul>
     </div>
@@ -140,6 +141,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
 <div class="col-lg-2 shadow-sm h-100" id="sidebar-menu">
+<div class="col-lg-2 shadow-sm h-100" id="sidebar-menu">
     <ul>
         <a href="student-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'student-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
         <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
@@ -150,7 +152,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <div class="accordion accordion-flush mt-3 scrollable-accordion" id="accordionFlushExample">
+    <div class="accordion accordion-flush mt-3 scrollable-accordion" id="accordionFlushExample">
         <div class="accordion-item">
+            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php' || $current_page == 'grades.php') ? 'activesidebar' : ''; ?>">
             <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php' || $current_page == 'grades.php') ? 'activesidebar' : ''; ?>">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Enrolled</div>
@@ -166,7 +170,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <a href='class.php?class=<?php echo md5($classList[$i]['class_code']);?>' class='fs-5 py-lg-1 text-truncate d-inline-block' style='max-width: 100%;'>
                         <?php
                             echo"<i class='ms-3 bi bi-book me-2 greenicon'></i>{$classList[$i]['class_name']}
+            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3 scrollable-collapse" data-bs-parent="#accordionFlushExample1" style="overflow-y: auto !important; max-height: 60vh;">
+                <?php include("student backend/includes/side-classes.php");?>
+                
+                <?php 
+                    for($i = 0 ; $i < count($classList); $i++){
+                        echo "<div class='class'>";
+                        ?>
+                            <a href='class.php?class=<?php echo md5($classList[$i]['class_code']);?>' class='fs-5 py-lg-1 text-truncate d-inline-block' style='max-width: 100%;'>
+                        <?php
+                            echo"<i class='ms-3 bi bi-book me-2 greenicon'></i>{$classList[$i]['class_name']}
                             </a>
+                        </div>";
+                    }
+                ?>
+                   <br><br>
                         </div>";
                     }
                 ?>

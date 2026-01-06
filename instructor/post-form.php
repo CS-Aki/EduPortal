@@ -109,12 +109,16 @@ $_SESSION["classCode"] = $_GET["class"];
                                 <li class="nav-item">
                                     <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
 
                 <!-- <div id="dispQuiz"></div> -->
+                
                 
                 <?php $toCreate = "Material" ?> <!-- ausin pa para ma save ung clicked sa prev dropdown as variable para ma show, or if may easier paraan ka -->
                 <h1 style="margin: 15px 0px 0px 15px;" class="h-font green1 me-2 sub-title">Create <?php echo $toCreate; ?></h1>

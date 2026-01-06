@@ -15,11 +15,16 @@ $(document).ready(function() {
             birthdate : $("#date_of_birth1").val(),
             password: "", // No password by default
             repeatPass: "" // No confirm password by default
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
     $(document).on('hidden.bs.modal', '#editProfModal', function () {
         $("#profModalMsg").empty();
+        $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
         $("#password").val("");      // Clear the password input
         $("#repeat_pass").val("");  // Clear the confirm password input
     });
@@ -33,6 +38,9 @@ $(document).ready(function() {
             email : $("#prof_email").val(),
             gender :  $("#profGender").val(),
             address : $("#prof_address").val(),
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
             birthdate : $("#date_of_birth1").val(),
             password: $("#password").val().trim(),
             repeatPass: $("#repeat_pass").val().trim()
@@ -87,6 +95,8 @@ $(document).ready(function() {
                     userId : id,
                     birthdate : birthdate,
                     password: password
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
@@ -111,6 +121,9 @@ $(document).ready(function() {
                             status : $("#instructor_status").val(),
                             email : $("#prof_email").val(),
                             gender :  $("#profGender").val(),
+                            address : $("#prof_address").val(),
+                             password: "",
+                            repeatPass: ""
                             address : $("#prof_address").val(),
                              password: "",
                             repeatPass: ""
@@ -166,6 +179,8 @@ $(document).ready(function() {
         $("#studentModalMsg").empty();
         $("#password").val("");      // Clear the password input
         $("#repeat_pass").val("");  // Clear the confirm password input
+        $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
     });
 
     $("#editStudentsModal").on("shown.bs.modal", function () {
@@ -182,6 +197,9 @@ $(document).ready(function() {
             birthdate : $("#date_of_birth1").val(),
             password: "", // No password by default
             repeatPass: "" // No confirm password by default
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
@@ -195,6 +213,9 @@ $(document).ready(function() {
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
             address : $("#student_address").val(),
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
             birthdate : $("#date_of_birth1").val(),
             password: $("#password").val().trim(),
             repeatPass: $("#repeat_pass").val().trim()
@@ -258,6 +279,8 @@ $(document).ready(function() {
                     id : studentCode,
                     birthdate : birthdate,
                     password: password
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
@@ -281,6 +304,9 @@ $(document).ready(function() {
                             email : $("#student_email").val(),
                             studentCode : $("#studentCode").val(),
                             gender : $("#studentGender").val(),
+                            address : $("#student_address").val(),
+                            password: "",
+                            repeatPass: ""
                             address : $("#student_address").val(),
                             password: "",
                             repeatPass: ""
@@ -332,6 +358,7 @@ $(document).ready(function() {
         }
 
     });
+
 
 
     $("#editStaffModal").on("shown.bs.modal", function () {

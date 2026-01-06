@@ -48,6 +48,8 @@ class InstructorController extends Instructor
         }
     
         // Validate email format
+    
+        // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
@@ -65,6 +67,7 @@ class InstructorController extends Instructor
             echo "Error updating professor details.";
             return;
         }
+    
     
         return $result;
     }

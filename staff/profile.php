@@ -5,18 +5,27 @@ if(!isset($_SESSION["user_category"])){
     header("Location: ../index.php");
 }
 
+
+if(!isset($_SESSION["user_category"])){
+    header("Location: ../index.php");
+}
+
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         // case 2:  break;
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        // case 2:  break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
         case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
     exit();
 }
+
 
 ?>
 
@@ -29,13 +38,19 @@ if(isset($_SESSION["user_category"])){
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <?php require('inc/links.php'); include("includes/view-profile.php"); ?>
+    <title>Staff Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <?php require('inc/links.php'); include("includes/view-profile.php"); ?>
 </head>
 <body>
     <?php require('inc/header.php'); ?>
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
             <div class="col-lg-10 col-sm-12 ms-auto ">
+            <div class="col-lg-10 col-sm-12 ms-auto ">
                 <div class="container px-lg-5 px-sm-2 d-flex align-items-center justify-content-center">
+                    <div class="rounded-5 bg-body-tertiary w-100 mt-5 px-4 py-4">
                     <div class="rounded-5 bg-body-tertiary w-100 mt-5 px-4 py-4">
                         <div class="p-3 d-flex align-content-center" id="profile-content">
                             <div class="row container-fluid">
@@ -45,9 +60,16 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-9">
                                     <h2 class="h-font green1 me-2 title mb-0 pb-0"><?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?></h2>
+                                    <h2 class="h-font green1 me-2 title mb-0 pb-0"><?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?></h2>
                                     <p class="lh-base fw-semibold black3 fs-5 pt-0 mt-0 mb-2">
                                         Staff
                                     </p>
+                                    <form enctype="multipart/form-data" id="changeProfileForm">
+                                        <input type="file" id="file" style="display: none;" name="file">
+                                        <button type="submit" name="changeBtn" id="changeProfileBtn" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0">
+                                            <i class="bi bi-pencil-square white2 me-2"></i>Change Profile
+                                        </button>
+                                    </form>
                                     <form enctype="multipart/form-data" id="changeProfileForm">
                                         <input type="file" id="file" style="display: none;" name="file">
                                         <button type="submit" name="changeBtn" id="changeProfileBtn" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4 fs-5 fw-light mt-0">
@@ -62,13 +84,16 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-8 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Name:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["name"])) echo $_SESSION["name"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Date of Birth:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["birthdate"])) echo $_SESSION["birthdate"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["birthdate"])) echo $_SESSION["birthdate"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Sex:</label>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"];?>" name="first_name" id="first_name_inp" readonly>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                             </div>
@@ -76,8 +101,11 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Email:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
+                                    <label class="form-label black2 mb-0 ps-2">Staff Number:</label>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php echo $userId; ?>" name="first_name" id="first_name_inp" readonly>
                                     <label class="form-label black2 mb-0 ps-2">Staff Number:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php echo $userId; ?>" name="first_name" id="first_name_inp" readonly>
                                 </div>
@@ -86,9 +114,11 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-12 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Address:</label>
                                     <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="<?php if(isset($_SESSION["address"])) echo $_SESSION["address"]; else echo "test";?>" readonly></textarea>
+                                    <textarea class="form-control py-3 black3 5 rounded-4 container-fluid shadow-elevation-dark-1" resize: none; rows="2" aria-label="With textarea" placeholder="<?php if(isset($_SESSION["address"])) echo $_SESSION["address"]; else echo "test";?>" readonly></textarea>
                                 </div>
                             </div>
                             <div class="mt-3 text-end">
+                                <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0" id="save-changes" disabled>Save</button>
                                 <button class="btn green shadow-none me-lg-2 me-3 rounded-5 px-5 fs-5 fw-bold mt-0" id="save-changes" disabled>Save</button>
                             </div>
                         </div>
@@ -99,6 +129,9 @@ if(isset($_SESSION["user_category"])){
             </div>
         </div>
     </div>
+    <?php require('inc/footer.php'); ?>
+    <script src="scripts/change-profile.js"></script>
+
     <?php require('inc/footer.php'); ?>
     <script src="scripts/change-profile.js"></script>
 

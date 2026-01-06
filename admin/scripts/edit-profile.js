@@ -35,6 +35,9 @@ $(document).ready(function() {
             birthdate : $("#date_of_birth1").val(),
             password: $("#password").val().trim(),
             repeatPass: $("#repeat_pass").val().trim()
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
         };
 
         let isChanged = false;
@@ -86,6 +89,8 @@ $(document).ready(function() {
                     userId : id,
                     birthdate : birthdate,
                     password: password
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
@@ -108,6 +113,9 @@ $(document).ready(function() {
                             status : $("#instructor_status").val(),
                             email : $("#prof_email").val(),
                             gender :  $("#profGender").val(),
+                            address : $("#prof_address").val(),
+                             password: "",
+                            repeatPass: ""
                             address : $("#prof_address").val(),
                              password: "",
                             repeatPass: ""
@@ -134,10 +142,22 @@ $(document).ready(function() {
                         });   
                         // $("#profModalMsg").empty();
                         // $("#profModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+                        // $("#profModalMsg").empty();
+                        // $("#profModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                   Swal.fire({
+                        title: 'Error Encountered!!',
+                        text: error,
+                        icon: 'error'
+                    });   
                    Swal.fire({
                         title: 'Error Encountered!!',
                         text: error,
@@ -158,6 +178,8 @@ $(document).ready(function() {
         $("#studentModalMsg").empty();
          $("#password").val("");      // Clear the password input
         $("#repeat_pass").val("");  // Clear the confirm password input
+         $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
     });
 
     $("#editStudentsModal").on("shown.bs.modal", function () {
@@ -174,6 +196,9 @@ $(document).ready(function() {
             birthdate : $("#date_of_birth1").val(),
             password: "", // No password by default
             repeatPass: "" // No confirm password by default
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
@@ -187,6 +212,9 @@ $(document).ready(function() {
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
             address : $("#student_address").val(),
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
             birthdate : $("#date_of_birth1").val(),
             password: $("#password").val().trim(),
             repeatPass: $("#repeat_pass").val().trim()
@@ -209,6 +237,20 @@ $(document).ready(function() {
         let studentCode = $("#studentCode").val();
         let gender = $("#studentGender").val();
         let address = $("#student_address").val();
+        let birthdate = $("#date_of_birth1").val();
+        let password = currentValues.password;
+        let repeatPass = currentValues.repeatPass;
+
+        if (password !== "" || repeatPass !== "") {
+            if (password !== repeatPass) {
+               Swal.fire({
+                    title: 'Invalid!',
+                    text: "Password Does Not Match",
+                    icon: 'error'
+                });  
+                return; // Stop submission if passwords don't match
+            }
+        }
         let birthdate = $("#date_of_birth1").val();
         let password = currentValues.password;
         let repeatPass = currentValues.repeatPass;
@@ -246,6 +288,8 @@ $(document).ready(function() {
                     id : studentCode,
                     birthdate : birthdate,
                     password: password
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
@@ -258,7 +302,15 @@ $(document).ready(function() {
                             icon: 'success'
                         });
                         
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Profile Updated!',
+                            icon: 'success'
+                        });
+                        
                         console.log("inside success");
+                        // $("#studentModalMsg").empty();
+                        // $("#studentModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
                         // $("#studentModalMsg").empty();
                         // $("#studentModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
                     
@@ -270,6 +322,9 @@ $(document).ready(function() {
                             email : $("#student_email").val(),
                             studentCode : $("#studentCode").val(),
                             gender : $("#studentGender").val(),
+                            address : $("#student_address").val(),
+                            password: "",
+                            repeatPass: ""
                             address : $("#student_address").val(),
                             password: "",
                             repeatPass: ""
@@ -299,10 +354,22 @@ $(document).ready(function() {
                         });   
                         // $("#studentModalMsg").empty();
                         // $("#studentModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+                        // $("#studentModalMsg").empty();
+                        // $("#studentModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error Encountered!!',
+                            text: error,
+                            icon: 'error'
+                        });   
                         Swal.fire({
                             title: 'Error Encountered!!',
                             text: error,
@@ -316,6 +383,13 @@ $(document).ready(function() {
             $("#studentModalMsg").empty();
         }
 
+    });
+    
+    $(document).on('hidden.bs.modal', '#editStaffModal', function () {
+        // console.log('Modal is hidden');
+        $("#staffModalMsg").empty();
+         $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
     });
     
     $(document).on('hidden.bs.modal', '#editStaffModal', function () {
@@ -339,6 +413,9 @@ $(document).ready(function() {
             birthdate : $("#date_of_birth1").val(),
             password: "", // No password by default
             repeatPass: "" // No confirm password by default
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
@@ -352,6 +429,9 @@ $(document).ready(function() {
             staffCode : $("#staffCode").val(),
             gender : $("#staffGender").val(),
             address : $("#staff_address").val(),
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
             birthdate : $("#date_of_birth1").val(),
             password: $("#password").val().trim(),
             repeatPass: $("#repeat_pass").val().trim()
@@ -374,6 +454,20 @@ $(document).ready(function() {
         let staffCode = $("#staffCode").val();
         let gender = $("#staffGender").val();
         let address = $("#staff_address").val();
+        let birthdate = $("#date_of_birth1").val();
+        let password = currentValues.password;
+        let repeatPass = currentValues.repeatPass;
+        
+        if (password !== "" || repeatPass !== "") {
+            if (password !== repeatPass) {
+                Swal.fire({
+                    title: 'Invalid!',
+                    text: "Password Does Not Match",
+                    icon: 'error'
+                });  
+                return; // Stop submission if passwords don't match
+            }
+        }
         let birthdate = $("#date_of_birth1").val();
         let password = currentValues.password;
         let repeatPass = currentValues.repeatPass;
@@ -418,6 +512,8 @@ $(document).ready(function() {
                     id : staffCode,
                     birthdate : birthdate,
                     password: password
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
@@ -440,6 +536,9 @@ $(document).ready(function() {
                             email : $("#staff_email").val(),
                             staffCode : $("#staffCode").val(),
                             gender : $("#staffGender").val(),
+                            address : $("#staff_address").val(),
+                            password: "",
+                            repeatPass: ""
                             address : $("#staff_address").val(),
                             password: "",
                             repeatPass: ""
@@ -470,10 +569,17 @@ $(document).ready(function() {
                         
                         // $("#staffModalMsg").empty();
                         // $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        // $("#staffModalMsg").empty();
+                        // $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                         Swal.fire({
+                            title: 'Error Encountered!!',
+                            text: error,
+                            icon: 'danger'
+                        });
                          Swal.fire({
                             title: 'Error Encountered!!',
                             text: error,

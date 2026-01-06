@@ -242,6 +242,8 @@ class StudentController extends ClassRm{
 
     public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status, $type){
         $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type);
+    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status, $type){
+        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type);
         if($result == false){
             echo "ERROR INSERTING GRADE";
         }

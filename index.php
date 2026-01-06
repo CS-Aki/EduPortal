@@ -7,8 +7,6 @@ require_once("log and reg backend/classes/view.User.php");
 
 if (session_id() === "") session_start();
 
-
-
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){

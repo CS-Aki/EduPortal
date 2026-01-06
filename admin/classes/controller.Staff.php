@@ -28,6 +28,8 @@ class StaffController extends Staff{
         }
     
         // Validate email
+    
+        // Validate email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
@@ -45,6 +47,7 @@ class StaffController extends Staff{
             echo "Error: Unable to update staff details.";
             return;
         }
+    
     
         return $result;
     }

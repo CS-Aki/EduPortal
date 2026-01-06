@@ -70,6 +70,9 @@ unset($_SESSION["displayQuiz"]);
                                 <li class="nav-item">
                                     <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -83,7 +86,13 @@ unset($_SESSION["displayQuiz"]);
                                 <i class="me-2 bi bi-gear green2 fs-3 icon"></i>
                             </a>
                         </div>
+                        <div class="dropdown">
+                            <a href="" id="setting-button">
+                                <i class="me-2 bi bi-gear green2 fs-3 icon"></i>
+                            </a>
+                        </div>
                     </div>
+
 
                     <div class="row d-flex px-2 py-1">
                         <div class="col-lg-9">
@@ -514,8 +523,12 @@ unset($_SESSION["displayQuiz"]);
     <?php require('inc/footer.php'); ?>  
     <script src="scripts/grade_system.js"></script>
  
+    <?php require('inc/footer.php'); ?>  
+    <script src="scripts/grade_system.js"></script>
+ 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
+
 
     <script>
         const navLinks = document.querySelectorAll('.nav-link');

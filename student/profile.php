@@ -70,15 +70,18 @@ if(isset($_SESSION["user_category"])){
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Sex:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"]; ?>" name="gender" id="gender" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"]; ?>" name="gender" id="gender" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Email:</label>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="email" id="email" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="email" id="email" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Student Number:</label>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"]; ?>" name="staff-code" id="staff-code" readonly>
                                     <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"]; ?>" name="staff-code" id="staff-code" readonly>
                                 </div>
                             </div>

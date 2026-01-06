@@ -43,6 +43,7 @@ class ClassRm extends DbConnection
     
     protected function fetchStudentList($classCode){
         $sql = "SELECT join_class.user_id, join_class.name, users.image, users.created FROM join_class INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.class_code = ?";
+        $sql = "SELECT join_class.user_id, join_class.name, users.image, users.created FROM join_class INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -66,6 +67,7 @@ class ClassRm extends DbConnection
         $currentDate = date("Y/m/d");
         
         $sql = "SELECT users.user_id, users.name, attendance.status, users.image FROM users INNER JOIN attendance ON attendance.user_id = users.user_id WHERE attendance.class_code = ? AND attendance.date = ?";
+        $sql = "SELECT users.user_id, users.name, attendance.status, users.image FROM users INNER JOIN attendance ON attendance.user_id = users.user_id WHERE attendance.class_code = ? AND attendance.date = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -79,6 +81,7 @@ class ClassRm extends DbConnection
                         $attendanceMap[$record["user_id"]] = $record["status"];
                     }
 
+                    $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $stmt = $this->connect()->prepare($sql);
                     
@@ -97,6 +100,7 @@ class ClassRm extends DbConnection
                     }
 
                 }else{
+                    $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $sql = "SELECT users.user_id, users.name, users.image FROM join_class INNER JOIN users ON join_class.user_id = users.user_id WHERE join_class.class_code = ?";
                     $stmt = $this->connect()->prepare($sql);
                     if ($stmt->execute(array($classCode))) {

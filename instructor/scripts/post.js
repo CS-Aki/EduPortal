@@ -129,6 +129,7 @@ if($('#contentType').val() == "quiz"){
             $("#attemptCont").removeAttr("hidden");
             $("#attemptCont").show();
         }else if(selectedValue == "activity"){
+        }else if(selectedValue == "activity"){
             $(".sub-title").text("Create Activity");
             $('#pointsContainer').removeAttr("hidden");
             $("#dateContainer").removeAttr("hidden");

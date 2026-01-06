@@ -7,6 +7,7 @@ if(isset($_SESSION["user_category"])){
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }
@@ -27,6 +28,7 @@ $_SESSION["name"] = $name;
 if (session_id() === "") session_start();
 
 require_once("student backend/get-profile.php");
+// require_once("student backend/includes/announce.php");
 // require_once("student backend/includes/announce.php");
 // echo $_SESSION["access_token"];
 // if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
@@ -59,6 +61,12 @@ if(isset($_GET["class"])){
     <script src="scripts/join-class.js"></script>
     
     <?php require('inc/links.php'); ?>
+    <script src="scripts/announce.js"></script>
+<style>
+    .card-body{
+        min-height:10rem !important;
+    }
+    </style>
     <script src="scripts/announce.js"></script>
 <style>
     .card-body{

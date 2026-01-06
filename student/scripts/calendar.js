@@ -19,9 +19,35 @@ $(document).ready(function () {
             };
         } else {
             return {
+        return;
+    }
+
+    // Determine the initial view and header toolbar based on screen size
+    function getInitialView() {
+        return window.innerWidth <= 768 ? 'listWeek' : 'dayGridMonth';
+    }
+
+    function getHeaderToolbar() {
+        if (window.innerWidth <= 768) {
+            return {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'listWeek' // Only show the list button on mobile
+            };
+        } else {
+            return {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,listWeek'
+            };
+        }
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: getInitialView(),
+        headerToolbar: getHeaderToolbar(),
+        height: 'auto',
+    });
             };
         }
     }
@@ -44,9 +70,22 @@ $(document).ready(function () {
         }
         calendar.setOption('headerToolbar', newToolbar);
     });
+    calendar.render();
+
+    // Dynamically adjust the calendar view and toolbar on window resize
+    $(window).on('resize', function () {
+        const newView = getInitialView();
+        const newToolbar = getHeaderToolbar();
+
+        if (calendar.view.type !== newView) {
+            calendar.changeView(newView);
+        }
+        calendar.setOption('headerToolbar', newToolbar);
+    });
 
     var addedEvents = new Set();
 
+    // Fetch events via AJAX
     // Fetch events via AJAX
     $.ajax({
         url: "student backend/includes/calendar.php",
@@ -61,6 +100,7 @@ $(document).ready(function () {
             response.forEach((eventData) => {
                 if (!eventData["class_code"] || !eventData["post id"]) {
                     console.error("Missing class_code or post id:", eventData);
+                    return;
                     return;
                 }
 
@@ -79,6 +119,7 @@ $(document).ready(function () {
                                 allDay: false
                             });
                             addedEvents.add(actStart);
+                            addedEvents.add(actStart);
                         }
                     }
                     if (eventData["act deadline date"] && eventData["act deadline time"]) {
@@ -90,6 +131,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
+                            addedEvents.add(actEnd);
                             addedEvents.add(actEnd);
                         }
                     }
@@ -106,6 +148,7 @@ $(document).ready(function () {
                                 allDay: false
                             });
                             addedEvents.add(quizStart);
+                            addedEvents.add(quizStart);
                         }
                     }
                     if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
@@ -117,6 +160,7 @@ $(document).ready(function () {
                                 url: eventUrl,
                                 allDay: false
                             });
+                            addedEvents.add(quizEnd);
                             addedEvents.add(quizEnd);
                         }
                     }

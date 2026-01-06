@@ -10,6 +10,7 @@ if(isset($_SESSION["user_category"])){
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }
@@ -55,6 +56,8 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </nav>
 
+            <!-- Activities Section -->
+            <div class="container mt-4 px-lg-5 px-sm-2">
             <!-- Activities Section -->
             <div class="container mt-4 px-lg-5 px-sm-2">
                     <div class="mt-2">
@@ -176,6 +179,8 @@ if(isset($_SESSION["user_category"])){
                                 foreach ($quiz as $index => $qz) {
                                     
                                     if ($qz['content_type'] === 'Quiz') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
                                         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
                                         // $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];

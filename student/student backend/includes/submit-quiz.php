@@ -17,13 +17,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = $_POST['date'];
     $time = $_POST['time'];
     $type = $_POST["type"];
+    $type = $_POST["type"];
     $stdController = new StudentController();
     // $quizDetails = $stdController->getQuizDetails($postId, $classCode);
     // user id, post id, class code, status, answer, question id
     // echo "POST ID : " . $classCode . "\n\n";
     date_default_timezone_set('Asia/Manila');
 
+    date_default_timezone_set('Asia/Manila');
+
     $currentDateTime = new DateTime(); 
+
+    echo $date . "\n\n\n";
+    echo "\n\n Current date dadas" . $currentDateTime->format('Y-m-d H:i:s') . "\n\n\n\n";
+    
+    $comparisonDateTime = new DateTime("$date $time");
+    $status = ($currentDateTime <= $comparisonDateTime) ? "On Time" : "Late";
+    
 
     echo $date . "\n\n\n";
     echo "\n\n Current date dadas" . $currentDateTime->format('Y-m-d H:i:s') . "\n\n\n\n";
@@ -35,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $totalItems = 0;
     $answers = [];
 
+
     foreach ($_POST as $questionId => $answer) {
         echo $questionId . "\n";
         if ($questionId === 'classCode' || $questionId === 'postId' || $questionId === "attempt" || $questionId === "date" || $questionId === "time" || $questionId === "type" || $questionId == "item-num") {
@@ -44,15 +55,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $answers[$questionId] = $answer;
         if (isset($_SESSION["answerKey"][$questionId]) && $_SESSION["answerKey"][$questionId] == $answer) {
             // echo "Correct Answer for Question ID $questionId: $answer\n\n";
+            // echo "Correct Answer for Question ID $questionId: $answer\n\n";
             $yourScore++;           
              $stdController->submitAnswers($_SESSION["id"], $postId, $classCode, 1, $answer, $questionId, $attempt);
         } else {
              $stdController->submitAnswers($_SESSION["id"], $postId, $classCode, 0, $answer, $questionId, $attempt);
             // echo "Wrong Answer for Question ID $questionId: $answer\n\n";
+            // echo "Wrong Answer for Question ID $questionId: $answer\n\n";
         }
         $totalItems++;
 
     }
+    
+    unset($_SESSION[md5($postId)]);
     
     unset($_SESSION[md5($postId)]);
 
@@ -61,8 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "\n\nTOTAL ITEMS " . $totalItems;
     echo "\n\SCORE  " . $yourScore;
     echo "\n\GRADE  " . $grade;
+    $stdController->insertGrade($_SESSION["id"], $postId, $classCode, "Quiz", $grade, $status, $type);
+    echo "\n\nTOTAL ITEMS " . $totalItems;
+    echo "\n\SCORE  " . $yourScore;
+    echo "\n\GRADE  " . $grade;
 
 
+//     echo var_dump($_SESSION["answerKey"]);
 //     echo var_dump($_SESSION["answerKey"]);
     
 //     if (!empty($postId) && !empty($classCode)) {

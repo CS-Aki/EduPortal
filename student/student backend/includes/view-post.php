@@ -37,8 +37,12 @@ if(isset($_GET["post"])){
     // echo var_dump($postDetails);
     $submissions = $stdController->getSubmittedFiles($postId, $classCode);
 
+
     // echo var_dump($postDetails);
     if($postDetails[0]["content_type"] == "Quiz"){
+        $listController = new ListController();
+        $quizGrades = $listController->getQuizGrades($_GET["post"], $_SESSION["user_id"]);
+
         $listController = new ListController();
         $quizGrades = $listController->getQuizGrades($_GET["post"], $_SESSION["user_id"]);
 
@@ -97,6 +101,7 @@ if(isset($_GET["post"])){
         $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
         
     }
+
 
 // echo var_dump($submissions);
     if($postDetails[0]["content_type"] == "Activity"){

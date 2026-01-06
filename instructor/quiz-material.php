@@ -13,6 +13,18 @@ if(isset($_SESSION["user_category"])){
     header("Location: ../");
     exit();
 }
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        // case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -202,6 +214,7 @@ if(isset($_SESSION["user_category"])){
 
 <body>
     <?php if (isset($_GET["class"])) {include("includes/view-quiz.php"); 
+    <?php if (isset($_GET["class"])) {include("includes/view-quiz.php"); 
     } ?>
     <?php require('inc/header.php');  ?>
 
@@ -223,6 +236,9 @@ if(isset($_SESSION["user_category"])){
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>">List of Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
@@ -300,8 +316,14 @@ if(isset($_SESSION["user_category"])){
                                                                     <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
                                                                            else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
                                                                     ?>
+                                                                    <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                           else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                    ?>
                                                                 </span>
                                                             </td>
+                                                            <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                      else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                    </td>
                                                             <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
                                                                       else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
                                                                     </td>
@@ -310,10 +332,13 @@ if(isset($_SESSION["user_category"])){
                                                                  if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
                                                                 
+                                                                
                                                                  }else{
                                                                     echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
                                                           
+                                                          
                                                                  }
+                                                                 $j++;
                                                                  $j++;
                                                                 ?>
                                                             </td>

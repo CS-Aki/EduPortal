@@ -16,6 +16,21 @@ if(isset($_SESSION["user_category"])){
 
 $_SESSION[$_GET["post"]] = $_GET["attempt"];
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
+        // case 4: header("Location: student/student-dashboard.php"); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
+
+$_SESSION[$_GET["post"]] = $_GET["attempt"];
+
 ?>
 
 <!DOCTYPE html>
@@ -290,6 +305,7 @@ $_SESSION[$_GET["post"]] = $_GET["attempt"];
     <div id="time" hidden><?php echo $quizDetails1[0]["deadline_time"]; ?></div>
 
     <!-- <div id="totalItems"><?php echo $j; ?>SASASASA</div> -->
+    <?php require('inc/footer.php'); $_SESSION["total" . $_GET["post"]] = $numberOfItems; ?>
     <?php require('inc/footer.php'); $_SESSION["total" . $_GET["post"]] = $numberOfItems; ?>
 
     <script src="scripts/submit-quiz.js"></script>

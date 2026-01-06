@@ -46,6 +46,8 @@ class StudentController extends Student{
         }
     
         // Validate email format
+    
+        // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
@@ -62,6 +64,7 @@ class StudentController extends Student{
             echo "Error updating student details.";
             return;
         }
+    
     
         return $result;
     }

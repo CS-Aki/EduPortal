@@ -45,6 +45,8 @@ class ClassRm extends DbConnection
     {
         // echo $userId;
         $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.class_status = ?";
+        // echo $userId;
+        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.class_status = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute(array($userId, "Active"));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -739,8 +741,27 @@ ORDER BY questions.question_id;";
                       AND quiz.status = ?
                       AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= CONVERT_TZ(NOW(), '+00:00', '+08:00');
                 ";
+        // echo $classCode;
+        $sql = "SELECT posts.post_id, 
+                       TIME(posts.created_at) AS 'time', 
+                       DATE(posts.created_at) AS 'month', 
+                       posts.title, 
+                       posts.content_type, 
+                       posts.content, 
+                       quiz.starting_date, 
+                       quiz.starting_time, 
+                       quiz.deadline_date, 
+                       quiz.deadline_time, 
+                       quiz.status 
+                FROM posts 
+                INNER JOIN quiz ON quiz.post_id = posts.post_id 
+                WHERE posts.class_code = ? 
+                      AND quiz.status = ?
+                      AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= CONVERT_TZ(NOW(), '+00:00', '+08:00');
+                ";
         $stmt = $this->connect()->prepare($sql);
 
+        $stmt->execute([$classCode, "Active"]);
         $stmt->execute([$classCode, "Active"]);
 
         if ($stmt->rowCount() == 0) {
@@ -751,6 +772,10 @@ ORDER BY questions.question_id;";
     }
 
     protected function getActsInClass($classCode){
+        $sql = "SET time_zone = '+08:00';";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([]);
+
         $sql = "SET time_zone = '+08:00';";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([]);
@@ -865,11 +890,21 @@ ORDER BY questions.question_id;";
             echo "\DEDUCTED GRADE DUE TO LATE SUBMISSION " . $grade . "\n";
         }
 
+    protected function insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type){
+
+        if($status == "Late"){
+            echo "\n\nORIGINAL GRADE " . $grade . "\n";
+            $gradeSys = $this->getGradingSystemDB($classCode);
+            $grade -= $gradeSys[0]["deduction"];
+            echo "\DEDUCTED GRADE DUE TO LATE SUBMISSION " . $grade . "\n";
+        }
+
         // INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`) VALUES ()
         $sql = "INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
+            if ($stmt->execute(array($userId, $postId, $classCode, $type, $grade, $status))) {
             if ($stmt->execute(array($userId, $postId, $classCode, $type, $grade, $status))) {
                 if ($stmt->rowCount() == 0) {
                     return false;
@@ -882,6 +917,38 @@ ORDER BY questions.question_id;";
         } catch (PDOException $e) {
             echo "Error insertGradeInDb: " . $e;
             return false;
+        }
+    }
+
+    protected function getGradingSystemDB($classCode){
+        $sql = "SELECT * FROM grading_system WHERE class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getAllGradingSystemDB($userId){
+        $sql = "SELECT gr.act_wg, gr.quiz_wg, gr.exam_wg, gr.deduction, gr.class_code, c.class_name FROM grading_system gr INNER JOIN classes c ON c.class_code = gr.class_code INNER JOIN join_class jc ON c.class_code = jc.class_code WHERE jc.user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
         }
     }
 
@@ -1118,12 +1185,15 @@ ORDER BY questions.question_id;";
                     ";
 
             $stmt = $this->connect()->prepare($sql);
+            $stmt = $this->connect()->prepare($sql);
 
             try {
                 $params = array("Quiz", "Activity", "Exam", "Seatwork", "Assignment", $userId, "Active");
                 $stmt->execute($params);
 
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo "SQL Error: " . $e->getMessage();
             } catch (PDOException $e) {
                 echo "SQL Error: " . $e->getMessage();
                 return null;
