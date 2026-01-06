@@ -88,6 +88,8 @@ $(document).ready(function() {
         let title = $("#postTitle").val();
         let description = $("#postDesc").val();
         let type = $("#content-type").text();
+        console.log("This is "+ type);
+
         let startingDate = "";
         let startingTime = "";
         let deadlineDate = "";
@@ -165,14 +167,14 @@ $(document).ready(function() {
                 return; 
             }
 
-            if (deadlineDateTime <= currentDate) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Deadline Time',
-                    text: 'Deadline time and date should be greater than the current time and date.',
-                });
-                return; 
-            }
+            // if (deadlineDateTime <= currentDate) {
+            //     Swal.fire({
+            //         icon: 'error',
+            //         title: 'Invalid Deadline Time',
+            //         text: 'Deadline time and date should be greater than the current time and date.',
+            //     });
+            //     return; 
+            // }
         
             if (startingDateTime > deadlineDateTime) {
                 Swal.fire({
@@ -195,17 +197,47 @@ $(document).ready(function() {
             }
         }
 
-        console.log("Starting Date " + startingDate);
-        console.log("Starting Time " + startingTime);
-        console.log("Deadline Date " + deadlineDate);
-        console.log("Deadline Time " + deadlineTime);
+        // console.log("Initial Starting Date " + initialSDate);
+        // console.log("Initial Starting Time " + initialSTime);
+        // console.log("Initial Deadline Date " + initEndDate);
+        // console.log("Initial Deadline Time " + initEndTime);
 
+        // console.log("Starting Date " + startingDate);
+        // console.log("Starting Time " + startingTime);
+        // console.log("Deadline Date " + deadlineDate);
+        // console.log("Deadline Time " + deadlineTime);
 
-        if(initialDesc == description && initialTitle == title && $("#fileInput")[0].files.length == 0 && initialSDate == startingDate && initialSTime == startingTime && initEndDate == deadlineDate && initEndTime == deadlineTime && initPoints == points && initAttempt == attempts){
-            console.log("NO CHANGES");
-            return;
+        // console.log("Init title " + initialTitle);
+        // console.log("New Title " + title);
+
+        if(type != "Material"){
+            if (
+                initialTitle.trim() === title.trim() &&
+                initialDesc.trim() === description.trim() &&
+                $("#fileInput")[0].files.length === 0 &&
+                initialSDate.trim() === startingDate.trim() &&
+                initialSTime.trim() === startingTime.trim() &&
+                initEndDate.trim() === deadlineDate.trim() &&
+                initEndTime.trim() === deadlineTime.trim() &&
+                Number(initPoints) === Number(points) ||
+                Number(initAttempt) === Number(attempts)
+            ) {
+                console.log("NO CHANGES");
+                return;
+            }
+        }else if(type == "Material"){
+             if (
+                initialTitle.trim() === title.trim() &&
+                initialDesc.trim() === description.trim() &&
+                $("#fileInput")[0].files.length === 0 
+            ) {
+                console.log("NO CHANGES");
+                return;
+            }
         }
+        
 
+        
         let formData = new FormData();
         formData.append("classCode", classCode);
         formData.append("postId", postId);
@@ -219,9 +251,6 @@ $(document).ready(function() {
         formData.append("points", points);
         formData.append("attempts", attempts);
 
-        if(type != "Material"){
-
-        }
         
         if(files != null && $("#fileInput")[0].files.length > 0){
             for (let i = 0; i < $("#fileInput")[0].files.length; i++) {
@@ -234,9 +263,10 @@ $(document).ready(function() {
                 text: 'Please wait while we upload your file.',
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
+                allowOutsideClick: false
             });
-
+            
             $.ajax({
                 method: "POST",
                 url: "includes/save-file-session.php",
@@ -327,8 +357,18 @@ $(document).ready(function() {
                             title: 'Success!',
                             text: "Edit Post Successfully",
                             icon: 'success',
-                        })
-                
+                        });
+
+                        
+                         initialTitle = $("#postTitle").val();
+                         initialDesc = $("#postDesc").val();
+                         initialSDate = $("#startDate").val();
+                         initialSTime = $("#startTime").val();
+                         initEndDate = $("#deadlineDate").val();
+                         initEndTime = $("#deadlineTime").val();
+                         initPoints = $("#points").val();
+                         initAttempt = $("#attempt-text").text();
+
                     },
                     error: function(xhr, status, error) {
                         Swal.close();

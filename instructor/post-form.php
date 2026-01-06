@@ -57,7 +57,7 @@ $_SESSION["classCode"] = $_GET["class"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Dashboard</title>
+    <title>Post Form</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 
@@ -76,7 +76,7 @@ $_SESSION["classCode"] = $_GET["class"];
         // $codeData = json_decode($_GET['code'], true);
         $code = $_GET['code'] ?? null;
         if ($class) {
-            header("Location: http://localhost/EduPortal/instructor/post-form.php?class=$class&code=$code");
+            header("Location: http://localhost/instructor/post-form.php?class=$class&code=$code");
             exit;
         }
     }
@@ -106,22 +106,27 @@ $_SESSION["classCode"] = $_GET["class"];
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
 
                 <!-- <div id="dispQuiz"></div> -->
-
+                
                 <?php $toCreate = "Material" ?> <!-- ausin pa para ma save ung clicked sa prev dropdown as variable para ma show, or if may easier paraan ka -->
-
                 <h1 style="margin: 15px 0px 0px 15px;" class="h-font green1 me-2 sub-title">Create <?php echo $toCreate; ?></h1>
                 <div style="padding: 1% 2%; position: relative;" id="postContainer">
                     <!-- <label class="labelText" >Content Type:</label> -->
                     <select style="position: absolute; z-index: 20;" id="contentType">
                         <option class="green2" value="material">Material</option>
                         <option class="green2" value="activity">Activity</option>
-                        <option class="green2" value="quiz">Quiz</option>
+                        <option class="green2" value="quiz">Quiz</option> 
+                        <option class="green2" value="exam">Exam</option>      <!-- CHANGES HERE -->
+                        <option class="green2" value="seatwork">Seatwork</option>    
+                        <option class="green2" value="assignment">Assignment</option>    
                     </select><span> <br>
                     </span>
 
@@ -152,7 +157,7 @@ $_SESSION["classCode"] = $_GET["class"];
                             <div class="d-flex col-2">
                                 <span style="font-size: large;" class="ms-2 form-label">Attempt:</span>
                                 <div class="form-floating ms-2" style="flex: 1;">
-                                    <input type="number" class="rounded-2 ps-2" id="attempt" value="1" min="1" max="5" placeholder="Enter number" required>
+                                    <input type="number" class="rounded-2 ps-2" id="attempt" value="1" min="1" placeholder="Enter number" required>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +224,7 @@ $_SESSION["classCode"] = $_GET["class"];
                             <a href="quiz-list.php?class=<?php echo md5($details[0]["class_code"]); ?>" ><button class="container-fluid btn green shadow-none mt-2 fw-medium fs-5">View Quiz List</button></a>
                         </div>
                     <!-- Handles the messaging -->
-                    <div class="form-message"></div>
+                    <!--<div class="form-message"></div>-->
                     <hr>
 
                 </div>

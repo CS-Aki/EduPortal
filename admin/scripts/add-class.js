@@ -65,7 +65,15 @@ $(document).ready(function() {
             },
             
             success: function(response) {
+                
                 if(response.includes("New Class Successfully Added")){
+
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'New Class Successfully Added!',
+                        icon: 'success'
+                    });
+
                     $.ajax({
                         url: "includes/class-list.php",
                         type: "POST",
@@ -73,6 +81,9 @@ $(document).ready(function() {
                             createClass : "true"
                         },
                         success: function(response) {
+                            
+                            
+
                             var table = $('#myTable').DataTable();
 
                             // Clear all existing rows from the table
@@ -99,7 +110,7 @@ $(document).ready(function() {
                             });
                             
                             $("#create_message").empty();
-                            $("#create_message").append("<div class='alert alert-success' role='alert'><span>SUCCESS</span></div>"); 
+                            // $("#create_message").append("<div class='alert alert-success' role='alert'><span>SUCCESS</span></div>"); 
 
                         },
                         error: function(xhr, status, error) {
@@ -108,9 +119,12 @@ $(document).ready(function() {
                         }
                     });
 
-                }else{
-                    $("#create_message").empty();
-                    $("#create_message").append("<div class='alert alert-danger' role='alert'><span>"+response+"</span></div>");   
+                }else{      
+                    Swal.fire({
+                        title: 'Invalid!',
+                        text: response,
+                        icon: 'error'
+                    });   
                 }
             },
             error: function(xhr, status, error) {

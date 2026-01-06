@@ -5,15 +5,15 @@ require_once("../classes/model.User.php");
 require_once("../classes/controller.Register.php");
 
 if(isset($_POST["registerBtn"])){
-  $firstName = $_POST["firstName"];
-  $middleName = $_POST["middleName"];
-  $lastName = $_POST["lastName"];
-  $email = $_POST["email"];
-  $password = $_POST["password"];
-  $repeatPass = $_POST["repeatPass"];
-  $birthdate = $_POST["birthdate"];
-  $gender = $_POST["gender"];
-  $address = $_POST["address"];
+  $firstName = trim($_POST["firstName"]);
+    $middleName = trim($_POST["middleName"]);
+    $lastName = trim($_POST["lastName"]);
+    $email = trim($_POST["email"]);
+    $password = trim($_POST["password"]);
+    $repeatPass = trim($_POST["repeatPass"]);
+    $birthdate = trim($_POST["birthdate"]);
+    $gender = trim($_POST["gender"]);
+    $address = trim($_POST["address"]);
   
   if($middleName == ""){
     $name = $firstName . " " . $lastName;

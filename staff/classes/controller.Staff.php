@@ -14,31 +14,35 @@ class StaffController extends Staff{
         return $instructorList;
     }
 
-    public function getStaffDetail(){
-        $userId = $_POST["userId"];
-        $userName = $_POST["userName"];
-
-        return $this->getStaffDetailInDb($userId, $userName);
+    public function getStaffDetail($name, $email){
+        return $this->getStaffDetailInDb($name, $email);
     }
 
-    public function changeStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate){
-        if($this->invalidInput($staffName)){
-            echo "Special Characters aren't allowed, please try again";
+     public function changeStaffDetails($staffName, $status, $email, $gender, $address, $oldName, $staffCode, $birthdate, $password = null) {
+        if ($this->invalidInput($staffName)) {
+            echo "Special characters Or Numbers aren't allowed, please try again.";
             return;
         }
-
+    
+        // Validate email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
-        } 
-
-        $result = $this->updateStaffDetails($staffName, $status,  $email,  $gender, $address, $oldName, $staffCode, $birthdate);
-
-        if($result == false || $result == null){
-            echo "Error changeProfDetails";
+        }
+        
+            
+        if ($this->isValidPassLen($password) == true){
+            echo "Password must be 4 characters or more!";
             return;
         }
 
+        $result = $this->updateStaffDetails($staffName, $status, $email, $gender, $address, $oldName, $staffCode, $birthdate, $password);
+    
+        if ($result === false || $result === null) {
+            echo "Error: Unable to update staff details.";
+            return;
+        }
+    
         return $result;
     }
 
@@ -53,5 +57,14 @@ class StaffController extends Staff{
         }
 
         return false;
+    }
+    
+    private function isValidPassLen($password){
+          if(strlen($password) < 4){
+              return true;
+          }
+          
+          return false;
+          
     }
 }

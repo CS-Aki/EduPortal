@@ -7,7 +7,6 @@ use phpseclib3\Crypt\EC;
 
 if (session_id() === "") session_start();
 
-
 if(!isset($_SESSION["user_category"])){
     header("Location: ../index.php");
 }
@@ -16,7 +15,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }
@@ -33,7 +32,7 @@ if (isset($_GET["code"])) {
 }
 
 if(isset($_GET["error"])){
-    header("location: http://localhost/EduPortal/student/material.php?class=" . $_SESSION["storeCode"] . "&post="  . $_SESSION["postId"]);
+    header("location: http://localhost/student/material.php?class=" . $_SESSION["storeCode"] . "&post="  . $_SESSION["postId"]);
 }
 
 $_SESSION["postId"] = $_GET["post"];
@@ -56,7 +55,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Material</title>
     <style>
         .gray-out {
             background-color: gray; /* Change to your desired gray color */
@@ -159,11 +158,10 @@ $_SESSION["storeCode"] =  $_GET["class"];
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <?php if(session_id() === "") session_start(); require('inc/links.php'); include("student backend/includes/view-post.php"); 
-    //   echo var_dump($postDetails);
     ?>
 </head>
 <body>
-    <?php require('inc/header.php'); ?>
+    <?php require('inc/header.php');   ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row">
@@ -278,7 +276,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                         </div>
                     </div>
                 </div>
-                <?php } else if($postDetails[0]["content_type"] == "Quiz"){ ;?>
+                <?php } else if($postDetails[0]["content_type"] == "Quiz" || $postDetails[0]["content_type"] == "Exam" ){ ;?>
 
                     <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
@@ -344,29 +342,38 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                         // Ensure $totalCorrectAnsCount and $totalItems are defined
                                                         $correctCount = isset($totalCorrectAnsCount[$attempt]) ? $totalCorrectAnsCount[$attempt] : 0;
                                                         $grade = ($totalItems > 0) ? ($correctCount / $totalItems) * 100 : 0;
+                                                        if($postDetails[0]["content_type"] == "Exam"){
+                                                            $grade = $examGrades[$j]["grade"];
 
+                                                        }else{
+                                                            $grade = $quizGrades[$j]["grade"];
+                                                        }
                                                         ?>
                                                         <tr>
                                                             <td><?php echo $attempt; ?></td>
-                                                            <td><?php echo $correctCount; ?> / <?php echo $totalItems; ?></td>
+                                                            <td><?php echo $correctCount; ?> / <?php echo $totalItem[0]["total-items"]; ?></td>
                                                             <td>
                                                                 Your Points: <?php echo $score; ?> <br> 
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
                                                                 Result: 
-                                                                <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
-                                                                    <?php echo ($grade >= 70) ? "Passed" : "Failed"; ?>
-                                                                </span>
-                                                            </td>
-                                                            <td><?php echo ceil($grade) . "%"; ?></td>
-                                                            <td><?php 
-                                                                
+                                                                  <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
+                                                                        <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                            else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                        ?>
+                                                                    </span>
+                                                                </td>
+                                                                <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                        else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                        </td>
+                                                                <td><?php 
+                                                
                                                                  if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
-                                                                    $j++;
+                                                                   
                                                                  }else{
                                                                     echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
                                                                  }
-                                                                
+                                                                 $j++;
                                                                 ?>
                                                             </td>
                                                             <td>
@@ -377,9 +384,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                     }
                                                 } 
                                                 
-                                                if(isset($_SESSION[$_GET["class"]])){ ?>
-                                                        <!-- <td><?php echo $_SESSION["attempt"]; ?></td>
-                                                            <td> ? / <?php echo $totalItems; ?></td>
+                                                  if(isset($_SESSION[$_GET["post"]])){ ?>
+                                                        <td><?php echo $_SESSION[$_GET["post"]]; ?></td>
+                                                            <td> ? / <?php echo $_SESSION["total" . $_GET["post"]]; ?></td>
                                                             <td>
                                                                 Your Score: ? <br> 
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
@@ -393,9 +400,9 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                                                 <span class="badge rounded-pill text-bg-secondary">Answering</span>
                                                             </td>
                                                             <td>
-                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION["attempt"]; ?>' class="green2">View</a>
+                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION[$_GET["post"]]; ?>' class="green2">View</a>
                                                             </td>
-                                                        </tr> -->
+                                                        </tr>
                                         <?php    }
                                                 ?>
                                               <!--<tr>
@@ -407,7 +414,7 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                             </tr> -->
                                             <?php if($submittedQuiz == null){ ?>
                                             <tr>
-                                                <td colspan="5">No record</td>
+                                                <td colspan="6">No record</td>
                                             </tr> 
                                             <?php }?>
                                         </tbody>
@@ -435,7 +442,8 @@ $_SESSION["storeCode"] =  $_GET["class"];
                 </div>
                     <?php }            
      
-                    else {?>
+                 else if($postDetails[0]["content_type"] == "Activity" || $postDetails[0]["content_type"] == "Assignment" || $postDetails[0]["content_type"] == "Seatwork"){ ?>
+                    <?php $_SESSION["post-type"] = $postDetails[0]["content_type"];?>
                     <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
                 <div class="container-fluid mt-4 px-lg-5 px-sm-4">
                     <div class="mt-2">
@@ -486,22 +494,24 @@ $_SESSION["storeCode"] =  $_GET["class"];
                                             <div class="d-flex justify-content-between flex-column h-100">
                                                 <div class="container">
                                                     <p class="fw-semibold green2 fs-4 lh-sm mt-2 mb-2">Your work</p>
-                                                    <?php if($submissions != null){
-                                                            // echo "SUBMISSION DATE ".$submissions[0]["created"] . "<br>";
+                                                    <div class="act-status">
+                                                        <?php if($submissions != null){
+                                                                // echo "SUBMISSION DATE ".$submissions[0]["created"] . "<br>";
 
-                                                            $currentDateTime = new DateTime('now', $timezone); // Current date and time
-                                                            // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
-                                                            $deadlineObj = new DateTime($submissions[0]["created"]);
-                                                            // echo $currentDateTime . "<br>";
-                                                        
-                                                            if ($submissions[0]["created"] <= $outputDateString) {
-                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-success done-badge">Done</span></div>';
-                                                            }else{
-                                                                echo '<div class="act-status"><span class="badge rounded-pill text-bg-danger done-badge">Late</span></div>';
-                                                            }
+                                                                $currentDateTime = new DateTime('now', $timezone); // Current date and time
+                                                                // echo "TIME NOW ".$currentDateTime->format('Y-m-d H:i:s');
+                                                                $deadlineObj = new DateTime($submissions[0]["created"]);
+                                                                // echo $currentDateTime . "<br>";
                                                             
-                                                        }
-                                                    ?>
+                                                                if ($submissions[0]["created"] <= $outputDateString) {
+                                                                    echo '<span class="badge rounded-pill text-bg-success done-badge">Done</span>';
+                                                                }else{
+                                                                    echo '<span class="badge rounded-pill text-bg-danger done-badge">Late</span>';
+                                                                }
+                                                                
+                                                            }
+                                                        ?>
+                                                    </div>
                                                     <!-- <div class='act-status'><span class="badge rounded-pill text-bg-danger done-badge">Missing</span></div> -->
                                                     <div id="fileContainer">
                                                         <?php if($submissions != null){ for($i = 0; $i < count($submissions); $i++){?>
@@ -697,7 +707,165 @@ $_SESSION["storeCode"] =  $_GET["class"];
                        
                     </div>
                 </div>
-                <?php } ?>
+                <?php }else if($postDetails[0]["content_type"] == "Exam"){?>
+                                <div class="container-fluid mt-4 px-lg-5 px-sm-4">
+                                    <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
+                                    <div class="mt-2">
+                                        <div class="d-flex px-3">
+                                            <div id="icon-material">
+                                                <i class="bi bi-question-circle-fill green1 fs-1 p-0 m-0 me-3"></i>
+                                            </div>
+                                            <div class="w-100">
+                                                <div>
+                                                    <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"]; ?></h1>
+                                                    <!-- <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year; ?></p>  -->
+                                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
+                                                    <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Deadline Date: <?php echo $deadlineDateTime; ?></p>   
+                                                    <p class="fw-light red fs-6 d-flex m-0" id="material-date">Max Attempt: <?php echo $quizContent[0]["attempt"]; ?></p>   
+                                                </div>
+                                                <div class="mt-3" id="material-description">
+                                                    <p class="black3 fs-6 lh-sm">
+                                                        Description: <?php echo $postDetails[0]["content"]; ?>
+                                                    </p>                         
+                                                </div>
+
+                                                <div class="container-fluid p-0">
+                                                    <h1 class="h-font green2 text-center sub-title mb-0" id="material-title">Your Work</h1><br>
+                                                    
+                                                    <div class="row justify-content-center"> 
+                                                        <div class="col-lg-3 col-md-12">
+                                                            <a class='<?php echo ($attemptNum >= $quizContent[0]["attempt"]) ? "disabled" : ""; ?>' href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]['post_id']); ?>&attempt=<?php echo ($submittedQuiz != null) ? $attemptNum + 1 : "1"; ?>'>
+                                                                <div class="container-fluid green shadow-elevation-dark-1 rounded-3 <?php echo ($attemptNum >= $quizContent[0]["attempt"]) ? "gray-out" : "1"; ?>">
+                                                                    <div class="d-flex justify-content-center align-items-center p-2 py-3">
+                                                                        <span class="white2 fw-semibold mb-0">Take Quiz</span>
+                                                                    </div> 
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div><br>
+                                                
+                                                <div class="container-fluid mt-2 m-0 p-0 table-responsive" id="table-container">
+                                                    <table id="classTable" class="table table-bordered text-center align-middle teble-responsive">
+                                                        <thead>
+                                                            <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Items</th>
+                                                            <th scope="col">Points</th>
+                                                            <th scope="col">Grade</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">View</th>
+                                                        
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                                
+                                                            <?php  
+                                                                // echo $yourScore[1];
+                                                                // echo count($quizStatus);
+                                                                $j = 0;
+                                                                // echo var_dump($quizStatus);
+
+                                                                if (count($yourScore) > 0) {
+                                                                    // echo $_SESSION["attempt"];
+                                                                    foreach ($yourScore as $attempt => $score) { 
+                                                                        // Ensure $totalCorrectAnsCount and $totalItems are defined
+                                                                        $correctCount = isset($totalCorrectAnsCount[$attempt]) ? $totalCorrectAnsCount[$attempt] : 0;
+                                                                        $grade = ($totalItems > 0) ? ($correctCount / $totalItems) * 100 : 0;
+
+                                                                        ?>
+                                                                        <tr>
+                                                                            <td><?php echo $attempt; ?></td>
+                                                                            <td><?php echo $correctCount; ?> / <?php echo $totalItems; ?></td>
+                                                                            <td>
+                                                                                Your Points: <?php echo $score; ?> <br> 
+                                                                                Total Points: <?php echo $totalScore; ?> <br> 
+                                                                                Result: 
+                                                                                <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
+                                                                                        <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                                            else echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                                        ?>
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                                        else echo ceil($examGrades[$j]["grade"]) . "%" ?>
+                                                                                        </td>
+                                                                                <td><?php 
+                                                                                
+                                                                                if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
+                                                                                    echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
+                                                                                    $j++;
+                                                                                }else{
+                                                                                    echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
+                                                                                }
+                                                                                
+                                                                                ?>
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href='quiz-result.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $attempt; ?>' class="green2">View</a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <?php 
+                                                                    }
+                                                                } 
+                                                                
+                                                                if(isset($_SESSION[$_GET["post"]])){ ?>
+                                                                        <td><?php echo $_SESSION[$_GET["post"]]; ?></td>
+                                                                            <td> ? / <?php echo $_SESSION["total" . $_GET["post"]]; ?></td>
+                                                                            <td>
+                                                                                Your Score: ? <br> 
+                                                                                Total Points: <?php echo $totalScore; ?> <br> 
+                                                                                Result: 
+                                                                                <span class="badge rounded-pill text-bg-secondary">
+                                                                                    Not Yet Submitted
+                                                                                </span>
+                                                                            </td>
+                                                                            <td>?</td>
+                                                                            <td>
+                                                                                <span class="badge rounded-pill text-bg-secondary">Answering</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href='quiz-form.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>&post=<?php echo md5($postDetails[0]["post_id"]); ?>&attempt=<?php echo $_SESSION[$_GET["post"]]; ?>' class="green2">View</a>
+                                                                            </td>
+                                                                        </tr>
+                                                        <?php    }
+                                                                ?>
+                                                            <!--<tr>
+                                                                <td>2</td>
+                                                                <td>Quiz: Quiz 1 <br> Quiz: Sorting Algorithm</td>
+                                                                <td>Correct Answers: 49 <br> Total Points: 80 <br> Result: <span class="badge rounded-pill text-bg-danger">Failed</span></td>
+                                                                <td><span class="badge rounded-pill text-bg-success">Finished</span></td>
+                                                                <td><a href="#" class="green2">View</a></td>
+                                                            </tr> -->
+                                                            <?php if($submittedQuiz == null){ ?>
+                                                            <tr>
+                                                                <td colspan="6">No record</td>
+                                                            </tr> 
+                                                            <?php }?>
+                                                        </tbody>
+                                                    </table> 
+                                                </div>
+
+                                                <div class="line2 mt-5"></div>
+                                                <div class="w-75 mt-4" id="material-comment-container">
+                                                    <div class="input-group mt-lg-2">
+                                                        <span class="input-group-text rounded-start-5 bg-white ps-3"><img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" style="width: 35px;" class="rounded-5"></span>
+                                                        <textarea class="form-control py-3 black3 5 border-start-0 border-end-0 fs-6" id="commentArea" style="resize: none;" rows="1" aria-label="With textarea" placeholder="Leave a comment..."></textarea>
+                                                        <span class="input-group-text rounded-end-5 bg-white">                                        
+                                                            <a href="" class="align-items-end green1 fs-3 pe-2 comment-btn"><i class="bi bi-send-fill"></i></a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="ms-lg-3 mt-4">
+                                                        <div id="comments"></div>
+                                                </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                <?php }?>
             </div>
 
         </div>

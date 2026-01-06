@@ -27,7 +27,7 @@ unset($_SESSION["displayQuiz"]);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Dashboard</title>
+    <title>Submitted Works</title>
     <?php require('inc/links.php'); include("includes/view-class.php"); include("includes/view-submission.php");
 ?>
 </head>
@@ -40,236 +40,220 @@ unset($_SESSION["displayQuiz"]);
                 <nav class="navbar navbar-expand-lg sticky-top line fs-5 z-2">
                     <div class="container-fluid sticky-top">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                            <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse green1" id="navbarNav">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="class.php?class=<?php echo md5($details[0]["class_code"]); ?>" >Class Name</a>
+                                    <a class="nav-link" href="class.php?class=<?php echo md5($details[0]['class_code']); ?>">Class Name</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="submittedworks.php?class=<?php echo md5($details[0]["class_code"]); ?>">Submitted Works</a>
+                                    <a class="nav-link active" href="submittedworks.php?class=<?php echo md5($details[0]['class_code']); ?>">Submitted Works</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
+                                    <a class="nav-link" href="list.php?class=<?php echo md5($details[0]['class_code']); ?>">List of Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]['class_code']); ?>">Grades</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
+
                 <div class="container mt-4 px-lg-5 px-sm-2">
-                    <div class="mt-2">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h1 class="h-font green1 me-2 sub-title">Activities</h1>
-                            <div class="line-h"></div>
-                        </div>
-                        <div>
-                            <?php 
-                                if (isset($post[0]['content_type'])) {
-                                    for ($i = 0; $i < count($post); $i++) {
-                                        if ($post[$i]['content_type'] == 'Activity') {
-                                            // Display activity card
-                                            echo "<div id='material'>
-                                                <button data-bs-toggle='collapse' href='#collapse_{$i}' role='button' aria-expanded='false' aria-controls='collapse_{$i}' class='btn container-fluid p-0 m-0'>
-                                                    <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1'>
-                                                        <div class='d-flex align-content-center'>
-                                                            <div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>
-                                                            <div class='ms-3 mt-1'>
-                                                                <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start' id='material-title'>
-                                                                    {$post[$i]["title"]}
-                                                                    <span class='fw-light green2 fs-6 d-flex mt-1' id='material-date'>{$month} {$day}, {$year}</span>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class='d-flex align-items-center justify-content-center'>
-                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-student-count'></p>
-                                                            <a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "'>
-                                                                <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </button>";
+                    <?php
+                    // Function to display material (Activity/Quiz/Exam)
+                    // if($contentType == "Exam"){
+                    //     echo "Submission student id " . $submission["user_id"] . "<br>";
+                    //     echo "user student id " . $student["user_id"] . "<br>";
+                    //     echo "submission id " . $submission["post_id"] . "<br>";
+                    //     echo "post id " . $post[$i]["post_id"] . "<br><br>";
+                    // }
 
-                                                $turnedIn = [];
-                                                $pending = [];
-                                                foreach ($studentList as $student) {
-                                                    $submitted = false;
-                                                    if ($actSubmission != null) {
-                                                        foreach ($actSubmission as $submission) {
-                                                            if ($submission['user_id'] == $student['user_id'] && $submission['post_id'] == $post[$i]['post_id']) {
-                                                                $submitted = true;
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                    if ($submitted) {
-                                                        $turnedIn[] = $student;
-                                                    } else {
-                                                        $pending[] = $student;
-                                                    }
-                                                }
+                    function displayMaterial($post, $contentType, $studentList, $submissionList, $classCode) {
+                        // echo var_dump($submissionList) . "<br><br><br>"; 
+                        if (isset($post[0]['content_type'])) {
+                            // echo var_dump($studentList);
 
-                                                // Display turned-in students
-                                                echo "<div class='collapse mb-2' id='collapse_{$i}'>
-                                                    <div class='d-flex flex-column align-items-end justify-content-end'>
-                                                        <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                            <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                                <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
-                                                                    <p class='fs-6 h-font green2 me-2 mb-1'>Turned In</p>
-                                                                    <div class='row px-2'>";
-                                                foreach ($turnedIn as $student) {
-                                                    echo "<a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
-                                                            <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
-                                                                <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
-                                                            </div>
-                                                        </a>";
-                                                }
-                                                echo "              </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>";
+                            for ($i = 0; $i < count($post); $i++) {
+                                if ($post[$i]['content_type'] == $contentType) {
+                                 
+                                    $turnedIn = [];
+                                    $pending = [];
 
-                                                // Display pending students
-                                                echo "<div class='d-flex flex-column align-items-end justify-content-end mt-3'>
-                                                        <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                            <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                                <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
-                                                                    <p class='fs-6 h-font black2 me-2 mb-1'>Pending</p>
-                                                                    <div class='row px-2'>";
-                                                foreach ($pending as $student) {
-                                                    echo "<a href='material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
-                                                            <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
-                                                                <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
-                                                            </div>
-                                                        </a>";
+                                    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                    $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
+                                    $month = $months[(int)($post[$i]["month"][5] . $post[$i]["month"][6]) - 1];
+                                    $day = $post[$i]["month"][8] . "" . $post[$i]["month"][9];
+
+                                    foreach ($studentList as $student) {
+                                        $submitted = false;
+                                        if ($submissionList != null) {
+                                            foreach ($submissionList as $submission) {
+                                    
+                                                if ($submission['user_id'] == $student['user_id'] && $submission['post_id'] == $post[$i]['post_id']) {
+                                                    // if($contentType == "Exam") echo "STUDENT SUBMITT FOUND";
+                                                    $submitted = true;
+                                                    break;
                                                 }
-                                                echo "              </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>";
                                             }
                                         }
+                                        if ($submitted) {
+                                            $turnedIn[] = $student;
+                                        } else {
+                                            $pending[] = $student;
+                                        }
                                     }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
+
+                                    $contentTemp = strtolower($contentType);
+                                    
+                                    echo "
+                                    <div id='material'>
+                                        <button data-bs-toggle='collapse' href='#collapse_{$i}' role='button' aria-expanded='false' aria-controls='collapse_{$i}' class='btn container-fluid p-0 m-0'>
+                                            <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1'>
+                                                <div class='d-flex align-content-center'>
+                                                    <div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>
+                                                    <div class='ms-3 mt-1'>
+                                                        <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start' id='material-title'>
+                                                            {$post[$i]['title']}
+                                                            <span class='fw-light green2 fs-6 d-flex mt-1' id='material-date'>{$month} {$day}, {$year}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>";
+                                                if($contentType == "Quiz" || $contentType == "Exam"){
+                                                if($contentType == "Exam") $contentTemp = "quiz";
+
+                                                echo"<div class='d-flex align-items-center justify-content-center'>
+                                                    <a href='{$contentTemp}-form.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "'>
+                                                        <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
+                                                    </a>";
+                                                }else{
+                                                    echo"<div class='d-flex align-items-center justify-content-center'>
+                                                    <a href='material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "'>
+                                                        <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
+                                                    </a>";
+                                                }
+                                            echo"</div>
+                                            </div>
+                                        </button>
+
+                                        <div class='collapse mb-2' id='collapse_{$i}'>
+                                            <div class='d-flex flex-column align-items-end justify-content-end'>
+                                                <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                    <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                        <div class='pe-lg-3' style='width: 100%;'>
+                                                            <p class='fs-6 h-font green2 me-2 mb-1'>Turned In</p>
+                                                            <div class='row px-2'>";
+
+                                    foreach ($turnedIn as $student) {
+                                        if($contentType == "Quiz" || $contentType == "Exam"){
+                                            if($contentType == "Exam") $contentTemp = "quiz";
+    
+                                            echo "<a href='{$contentTemp}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                                <div class='d-flex align-items-center justify-content-start p-2 white-btn rounded-4' style='width: 95%;'>
+                                                    <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
+                                                    <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
+                                                </div>
+                                            </a>";
+                                        }else{
+                                            echo "<a href='material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                                <div class='d-flex align-items-center justify-content-start p-2 white-btn rounded-4' style='width: 95%;'>
+                                                    <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
+                                                    <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
+                                                </div>
+                                            </a>";
+                                        }
+                                    }
+                                    echo "               </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>";
+
+                                    // Display pending students
+                                    echo "<div class='d-flex flex-column align-items-end justify-content-end mt-3'>
+                                            <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                <div class='mt-0 pt-0 d-flex'>
+                                                    <div class='pe-lg-3' style='width: 100%;'>
+                                                        <p class='fs-6 h-font black2 me-2 mb-1'>Pending</p>
+                                                        <div class='row px-2'>";
+                                    foreach ($pending as $student) {
+                                        if($contentType == "Quiz" || $contentType == "Exam"){
+                                        if($contentType == "Exam") $contentTemp = "quiz";
+
+                                        echo "<a href='{$contentTemp}-material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                                <div class='d-flex align-items-center justify-content-start p-2 white-btn rounded-4' style='width: 95%;'>
+                                                    <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
+                                                    <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
+                                                </div>
+                                            </a>";
+                                        }else{
+                                            echo "<a href='material.php?class=" . md5($classCode) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
+                                                <div class='d-flex align-items-center justify-content-start p-2 white-btn rounded-4' style='width: 95%;'>
+                                                    <img src='{$student['image']}' style='width: 20px;' class='rounded-5 me-3'>
+                                                    <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student['name']}</p>
+                                                </div>
+                                            </a>";
+                                        }
+                                    }
+                                    echo "               </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>";
+                                }
+                            }
+                        }
+                    }
+
+                    // Display Activities
+                    echo "<div class='mt-4'>
+                            <div class='d-flex align-items-center justify-content-between'>
+                                <h1 class='h-font green1 me-2 sub-title'>Activities</h1>
+                                <div class='line-h'></div>
+                            </div>";
+                    displayMaterial($post, 'Activity', $studentList, $actSubmission, $details[0]['class_code']);
+                    echo "</div>";
+
+                    // Display Quizzes
+                    echo "<div class='mt-4'>
+                            <div class='d-flex align-items-center justify-content-between'>
+                                <h1 class='h-font green1 me-2 sub-title'>Quizzes</h1>
+                                <div class='line-h'></div>
+                            </div>";
+                    displayMaterial($post, 'Quiz', $studentList, $quizSubmission, $details[0]['class_code']);
+                    echo "</div>";
+
+                    // Display Exams
+                    echo "<div class='mt-4'>
+                            <div class='d-flex align-items-center justify-content-between'>
+                                <h1 class='h-font green1 me-2 sub-title'>Exams</h1>
+                                <div class='line-h'></div>
+                            </div>";
+                    displayMaterial($post, 'Exam', $studentList, $examSubmission, $details[0]['class_code']);
+                    echo "</div>";
                     
-                <?php if($actSubmission != null) echo "</div>"; ?>
-
-                <div class="container mt-4 px-lg-5 px-sm-2">
-                    <div class="mt-2">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h1 class="h-font green1 me-2 sub-title">Quizzes</h1>
-                            <div class="line-h"></div>
-                        </div>
-                        <div>
-                            <?php 
-
-                                if(isset($post[0]['content_type'])){
-                                    for($i = 0 ; $i < count($post); $i++){
-                                        if($post[$i]['content_type'] == 'Quiz'){
-                                            echo "<div id='material'>
-                                                <button data-bs-toggle='collapse' href='#collapse_{$i}' role='button' aria-expanded='false' aria-controls='collapse_{$i}' class='btn container-fluid p-0 m-0'>
-                                                    <div class='container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1'>
-                                                        <div class='d-flex align-content-center'>
-                                                            <div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>
-                                                            <div class='ms-3 mt-1'>
-                                                                <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start' id='material-title'>
-                                                                    {$post[$i]["title"]}
-                                                                    <span class='fw-light green2 fs-6 d-flex mt-1' id='material-date'>{$month} {$day}, {$year}</span>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class='d-flex align-items-center justify-content-center'>
-                                                            <p class='green2 fw-light fs-5 me-2 mb-0 pb-0' id='material-score'></p>
-                                                            <a href='quiz-form.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "'>
-                                                                <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </button>";
-
-                                                // Group students into "Turned In" and "Pending"
-                                                $turnedIn = [];
-                                                $pending = [];
-                                                foreach ($studentList as $student) {
-                                               
-                                                    $submitted = false;
-                                                    if ($quizSubmission != null) {
-                                                        foreach ($quizSubmission as $submission) {
-                                                            if ($submission['user_id'] == $student['user_id'] && $submission['post_id'] == $post[$i]['post_id']) {
-                                                                $submitted = true;
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                    if ($submitted) {
-                                                        $turnedIn[] = $student;
-                                                    } else {
-                                                        $pending[] = $student;
-                                                    }
-                                                }
-
-                                                // Display turned-in students
-                                                echo "<div class='collapse mb-2' id='collapse_{$i}'>
-                                                    <div class='d-flex flex-column align-items-end justify-content-end'>
-                                                        <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                            <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                                <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
-                                                                    <p class='fs-6 h-font green2 me-2 mb-1'>Turned In</p>
-                                                                    <div class='row px-2'>";
-                                                foreach ($turnedIn as $student) {
-                                                    echo "<a href='quiz-material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
-                                                            <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
-                                                                <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
-                                                            </div>
-                                                        </a>";
-                                                }
-                                                echo "              </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>";
-
-                                                // Display pending students
-                                                echo "<div class='d-flex flex-column align-items-end justify-content-end mt-3'>
-                                                        <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                            <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                                <div class='pe-lg-3' style='width: 100%;' id='card-left-side'>
-                                                                    <p class='fs-6 h-font black2 me-2 mb-1'>Pending</p>
-                                                                    <div class='row px-2'>";
-                                                foreach ($pending as $student) {
-                                                    echo "<a href='quiz-material.php?class=" . md5($details[0]["class_code"]) . "&post=" . md5($post[$i]['post_id']) . "&user=" . md5($student['user_id']) . "' class='col-lg-4 col-md-6 col-sm-12 p-1 mb-1'>
-                                                            <div class='d-flex align-items-center justify-content-center p-2 white-btn rounded-4' style='width: 95%;'>
-                                                                <img src='{$student["image"]}' style='width: 20px;' class='rounded-5 me-3'>
-                                                                <p class='student_name green2 fw-semibold lh-sm m-0 p-0 fs-6'>{$student["name"]}</p>
-                                                            </div>
-                                                        </a>";
-                                                }
-                                                echo "              </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>";
-                                            }
-                                        }
-                                    }
-                            ?>
-                            
-                        </div>
-
-                    </div>
+                    echo "<div class='mt-4'>
+                            <div class='d-flex align-items-center justify-content-between'>
+                                <h1 class='h-font green1 me-2 sub-title'>Seatworks</h1>
+                                <div class='line-h'></div>
+                            </div>";
+                    displayMaterial($post, 'Seatwork', $studentList, $seatworkSubmission, $details[0]['class_code']);
+                    echo "</div>";
+                    
+                    echo "<div class='mt-4'>
+                            <div class='d-flex align-items-center justify-content-between'>
+                                <h1 class='h-font green1 me-2 sub-title'>Assignments</h1>
+                                <div class='line-h'></div>
+                            </div>";
+                    displayMaterial($post, 'Assignment', $studentList, $assignmentSubmission, $details[0]['class_code']);
+                    echo "</div>";
+            
+                    
+                    ?>
                 </div>
-
-                
             </div>
         </div>
     </div>

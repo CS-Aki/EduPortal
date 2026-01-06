@@ -30,38 +30,30 @@ class RegisterController extends User
   // Handles error handling, communicates with model and view
   public function registerUser()
   {
-    
+    // echo strlen($this->password) . " " . strlen($this->repeatPass);
     if ($this->isEmptyInput() == true) {
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>Fill in all fields!</span>";
-      echo "</div>";
+      echo "Fill in all fields!";
       //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");
       //  header("Location: index.php?error=emptyInput");
       exit();
     }
 
     if ($this->invalidName() == true) {
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>Special Characters are not allowed in name!</span>";
-      echo "</div>";
+      echo "Special Characters or Numbers Are Not Allowed in Name!";
       //  echo $view->showRegistrationErrorMsg("Special Characters aren't allowed, please try again");
       // header("Location: index.php?error=invalidNameInput");
       exit();
     }
 
     if ($this->invalidEmail() == true) {
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>Invalid Email Format!</span>";
-      echo "</div>";
+      echo "Invalid Email Format!";
       //echo $view->showRegistrationErrorMsg("Invalid Email Format");
       // header("Location: index.php?error=invalidEmail");
       exit();
     }
 
     if($this->gender == "blank"){
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>Please Choose a Gender!</span>";
-      echo "</div>";
+      echo "Please Choose a Gender!";
       //echo $view->showRegistrationErrorMsg("Invalid Email Format");
       // header("Location: index.php?error=invalidEmail");
       exit();
@@ -71,9 +63,7 @@ class RegisterController extends User
     $validAge = $year - 5;
     
     if(substr($this->birthdate, 0, 4) >= $validAge){
-        echo "<br><div class='alert alert-danger' role='alert'>";
-        echo "<span>Invalid Birth Date, You Must Be 6 Years old or older</span>";
-        echo "</div>";
+        echo "Invalid Birth Date, You Must Be 6 Years old or older";
         //echo $view->showRegistrationErrorMsg("Invalid Email Format");
         // header("Location: index.php?error=invalidEmail");
         exit();
@@ -81,18 +71,19 @@ class RegisterController extends User
     
 
     if ($this->isUserRegistered($this->name, $this->email) == true) {
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>User Already registered!</span>";
-      echo "</div>";
+      echo "User Already registered!";
       // echo $view->showRegistrationErrorMsg("User Already registered");
       // header("Location: index.php?error=userAlreadyRegistered");
       exit();
     }
+    
+    if ($this->isValidPassLen() == true){
+        echo "Password must be 4 characters or more!";
+        exit();
+    }
 
     if ($this->isPasswordMatch() != true) {
-      echo "<br><div class='alert alert-danger' role='alert'>";
-      echo "<span>Password Does Not Match</span>";
-      echo "</div>";
+      echo "Password Does Not Match";
       // echo $view->showRegistrationErrorMsg("Password Mismatch");
       // header("Location: index.php?error=passwordMismatch");
       exit();
@@ -112,10 +103,19 @@ class RegisterController extends User
 
     // echo $view->showRegistrationMsg($result);
   }
+  
+  private function isValidPassLen(){
+      if(strlen($this->password) < 4 || strlen($this->repeatPass) < 4){
+          return true;
+      }
+      
+      return false;
+      
+  }
 
   private function isEmptyInput()
   {
-    if (empty($this->name) || empty($this->email) || empty($this->password) || empty($this->repeatPass)) {
+    if (empty($this->name) || empty($this->email) || empty($this->password) || empty($this->repeatPass) || empty($this->gender) || empty($this->address) || empty($this->birthdate)) {
       return true;
     } else {
       return false;
@@ -124,7 +124,7 @@ class RegisterController extends User
 
   private function invalidName()
   {
-    if (!preg_match("/^[a-zA-Z ]*$/", $this->name)) {
+    if (!preg_match("/^[a-zA-Z. ]*$/", $this->name)) {
       return true;
     } else {
       return false;
@@ -133,7 +133,7 @@ class RegisterController extends User
 
   private function invalidEmail()
   {
-    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL) || strpos($this->email, '@gmail.com') === false) {
       return true;
     } else {
       return false;

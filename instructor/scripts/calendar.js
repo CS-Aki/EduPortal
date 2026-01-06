@@ -1,23 +1,54 @@
 $(document).ready(function () {
+    
     var calendarEl = document.getElementById('calendar');
     if (!calendarEl) {
         console.error("Calendar element not found");
-    } else {
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: getInitialView(),
-            headerToolbar: {
+        return;
+    }
+
+    // Determine the initial view and header toolbar based on screen size
+    function getInitialView() {
+        return window.innerWidth <= 768 ? 'listWeek' : 'dayGridMonth';
+    }
+
+    function getHeaderToolbar() {
+        if (window.innerWidth <= 768) {
+            return {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'listWeek' // Only show the list button on mobile
+            };
+        } else {
+            return {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,listWeek'
-            },
-            height: 'auto',
-        });
-
-        calendar.render();
+            };
+        }
     }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: getInitialView(),
+        headerToolbar: getHeaderToolbar(),
+        height: 'auto',
+    });
+
+    calendar.render();
+
+    // Dynamically adjust the calendar view and toolbar on window resize
+    $(window).on('resize', function () {
+        const newView = getInitialView();
+        const newToolbar = getHeaderToolbar();
+
+        if (calendar.view.type !== newView) {
+            calendar.changeView(newView);
+        }
+        calendar.setOption('headerToolbar', newToolbar);
+    });
 
     var addedEvents = new Set();
 
+    // Fetch events via AJAX
     $.ajax({
         url: "includes/calendar.php",
         type: "POST",
@@ -28,95 +59,157 @@ $(document).ready(function () {
 
             console.table(response);
 
-            response.forEach((eventData, index) => {
-                console.log(`Processing event ${index + 1}:`, eventData);
-            
+            response.forEach((eventData) => {
                 if (!eventData["class_code"] || !eventData["post id"]) {
-                    console.error("Skipping due to missing fields:", eventData);
-                    return; 
+                    console.error("Missing class_code or post id:", eventData);
+                    return;
                 }
-            
+
                 const classHash = md5(String(eventData["class_code"]));
                 const postHash = md5(String(eventData["post id"]));
                 let eventUrl = `material.php?class=${classHash}&post=${postHash}`;
-            
+
                 if (eventData["content type"] === "Activity") {
                     if (eventData["act start date"] && eventData["act start time"]) {
                         const actStart = `${eventData["act start date"]}T${eventData["act start time"]}`;
-                        const uniqueKey = `${actStart}-${eventData["post id"]}`;
-                        if (!addedEvents.has(uniqueKey)) {
+                        if (!addedEvents.has(actStart)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Activity Start)`,
                                 start: actStart,
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(uniqueKey);
+                            addedEvents.add(actStart);
                         }
                     }
-
                     if (eventData["act deadline date"] && eventData["act deadline time"]) {
-                        const actStart = `${eventData["act deadline date"]}T${eventData["act deadline time"]}`;
-                        const uniqueKey = `${actStart}-${eventData["post id"]}`;
-                        if (!addedEvents.has(uniqueKey)) {
+                        const actEnd = `${eventData["act deadline date"]}T${eventData["act deadline time"]}`;
+                        if (!addedEvents.has(actEnd)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Activity Deadline)`,
+                                start: actEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actEnd);
+                        }
+                    }
+                }
+
+                if (eventData["content type"] === "Seatwork") {
+                    if (eventData["seatwork start date"] && eventData["seatwork start time"]) {
+                        const actStart = `${eventData["seatwork start date"]}T${eventData["seatwork start time"]}`;
+                        if (!addedEvents.has(actStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Seatwork Start)`,
                                 start: actStart,
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(uniqueKey);
+                            addedEvents.add(actStart);
                         }
                     }
-                    // Add act deadline similar to the above.
+                    if (eventData["seatwork deadline date"] && eventData["seatwork deadline time"]) {
+                        const actEnd = `${eventData["seatwork deadline date"]}T${eventData["seatwork deadline time"]}`;
+                        if (!addedEvents.has(actEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Seatwork Deadline)`,
+                                start: actEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actEnd);
+                        }
+                    }
                 }
+
+                if (eventData["content type"] === "Assignment") {
+                    if (eventData["assignment start date"] && eventData["assignment start time"]) {
+                        const actStart = `${eventData["assignment start date"]}T${eventData["assignment start time"]}`;
+                        if (!addedEvents.has(actStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Assignment Start)`,
+                                start: actStart,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actStart);
+                        }
+                    }
+                    if (eventData["assignment deadline date"] && eventData["assignment deadline time"]) {
+                        const actEnd = `${eventData["assignment deadline date"]}T${eventData["assignment deadline time"]}`;
+                        if (!addedEvents.has(actEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Assignment Deadline)`,
+                                start: actEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(actEnd);
+                        }
+                    }
+                }
+
                 if (eventData["content type"] === "Quiz") {
-                    eventUrl = `quiz-form.php?class=${classHash}&post=${postHash}`;
-                    // Similar logic for quiz start and deadline
                     if (eventData["quiz start date"] && eventData["quiz start time"]) {
-                        const actStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
-                        const uniqueKey = `${actStart}-${eventData["post id"]}`;
-                        if (!addedEvents.has(uniqueKey)) {
+                        eventUrl = `quiz-form.php?class=${classHash}&post=${postHash}`;
+                        const quizStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
+                        if (!addedEvents.has(quizStart)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Quiz Start)`,
-                                start: actStart,
+                                start: quizStart,
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(uniqueKey);
+                            addedEvents.add(quizStart);
                         }
                     }
-
                     if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
-                        eventUrl = `quiz-form.php?class=${classHash}&post=${postHash}`;
-                        const actStart = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
-                        const uniqueKey = `${actStart}-${eventData["post id"]}`;
-                        if (!addedEvents.has(uniqueKey)) {
+                        const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
+                        if (!addedEvents.has(quizEnd)) {
                             calendar.addEvent({
                                 title: `${eventData["post title"]} (Quiz Deadline)`,
-                                start: actStart,
+                                start: quizEnd,
                                 url: eventUrl,
                                 allDay: false
                             });
-                            addedEvents.add(uniqueKey);
+                            addedEvents.add(quizEnd);
+                        }
+                    }
+                }
+
+                if (eventData["content type"] === "Exam") {
+                    eventUrl = `quiz-form.php?class=${classHash}&post=${postHash}`;
+                    if (eventData["quiz start date"] && eventData["quiz start time"]) {
+                        const quizStart = `${eventData["quiz start date"]}T${eventData["quiz start time"]}`;
+                        if (!addedEvents.has(quizStart)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Exam Start)`,
+                                start: quizStart,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizStart);
+                        }
+                    }
+                    if (eventData["quiz deadline date"] && eventData["quiz deadline time"]) {
+                        eventUrl = `quiz-material.php?class=${classHash}&post=${postHash}`;
+                        const quizEnd = `${eventData["quiz deadline date"]}T${eventData["quiz deadline time"]}`;
+                        if (!addedEvents.has(quizEnd)) {
+                            calendar.addEvent({
+                                title: `${eventData["post title"]} (Exam Deadline)`,
+                                start: quizEnd,
+                                url: eventUrl,
+                                allDay: false
+                            });
+                            addedEvents.add(quizEnd);
                         }
                     }
                 }
             });
-            
         },
         error: function (xhr, status, error) {
             console.log("Error:", status, error);
         }
     });
-
-    function getInitialView() {
-        if (window.innerWidth <= 768) {
-            return 'listWeek';
-        } else if (window.innerWidth <= 1024) {
-            return 'timeGridWeek';
-        } else {
-            return 'dayGridMonth';
-        }
-    }
 });

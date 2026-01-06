@@ -1,6 +1,6 @@
 <?php
 
-use PgSql\Lob;
+if (session_id() === "") session_start();
 
 class Instructor extends DbConnection
 {
@@ -214,14 +214,18 @@ class Instructor extends DbConnection
                 return false;
             }
           
-        }else if($type == "activity"){
+        }else if($type == "activity" || $type == "seatwork" || $type == "assignment"){
+
             $type = ucfirst($type);
             $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
             $postID = $this->getPostId($title, $newCode[0]["class_code"]);
             $_SESSION["postId"] = $connection->lastInsertId();
 
-            $stmt = null;
-            $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`, `starting_date`, `starting_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+     
+            if($type == "Activity") $sql = "INSERT INTO `activity`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`, `starting_date`, `starting_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            else if ($type == "Seatwork") $sql = "INSERT INTO `seatwork`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`, `starting_date`, `starting_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            else if ($type == "Assignment") $sql = "INSERT INTO `assignment`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `points`, `status`, `starting_date`, `starting_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            
             $stmt = $connection->prepare($sql);
             
             if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $points, "Pending", $startingDate, $startingTime))) {
@@ -232,6 +236,22 @@ class Instructor extends DbConnection
                 return false;
             }
             exit();
+        }else if($type == "exam"){
+            $type = ucfirst($type);
+            $stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"));
+            $_SESSION["postId"] = $connection->lastInsertId();
+
+            $postID = $this->getPostId($title, $newCode[0]["class_code"]);
+           
+            $sql = "INSERT INTO `quiz`(`post_id`, `class_code`, `deadline_date`, `deadline_time`, `attempt`, `starting_date`, `starting_time`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $connection->prepare($sql);
+            if ($stmt->execute(array($_SESSION["postId"], $newCode[0]["class_code"], $endDate, $endTime, $attempt, $startingDate, $startingTime, "Pending"))) {
+                // echo "trueee";
+                return true;
+            }else{
+                echo "Error statement";
+                return false;
+            }
         }else{
             $type = ucfirst($type);
             if ($stmt->execute(array($newCode[0]["class_code"], $_SESSION["name"], $title, $type, $desc, "Visible"))) {
@@ -696,6 +716,8 @@ class Instructor extends DbConnection
             // echo $type . "\n";
             // echo $questionText . "\n";
             // echo $questionText . "\n";
+            $this->updateQuizStatus($realCode[0]["class_code"], $newPostId[0]["post_id"]);
+
             $qTextResult = $this->isQuestionTextInDb($questionText, $realCode[0]["class_code"], $newPostId[0]["post_id"]);
             if($qTextResult == true){
                 echo "\nQuestion Text Already in database\n";
@@ -761,9 +783,34 @@ class Instructor extends DbConnection
                         return false;
                     }
                 }
+
             }
         }
         return true;
+    }
+
+    protected function updateQuizStatus($classCode, $postId){
+        echo $classCode;
+        echo "POST ID " . $postId;
+        echo "\n\nINSIDE UPDATING QUIZ\n";
+        $sql = "UPDATE quiz SET status = ? WHERE class_code = ? AND post_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array("Active", $classCode, $postId))) {
+                if ($stmt->rowCount() > 0) {
+                    echo "STATUS UPDATED SUCCESS\n\n";
+                    return true;
+                }
+                echo "STATUS UPDATED Failed\n\n";
+                return false;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error in updateQuizStatus : ";
+            return null;
+        }
     }
 
     protected function removingElementsInDb($postId, $removedElements, $id){
@@ -936,37 +983,52 @@ class Instructor extends DbConnection
         }
     }
 
-    protected function removeQuizInDb($postId){
+    protected function removeQuizInDb($postId) {
         try {
+            echo "This is the post id: " . $postId;
+    
             $conn = $this->connect();
             $conn->beginTransaction(); // Start transaction
-        
-            $sqlQuiz = "DELETE FROM quiz WHERE post_id = ?";
+            
+            // Delete from questions
+            $sqlQuestions = "DELETE FROM questions WHERE MD5(post_id) = ?";
+            $stmtQuestions = $conn->prepare($sqlQuestions);
+            $stmtQuestions->execute([$postId]);
+    
+            // Delete from quiz
+            $sqlQuiz = "DELETE FROM quiz WHERE MD5(post_id) = ?";
             $stmtQuiz = $conn->prepare($sqlQuiz);
             $stmtQuiz->execute([$postId]);
-        
-            $sqlPosts = "DELETE FROM posts WHERE post_id = ?";
+    
+            // Delete from posts
+            $sqlPosts = "DELETE FROM posts WHERE MD5(post_id) = ?";
             $stmtPosts = $conn->prepare($sqlPosts);
             $stmtPosts->execute([$postId]);
-        
-            $sqlGrades = "DELETE FROM grades WHERE post_id = ?";
+    
+            // Delete from grades
+            $sqlGrades = "DELETE FROM grades WHERE MD5(post_id) = ?";
             $stmtGrades = $conn->prepare($sqlGrades);
             $stmtGrades->execute([$postId]);
-        
+    
             $conn->commit(); // Commit transaction
-        
+    
+            // Check if any rows were deleted
             if ($stmtQuiz->rowCount() > 0 || $stmtPosts->rowCount() > 0 || $stmtGrades->rowCount() > 0) {
                 echo "Success";
                 return true;    
             }
+            echo "Failed";
             return false;
         } catch (PDOException $e) {
-            $this->connect()->rollBack(); // Rollback on error
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
             echo "Error: " . $e->getMessage();
             return false;
         }
-        
     }
+
+
 
     protected function deadlineAndPointsInDb($postID, $classCode){
         $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, points FROM activity WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
@@ -993,7 +1055,7 @@ class Instructor extends DbConnection
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($userId, $postId, $classCode, "Activity", $grade, $status))) {
+            if ($stmt->execute(array($userId, $postId, $classCode, $_SESSION["post-type"], $grade, $status))) {
                 if ($stmt->rowCount() > 0) {
                     return true;
                 }
@@ -1014,11 +1076,11 @@ class Instructor extends DbConnection
         // echo "user : " . $classCode . "<br>";
         // echo "user : " . $userId . "<br>";
 
-        $sql = "SELECT * FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ? AND content_type = ?";
+        $sql = "SELECT * FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($postId, $classCode, $userId, "Activity"))) {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
                 if ($stmt->rowCount() > 0) {
                     // echo "no result";
                     return $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1034,8 +1096,9 @@ class Instructor extends DbConnection
         }
     }
 
+  
     protected function updateActGradeInDb($postId, $classCode, $userId, $status, $grade){
-        echo "\n\n\nGRADE : " . $grade . "\n\n\n";
+
         $sql = "UPDATE `grades` SET `grade`= ? WHERE user_id = ? AND post_id = ? AND class_code = ?";
         $stmt = $this->connect()->prepare($sql);
 
@@ -1146,7 +1209,7 @@ class Instructor extends DbConnection
         // echo "user id " . $userId . "<br>";
         // echo "ATTEMPT " . $attempt . "<br>";
 
-        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt, answers.question_id FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND MD5(answers.user_id) = ? AND answers.attempt = ?";
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt, answers.question_id FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND MD5(answers.user_id) = ? AND answers.attempt = ? ORDER BY answers.question_id";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -1197,7 +1260,10 @@ class Instructor extends DbConnection
                 break;
             case "Quiz":
                 $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
-                break; 
+                break;
+            case "Exam":
+                $this->updateQuiz($classCode, $title, $postId, $description, $startingDate, $startingTime, $deadlineDate, $deadlineTime, $attempts);
+                break;
             default:
                 echo "NO TYPE FOUND ERROR";
                 break;
@@ -1322,6 +1388,54 @@ class Instructor extends DbConnection
             return false;
         }
    }
+   
+  protected function removeSeatworkInDb($postId){
+        $sql = "START TRANSACTION;
+                      DELETE FROM seatwork WHERE MD5(post_id) = ?;
+                      DELETE from posts WHERE MD5(post_id) = ?;
+                      DELETE from grades WHERE MD5(post_id) = ?;
+                      DELETE from comments WHERE MD5(post_id) = ?;
+                COMMIT;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $postId, $postId, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error removeSeatworkInDb: " . $e;
+            return false;
+        }
+   }
+   
+    protected function removeAssignmentInDb($postId){
+        $sql = "START TRANSACTION;
+                      DELETE FROM assignment WHERE MD5(post_id) = ?;
+                      DELETE from posts WHERE MD5(post_id) = ?;
+                      DELETE from grades WHERE MD5(post_id) = ?;
+                      DELETE from comments WHERE MD5(post_id) = ?;
+                COMMIT;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $postId, $postId, $postId))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error removeSeatworkInDb: " . $e;
+            return false;
+        }
+   }
 
    protected function removeMaterialInDb($postId){
         $sql = "START TRANSACTION;
@@ -1364,17 +1478,23 @@ class Instructor extends DbConnection
     protected function getAllQuizAndActInDb($userId){
         if (session_id() === "") session_start();
 
-        $sql = "SELECT classes.class_code, activity.starting_date AS 'act start date', activity.starting_time AS 'act start time', activity.deadline_date AS 'act deadline date', activity.deadline_time AS 'act deadline time', quiz.starting_date AS 'quiz start date', quiz.starting_time AS 'quiz start time', quiz.deadline_date AS 'quiz deadline date', quiz.deadline_time AS 'quiz deadline time', posts.post_id AS 'post id', posts.content_type AS 'content type', posts.title AS 'post title' FROM posts
+        $sql = "SELECT classes.class_code, activity.starting_date AS 'act start date', activity.starting_time AS 'act start time', activity.deadline_date AS 'act deadline date', activity.deadline_time AS 'act deadline time', 
+                quiz.starting_date AS 'quiz start date', quiz.starting_time AS 'quiz start time', quiz.deadline_date AS 'quiz deadline date', quiz.deadline_time AS 'quiz deadline time', 
+                seatwork.starting_date AS 'seatwork start date', seatwork.starting_time AS 'seatwork start time', seatwork.deadline_date AS 'seatwork deadline date', seatwork.deadline_time AS 'seatwork deadline time', 
+                assignment.starting_date AS 'assignment start date', assignment.starting_time AS 'assignment start time', assignment.deadline_date AS 'assignment deadline date', assignment.deadline_time AS 'assignment deadline time', 
+                posts.post_id AS 'post id', posts.content_type AS 'content type', posts.title AS 'post title' FROM posts
                 INNER JOIN classes ON classes.class_code = posts.class_code
                 INNER JOIN users ON users.user_id = classes.user_id
                 LEFT JOIN activity ON posts.post_id = activity.post_id  
-                LEFT JOIN quiz ON posts.post_id = quiz.post_id          
-                WHERE (posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ?;";
+                LEFT JOIN quiz ON posts.post_id = quiz.post_id   
+                LEFT JOIN seatwork ON posts.post_id = seatwork.post_id                 
+                LEFT JOIN assignment ON posts.post_id = assignment.post_id          
+                WHERE (posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ?;";
 
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array("Quiz", "Activity", $userId))) {
+            if ($stmt->execute(array("Quiz", "Activity", "Exam", "Seatwork", "Assignment",$userId))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;
@@ -1384,5 +1504,174 @@ class Instructor extends DbConnection
             return null;
         }
     }
+
+    protected function getGradingSystemDB($classCode){
+        $sql = "SELECT * FROM grading_system WHERE MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $assignmentWg, $seatworkWg){
+        $sql = "UPDATE `grading_system` SET `act_wg`= ?,`quiz_wg`= ?,`exam_wg`= ?,`assignment_wg` = ?, `seatwork_wg` = ? WHERE MD5(class_code) = ?";    
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($actWg, $quizWg, $examWg, $assignmentWg, $seatworkWg, $classCode))) {
+            if ($stmt->rowCount() > 0) {
+                echo "editing";
+                // $this->updateLateGrades($classCode, $oldDeduction, $deduction);
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+        } catch (PDOException $e) {
+        echo "Error removeFilesFromDb: " . $e;
+        return false;
+        }
+    }
+
+    protected function updateLateGrades($classCode, $oldDeduction, $newDeduction){
+        if($oldDeduction < $newDeduction){
+            $sql = "UPDATE `grades` SET `grade`= (grade + $oldDeduction - $newDeduction) WHERE MD5(class_code) = ?";    
+            echo "\nMINUS\n";
+        }else{
+            $sql = "UPDATE `grades` SET `grade`= (grade - $newDeduction + $oldDeduction) WHERE MD5(class_code) = ?";  
+            echo "\PLUS\n";
+  
+        }
+
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+        if ($stmt->execute(array($classCode))) {
+            if ($stmt->rowCount() > 0) {
+                echo "error";
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+        } catch (PDOException $e) {
+        echo "Error removeFilesFromDb: " . $e;
+        return false;
+        }  
+    }
+
+    protected function getExam($postId, $classCode){
+        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, attempt FROM quiz WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuiz: " . $e;
+            return null;
+        }
+    }
+
+    protected function getExamStatusFromDb($postId, $classCode, $userId){
+        $sql = "SELECT grade, status FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuizStatusFromDb: " . $e;
+            return null;
+        }
+    }
+
+    protected function getExamResultFromDb($postId, $classCode, $userId){
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode, $userId))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error getQuizResultFromDb: " . $e;
+            return null;
+        }
+    }
+    
+        protected function deadlineAndPointsSwInDb($postID, $classCode){
+        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, points FROM seatwork WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postID, $classCode))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+
+    protected function deadlineAndPointsAssignInDb($postID, $classCode){
+        $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, points FROM assignment WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postID, $classCode))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }else{
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error in decryptQuestionId : ";
+            return null;
+        }
+    }
+
 
 }

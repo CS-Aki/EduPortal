@@ -5,8 +5,13 @@ $(document).ready(function() {
   console.log(io);
   // const socket = io('http://localhost:4000');
   // const socket = io('https://eduportal-wgrc.onrender.com');
-  const socket = io("https://eduportal-wgrc.onrender.com", {
-    transports: ["websocket"] // Ensure WebSocket transport
+   const socket = io("https://eduportal-wgrc.onrender.com", {
+      transports: ["websocket"], // Ensure WebSocket transport
+      timeout: 10000,            // Maximum time (ms) to wait for a connection
+      reconnection: true,        // Enable auto-reconnection
+      reconnectionAttempts: 5,   // Maximum attempts before giving up
+      pingInterval: 25000,       // Send a ping every 25 seconds
+      pingTimeout: 5000          // Wait 5 seconds for a pong before disconnecting
   });
 
   socket.on('connect_error', (err) => {
@@ -21,7 +26,7 @@ $(document).ready(function() {
   console.log($("#post-id").text());
   socket.on($("#post-id").text(), data=>{
     console.log("this is the ", data);
-    $('#comments').append("<div class='d-flex align-content-center mb-3' id='comment-container'><div class='me-lg-3 d-flex align-items-center justify-content-center'> <img src='"+data.image+"' style='width: 35px;' class='rounded-5'></span></div><div class=''><div class='d-flex'><p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>"+ data.name + "</p><p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>"+ data.month +" "+ data.day +"</p></div><div class='m-0 p-'><p class='black2 m-0 p-0' id='comment'>" + data.comment + "</p></div></div></div>");
+    $('#comments').append("<div class='d-flex align-content-center mb-3' id='comment-container'><div class='me-3 d-flex align-items-center justify-content-center'> <img src='"+data.image+"' style='width: 35px;' class='rounded-5'></span></div><div class=''><div class='d-flex'><p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>"+ data.name + "</p><p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>"+ data.month +" "+ data.day +"</p></div><div class='m-0 p-'><p class='black2 m-0 p-0' id='comment'>" + data.comment + "</p></div></div></div>");
 
   });
 
@@ -147,7 +152,7 @@ $(document).ready(function() {
           let day = value["month"].charAt(8) + value["month"].charAt(9);
           let comment =  value["comment"];
           comment = comment.replaceAll("\n", "<br>");  
-          $('#comments').append("<div class='d-flex align-content-center mb-3' id='comment-container'><div class='me-lg-3 d-flex align-items-center justify-content-center'> <img src='"+value["image"]+"' style='width: 35px;' class='rounded-5'></span></div><div class=''><div class='d-flex'><p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>"+ value["name"] + "</p><p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>"+ month +" "+ day +"</p></div><div class='m-0 p-'><p class='black2 m-0 p-0' id='comment'>" + comment + "</p></div></div></div>");
+          $('#comments').append("<div class='d-flex align-content-center mb-3' id='comment-container'><div class='me-3 d-flex align-items-center justify-content-center'> <img src='"+value["image"]+"' style='width: 35px;' class='rounded-5'></span></div><div class=''><div class='d-flex'><p class='green2 fw-semibold lh-sm m-0 p-0 ' id='comment-name'>"+ value["name"] + "</p><p class='black3 fw-semibold lh-sm ms-2 m-0 p-0 fs-6' id='comment-date'>"+ month +" "+ day +"</p></div><div class='m-0 p-'><p class='black2 m-0 p-0' id='comment'>" + comment + "</p></div></div></div>");
         });
 
         $('#commentArea').val("");

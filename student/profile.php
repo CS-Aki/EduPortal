@@ -9,7 +9,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); exit(); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }
@@ -25,7 +25,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Profile</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <?php require('inc/links.php'); include("student backend/includes/view-profile.php"); ?>
@@ -65,21 +65,21 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Date of Birth:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="08-24-04" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["birthdate"])) echo $_SESSION["birthdate"]; ?>" name="birthdate" id="birthdate" readonly>
                                 </div>
                                 <div class="col-lg-2 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Sex:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if($_SESSION["name"] == "Sir Victor D. Aquino") echo "Male"; else echo "Female"?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["gender"])) echo $_SESSION["gender"]; ?>" name="gender" id="gender" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Email:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" placeholder="<?php if(isset($_SESSION["email"])) echo $_SESSION["email"];?>" name="email" id="email" readonly>
                                 </div>
                                 <div class="col-lg-6 mt-2">
                                     <label class="form-label black2 mb-0 ps-2">Student Number:</label>
-                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"]; ?>" name="first_name" id="first_name_inp" readonly>
+                                    <input type="text" class="form-control black3 fs-5 shadow-elevation-dark-1 rounded-5 py-2 px-3" rows="3" placeholder="<?php if(isset($_SESSION["id-code"])) echo $_SESSION["id-code"]; ?>" name="staff-code" id="staff-code" readonly>
                                 </div>
                             </div>
                             <div class="row">

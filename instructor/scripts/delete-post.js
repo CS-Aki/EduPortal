@@ -81,7 +81,7 @@ $(document).ready(function () {
         });
         // console.log(type);
         $.ajax({
-            url: 'includes/delete-post.php',  // PHP script to handle form submission
+            url: 'includes/delete-post.php',  
             type: 'POST',
             data: {
                 files : files,
@@ -94,7 +94,7 @@ $(document).ready(function () {
                 if($(".post-id").text() != "" || $(".post-id").text() != null){
                     Swal.fire({
                         title: 'Deleted!',
-                        text: "Your file has been successfully deleted. Going Back To Class",
+                        text: "Your post has been successfully deleted. Going Back To Class",
                         icon: 'success',
                         allowOutsideClick: false,
                         allowEscapeKey: false,
@@ -106,10 +106,9 @@ $(document).ready(function () {
                     }, 3000);
   
                 }else{
-                     
                     Swal.fire({
                         title: 'Deleted!',
-                        text: 'Your file has been successfully deleted.',
+                        text: 'Deleted Successfully!.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     });

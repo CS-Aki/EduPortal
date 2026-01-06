@@ -17,12 +17,12 @@ class Staff extends DbConnection{
         }
     }
 
-    protected function getStaffDetailInDb($userId, $userName){
-        $sql = "SELECT user_id, name, email, status, created, birthdate, gender, address, image FROM users WHERE user_category = ? AND user_id = ? AND name = ?";
+    protected function getStaffDetailInDb($name, $email){
+        $sql = "SELECT user_id, name, email, status, created, birthdate, gender, address, image FROM users WHERE user_category = ? AND email = ? AND name = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute([2, $userId, $userName])) {
+            if ($stmt->execute([2, $email, $name])) {
                 return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return null;
@@ -49,5 +49,43 @@ class Staff extends DbConnection{
             echo "Error inside staff Model (updateStaffDetails): " . $e->getMessage();
             return null;
         }
+    }
+
+    protected function fetchStudentProfile($name, $email){
+        $sql = "SELECT user_id FROM users WHERE name = ? AND email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($name, $email))) {
+                // Add conditional statement if rowCount == 0 then call a function
+                return $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return null;
+        }
+        return null;
+    }
+
+    protected function updateProfilePicture($userId, $profile){
+        $profile = "../profiles/" . $profile;
+        $sql = "UPDATE users SET image = ? WHERE user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($profile, $userId))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: ";
+            return false;
+        }
+        return false;
     }
 }

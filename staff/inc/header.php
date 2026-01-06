@@ -80,7 +80,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <div class="d-flex align-items-center">
         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="me-2 bi bi-person-circle fs-1 icon"></i>
+        <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" style="width: 40px;" class="me-2 bi me-2 rounded pill" id="smolImg"></span> 
+
+            <!-- <i class="me-2 bi bi-person-circle fs-1 icon"></i> -->
         </a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>

@@ -1,6 +1,18 @@
 <?php
 if (session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
+        // case 4: header("Location: student/student-dashboard.php"); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +21,7 @@ if (session_id() === "") session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Quiz Result</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
@@ -143,21 +155,23 @@ if (session_id() === "") session_start();
                                 <?php
                              $j = 0;
                              $questionTitle = "";
-                             $questionCount = 1;
+                             $questionCount = 0;
                              $choiceCount = 1;
                              $correct = 0;
-                             
+                                
                              // echo count($quizDetails);
-                            // echo var_dump($result);
+                            // echo var_dump($quizDetails);
                             // echo $quizDetails[0]["question_id"];
                             // echo "<br>" . $result[2]["answer_text"];
                             // echo "<br>" .  $numberOfCorrect;
+
                             for ($i = 0; $i < count($quizDetails); $i++) {
                                 if ($i == 0 || $questionTitle != $quizDetails[$i]["question_text"]) {
                                     if ($i > 0) {
-                                        echo ($correct != 1) 
-                                            ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
-                                            : "</div>";
+                                        // echo ($correct != 1) 
+                                        //     ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
+                                        //     : "</div>";
+                                        echo "</div>";
                                         echo "</div>";
                                     }
                             
@@ -223,9 +237,10 @@ if (session_id() === "") session_start();
                             
                             // Close the last question block
                             if (count($quizDetails) > 0) {
-                                echo ($correct != 1) 
-                                    ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
-                                    : "</div>";
+                                // echo ($correct != 1) 
+                                //     ? "<label class='fw-semibold green2'>Answer Key: {$quizDetails[$i - 1]['ans_key']}</label></div>"
+                                //     : "</div>";
+                                echo "</div>";
                                 echo "</div>";
                             }
                             

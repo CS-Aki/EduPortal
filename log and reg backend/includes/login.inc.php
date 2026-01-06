@@ -8,7 +8,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     if(isset($_POST["loginBtn"])){
         $email = $_POST["email"];
         $password = $_POST["password"];
-
+        $email = trim($email);
+        $password = trim($password);
     //  echo "<div class='alert alert-danger' role='alert'>";
     //  echo "<span>{$email}, {$password}</span>";
     //  echo "</div>";

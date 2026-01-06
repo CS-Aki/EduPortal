@@ -250,7 +250,7 @@ class InstructorController extends Instructor
     public function removeQuiz($postId){
         $result = $this->removeQuizInDb($postId);
         if($result == false){
-            echo "DELETION FAILED";
+            // echo "DELETION FAILED";
         }
     }
 
@@ -322,6 +322,15 @@ class InstructorController extends Instructor
     public function removeActivity($postId){
         $this->removeActivityInDb($postId);
     }
+    
+    public function removeSeatwork($postId){
+        $this->removeSeatworkInDb($postId);
+    }
+    
+    public function removeAssignment($postId){
+        $this->removeAssignmentInDb($postId);
+    }
+
 
     public function removeMaterial($postId){
         $this->removeMaterialInDb($postId);
@@ -334,4 +343,35 @@ class InstructorController extends Instructor
     public function getAllQuizAndAct($userId){
         return $this->getAllQuizAndActInDb($userId);
     }
+
+    public function getGradingSystem($classCode){
+        return $this->getGradingSystemDB($classCode);
+    }
+
+    public function editGradeSystem($classCode, $actWg, $quizWg, $examWg, $deduction, $oldDeduction){
+        return $this->editGradeSystemDB($classCode, $actWg, $quizWg, $examWg, $deduction, $oldDeduction);
+    }
+
+    public function getExamContent($postId, $classCode){
+        return $this->getExam($postId, $classCode);
+    }
+
+    public function getExamStatus($postId, $classCode, $userId){
+        $result = $this->getExamStatusFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getExamResult($postId, $classCode, $userId){
+        $result = $this->getExamResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+    
+    public function deadlineAndPointsSw($postID, $classCode){
+        return $this->deadlineAndPointsSwInDb($postID, $classCode);
+    }
+
+    public function deadlineAndPointsAssign($postID, $classCode){
+        return $this->deadlineAndPointsAssignInDb($postID, $classCode);
+    }
+
 }

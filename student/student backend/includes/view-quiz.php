@@ -11,14 +11,14 @@ $classCode = $_GET["class"];
 
 $stdController = new StudentController();
 $postDetails = $stdController->getPostDetails($postId, $classCode);
-$quizDetails = $stdController->getQuizDetails($postId, $classCode);
+$quizDetails1 = $stdController->getQuizDetails($postId, $classCode);
+$quizDetails = $stdController->getQuizDetailsTemp($postId, $classCode);
 $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); // Checks answer table if student already done with the quiz, 
                                                                                      //will add checker for attempt no. and add attempt number col on answer table
 $temp = $stdController->getTotalItems($postId);                                             
 $numberOfItems = $temp[0]["totalItems"];
 $score = 0;
 $totalPoints = 0;            
-
 
 $time = $quizDetails[0]["deadline_time"];
 $dateTime = DateTime::createFromFormat('H:i:s', $time);
@@ -31,7 +31,6 @@ $formattedTime = $dateTime->format('h:i A');
 // $formattedDeadline = $date->format('F d, Y');
 // $formattedDeadline.substr(0, 3);
 
-// echo var_dump($quizDetails); 
 
 // $result = "";
 // Viewing the quiz result
@@ -41,6 +40,7 @@ if(isset($_GET["attempt"])){
     // echo "user id " . $_SESSION["id"] . "<br>";
     // echo "ATTEMPT " . $_GET["attempt"] . "<br>";
     $result = $stdController->getQuizResultFormat($postId, $classCode, $_SESSION["id"], $_GET["attempt"]);
+    // echo var_dump($result); 
     $numberOfCorrect = 0;
     // $j = 0;
     if($result != null){
@@ -53,7 +53,7 @@ if(isset($_GET["attempt"])){
 // echo var_dump($result);
 if($submittedQuiz != null){
     if($result != null) $numberOfItems = count($submittedQuiz) / ($_GET["attempt"]);
-    else $numberOfItems = count($submittedQuiz) / ($_GET["attempt"] - 1);
+    // else $numberOfItems = count($submittedQuiz) / ($_GET["attempt"] - 1);
 }
 
 

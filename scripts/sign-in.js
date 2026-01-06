@@ -62,7 +62,12 @@ $(document).ready(function() {
                     // $(".form-message").text("");
                     return;
                 }else{
-                    $(".form-message").html(response);
+                    Swal.fire({
+                        title: 'Invalid!',
+                        text: response,
+                        icon: 'error'
+                    });   
+                    // $(".form-message").html(response);
                 }
             },
             error: function(xhr, status, error) {

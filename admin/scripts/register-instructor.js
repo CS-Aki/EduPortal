@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    console.log("test");
     $('#signUpModal').on('hidden.bs.modal', function () {
         $("#signUpForm")[0].reset();
         $("#profModalMsg").empty(); // Clear any messages
@@ -16,8 +16,8 @@ $(document).ready(function() {
             birthdate: $("#date_of_birth").val(),
             gender: $("#gender").val(),
             address: $("#address").val(),
-            password: $("#password").val(),
-            repeatPass: $("#repeat_pass").val()
+            password: $("#password1").val(),
+            repeatPass: $("#repeat_pass1").val()
         };
 
             $.ajax({
@@ -25,14 +25,23 @@ $(document).ready(function() {
                 type: "POST",
                 data: formData,
                 
+                
                 success: function(response) {
+                    console.log($("#password").val());
+                    console.log($("#repeat_pass").val());
                     // console.log("inside");
                     response = response.trim();
-                    console.table(response);     
                     if(response === "Registration Success"){
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'New Instructor Account Created!',
+                            icon: 'success'
+                        });
+
                         console.log("inside success");
-                        $("#registerModalMsg").empty();
-                        $("#registerModalMsg").append("<div class='alert alert-success' role='alert'><span>Registration Success</span></div>");
+                        // $("#registerModalMsg").empty();
+                        // $("#registerModalMsg").append("<div class='alert alert-success' role='alert'><span>Registration Success</span></div>");
                         // Clear the form fields
                        
                         $("#signUpForm")[0].reset();
@@ -81,12 +90,21 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        $("#registerModalMsg").empty();
-                        $("#registerModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response,
+                            icon: 'error'
+                        });
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error Encountered!',
+                        text: error,
+                        icon: 'error'
+                    });
+
                     console.log("error here");
                     console.log(error);
                 }

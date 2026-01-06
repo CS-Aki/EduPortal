@@ -43,7 +43,8 @@ class ClassRm extends DbConnection
 
     protected function getClasses($userId)
     {
-        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.status = ?";
+        // echo $userId;
+        $sql = "SELECT classes.class_code, classes.class_name, classes.class_teacher, classes.class_schedule from join_class INNER JOIN classes ON join_class.class_code = classes.class_code INNER JOIN users ON users.user_id = join_class.user_id WHERE join_class.user_id = ? AND classes.class_status = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute(array($userId, "Active"));
         $listOfClass = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -508,7 +509,7 @@ class ClassRm extends DbConnection
             return false;
         }
     }
-
+    // keep i mind
     protected function fetchSubmissions($classCode, $userId){
         $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ? AND files.user_id = ?";
         $stmt = $this->connect()->prepare($sql);
@@ -519,7 +520,50 @@ class ClassRm extends DbConnection
                     return $result = null;
                 }
                 $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: fetchSubmissions " . $e;
+            return null;
+        }
+    }
 
+    protected function fetchSubmissionSw($classCode, $userId){
+        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ? AND files.user_id = ? AND posts.content_type = ? ORDER BY files.post_id";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, "4", $userId, "Seatwork"))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: fetchSubmissions " . $e;
+            return null;
+        }
+    }
+
+    protected function fetchSubmissionAssign($classCode, $userId){
+    
+        $sql = "SELECT files.file_name, posts.title, posts.post_id, files.created FROM `files` INNER JOIN posts ON posts.post_id = files.post_id WHERE md5(files.class_code) = ? AND files.user_category = ? AND files.user_id = ? AND posts.content_type = ? ORDER BY files.post_id";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode, "4", $userId, "Assignment"))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = null;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // echo var_dump($result);
                 return $result;
             } else {
                 return null;
@@ -531,7 +575,44 @@ class ClassRm extends DbConnection
     }
 
     protected function fetchQuizDetails($postId, $classCode){
-        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key, quiz.deadline_date, quiz.deadline_time FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ? ORDER BY questions.question_id";
+        $sql = "SELECT 
+    questions.question_id, 
+    questions.question_type, 
+    questions.question_text, 
+    questions.points, 
+    GROUP_CONCAT(options.option_text ORDER BY options.option_text SEPARATOR ', ') AS option_text,
+    posts.title, 
+    questions.ans_key, 
+    quiz.deadline_date, 
+    quiz.deadline_time 
+FROM quiz 
+LEFT JOIN questions ON quiz.post_id = questions.post_id 
+LEFT JOIN options ON options.question_id = questions.question_id 
+LEFT JOIN posts ON posts.post_id = quiz.post_id 
+WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ? 
+GROUP BY questions.question_id, questions.question_type, questions.question_text, questions.points, posts.title, questions.ans_key, quiz.deadline_date, quiz.deadline_time 
+ORDER BY questions.question_id;";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return $result = $this->fetchQuizTitle($postId, $classCode);;
+                }
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error fetchQuizDetails: " . $e;
+            return null;
+        }
+    }
+
+    protected function fetchQuizDetailsTemp($postId, $classCode){
+        $sql = "SELECT questions.question_id, questions.question_type, questions.question_text, questions.points, options.option_text, posts.title, questions.ans_key, quiz.deadline_date, quiz.deadline_time FROM quiz LEFT JOIN questions ON quiz.post_id = questions.post_id LEFT JOIN options ON options.question_id = questions.question_id LEFT JOIN posts ON posts.post_id = quiz.post_id WHERE md5(quiz.post_id) = ? AND md5(quiz.class_code) = ? ORDER BY questions.question_id ";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -640,10 +721,27 @@ class ClassRm extends DbConnection
     }
 
     protected function getQuizInClass($classCode){
-        $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, quiz.starting_date, quiz.starting_time, quiz.deadline_date, quiz.deadline_time, quiz.status FROM `posts` INNER JOIN quiz ON quiz.post_id = posts.post_id WHERE posts.class_code = ? AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW();";
+        // echo $classCode;
+        $sql = "SELECT posts.post_id, 
+                       TIME(posts.created_at) AS 'time', 
+                       DATE(posts.created_at) AS 'month', 
+                       posts.title, 
+                       posts.content_type, 
+                       posts.content, 
+                       quiz.starting_date, 
+                       quiz.starting_time, 
+                       quiz.deadline_date, 
+                       quiz.deadline_time, 
+                       quiz.status 
+                FROM posts 
+                INNER JOIN quiz ON quiz.post_id = posts.post_id 
+                WHERE posts.class_code = ? 
+                      AND quiz.status = ?
+                      AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= CONVERT_TZ(NOW(), '+00:00', '+08:00');
+                ";
         $stmt = $this->connect()->prepare($sql);
 
-        $stmt->execute([$classCode]);
+        $stmt->execute([$classCode, "Active"]);
 
         if ($stmt->rowCount() == 0) {
             return null;
@@ -653,6 +751,10 @@ class ClassRm extends DbConnection
     }
 
     protected function getActsInClass($classCode){
+        $sql = "SET time_zone = '+08:00';";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([]);
+
         $sql = "SELECT posts.post_id, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', posts.title, posts.content_type, posts.content, activity.starting_date, activity.starting_time, activity.deadline_date, activity.deadline_time, activity.status FROM `posts` INNER JOIN activity ON activity.post_id = posts.post_id WHERE posts.class_code = ? AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW();";
         $stmt = $this->connect()->prepare($sql);
 
@@ -713,7 +815,7 @@ class ClassRm extends DbConnection
         // echo "user id " . $userId . "<br>";
         // echo "ATTEMPT " . $attempt . "<br>";
 
-        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt, answers.question_id FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ? AND answers.attempt = ?";
+        $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt, answers.question_id FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ? AND answers.attempt = ? ORDER BY questions.question_id";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -754,13 +856,21 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status){
+    protected function insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type){
+
+        if($status == "Late"){
+            echo "\n\nORIGINAL GRADE " . $grade . "\n";
+            $gradeSys = $this->getGradingSystemDB($classCode);
+            $grade -= $gradeSys[0]["deduction"];
+            echo "\DEDUCTED GRADE DUE TO LATE SUBMISSION " . $grade . "\n";
+        }
+
         // INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`) VALUES ()
         $sql = "INSERT INTO `grades`(`user_id`, `post_id`, `class_code`, `content_type`, `grade`, `status`) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array($userId, $postId, $classCode, $contentType, $grade, $status))) {
+            if ($stmt->execute(array($userId, $postId, $classCode, $type, $grade, $status))) {
                 if ($stmt->rowCount() == 0) {
                     return false;
                 }
@@ -772,6 +882,38 @@ class ClassRm extends DbConnection
         } catch (PDOException $e) {
             echo "Error insertGradeInDb: " . $e;
             return false;
+        }
+    }
+
+    protected function getGradingSystemDB($classCode){
+        $sql = "SELECT * FROM grading_system WHERE class_code = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($classCode))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getAllGradingSystemDB($userId){
+        $sql = "SELECT gr.act_wg, gr.quiz_wg, gr.exam_wg, gr.deduction, gr.class_code, c.class_name FROM grading_system gr INNER JOIN classes c ON c.class_code = gr.class_code INNER JOIN join_class jc ON c.class_code = jc.class_code WHERE jc.user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
         }
     }
 
@@ -797,6 +939,54 @@ class ClassRm extends DbConnection
     protected function getActContent($postId, $classCode){
         // echo $postId ."<br>" . $classCode;
         $sql = "SELECT points, deadline_date, deadline_time, starting_date, starting_time FROM activity WHERE MD5(activity.post_id) = ? AND MD5(activity.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                    // return $result = $this->fetchNoComment($postId, $classCode);
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getSeatworkContent($postId, $classCode){
+        // echo $postId ."<br>" . $classCode;
+        $sql = "SELECT points, deadline_date, deadline_time, starting_date, starting_time FROM seatwork WHERE MD5(seatwork.post_id) = ? AND MD5(seatwork.class_code) = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($postId, $classCode))) {
+                if ($stmt->rowCount() == 0) {
+                    return null;
+                    // return $result = $this->fetchNoComment($postId, $classCode);
+                }
+                // Add conditional statement if rowCount == 0 then call a function
+                $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //echo var_dump($result);
+                return $result;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    protected function getAssignContent($postId, $classCode){
+        // echo $postId ."<br>" . $classCode;
+        $sql = "SELECT points, deadline_date, deadline_time, starting_date, starting_time FROM assignment WHERE MD5(assignment.post_id) = ? AND MD5(assignment.class_code) = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
@@ -849,31 +1039,388 @@ class ClassRm extends DbConnection
         }
     }
 
-    protected function getAllActsAndQuizInDb($userId){
-        $sql = "SELECT join_class.class_code, activity.starting_date AS 'act start date', activity.starting_time AS 'act start time', activity.deadline_date AS 'act deadline date', activity.deadline_time AS 'act deadline time', quiz.starting_date AS 'quiz start date', quiz.starting_time AS 'quiz start time', quiz.deadline_date AS 'quiz deadline date', quiz.deadline_time AS 'quiz deadline time', posts.post_id AS 'post id', posts.content_type AS 'content type', posts.title AS 'post title' FROM posts
-                INNER JOIN join_class 
-                ON posts.class_code = join_class.class_code
-                INNER JOIN users 
-                ON users.user_id = join_class.user_id
-                LEFT JOIN activity 
-                ON posts.post_id = activity.post_id  
-                LEFT JOIN quiz 
-                ON posts.post_id = quiz.post_id          
-                WHERE (posts.content_type = ? OR posts.content_type = ?) AND users.user_id = ? 
-                AND ((quiz.starting_date IS NOT NULL AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW())
-                OR (activity.starting_date IS NOT NULL AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW()));";
-
+    protected function getGradesSwInDb($userId, $classCode){
+        $sql = "SELECT post_id, grade, status FROM grades WHERE user_id = ? AND class_code = ? AND content_type = ?";
         $stmt = $this->connect()->prepare($sql);
 
         try {
-            if ($stmt->execute(array("Quiz", "Activity", $userId))) {
+            if ($stmt->execute(array($userId, $classCode, "Seatwork"))) {
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                return null;
+            } else {                return null;
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             return null;
         }
     }
+
+
+    protected function getGradesAssignInDb($userId, $classCode){
+        $sql = "SELECT post_id, grade, status FROM grades WHERE user_id = ? AND class_code = ? AND content_type = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        try {
+            if ($stmt->execute(array($userId, $classCode, "Assignment"))) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {                return null;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
+    protected function getAllActsAndQuizInDb($userId){
+            $sql = "SELECT 
+                        join_class.class_code, 
+                        activity.starting_date AS 'act start date', 
+                        activity.starting_time AS 'act start time', 
+                        activity.deadline_date AS 'act deadline date', 
+                        activity.deadline_time AS 'act deadline time', 
+                        quiz.starting_date AS 'quiz start date', 
+                        quiz.starting_time AS 'quiz start time', 
+                        quiz.deadline_date AS 'quiz deadline date', 
+                        quiz.deadline_time AS 'quiz deadline time', 
+                        seatwork.starting_date AS 'seatwork start date', 
+                        seatwork.starting_time AS 'seatwork start time', 
+                        seatwork.deadline_date AS 'seatwork deadline date', 
+                        seatwork.deadline_time AS 'seatwork deadline time', 
+                        assignment.starting_date AS 'assignment start date', 
+                        assignment.starting_time AS 'assignment start time', 
+                        assignment.deadline_date AS 'assignment deadline date', 
+                        assignment.deadline_time AS 'assignment deadline time', 
+                        posts.post_id AS 'post id', 
+                        posts.content_type AS 'content type', 
+                        posts.title AS 'post title' 
+                    FROM posts
+                    INNER JOIN join_class 
+                        ON posts.class_code = join_class.class_code
+                    INNER JOIN users 
+                        ON users.user_id = join_class.user_id
+                    LEFT JOIN activity 
+                        ON posts.post_id = activity.post_id  
+                    LEFT JOIN quiz 
+                        ON posts.post_id = quiz.post_id       
+                    LEFT JOIN seatwork 
+                        ON posts.post_id = seatwork.post_id 
+                    LEFT JOIN assignment 
+                        ON posts.post_id = assignment.post_id    
+                    WHERE (posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ? OR posts.content_type = ?) 
+                        AND users.user_id = ?
+                        AND (quiz.status = ? OR quiz.status IS NULL OR posts.content_type NOT IN ('Quiz'))
+                        AND (
+                            (quiz.starting_date IS NOT NULL AND TIMESTAMP(quiz.starting_date, quiz.starting_time) <= NOW())
+                            OR (activity.starting_date IS NOT NULL AND TIMESTAMP(activity.starting_date, activity.starting_time) <= NOW())
+                            OR (seatwork.starting_date IS NOT NULL AND TIMESTAMP(seatwork.starting_date, seatwork.starting_time) <= NOW())
+                            OR (assignment.starting_date IS NOT NULL AND TIMESTAMP(assignment.starting_date, assignment.starting_time) <= NOW())
+                        );
+                    ";
+
+            $stmt = $this->connect()->prepare($sql);
+
+            try {
+                $params = array("Quiz", "Activity", "Exam", "Seatwork", "Assignment", $userId, "Active");
+                $stmt->execute($params);
+
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo "SQL Error: " . $e->getMessage();
+                return null;
+            }
+        }
+
+        protected function listOfExamsDb($classCode){
+            $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE classes.class_code = ? AND visibility = ? AND posts.content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($classCode, "Visible", "Exam"))) {
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {                return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return null;
+            }
+        }
+
+        
+
+        protected function listOfSeatworkDb($classCode){
+            $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE classes.class_code = ? AND visibility = ? AND posts.content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($classCode, "Visible", "Seatwork"))) {
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {                return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return null;
+            }
+        }
+
+        protected function listOfAssignmentDb($classCode){
+            $sql = "SELECT posts.post_id, posts.class_code, posts.prof_name, posts.title, posts.content_type, posts.content, posts.visibility, TIME(posts.created_at) as 'time', DATE(posts.created_at) as 'month', classes.class_name, classes.class_schedule FROM posts INNER JOIN classes ON classes.class_code = posts.class_code WHERE classes.class_code = ? AND visibility = ? AND posts.content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($classCode, "Visible", "Assignment"))) {
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {                return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return null;
+            }
+        }
+
+        protected function getExam($postId, $classCode){
+            $sql = "SELECT starting_date, starting_time, deadline_date, deadline_time, attempt FROM quiz WHERE MD5(post_id) = ? AND MD5(class_code) = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($postId, $classCode))) {
+                    if ($stmt->rowCount() == 0) {
+                        return null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getExam: " . $e;
+                return null;
+            }
+        }
+
+        protected function getExamStatusFromDb($postId, $classCode, $userId){
+            $sql = "SELECT grade, status FROM grades WHERE MD5(post_id) = ? AND MD5(class_code) = ? AND user_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($postId, $classCode, $userId))) {
+                    if ($stmt->rowCount() == 0) {
+                        return $result = null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getExamStatusFromDb: " . $e;
+                return null;
+            }
+        }
+
+        protected function getExamResultFromDb($postId, $classCode, $userId){
+            $sql = "SELECT answers.user_id, answers.status, questions.points AS 'score', answers.answer_text, answers.attempt FROM `answers` INNER JOIN questions ON answers.question_id = questions.question_id WHERE md5(answers.post_id) = ? AND md5(answers.class_code) = ? AND answers.user_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($postId, $classCode, $userId))) {
+                    if ($stmt->rowCount() == 0) {
+                        return $result = null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getExamResultFromDb: " . $e;
+                return null;
+            }
+        }
+
+        // same as getAnsweredQuizIndb
+        protected function getAnsweredExamsInDb($classCode, $userId){
+            // SELECT DISTINCT answers.post_id, answers.created FROM `answers` LEFT JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = 15 AND quiz.class_code = "3fCPK434" GROUP BY answers.post_id ORDER BY answers.post_id
+            $sql = "SELECT DISTINCT answers.post_id, answers.created FROM `answers` INNER JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = ? AND MD5(quiz.class_code) = ? GROUP BY answers.post_id ORDER BY answers.post_id";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($userId, $classCode))) {
+                    if ($stmt->rowCount() == 0) {
+                        return $result = null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getAnsweredExamsInDb: " . $e;
+                return null;
+            }
+        }
+
+        protected function getAnsweredAssignInDb($classCode, $userId){
+            // SELECT DISTINCT answers.post_id, answers.created FROM `answers` LEFT JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = 15 AND quiz.class_code = "3fCPK434" GROUP BY answers.post_id ORDER BY answers.post_id
+            $sql = "SELECT DISTINCT answers.post_id, answers.created FROM `answers` INNER JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = ? AND MD5(quiz.class_code) = ? GROUP BY answers.post_id ORDER BY answers.post_id";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($userId, $classCode))) {
+                    if ($stmt->rowCount() == 0) {
+                        return $result = null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getAnsweredExamsInDb: " . $e;
+                return null;
+            }
+        }
+
+        protected function getAnsweredSwInDb($classCode, $userId){
+            // SELECT DISTINCT answers.post_id, answers.created FROM `answers` LEFT JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = 15 AND quiz.class_code = "3fCPK434" GROUP BY answers.post_id ORDER BY answers.post_id
+            $sql = "SELECT DISTINCT answers.post_id, answers.created FROM `answers` INNER JOIN quiz ON quiz.class_code = answers.class_code WHERE answers.user_id = ? AND MD5(quiz.class_code) = ? GROUP BY answers.post_id ORDER BY answers.post_id";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+                if ($stmt->execute(array($userId, $classCode))) {
+                    if ($stmt->rowCount() == 0) {
+                        return $result = null;
+                    }
+                    $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                    return $result;
+                } else {
+                    return null;
+                }
+            } catch (PDOException $e) {
+                echo "Error getAnsweredExamsInDb: " . $e;
+                return null;
+            }
+        }
+
+        protected function getAllGradesDb(){
+            $sql = "SELECT MAX(grade) as grade, content_type, post_id, user_id, class_code FROM `grades` WHERE user_id = ? GROUP BY post_id ORDER BY grade DESC";    
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+            if ($stmt->execute(array($_SESSION["user_id"]))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+            echo "Error getAllGradesDb: " . $e;
+            return null;
+            }
+        }
+
+        protected function totalActCountDb(){
+            $sql = "SELECT 
+                    jc.user_id, 
+                    p.class_code, 
+                    p.content_type, 
+                    COUNT(p.post_id) AS total_posts
+                FROM 
+                    join_class jc
+                JOIN 
+                    posts p ON jc.class_code = p.class_code
+                WHERE 
+                    jc.user_id = ? AND
+                    p.content_type <> 'material' 
+                GROUP BY 
+                    jc.user_id, 
+                    p.class_code, 
+                    p.content_type
+                ORDER BY 
+                    jc.user_id, 
+                    p.class_code, 
+                    p.content_type;";
+                    
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+            if ($stmt->execute(array($_SESSION["user_id"]))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+            echo "Error getAllGradesDb: " . $e;
+            return null;
+            }
+        }
+        
+        protected function getExamGradesDb($postId, $userId){
+
+            $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+    
+            try {
+            if ($stmt->execute(array($postId, $userId, "Exam"))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+                echo "Error getExamGradesDb: " . $e;
+                return null;
+            }
+        }
+        
+        protected function getQuizGradesDb($postId, $userId){
+            $sql = "SELECT grade, content_type, post_id, user_id FROM `grades` WHERE MD5(post_id) = ? AND user_id = ? AND content_type = ?";
+            $stmt = $this->connect()->prepare($sql);
+        
+            try {
+            if ($stmt->execute(array($postId, $userId, "Quiz"))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+                echo "Error getExamGradesDb: " . $e;
+                return null;
+            }
+        }
+        
+        protected function getTotalItemsDb($postId){
+            $sql = "SELECT count(*) as 'total-items' FROM questions WHERE MD5(post_id) = ?";
+            $stmt = $this->connect()->prepare($sql);
+        
+            try {
+            if ($stmt->execute(array($postId))) {
+                if ($stmt->rowCount() > 0) {
+                    return $instList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return null;
+            } else {
+                return null;
+            }
+            } catch (PDOException $e) {
+                echo "Error getExamGradesDb: " . $e;
+                return null;
+            }
+        }
+        
 }

@@ -9,7 +9,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
         // case 4: header("Location: student/student-dashboard.php"); break;
     }
@@ -25,7 +25,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Submitted Works</title>
     <?php require('inc/links.php'); include("student backend/includes/view-submission.php"); ?>
 </head>
 <body>
@@ -55,19 +55,18 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </nav>
 
-                <!-- Activities Section -->
-                <div class="container mt-4 px-lg-5 px-sm-2">
+            <!-- Activities Section -->
+            <div class="container mt-4 px-lg-5 px-sm-2">
                     <div class="mt-2">
                         <div class="d-flex align-items-center justify-content-between">
                             <h1 class="h-font green1 me-2 sub-title">Activities</h1>
                             <div class="line-h"></div>
                         </div>
                         <div>
-                            <?php 
+                        <?php
                             if ($activity != null) {
-                                $j = 0;
-                                // echo var_dump($submissions);
-                                // echo var_dump($activity);
+                                $submissionPostIds = $submissions != null ? array_column($submissions, 'post_id') : [];
+
                                 foreach ($activity as $index => $act) {
                                     if ($act['content_type'] === 'Activity') {
                                         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
@@ -90,7 +89,6 @@ if(isset($_SESSION["user_category"])){
                                                         </div>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-center">
-                                                        <!-- <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p> -->
                                                         <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($act["post_id"]); ?>'>
                                                             <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
                                                         </a>
@@ -98,52 +96,62 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                             </button>
                                             <div class="collapse mb-2" id="activity-collapse-<?php echo $index; ?>">
-                                                <div class='d-flex flex-column align-items-end justify-content-end' >
-                                                            <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
-                                                                <div class='mt-0 pt-0 d-flex' id='card-container'>
-                                                                    <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
-                                                                        <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
-                                                                        <p class='black3 fs-6 lh-sm'><?php echo $act["content"]; ?></p>
-                                                                    </div>
-                                                                    <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
-                                                                        <div class='mt-3'>
-                                                                        <?php if($submissions != null){ 
-                                                                                if($j < count($submissions) && $act["post_id"] == $submissions[$j]["post_id"]){ 
-                                                                                $date = new DateTime($submissions[$j]["created"]);
-                                                                                $formattedDate = $date->format('F d, Y');
-                                                                        ?>
-                                                                        <i class='bi bi-check-circle green2 fs-1'></i>
-                                                                        <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
-                                                                        <?php if($actGrades != null){ foreach($actGrades as $grade){
-                                                                                if($grade["post_id"] == $act["post_id"]){
-                                                                                    echo "<p class='fs-6 green2 fw-bold mb-0' id='material-status'>Grade: {$grade["grade"]}%</p>";
-                                                                                }else{
-                                                                                    echo '<p class="fs-6 green2 fw-bold mb-0" id="material-status">Not Yet Graded</p>';
+                                                <div class='d-flex flex-column align-items-end justify-content-end'>
+                                                    <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                        <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                            <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
+                                                                <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
+                                                                <p class='black3 fs-6 lh-sm'><?php echo $act["content"]; ?></p>
+                                                            </div>
+                                                            <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
+                                                                <div class='mt-3'>
+                                                                    <?php
+                                                                    if ($submissions != null) {
+                                                                        if (in_array($act["post_id"], $submissionPostIds)) {
+                                                                            foreach ($submissions as $submission) {
+                                                                                if ($submission["post_id"] == $act["post_id"]) {
+                                                                                    $date = new DateTime($submission["created"]);
+                                                                                    $formattedDate = $date->format('F d, Y');
+                                                                                    ?>
+                                                                                    <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                    <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                                    <?php if ($actGrades != null) {
+                                                                                        foreach ($actGrades as $grade) {
+                                                                                            if ($grade["post_id"] == $act["post_id"]) {
+                                                                                                echo "<p class='fs-6 green2 fw-bold mb-0' id='material-status'>Grade: {$grade["grade"]}%</p>";
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                    } ?>
+                                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate; ?></p>
+                                                                                    <?php
+                                                                                    break; 
                                                                                 }
-                                                                            } 
-                                                                        }?>
-                                                                        <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
-                                                                        <?php } else{   ?>
+                                                                            }
+                                                                        } else {
+                                                                            ?>
                                                                             <i class="bi bi-three-dots green2 fs-1"></i>
                                                                             <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
                                                                             <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
-                                                                <?php           }
-                                                                        }else {?>
+                                                                            <?php
+                                                                        }
+                                                                    } else {
+                                                                        ?>
                                                                         <i class="bi bi-three-dots green2 fs-1"></i>
                                                                         <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
                                                                         <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
-                                                                        <!-- <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $month ." ". $day .", " .$year; ?></p>    -->
-
-                                                                        <?php } ?>
-                                                                        </div>                                           
-                                                                    </div>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
                                         <?php
-                                    $j++; }
+                                    }
                                 }
                             }
                             ?>
@@ -162,10 +170,14 @@ if(isset($_SESSION["user_category"])){
                             // echo "<pre> " . print_r($answeredQuiz) . "</pre>";
                             if ($quiz != null) { 
                                 $j = 0;
+                                $submissionPostIds = $answeredQuiz != null ? array_column($answeredQuiz, 'post_id') : [];
+
                                 // echo var_dump($quiz);
                                 foreach ($quiz as $index => $qz) {
                                     
                                     if ($qz['content_type'] === 'Quiz') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
                                         // $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
                                         // $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
                                         // $day = $post[$i]["month"][8] . "" . $post[$i]["month"][9];
@@ -206,25 +218,29 @@ if(isset($_SESSION["user_category"])){
                                                                 </div>
                                                                 <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
                                                                     <div class='mt-3'>
-                                                                        <?php if($answeredQuiz != null) {?>
-                                                                        <?php if($j < count($answeredQuiz) && $qz["post_id"] == $answeredQuiz[$j]["post_id"]){ 
-                                                                                $date = new DateTime($answeredQuiz[$j]["created"]);
-                                                                                $formattedDate = $date->format('F d, Y');
-                                                                        ?>
-                                                                            <i class='bi bi-check-circle green2 fs-1'></i>
-                                                                            <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
-                                                                            <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
-                                                                            <?php } else {?>
-                                                                            <i class="bi bi-three-dots green2 fs-1"></i>
-                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
-                                                                            <!-- <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $month ." ". $day .", " .$year; ?></p>    -->
-                                                                        <?php } ?> 
-                                                                      <?php }else{ ?>
-                                                                            <i class="bi bi-three-dots green2 fs-1"></i>
-                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
-                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
-                                                                        <?php }?>
+                                                                        <?php if($answeredQuiz != null) { ?>
+                                                                        <?php 
+                                                                            if (in_array($qz["post_id"], $submissionPostIds)) {
+                                                                                    foreach($answeredQuiz as $ansQuiz){
+                                                                                        if($qz["post_id"] == $ansQuiz["post_id"]){ 
+                                                                                            $date = new DateTime($ansQuiz["created"]);
+                                                                                            $formattedDate = $date->format('F d, Y');
+                                                                                            ?>
+                                                                                    <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                    <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
+                                                                                <?php   }
+                                                                                    } 
+                                                                            }else{ ?>
+                                                                                    <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                                    <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                                    <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                        <?php   }   
+                                                                         }else{ ?>
+                                                                                 <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                                 <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                                 <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                         <?php }?>
                                                                     </div>                                           
                                                                 </div>
                                                             </div>
@@ -242,6 +258,318 @@ if(isset($_SESSION["user_category"])){
                         </div>
                     </div>
                 </div>
+
+                <div class="container mt-4 px-lg-5 px-sm-2">
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Exams</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div>
+                       <?php 
+                         if ($exams != null) { 
+                                $j = 0;
+                                $submissionPostIds = $answeredExam != null ? array_column($answeredExam, 'post_id') : [];
+
+                                foreach ($exams as $index => $qz) {
+                                    
+                                    if ($qz['content_type'] === 'Exam') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+                                        // $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
+                                        // $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
+                                        // $day = $post[$i]["month"][8] . "" . $post[$i]["month"][9];
+
+                                        $year = substr($qz["month"], 0, 4);
+                                        $month = $months[intval(substr($qz["month"], 5, 2)) - 1];
+                                        $day = substr($qz["month"], 8, 2);
+                                        // echo var_dump($answeredExam);
+                                        ?>
+
+                                        <div id="exam-<?php echo $index; ?>">
+                                            <button data-bs-toggle="collapse" href="#exam-collapse-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="quiz-collapse-<?php echo $index; ?>" class="btn container-fluid p-0 m-0">
+                                                <div class="container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1">
+                                                    <div class="d-flex align-content-center">
+                                                        <div>
+                                                            <i class="bi bi-question-circle-fill green1 fs-2 p-0 m-0"></i>
+                                                        </div>
+                                                        <div class="ms-3 mt-1">
+                                                            <p class="green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start" id="material-title">
+                                                                <?php echo $qz["title"]; ?>
+                                                                <span class="fw-light green2 fs-6 d-flex mt-1" id="material-date"><?php echo "{$month} {$day}, {$year}"; ?></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <!-- <p class="green2 fw-light fs-5 me-2 mb-0 pb-0" id="material-score">6/10</p> -->
+                                                        <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($qz["post_id"]); ?>'>
+                                                            <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </button>
+                        
+                                            <div class="collapse mb-2" id="exam-collapse-<?php echo $index; ?>">
+                                                <div class='d-flex flex-column align-items-end justify-content-end' >
+                                                        <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                            <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                                <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
+                                                                    <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
+                                                                    <p class='black3 fs-6 lh-sm'><?php echo $qz["content"]; ?></p>
+                                                                </div>
+                                                                <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
+                                                                    <div class='mt-3'>
+                                                                        <?php if($answeredExam != null) {?>
+                                                                          <?php 
+                                                                            if (in_array($qz["post_id"], $submissionPostIds)) {
+
+                                                                                    foreach($answeredExam as $ansExam){
+                                                                                        if($qz["post_id"] == $ansExam["post_id"]){ 
+                                                                                            $date = new DateTime($ansExam["created"]);
+                                                                                            $formattedDate = $date->format('F d, Y');
+                                                                                            ?>
+                                                                                    <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                    <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate;?></p>
+                                                                                <?php   }
+
+                                                                                    } 
+                                                                            }else{ ?>
+                                                                                    <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                                    <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                                    <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                        <?php   }   
+                                                                         }else{ ?>
+                                                                                    <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                                    <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                                    <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                         <?php } ?>
+                                                                    </div>                                           
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
+                                        // IF MAGLOKO ADD DIV HERE
+                                    $j++;}
+                                }
+                            }
+                        
+                            ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mt-4 px-lg-5 px-sm-2">
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Seatworks</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div>
+                        <?php
+                            if ($seatworks != null) {
+                                $submissionPostIds = $swSubmission != null ? array_column($swSubmission, 'post_id') : [];
+
+                                foreach ($seatworks as $index => $act) {
+                                    if ($act['content_type'] === 'Seatwork') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                        $year = substr($act["month"], 0, 4);
+                                        $month = $months[intval(substr($act["month"], 5, 2)) - 1];
+                                        $day = substr($act["month"], 8, 2);
+                                        ?>
+                                        <div id="seatwork-<?php echo $index; ?>">
+                                            <button data-bs-toggle="collapse" href="#seatwork-collapse-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="activity-collapse-<?php echo $index; ?>" class="btn container-fluid p-0 m-0">
+                                                <div class="container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1">
+                                                    <div class="d-flex align-content-center">
+                                                        <div>
+                                                            <i class="bi bi-bookmark-fill green1 fs-2 p-0 m-0"></i>
+                                                        </div>
+                                                        <div class="ms-3 mt-1">
+                                                            <p class="green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start" id="material-title">
+                                                                <?php echo $act["title"]; ?>
+                                                                <span class="fw-light green2 fs-6 d-flex mt-1" id="material-date"><?php echo "{$month} {$day}, {$year}"; ?></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($act["post_id"]); ?>'>
+                                                            <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <div class="collapse mb-2" id="seatwork-collapse-<?php echo $index; ?>">
+                                                <div class='d-flex flex-column align-items-end justify-content-end'>
+                                                    <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                        <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                            <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
+                                                                <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
+                                                                <p class='black3 fs-6 lh-sm'><?php echo $act["content"]; ?></p>
+                                                            </div>
+                                                            <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
+                                                                <div class='mt-3'>
+                                                                    <?php
+                                                                    if ($swSubmission != null) {
+                                                                        if (in_array($act["post_id"], $submissionPostIds)) {
+                                                                            foreach ($swSubmission as $submission) {
+                                                                                if ($submission["post_id"] == $act["post_id"]) {
+                                                                                    $date = new DateTime($submission["created"]);
+                                                                                    $formattedDate = $date->format('F d, Y');
+                                                                                    ?>
+                                                                                    <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                    <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                                    <?php if ($swGrades != null) {
+                                                                                        foreach ($swGrades as $grade) {
+                                                                                            if ($grade["post_id"] == $act["post_id"]) {
+                                                                                                echo "<p class='fs-6 green2 fw-bold mb-0' id='material-status'>Grade: {$grade["grade"]}%</p>";
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                    } ?>
+                                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate; ?></p>
+                                                                                    <?php
+                                                                                    break; 
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            ?>
+                                                                            <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                            <?php
+                                                                        }
+                                                                    } else {
+                                                                        ?>
+                                                                        <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                        <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                        <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mt-4 px-lg-5 px-sm-2">
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Assignments</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div>
+
+                        <?php
+                            if ($assignments != null) {
+                                $submissionPostIds = $assignSubmission != null ? array_column($assignSubmission, 'post_id') : [];
+
+                                foreach ($assignments as $index => $act) {
+                                    if ($act['content_type'] === 'Assignment') {
+                                        $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                        $year = substr($act["month"], 0, 4);
+                                        $month = $months[intval(substr($act["month"], 5, 2)) - 1];
+                                        $day = substr($act["month"], 8, 2);
+                                        ?>
+                                        <div id="assignment-<?php echo $index; ?>">
+                                            <button data-bs-toggle="collapse" href="#assignment-collapse-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="activity-collapse-<?php echo $index; ?>" class="btn container-fluid p-0 m-0">
+                                                <div class="container-fluid bg-body-tertiary d-flex align-content-center justify-content-between rounded-3 px-lg-4 py-2 mb-2 shadow-elevation-dark-1">
+                                                    <div class="d-flex align-content-center">
+                                                        <div>
+                                                            <i class="bi bi-bookmark-fill green1 fs-2 p-0 m-0"></i>
+                                                        </div>
+                                                        <div class="ms-3 mt-1">
+                                                            <p class="green2 fw-bold lh-1 fs-5 mb-0 pb-0 d-flex flex-column align-items-start" id="material-title">
+                                                                <?php echo $act["title"]; ?>
+                                                                <span class="fw-light green2 fs-6 d-flex mt-1" id="material-date"><?php echo "{$month} {$day}, {$year}"; ?></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($act["post_id"]); ?>'>
+                                                            <i class='bi bi-eye-fill green1 fs-2 p-0 m-0'></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <div class="collapse mb-2" id="assignment-collapse-<?php echo $index; ?>">
+                                                <div class='d-flex flex-column align-items-end justify-content-end'>
+                                                    <div class='card card-body rounded-3 bg-body-tertiary shadow-elevation-dark-1 border-0' style='width: 90%;'>
+                                                        <div class='mt-0 pt-0 d-flex' id='card-container'>
+                                                            <div class='pe-lg-3' style='width: 70%;' id='card-left-side'>
+                                                                <p class='fs-6 h-font green2 me-2 mb-1'>Description</p>
+                                                                <p class='black3 fs-6 lh-sm'><?php echo $act["content"]; ?></p>
+                                                            </div>
+                                                            <div class='line-left text-end d-lg-flex align-content-lg-end justify-content-lg-end' style='width: 30%;' id='card-right-side'>
+                                                                <div class='mt-3'>
+                                                                    <?php
+                                                                    if ($assignSubmission != null) {
+                                                                        if (in_array($act["post_id"], $submissionPostIds)) {
+                                                                            foreach ($assignSubmission as $submission) {
+                                                                                if ($submission["post_id"] == $act["post_id"]) {
+                                                                                    $date = new DateTime($submission["created"]);
+                                                                                    $formattedDate = $date->format('F d, Y');
+                                                                                    ?>
+                                                                                    <i class='bi bi-check-circle green2 fs-1'></i>
+                                                                                    <p class='mb-0 text-lg-right fs-4 green2 fw-bold' id='material-status'>Turned In</p>
+                                                                                    <?php if ($assignGrades != null) {
+                                                                                        foreach ($assignGrades as $grade) {
+                                                                                            if ($grade["post_id"] == $act["post_id"]) {
+                                                                                                echo "<p class='fs-6 green2 fw-bold mb-0' id='material-status'>Grade: {$grade["grade"]}%</p>";
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                    } ?>
+                                                                                    <p class='fs-6 green2 fw-bold mb-0' id='material-deadline'><?php echo $formattedDate; ?></p>
+                                                                                    <?php
+                                                                                    break; 
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            ?>
+                                                                            <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                            <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                            <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                            <?php
+                                                                        }
+                                                                    } else {
+                                                                        ?>
+                                                                        <i class="bi bi-three-dots green2 fs-1"></i>
+                                                                        <p class="mb-0 text-lg-right fs-4 green2 fw-bold" id="material-status">Pending</p>
+                                                                        <p class="fs-6 green2 fw-bold mb-0" id="material-status">N/A</p>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

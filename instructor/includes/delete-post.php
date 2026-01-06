@@ -1,6 +1,10 @@
 <?php
 if (session_id() === "") session_start();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if(isset($_GET["code"])){
     require_once("../vendor/autoload.php");
     require_once("../log and reg backend/classes/connection.php");
@@ -66,14 +70,33 @@ if(isset($_POST["postId"])){
     if($type != "Quiz") $classCode = $_POST["classCode"];
 
 
-    if($type == "Quiz"){
+    if($type == "Quiz" || $type == "Exam"){
         echo "inside";
         $instrCtrlr->removeQuiz($postId);
     }else if($type == "Activity"){
         $instrCtrlr->removeActivity($postId);
-        for($i = 0; $i < count($files); $i++){
-            $instrCtrlr->removeFiles($files[$i]);
-             deleteFileFromDrive($files[$i]);
+        if($files != null){
+            for($i = 0; $i < count($files); $i++){
+                $instrCtrlr->removeFiles($files[$i]);
+                deleteFileFromDrive($files[$i]);
+            }
+        }
+
+    }else if($type == "Seatwork"){
+        $instrCtrlr->removeSeatwork($postId);
+        if($files != null){
+            for($i = 0; $i < count($files); $i++){
+                $instrCtrlr->removeFiles($files[$i]);
+                 deleteFileFromDrive($files[$i]);
+            }
+        }
+    }else if($type == "Assignment"){
+        $instrCtrlr->removeAssignment($postId);
+        if($files != null){
+            for($i = 0; $i < count($files); $i++){
+                $instrCtrlr->removeFiles($files[$i]);
+                 deleteFileFromDrive($files[$i]);
+            }
         }
     }else{
         $instrCtrlr->removeMaterial($postId);

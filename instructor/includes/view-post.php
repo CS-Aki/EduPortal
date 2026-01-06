@@ -44,8 +44,9 @@ if(isset($_GET["post"])){
     // if(isset($comments[0]["month"])){
         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
         $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];
-        $month = $months[$postDetails[0]["month"][5] . "" . $postDetails[0]["month"][6] - 1];
+        $month = $months[(int)($postDetails[0]["month"][5] . $postDetails[0]["month"][6]) - 1];
         $day = $postDetails[0]["month"][8] . "" . $postDetails[0]["month"][9];
+
     //  }else{
     //     $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
     //     $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];

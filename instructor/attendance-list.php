@@ -9,7 +9,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         // case 3: header("Location: instructor/instructor-dashboard.php"); break;
         case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
     }
@@ -25,7 +25,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Dashboard</title>
+    <title>Attendance List</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <?php require('inc/links.php'); include("includes/view-attendance-list.php");?>
@@ -33,9 +33,10 @@ if(isset($_SESSION["user_category"])){
 
 <style>
     table, th, td {
-        padding: 2px 60px 20px 80px;
+        
         border: 1px solid black;
         border-collapse: collapse;
+        word-wrap: break-word;
     }
 </style>
 <body>
@@ -60,11 +61,14 @@ if(isset($_SESSION["user_category"])){
                                 <li class="nav-item">
                                     <a class="nav-link active" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
-                <div class="container mt-4 px-lg-5 px-sm-2">
+                <div class="mt-4 px-lg-5 px-sm-2">
                     <!-- <div class="mt-2" id="professor-container">
                         <div class="">
                             <h1 class="h-font green1 me-2 sub-title mb-0 pb-0">Professor</h1>
@@ -77,7 +81,7 @@ if(isset($_SESSION["user_category"])){
                             </div>                         
                         </div>
                     </div> -->
-                    <div class="mt-2" id="student-container">
+                    <div class="container-fluid" id="student-container">
                         <div class="">
                             <h1 class="h-font green1 me-2 sub-title mb-0 pb-0">Students</h1>
                             <div class="line-h mt-0"></div>
@@ -94,48 +98,68 @@ if(isset($_SESSION["user_category"])){
                                 border: 1px solid var(--black3); 
                                 text-align: center;              
                                 vertical-align: middle;          
-                                padding: 10px;                   
+                                padding: 5px;                 
                             }
                             thead th {
                                 position: sticky;       
                                 top: 0;                   
                                 z-index: 2;                
-                                background-color: var(--green2); 
+                                background-color: var(--green1); 
                                 color: white;              
                             }
                             th[colspan] {
                                 text-align: center; 
                             }
+                            input[type="checkbox"]:checked {
+                                background-color: var(--green2);
+                                border-color: var(--green2);
+                              }
+                           
+                            
+                             
                         </style>
 
-                        <div class="ms-3 mt-3">
-                            <form action="includes/attendance.php" method="post" id="attendanceForm">
-                            <table>
+                        <div class="ms-lg-3 mt-3 container-fluid px-0">
+                            <form action="includes/attendance.php" method="post" id="attendanceForm" class="w-100 container-fluid">
+                            <table class="w-100 container-flui px-0">
                                 <thead style="background-color: var(--green2);color: white;">
-                                    <th>NAME</th>
-                                    <th>STATUS</th>
-                                    <th colspan=3 class="">ACTION</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th colspan=3 class="">Action</th>
                                 </thead>
                             <tbody id="loadStudents">
 
-                            <td><label class="fw-semibold">Check All</label></td><td></td><td><input type="checkbox" id="checkAllPresent" name="checkAll" value="Present"></td><td><input type="checkbox" id="checkAllAbsent" name="checkAll" value="Absent"></td><td><input type="checkbox" name="checkAll" id="checkAllLate" value="Late"></td>
+                            <td><label class="fw-semibold black3">Check All</label></td><td></td><td><input type="checkbox" id="checkAllPresent" name="checkAll" value="Present"></td><td><input type="checkbox" id="checkAllAbsent" name="checkAll" value="Absent"></td><td><input type="checkbox" name="checkAll" id="checkAllLate" value="Late"></td>
                             
-                           <?php
+                           <?php //echo var_dump($studentList);
+                                $late = 0;
+                                $absent = 0;
+                                $present = 0;
+                                $pending = 0;
+                                
                                 if(isset($studentList[0]["status"])){
                                     for($i = 0 ; $i < count($studentList); $i++){
+                                        if($studentList[$i]["status"] == "Pending") $pending++;
+                                        else if($studentList[$i]["status"] == "Present") $present++;
+                                        else if($studentList[$i]["status"] == "Late") $late++;
+                                        else if($studentList[$i]["status"] == "Absent") $absent++;
+
                                         echo "<tr>
                                                 <td>
-                                                    <div class='d-flex align-items-center mb-2'>
-                                                        <img src='images/profile.png' style='width: 40px;' class='rounded-5 me-3'>
-                                                        <p class='green2 fw-semibold lh-sm m-0 p-0 fs-5 student-name'>{$studentList[$i]["name"]} </p>
+                                                    <div class='d-flex align-items-center px-lg-3 px-2'>
+                                                        <img src='{$studentList[$i]["image"]}' style='width: 40px;' class='rounded-5 me-3'>
+                                                        <p class='green2 fw-semibold lh-sm m-0 p-0 fs-lg-5 fs-sm-6 student-name tablefont'>{$studentList[$i]["name"]} </p>
                                                     </div>
                                                 </td>
-                                                <td class='student-status'>{$studentList[$i]["status"]}</td>
-                                                <td><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status present' value='Present'> Present</td>
-                                                <td><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status absent' value='Absent'> Absent</td>
-                                                <td><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status late' value='Late'> Late</td>
+                                                <td class='student-status black3 fs-lg-5 fs-sm-6 tablefont'>{$studentList[$i]["status"]}</td>
+                                                <td class='black3 fs-lg-5 fs-sm-6 tablefont'><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status present' value='Present'> Present</td>
+                                                <td class='black3 fs-lg-5 fs-sm-6 tablefont'><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status absent' value='Absent'> Absent</td>
+                                                <td class='black3 fs-lg-5 fs-sm-6 tablefont'><input type='checkbox' name='status[{$studentList[$i]["user_id"]}]' class='status late' value='Late'> Late</td>
                                             </tr>";
                                     }
+                                    echo "<tr>
+                                            <td></td><td id='totalPending'>Pending: {$pending}</td><td id='totalPresent'>{$present}</td> <td id='totalAbsent'>{$absent}</td>  <td id='totalLate'>{$late}</td>  
+                                        </tr>";
                                }
                                
                             ?>
@@ -175,7 +199,7 @@ if(isset($_SESSION["user_category"])){
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
 
     <script>
-
+        let noChange = true;
         function getSelectedVal(){
         var ID={};
         ID.values=[];
@@ -189,10 +213,30 @@ if(isset($_SESSION["user_category"])){
             });     
 
         }
+        
+        function updateTotals() {
+            var totalPresent = $('.status.present:checked').length;
+            var totalAbsent = $('.status.absent:checked').length;
+            var totalLate = $('.status.late:checked').length;
+        
+            var totalPending = $('.student-status').filter(function () {
+                // Find rows where no status checkbox is checked
+                    var currentStatus = $(this).text().trim(); // Get the current status text
+                    var hasCheckedStatus = $(this).siblings().find('.status:checked').length > 0; // Check if any checkbox is selected
+                    return currentStatus === "Pending" && !hasCheckedStatus;
+            }).length;
+        
+            $('#totalPresent').text(totalPresent);
+            $('#totalAbsent').text(totalAbsent);
+            $('#totalLate').text(totalLate);
+            $('#totalPending').text("Pending: " + totalPending);
+        }
 
         $(document).on('change', 'input[type="checkbox"]', function() {
             $('input[name="' + this.name + '"]').not(this).prop('checked', false);
             updateCheckAllStatus();
+            updateTotals();
+            noChange = false;
         });
 
         // Function to check only "Present" checkboxes and uncheck others
@@ -203,6 +247,9 @@ if(isset($_SESSION["user_category"])){
             } else {
                 $('.status.present').prop('checked', false); // Uncheck all "Present"
             }
+            updateTotals();
+
+            noChange = false;
         });
 
         // Function to check only "Late" checkboxes and uncheck others
@@ -213,6 +260,9 @@ if(isset($_SESSION["user_category"])){
             } else {
                 $('.status.late').prop('checked', false); // Uncheck all "Late"
             }
+            updateTotals();
+
+            noChange = false;
         });
 
         // Function to check only "Absent" checkboxes and uncheck others
@@ -222,6 +272,9 @@ if(isset($_SESSION["user_category"])){
                 $('.status.present, .status.late').prop('checked', false); // Uncheck all "Present" and "Late"
             } else {
                 $('.status.absent').prop('checked', false); // Uncheck all "Absent"
+              updateTotals();
+
+              noChange = false;
             }
         });
 
@@ -250,6 +303,11 @@ if(isset($_SESSION["user_category"])){
             });
 
             $("#attendanceForm").submit(function (event) {
+                console.log($('#totalPending').text());
+                let pending = $('#totalPending').text();
+                let late = $('#totalLate').text()
+                let absent = $('#totalAbsent').text();
+                let present =$('#totalPresent').text();
                 event.preventDefault();
                 console.log("clicked");
                 var selectedStatuses = {};
@@ -270,7 +328,9 @@ if(isset($_SESSION["user_category"])){
 
                     console.log(selectedStatuses);
                 });
-
+                    
+                if(noChange == true) return;
+            
                 $.ajax({
                 method: "POST",
                 url: "includes/attendance.php",
@@ -298,12 +358,14 @@ if(isset($_SESSION["user_category"])){
 
                                     var newRow = $("<tr>");
                                     $('#loadStudents').append(newRow);
-                                    $('#loadStudents').append("<td><div class='d-flex align-items-center mb-2'><img src='images/profile.png' style='width: 40px;' class='rounded-5 me-3'><p class='green2 fw-semibold lh-sm m-0 p-0 fs-5 student-name'>" + response[i]["name"] + "</p></div></td>");
+                                    $('#loadStudents').append("<td><div class='d-flex align-items-center mb-2'><img src='" + response[i]["image"]+ "' style='width: 40px;' class='rounded-5 me-3'><p class='green2 fw-semibold lh-sm m-0 p-0 fs-5 student-name'>" + response[i]["name"] + "</p></div></td>");
                                     $('#loadStudents').append("<td>" + response[i]["status"] + "</td>");
                                     $('#loadStudents').append("<td><input type='checkbox' name='status[" + response[i]["user_id"] + "]' class='status present' value='Present'> Present</td>");
                                     $('#loadStudents').append("<td><input type='checkbox' name='status[" + response[i]["user_id"] + "]' class='status absent' value='Absent'> Absent</td>");
                                     $('#loadStudents').append("<td><input type='checkbox' name='status[" + response[i]["user_id"] + "]' class='status late' value='Late'> Late</td>");
                                 }
+                                
+                                $('#loadStudents').append("<tr><td></td><td id='totalPending'>"+ pending +"</td><td id='totalPresent'>"+ present +"</td> <td id='totalAbsent'>"+ absent +"</td>  <td id='totalLate'>"+ late +"</td>  </tr>");
 
                             },
                             error: function(xhr, status, error) {

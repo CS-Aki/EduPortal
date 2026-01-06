@@ -1,4 +1,4 @@
-<!-- ORIG MATERIAL -->
+
 <?php 
 if (session_id() === "") session_start();
 
@@ -36,7 +36,7 @@ if(isset($_GET["code"])){
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Dashboard</title>
+    <title>Material</title>
     <style>
 
         .table thead th{
@@ -116,12 +116,12 @@ if(isset($_GET["code"])){
     </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-    <?php if(session_id() === "") session_start(); require('inc/links.php'); include("includes/view-post.php"); if($postDetails[0]["content_type"] != "Material") include("includes/view-submission.php"); ?>
+    <?php if(session_id() === "") session_start(); require('inc/links.php'); include("includes/view-post.php"); if($postDetails[0]["content_type"] != "Material")  include("includes/view-submission.php"); ?>
 
 </head>
 <body>
 
-<?php require('inc/header.php');  ?>
+<?php require('inc/header.php'); ?>
 
     <div class="container-fluid p-0 m-0" id="main-content">
         <div class="row" >
@@ -142,6 +142,9 @@ if(isset($_GET["code"])){
                             <li class="nav-item">
                                 <a class="nav-link" href="list.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>">List of Students</a>
                             </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
+                            </li>
                         </ul>
                         </div>
                     </div>
@@ -157,10 +160,10 @@ if(isset($_GET["code"])){
                         
                             <div class="row">       
                                 <div class="col-lg-9 col-md-12 mb-md-2">
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between align-items-start">
                                         <div class="col-lg-9 col-md-12 mb-md-2">
                                             <h1 class="h-font green1 me-2 sub-title mb-0" id="material-title"><?php echo $postDetails[0]["title"];?></h1>
-                                            <p class="fw-light green1 blue fs-6 d-flex m-0" id="material-date"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
+                                            <p class="fw-light green1 blue fs-6 d-flex m-0" id="graded-text"><?php if (isset($_GET["user"])) echo ($grades != null) ? " (Graded)" : " (Not Graded Yet)";?>                                        </p> 
                                             <p class="fw-light green2 fs-6 d-flex m-0" id="material-date"><?php echo $month . " ". $day . ", " . $year ?></p> 
                                             <?php if ($startingDateTime != null){ ?>
                                                 <p class="fw-light green2 fs-6 d-flex m-0" id="material-date">Starting Date: <?php  echo $startingDateTime; ?></p>   
@@ -217,6 +220,7 @@ if(isset($_GET["code"])){
                                                           <p class="fw-semibold green2 fs-4 lh-sm mb-0"><?php echo $firstName; ?>'s work</p>
                                                         <div class="act-status ms-2">
                                                             <?php 
+                                                            
                                                                 if($status == "Late"){
                                                                     echo '<span class="submit-status badge rounded-pill text-bg-danger done-badge">Late';
                                                                 } 
@@ -252,15 +256,15 @@ if(isset($_GET["code"])){
                                                     <div class="d-flex col-2 align-items-center">
                                                         <span style="font-size: large;" class="ms-2 form-label green2">Point: </span>
                                                         <div class="form-floating ms-2" style="flex: 1;">
-                                                            <input type="number" class="rounded-2 ps-2" id="points" value="<?php echo ($grades != null) ?  $currentPoint : 1; ?>" min="1" max="<?php echo $actContent[0]["points"]; ?>" required>
+                                                            <input type="number" class="rounded-2 ps-2" id="points" value="<?php echo ($grades != null) ?  $currentPoint : 1; ?>" min="1" max="<?php echo $maxPoints; ?>" required>
                                                         </div>
                                                         <span style="font-size: medium;" class="ms-3 form-label d-flex align-items-center green2">
-                                                            Max: <span class="ms-1 green2" id="max-points"><?php echo $actContent[0]["points"]; ?></span>
+                                                            Max: <span class="ms-1 green2" id="max-points"><?php echo $maxPoints; ?></span>
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div id="grading-container">
-                                                <?php  if($grades != null){?>       
+                                                <?php if($grades != null){?>       
                                                         <a href="#" id="edit-grade">
                                                             <div class="container-fluid green shadow-elevation-dark-1 rounded-3">
                                                                 <div class="d-flex justify-content-center align-items-center p-2">
@@ -297,7 +301,7 @@ if(isset($_GET["code"])){
                                 </div>
                                 <div class="line2 mt-lg-3"></div>
                                 <div class="w-75 mt-4" id="material-comment-container">
-                                <p id="post-id" hidden><?php echo $postDetails[0]["post_id"]; ?></p>
+                                <p id="post-id" hidden><?php echo $legitPostId; ?></p>
 
                                     <!-- FOR COMMENT -->
                                     <div class="input-group mt-lg-2">
@@ -325,7 +329,7 @@ if(isset($_GET["code"])){
         </div>
     </div>
     <!-- EDIT POST MODAL -->
-    <div class="modal fade" id="editPostModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editPostLabel" aria-hidden="true">
+    <div class="modal fade" id="editPostModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editPostLabel" >
         <div class="modal-dialog modal-dialog-centered modal-lg">                       
                 <div class="modal-content rounded-4">
                     <form action="includes/edit-post.php" method="post" id="editForm" enctype="multipart/form-data">
@@ -351,13 +355,13 @@ if(isset($_GET["code"])){
                                     <textarea type="text" rows="4" class="form-control black3 shadow-elevation-light-3 container-fluid" value="" name="post_desc" id="postDesc"><?php echo $postDetails[0]["content"]; ?></textarea>
                                 </div>
                                 <?php if($postDetails[0]["content_type"] != "Material"){?>
-
-                                <?php if($postDetails[0]["content_type"] == "Activity"){ ?>
+                                    
+                                <?php if($postDetails[0]["content_type"] == "Activity" || $postDetails[0]["content_type"] == "Assignment" || $postDetails[0]["content_type"] == "Seatwork"){ ?>
                                         <div class="col-lg-1 col-sm-12 mb-2">
                                             <label class="black3 mb-0">Points</label>
                                         </div>
                                         <div class="col-lg-3 col-sm-6 mb-2">
-                                            <input type="number" class="points form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" min="1" value="<?php echo $actContent[0]["points"]; ?>" name="points" id="points">
+                                            <input type="number" class="points form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" min="1" value="<?php echo $pointTemp; ?>" name="points" id="points">
                                         </div>
                                         <!-- <div class="col-lg-5 mb-2"></div> -->
                                         <div class="col-lg-1 col-sm-12 mb-2">
@@ -365,10 +369,10 @@ if(isset($_GET["code"])){
                                         </div>
 
                                         <div class="col-lg-3 col-sm-6 mb-2">
-                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_date"]; ?>" name="post_title" id="startDate">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $startDate; ?>" name="post_title" id="startDate">
                                         </div>
                                         <div class="col-lg-3 col-sm-6 mb-2">
-                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["starting_time"]; ?>" name="post_title" id="startTime">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $startTime; ?>" name="post_title" id="startTime">
                                         </div>
 
                                         <div class="col-lg-4 mb-2"></div>
@@ -377,11 +381,11 @@ if(isset($_GET["code"])){
                                         </div>
                             
                                         <div class="col-lg-3 col-sm-6 mb-2">
-                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_date"]; ?>" name="post_title" id="deadlineDate">
+                                            <input type="date" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $endDate; ?>" name="post_title" id="deadlineDate">
                                         </div>
                                         
                                         <div class="col-lg-3 col-sm-6 mb-2">
-                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $actContent[0]["deadline_time"]; ?>" name="post_title" id="deadlineTime">
+                                            <input type="time" class="form-control black3 shadow-elevation-light-3 container-fluid border-0 w-100" value="<?php echo $endTime; ?>" name="post_title" id="deadlineTime">
                                         </div>
                                         
                                      <?php }else if($postDetails[0]["content_type"] == "Quiz"){ //Need to add quiz content var?> 
@@ -513,7 +517,7 @@ if(isset($_GET["code"])){
     </div>
     <div class='point-temp' hidden><?php if($grades != null) echo $currentPoint;?></div>
     <div class='user-id' hidden><?php echo $userId;?></div>
-    <div class='post-id' hidden><?php echo $actSubmission[0]["post_id"];?></div>
+    <div class='post-id' hidden><?php echo $legitPostId;?></div>
     <div class='class-code' hidden><?php echo $actSubmission[0]["class_code"];?></div>
     <?php require('inc/footer.php'); ?>   
 

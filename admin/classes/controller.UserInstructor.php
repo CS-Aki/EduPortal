@@ -32,6 +32,14 @@ class RegisterInstructorController extends UserInstructor
   {
     
     if ($this->isEmptyInput() == true) {
+    //   echo   $this->name . "\n";
+    //   echo   $this->email . "\n";
+    //   echo   $this->password . "\n";
+    //   echo   $this->repeatPass . "\n";
+    //   echo   $this->birthdate . "\n";
+    //   echo   $this->gender . "\n";
+    //   echo   $this->address . "\n";
+
       echo "Fill in all fields!";
       
       //  $view->showRegistrationErrorMsg("Please fill out all the necessary information");
@@ -41,7 +49,7 @@ class RegisterInstructorController extends UserInstructor
 
     if ($this->invalidName() == true) {
      
-      echo "Special Characters are not allowed in name!";
+      echo "Special Characters or Numbers Are Not Allowed in Name!";
      
       //  echo $view->showRegistrationErrorMsg("Special Characters aren't allowed, please try again");
       // header("Location: index.php?error=invalidNameInput");
@@ -81,16 +89,21 @@ class RegisterInstructorController extends UserInstructor
 
     if ($this->isUserRegistered($this->name, $this->email) == true) {
      
-      echo "<span>User Already registered!</span>";
+      echo "User Already registered!>";
      
       // echo $view->showRegistrationErrorMsg("User Already registered");
       // header("Location: index.php?error=userAlreadyRegistered");
       exit();
     }
+    
+    if ($this->isValidPassLen() == true){
+        echo "Password must be 4 characters or more!";
+        exit();
+    }
 
     if ($this->isPasswordMatch() != true) {
       
-      echo "<span>Password Does Not Match</span>";
+      echo "Password Does Not Match";
      
       // echo $view->showRegistrationErrorMsg("Password Mismatch");
       // header("Location: index.php?error=passwordMismatch");
@@ -111,6 +124,15 @@ class RegisterInstructorController extends UserInstructor
     // echo $view->showRegistrationMsg($result);
     return;
   }
+  
+    private function isValidPassLen(){
+        if(strlen($this->password) < 4 || strlen($this->repeatPass) < 4){
+          return true;
+        }
+        
+        return false;
+    
+    }
 
   private function isEmptyInput()
   {
@@ -132,7 +154,7 @@ class RegisterInstructorController extends UserInstructor
 
   private function invalidEmail()
   {
-    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL) || strpos($this->email, '@gmail.com') === false) {
       return true;
     } else {
       return false;

@@ -65,7 +65,7 @@
 // Get the current file name
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-<div class="container-fluid greenbg vh-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
+<div class="container-fluid greenbg h-100 w-100 justify-content-center align-items-center flex-column gap-3" data-mdb-animation-init data-mdb-animation-reset="true" data-mdb-animation="slide-out-down" id="mobile_directory">
     <a href="instructor-dashboard.php" class="fs-3 white1"><i class="bi bi-house-door-fill me-2 white1"></i>Home</a>
     <a href="calendar.php" class="fs-3 white1"><i class="bi bi-calendar-week me-2 white1"></i>Calendar</a>
     <a href="instructor-dashboard.php" class="fs-3 white1"><i class="bi bi-mortarboard-fill me-2 white1"></i>Enrolled</a>
@@ -91,7 +91,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $url .= "://";
             $url .= $_SERVER['HTTP_HOST'];
             $url .= $_SERVER['REQUEST_URI'];
-            if($url == "http://localhost/EduPortal/instructor/instructor-dashboard.php"){
+            if($url == "http://localhost/instructor/instructor-dashboard.php"){
         ?>
 
         <?php } ?>
@@ -107,7 +107,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </div>
 
 
-<div class="col-lg-2 shadow-sm" id="sidebar-menu">
+<div class="col-lg-2 shadow-sm h-100" id="sidebar-menu">
     <ul>
         <a href="instructor-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'instructor-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
         <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
@@ -119,12 +119,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="accordion accordion-flush mt-3" id="accordionFlushExample">
         <div class="accordion-item">
-            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php') ? 'activesidebar' : ''; ?>">
+            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php' || $current_page == 'grades.php') ? 'activesidebar' : ''; ?>">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Teaching</div>
             </h2>
 
-            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1">
+            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1" style="overflow-y: auto !important; max-height: 60vh;">
 
 
                     <?php 
@@ -154,7 +154,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </a>
                         </div> -->
                    
-                
+                <br><br>
             </div>
         </div>
     </div>

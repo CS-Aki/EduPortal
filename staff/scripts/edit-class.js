@@ -112,6 +112,13 @@ $(document).ready(function() {
                     $("#message").empty();
                     tempClassName = className;
                     if(response.includes("Edit Successfully")){
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Class Updated Successfully!',
+                            icon: 'success'
+                        });
+
                         isChange = false;
                         window.initialFormValues = {
                             className: $("#class_name").val(),
@@ -138,7 +145,6 @@ $(document).ready(function() {
                                 rowData[2] = classProf;
                                 rowData[3] = "(" + daySched + ")" + " " + startingHour + ":" + startingMin + " " + startingPeriod + "-" + endingHour + ":" + endingMin + " " + endingPeriod;
                                 rowData[4] = classStatus;
-
     
                                 this.data(rowData).draw(false);
                                 // Once the row is found, stop further iterations
@@ -146,24 +152,33 @@ $(document).ready(function() {
                             }
                         });
 
-                        $("#message").empty();
-                        $("#message").append("<div class='alert alert-success' role='alert'><span>Update Successfully</span></div>");
+                        // $("#message").empty();
+                        // $("#message").append("<div class='alert alert-success' role='alert'><span>Update Successfully</span></div>");
 
                     }else{
-                    
-                        $("#message").append("<div class='alert alert-danger' role='alert'><span>"+response+"</span></div>");
+                        Swal.fire({
+                            title: 'Invalid!',
+                            text: response,
+                            icon: 'error'
+                        });   
+                        // $("#message").append("<div class='alert alert-danger' role='alert'><span>"+response+"</span></div>");
                     }
                 
                 },
                 error: function(xhr, status, error) {
-                    console.log("error here");
-                    console.log(error);
+                    Swal.fire({
+                        title: 'Encountered an Error!',
+                        text: response,
+                        icon: 'error'
+                    });   
                 }
             });
         }else{
-            $("#message").empty();
-            $("#message").append("<div class='alert alert-danger' role='alert'><span>No Changes Made</span></div>");
-            console.log("no changes ");
+          Swal.fire({
+                title: 'Still the same',
+                text: "No Changes Made",
+                icon: 'info'
+            });   
         }
         
     });

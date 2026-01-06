@@ -88,7 +88,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $url .= "://";
             $url .= $_SERVER['HTTP_HOST'];
             $url .= $_SERVER['REQUEST_URI'];
-            if($url == "http://localhost/EduPortal/student/student-dashboard.php"){
+            if($url == "https://eduportal.aki-dev.online/student/student-dashboard.php"){
         ?>
         
         <button type="button" class="btn bg-transparent p-0 m-0" data-bs-toggle="modal" data-bs-target="#joinClassModal">
@@ -100,9 +100,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <!-- <i class="me-2 bi bi-person-circle fs-1 icon"></i> -->
             <img src="<?php if(isset($_SESSION["profile"])){ echo "../profiles/".$_SESSION["profile"]; } else{ echo "../profiles/profile.png"; }  ?>" style="width: 40px;" class="me-2 bi me-2 rounded pill" id="smolImg"></span> 
-            </a>
+        </a>
+        
         <ul class="dropdown-menu">
             <li><a class="dropdown-item h-font green1 fs-4" href="profile.php">Profile</a></li>
+            <li><a class="dropdown-item h-font green1 fs-4" href="grades.php">Grades</a></li>
             <li><a class="dropdown-item h-font green1 fs-4" href="student backend/includes/logout.inc.php">Log Out</a></li>
         </ul>
     </div>
@@ -137,7 +139,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </div>
 
 
-<div class="col-lg-2 shadow-sm" id="sidebar-menu">
+<div class="col-lg-2 shadow-sm h-100" id="sidebar-menu">
     <ul>
         <a href="student-dashboard.php" class="fs-3 h-font"><li class="mt-3 <?php echo ($current_page == 'student-dashboard.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-house-door-fill ms-3 me-2 greenicon"></i>Home</li></a>
         <a href="profile.php" class="fs-3 h-font"><li class="<?php echo ($current_page == 'profile.php') ? 'activesidebar' : ''; ?>"><i class="bi bi-person-circle ms-3 me-2 greenicon"></i>Profile</li></a>
@@ -147,31 +149,28 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <div class="line container-fluid">
     </div>
 
-    <div class="accordion accordion-flush mt-3" id="accordionFlushExample">
+    <div class="accordion accordion-flush mt-3 scrollable-accordion" id="accordionFlushExample">
         <div class="accordion-item">
-            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php') ? 'activesidebar' : ''; ?>">
+            <h2 class="accordion-header <?php echo ($current_page == 'class.php' || $current_page == 'list.php' || $current_page == 'submittedworks.php' || $current_page == 'material.php' || $current_page == 'grades.php') ? 'activesidebar' : ''; ?>">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                     <div id="folder"><i class="bi bi-mortarboard-fill me-2 greenicon h-font"></i>Enrolled</div>
             </h2>
 
-            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3" data-bs-parent="#accordionFlushExample1">
-
-                        <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
-                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
+            <div id="flush-collapseOne" class="accordion-collapse collapse p-lg-3 scrollable-collapse" data-bs-parent="#accordionFlushExample1" style="overflow-y: auto !important; max-height: 60vh;">
+                <?php include("student backend/includes/side-classes.php");?>
+                
+                <?php 
+                    for($i = 0 ; $i < count($classList); $i++){
+                        echo "<div class='class'>";
+                        ?>
+                            <a href='class.php?class=<?php echo md5($classList[$i]['class_code']);?>' class='fs-5 py-lg-1 text-truncate d-inline-block' style='max-width: 100%;'>
+                        <?php
+                            echo"<i class='ms-3 bi bi-book me-2 greenicon'></i>{$classList[$i]['class_name']}
                             </a>
-                        </div>
-                        <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
-                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
-                            </a>
-                        </div>
-                        <div class="class">
-                            <a href="" class="fs-5 text-truncate d-inline-block py-lg-1" style="max-width: 100%;">
-                                <i class="ms-3 bi bi-book me-2 greenicon"></i>Algorithm
-                            </a>
-                        </div>
-                   
+                        </div>";
+                    }
+                ?>
+                   <br><br>
                 
             </div>
         </div>

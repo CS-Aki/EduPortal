@@ -32,10 +32,9 @@ if(isset($_GET["class"])){
     if(isset($post[0]["month"])){
         $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
         $year = $post[0]["month"][0] . "" . $post[0]["month"][1] . $post[0]["month"][2] . "" . $post[0]["month"][3];
-        $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
+        $month = $months[$post[0]["month"][5]] . " " . $post[0]["month"][6] - 1;
         $day = $post[0]["month"][8] . "" . $post[0]["month"][9];
     }
-
 
     $currentDate = date("F j, Y");
         // $today = $currentDate->format("m-d-Y");

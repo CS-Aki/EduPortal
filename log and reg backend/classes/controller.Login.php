@@ -13,27 +13,29 @@ class LoginController extends User{
     public function loginUser(){
 
         if($this->isEmptyInput() == true){
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>Fill in all fields!</span>";
-            echo "</div>";
+            echo "Fill in all fields!";
+
             // $_SESSION["msg"] = "Please fill out all the necessary information";
             // header("Location: index.php?error=emptyInput");
             exit();
         }  
 
         if($this->invalidEmail() == true){
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>Invalid Email Format!</span>";
-            echo "</div>";
+            echo "Invalid Email Format!";
             // $_SESSION["msg"] = "Invalid Email Format";
             // header("Location: index.php?error=invalidEmail");
             exit();
         }
+        
+        
+        if($this->isUserRegistered("", $this->email) == false){
+            echo "User Account Does Not Exist!";
+            exit();
+        }
+        
 
         if($this->isUserActive($this->email) == false){
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>User Account Suspended or Does Not Exist!</span>";
-            echo "</div>";
+            echo "User Account Suspended!";
             // $_SESSION["msg"] = "Invalid Email Format";
             // header("Location: index.php?error=invalidEmail");
             exit();
@@ -46,12 +48,15 @@ class LoginController extends User{
         $num = $user[0]["user_id"];
         $_SESSION["user_id"] = $user[0]["user_id"];
         $_SESSION["user_category"] = $user[0]["user_category"];
-        // $_SESSION["email"] = $user[0]["email"];
+        $_SESSION["email"] = $user[0]["email"];
         // $_SESSION["name"] = $user[0]["name"];
+        $_SESSION["name"] = $user[0]["name"];
         $_SESSION["address"] = $user[0]["address"];
         $_SESSION['google_loggedin'] = true;
         $_SESSION['google_email'] = $user[0]["email"];
-        $_SESSION['google_name'] = $user[0]["name"];;
+        $_SESSION['google_name'] = $user[0]["name"];
+        $_SESSION["birthdate"] = $user[0]["birthdate"];
+        $_SESSION["gender"] = $user[0]["gender"];
      //   $google_picture = $_SESSION['google_picture'];
         $userId = $this->getUserId($_SESSION['google_email'], $_SESSION['google_name']);
         $_SESSION['user_id'] = $userId[0]['user_id'];

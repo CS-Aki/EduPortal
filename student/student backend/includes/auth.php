@@ -23,7 +23,7 @@ if(isset($_GET["code"])){
 // }
 
 $client->addScope(Google_Service_Drive::DRIVE_FILE);
-$client->setRedirectUri('http://localhost/EduPortal/student/material.php');
+$client->setRedirectUri('https://eduportal.aki-dev.online/student/material.php');
 
 // Check if we have an authorization code in the query string
 if (isset($_GET['code'])) {
@@ -37,7 +37,7 @@ if (isset($_GET['code'])) {
     // $_SESSION["storedFile"] = $_FILES['files'];
     echo "This is the post id " . $_SESSION["post"];
     // Redirect back to the page to ensure everything is set
-    header('Location: http://localhost/EduPortal/student/material.php?class='.$_SESSION["storeCode"]."&post=".$_SESSION["storedId"]);
+    header('Location: https://eduportal.aki-dev.online/student/material.php?class='.$_SESSION["storeCode"]."&post=".$_SESSION["storedId"]);
     exit;
 }
 

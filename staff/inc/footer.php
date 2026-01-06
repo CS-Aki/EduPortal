@@ -6,4 +6,13 @@ function toggleSidebar() {
     const body = document.body;
     body.classList.toggle('overflow-hidden');
 }
+
+document.addEventListener("click", function(event) {
+    if (event.altKey) {
+        let target = event.target.closest("a, button");
+        if (target) {
+            event.preventDefault();
+        }
+    }
+});
 </script>

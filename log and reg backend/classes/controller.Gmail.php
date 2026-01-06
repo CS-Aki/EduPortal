@@ -22,6 +22,14 @@ class GmailController extends User{
     public function getAddress(){
         return $this->fetchAddress($this->name, $this->email);
     }
+    
+    public function getBirthDate(){
+        return $this->fetchBirthDate($this->name, $this->email);
+    }
+    
+    public function getGender(){
+        return $this->fetchGender($this->name, $this->email);
+    }
 
     private function rearrangedName($name){
        $newName = "";

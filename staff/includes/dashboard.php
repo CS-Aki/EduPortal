@@ -1,9 +1,9 @@
 <?php
 class DbConnection {
     private $db_server = "localhost";
-    private $db_user = "root";
-    private $db_password = "";
-    private $db_name = "classroom_db";
+    private $db_user = "u227551606_classroom_user";
+    private $db_password = "Eduportal052898";
+    private $db_name = "u227551606_classroom_db";
 
     protected function connect() {
         $dsn = 'mysql:host=' . $this->db_server . ';dbname=' . $this->db_name;
@@ -107,6 +107,7 @@ function getMonthlyEnrollment($months = 4) {
     $db = new DbConnection();
     $pdo = $db->getConnection();
 
+    // Prepare query to fetch enrollment data for the past N months
     $query = "SELECT 
                  DATE_FORMAT(created, '%Y-%m') AS month, 
                  COUNT(*) AS enrolled_count
@@ -122,26 +123,25 @@ function getMonthlyEnrollment($months = 4) {
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Manual assignment of data
+    // Build dynamic data array
     $data = [];
     foreach ($results as $row) {
         $data[$row['month']] = (int)$row['enrolled_count'];
     }
 
-    // Assign specific months manually
-    $september = $data['2024-09'] ?? 0;
-    $october = $data['2024-10'] ?? 0;
-    $november = $data['2024-11'] ?? 0;
-    $december = $data['2024-12'] ?? 0;
+    // Generate labels and default data dynamically
+    $dynamicData = [];
+    $currentDate = new DateTime();
 
-    return [
-        'September' => $september,
-        'October' => $october,
-        'November' => $november,
-        'December' => $december,
-    ];
+    for ($i = 0; $i < $months; $i++) {
+        $month = $currentDate->format('Y-m'); // Format as YYYY-MM
+        $monthLabel = $currentDate->format('F Y'); // Format as "Month Year"
+        $dynamicData[$monthLabel] = $data[$month] ?? 0; // Use fetched data or default to 0
+        $currentDate->modify('-1 month'); // Move to the previous month
+    }
+
+    return array_reverse($dynamicData); // Reverse to show oldest first
 }
-
 function getMonthlyPassFail($months = 4) {
     $db = new DbConnection();
     $pdo = $db->getConnection();
@@ -181,6 +181,25 @@ function getMonthlyPassFail($months = 4) {
         'November' => $november,
         'December' => $december,
     ];
+}
+
+function displayAnnouncements(){
+    require_once("classes/model.Announce.php");
+    require_once("classes/controller.Announce.php");
+
+    $announceController = new AnnounceController();
+    $list = $announceController->getAllAnnouncement();
+    if($list != null){
+        for($i = 0; $i < count($list); $i++){
+            echo "<a href='' class='view-announcement'>";
+            echo "<div class='announce-id' hidden>{$list[$i]["id"]}</div>";
+            echo "<div class='container-fluid bg-body-secondary rounded-3 px-lg-3 d-flex align-items-center p-2 mb-2'>";
+            echo "<div><i class='bi bi-megaphone-fill green1 me-3 fs-2'></i></div>";
+            echo "<div><p class='black3 fw-bold lh-1 fs-6 mb-0 pb-0' id='material-title'>{$list[$i]['title']}<span class='fw-light black3 fs-6 d-flex mt-1' id='material-date'></p></div>";
+            echo "</div></a>";
+        }
+    }
+
 }
 
 

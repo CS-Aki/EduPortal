@@ -9,7 +9,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         // case 3: header("Location: instructor/instructor-dashboard.php"); break;
         case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
     }
@@ -24,7 +24,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Dashboard</title>
+    <title>List of Students</title>
     <?php require('inc/links.php'); include("includes/view-list.php");?>
 </head>
 <body>
@@ -48,6 +48,9 @@ if(isset($_SESSION["user_category"])){
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
                             </ul>
                         </div>

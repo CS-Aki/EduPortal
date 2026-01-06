@@ -9,6 +9,18 @@ class ClassRm extends DbConnection
         $stmt = $this->connect()->prepare($sql);
 
         if ($stmt->execute(array($classCode, $className, $classProf, $classSchedule, $status, $userId))) {
+            $this->insertGradingSystem($classCode);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected function insertGradingSystem($classCode){
+        $sql = "INSERT INTO grading_system (`class_code`, `act_wg`, `quiz_wg`, `exam_wg`, `deduction`) VALUES (?, ? ,?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+
+        if ($stmt->execute(array($classCode, 30, 40, 30, 10))) {
             return true;
         } else {
             return false;

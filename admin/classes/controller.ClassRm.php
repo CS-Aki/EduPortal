@@ -72,7 +72,7 @@ class ClassRmController extends ClassRm
             return;
         }
 
-        if ($this->invalidScheduleDate() == true) {
+        if ($this->isScheduleValid() == true) {
             echo "Invalid Schedule Date";
             // $_SESSION["msg"] = "Invalid Schedule Date";
             // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleDate"); 
@@ -145,7 +145,7 @@ class ClassRmController extends ClassRm
             exit();
         }
 
-        if ($this->invalidScheduleDate() == true) {
+        if ($this->isScheduleValid() == true) {
             echo "Invalid Schedule Date";
             $_SESSION["msg"] = "Invalid Schedule Date";
             // header("Location: admin-dashboard.php?adminBtn=Add Class error=invalidScheduleDate"); 
@@ -210,23 +210,37 @@ class ClassRmController extends ClassRm
         return false;
     }
 
-    private function invalidScheduleDate()
-    {
-        // echo $this->classSchedule["startTimePeriod"] . " " . $this->classSchedule["endTimePeriod"] . "<br>";
-        // echo $this->classSchedule["endingHour"] . " " . $this->classSchedule["startingHour"] . "<br>";
-        // echo $this->classSchedule["endingMin"] . " " . $this->classSchedule["startingMin"] . "<br>";
-
-        if($this->classSchedule["startTimePeriod"] == $this->classSchedule["endTimePeriod"]){
-            if($this->classSchedule["startingHour"] > $this->classSchedule["endingHour"]){
-               return true;
-            }else if($this->classSchedule["startingHour"] == $this->classSchedule["endingHour"]){
-                if($this->classSchedule["startingMin"] >= $this->classSchedule["endingMin"]){
-                    return true;
-                }
-            }
+    private function convertTimeTo24Hour($hour, $min, $period) {
+        if ($period == 'pm' && $hour != 12) {
+            $hour += 12; // Convert PM hour to 24-hour format
+        } elseif ($period == 'am' && $hour == 12) {
+            $hour = 0;  // Convert 12 AM to 0 hours
         }
-
-        return false;
+        return [$hour, $min];
+    }
+    
+    public function isScheduleValid() {
+        // Convert starting time
+        [$startingHour, $startingMin] = $this->convertTimeTo24Hour(
+            $this->classSchedule["startingHour"],
+            $this->classSchedule["startingMin"],
+            strtolower($this->classSchedule["startTimePeriod"]) // Ensure this is lower case
+        );
+    
+        // Convert ending time
+        [$endingHour, $endingMin] = $this->convertTimeTo24Hour(
+            $this->classSchedule["endingHour"],
+            $this->classSchedule["endingMin"],
+            strtolower($this->classSchedule["endTimePeriod"]) // Ensure this is lower case
+        );
+    
+        // Now, perform the time comparison
+        if ($startingHour > $endingHour) {
+            return true; // Starting time is after ending time
+        } elseif ($startingHour == $endingHour) {
+            return $startingMin >= $endingMin;  // Only check minutes if hours are equal
+        }
+        return false; // Starting time is before ending time
     }
 
     // private function noChanges(){

@@ -27,6 +27,18 @@ class ListController extends ClassRm
 
         return $resultArr;
     }
+    
+    public function getExamSubmission1($classCode){
+        return $this->fetchExamSubmissionDb($classCode);
+    }
+    
+    public function getSeatworkSubmission($classCode){
+        return $this->getSeatworkSubmissionDb($classCode);
+    }
+
+    public function getAssignmentSubmission($classCode){
+        return $this->getAssignmentSubmissionDb($classCode);
+    }
 
     public function getClassFromCName()
     {
@@ -94,4 +106,31 @@ class ListController extends ClassRm
         return $this->getQuizSubmissionInDb($classCode);
     }
 
+    public function getExamTitle($classCode, $postId){
+        return $this->getExamTitleDb($classCode, $postId);
+    }
+
+    public function getExamSubmission($classCode){
+        return $this->getExamSubmissionDb($classCode);
+    }
+
+    public function getAllGrades($classCode){
+        return $this->getAllGradesDb($classCode);
+    }
+
+    public function getGradingSystem($classCode){
+        return $this->getGradingSystemDb($classCode);
+    }
+
+    public function totalActCount($classCode){
+        return $this->totalActCountDb($classCode);
+    }
+
+    public function getExamGrades($postId, $userId){
+        return $this->getExamGradesDb($postId, $userId);
+    }
+
+    public function getQuizGrades($postId, $userId){
+        return $this->getQuizGradesDb($postId, $userId);
+    }
 }

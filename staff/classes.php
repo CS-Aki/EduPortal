@@ -4,10 +4,10 @@ if (session_id() === "") session_start();
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
-        // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        // case 2: header("Location: ../instructor/instructor-dashboard.php"); break;
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        // case 2:  break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
@@ -20,7 +20,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Staff Dashboard</title>
     <style>
         .table thead th{
             background-color: #219E53 !important; 

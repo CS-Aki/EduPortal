@@ -6,7 +6,7 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        case 2: break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         // case 3: header("Location: instructor/instructor-dashboard.php"); break;
         case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
     }
@@ -38,6 +38,11 @@ if(isset($_GET["class"])){
     <!-- <script src="scripts/view-class.js"></script> -->
 
     <?php require('inc/links.php');?>
+    <style>
+    .card-body{
+        min-height:10rem !important;
+    }
+    </style>
 </head>
 
 <body>
@@ -74,22 +79,87 @@ if(isset($_GET["class"])){
                             </div>
                       -->
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+       <!-- Announce modal -->
+        <div class="modal fade" id="announceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editProfLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">                       
+                <div class="modal-content rounded-4 px-0">
+                    <div class="container-fluid rounded-top-4 general" id="announcement-type"></div> <!-- change class naalng here general, exam or maintenance -->
+                    <div class="modal-body px-3 pb-3 mt-2">
+                        <form action="">
+                            <div class="container-fluid d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <div>
+                                        <i class='bi bi-megaphone-fill fs-1 green1 title p-0 m-0'></i>
+                                    </div>
+                                    <div class="lh-1">
+                                        <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1 lh-1" id="className">Announcement</h1>
+                                        <p class="fw-light black3 ms-3 fs-6 d-flex m-0 lh-1" id="date-text">October 12, 2024</p>   
+                                    </div>
+                                </div>
+                                <!-- Close button -->
+                                <button type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="container-fluid mt-4 mb-4">
+                                <div class="container-fluid">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <p class="fw-bold black2 fs-6 d-flex m-0 lh-1" id="announcement-title">Announcement Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>   
+                                    </div>
+                                    <div class="container-fluid d-flex align-items-center justify-content-start mt-4">
+                                        <pre class="black2 fs-6" style="white-space: pre-wrap;" id="content">
+                                        <?php 
+                                        $text = <<<'ANNOUNCEMENT'
+                                                    Dear UCCians,
+
+                                                    We hope this message finds you safe and in good spirits. We would like to inform you of an important update concerning the academic schedule. Due to the incoming typhoon expected to affect our area, all classes and academic activities from October 11 to October 15 will be suspended. This decision has been made to prioritize the safety and well-being of our students, instructors, staff, and the entire UCC community.
+
+                                                    During this period, we advise everyone to take the necessary precautions to stay safe. The typhoon is predicted to bring heavy rains, strong winds, and possible flooding, and we urge you to follow updates from local authorities and weather agencies.
+                                                    Stay safe, UCCians!
+
+                                                    Warm regards,
+                                                    The UCC Admin Team
+                                                    University of Caloocan City
+                                                    ANNOUNCEMENT;
+
+                                        echo trim($text);
+                                        ?>
+                                        </pre> 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buttons positioned at the bottom -->
+                            <div class="modal-footer d-flex justify-content-end">
+                                <button id="next-btn" type="button" class="btn btn-primary me-2">Next</button>
+                                <button type="button" class="btn btn-secondary" id='close-announce' data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>      
+            </div>           
+        </div>
+    </div>
     
     <?php require('inc/footer.php'); ?>   
-    
+    <script src="scripts/announce.js"></script>
     <script src="https://eduportal-wgrc.onrender.com/socket.io/socket.io.min.js"></script>
     <!-- <script src="../server/socket.js"></script> -->
     <script>    
         const socket = io("https://eduportal-wgrc.onrender.com", {
-            transports: ["websocket"] // Ensure WebSocket transport
-            });
-
+              transports: ["websocket"], // Ensure WebSocket transport
+              timeout: 10000,            // Maximum time (ms) to wait for a connection
+              reconnection: true,        // Enable auto-reconnection
+              reconnectionAttempts: 5,   // Maximum attempts before giving up
+              pingInterval: 25000,       // Send a ping every 25 seconds
+              pingTimeout: 5000          // Wait 5 seconds for a pong before disconnecting
+          });
+          
         socket.on('connect_error', (err) => {
             console.error("Connection error:", err);
         });

@@ -7,10 +7,10 @@ class User extends DbConnection
 
     protected function insertUser($name, $email, $password, $birthdate, $gender, $address)
     {
-        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`, `birthdate`, `gender`, `address`) VALUES (? ,?, ?, ?, ? ,?, ?, ?)";
+        $sql = "INSERT INTO users (`user_category`, `name`, `email`, `password`, `image`, `birthdate`, `gender`, `address`, `status`) VALUES (? ,?, ?, ?, ? ,?, ?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png", $birthdate, $gender, $address))) {
+        if ($stmt->execute(array(4, $name, $email, $password, "../profiles/profile.png", $birthdate, $gender, $address, "Active"))) {
             return true;
         } else {
             return false;
@@ -29,6 +29,33 @@ class User extends DbConnection
             return false;
         }
     }
+    
+    protected function fetchBirthDate($name, $email){
+        $sql = "SELECT birthdate FROM users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if ($stmt->execute(array($email))) {
+            $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // for($i = 0; $i < count($result); $i++){
+            //        $result[$i]["status"] = "Pending";
+            // }
+            return $result;
+       }
+    }
+    
+    protected function fetchGender($name, $email){
+        $sql = "SELECT gender FROM users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if ($stmt->execute(array($email))) {
+            $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // for($i = 0; $i < count($result); $i++){
+            //        $result[$i]["status"] = "Pending";
+            // }
+            return $result;
+       }
+    }
+
 
     protected function fetchAddress($name, $email){
         $sql = "SELECT address FROM users WHERE email = ?";
@@ -58,16 +85,12 @@ class User extends DbConnection
 
         if (!$stmt->execute(array($email))) {
             // header("Location: index.php?error=statementFailed");
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>Statement Failed</span>";
-            echo "</div>";
+            echo "Statement Failed";
             exit();
         }
 
         if ($stmt->rowCount() == 0) {
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>User Not Found!</span>";
-            echo "</div>";
+            echo "User Not Found!";
             // header("Location: index.php?error=userNotFound");
             exit();
         }
@@ -76,9 +99,7 @@ class User extends DbConnection
         $checkPass = password_verify($password, $hashedPass[0]["password"]);
 
         if ($checkPass == false) {
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<span>Wrong Password!</span>";
-            echo "</div>";
+            echo "Wrong Password!";
             // $_SESSION["signIn"] = "true";
             // header("Location: index.php?error=wrongPassword");
             exit();

@@ -1,18 +1,20 @@
 <?php 
 if (session_id() === "") session_start();
 // echo "test " . $_SESSION["address"];
+
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
-        // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
         // case 2:  break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -20,8 +22,12 @@ if(isset($_SESSION["user_category"])){
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Staff Dashboard</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
   <?php require('inc/links.php'); ?>
+  <script src="scripts/announce.js"></script>
+
 </head>
 <body>
   <?php require('inc/header.php'); require_once('includes/dashboard.php');
@@ -111,45 +117,9 @@ if(isset($_SESSION["user_category"])){
                           <h4 class="fw-bold green2 mt-lg-2 mt-md-1">Announcements</h4>
                           <a href="" data-bs-toggle="modal" data-bs-target="#announcementModal"><i class="bi bi-plus-circle-fill green1 fs-2"></i></a>
                         </div>
-                        <a href="">
-                          <div class="container-fluid bg-body-secondary rounded-3 px-lg-3 d-flex align-items-center p-2 mb-2">
-                            <div>
-                              <i class="bi bi-megaphone-fill green1 me-3 fs-2"></i>
-                            </div>
-                            <div>
-                              <p class="black3 fw-bold lh-1 fs-6 mb-0 pb-0" id="material-title">
-                                  No classes between October 11-15 <br>
-                                  <span class="fw-light black3 fs-6 d-flex mt-1" id="material-date">September 24, 2024</span>                                         
-                              </p>
-                            </div>
-                          </div>
-                        </a>
-                        <a href="">
-                          <div class="container-fluid bg-body-secondary rounded-3 px-lg-3 d-flex align-items-center p-2 mb-2">
-                            <div>
-                              <i class="bi bi-megaphone-fill green1 me-3 fs-2"></i>
-                            </div>
-                            <div class="w-100">
-                              <p class="black3 fw-bold lh-1 fs-6 mb-0 pb-0" id="material-title">
-                                  No classes between October 11-15 <br>
-                                  <span class="fw-light black3 fs-6 d-flex mt-1" id="material-date">September 24, 2024</span>                                         
-                              </p>
-                            </div>
-                          </div>
-                        </a>
-                        <a href="">
-                          <div class="container-fluid bg-body-secondary rounded-3 px-lg-3 d-flex align-items-center p-2 mb-2">
-                            <div>
-                              <i class="bi bi-megaphone-fill green1 me-3 fs-2"></i>
-                            </div>
-                            <div class="w-100">
-                              <p class="black3 fw-bold lh-1 fs-6 mb-0 pb-0 pe-5" id="material-title">
-                                  No classes between October 11-15 sdfasdfgasfasfasfasfaasddfdfasasdsfasfasfasdasdasdasas <br>
-                                  <span class="fw-light black3 fs-6 d-flex mt-1" id="material-date">September 24, 2024</span>                                         
-                              </p>
-                            </div>
-                          </div>
-                        </a>
+                        <div id="announce-container">
+                        <?php displayAnnouncements(); ?>
+</div>
                       </div>
                       
                       <div class="border-3 bordergreen border rounded-4 pt-lg-2 pt-md-2 pt-sm-3 pt-3 px-lg-3 px-md-3 px-sm-3 px-3 mb-2">
@@ -261,12 +231,12 @@ if(isset($_SESSION["user_category"])){
       </div>
   </div>
 
-  <!-- CREATE ANNOUNCEMENT MODAL -->
-  <div class="modal fade" id="announcementModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editProfLabel" aria-hidden="true">
+ <!-- CREATE ANNOUNCEMENT MODAL -->
+ <div class="modal fade" id="announcementModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="announcementModalLabel">
       <div class="modal-dialog modal-dialog-centered modal-xl">                       
               <div class="modal-content rounded-4 px-2">
                   <div class="modal-body">
-                      <form action="">
+                      <form action="includes/announcement.php" method="post" id="announcementForm">
                           <div class="container-fluid d-flex justify-content-between align-items-center">
                               <div class="d-flex justify-content-center align-items-center">
                                   <div>
@@ -301,7 +271,7 @@ if(isset($_SESSION["user_category"])){
                                   <div class="col-lg-4 d-flex align-items-center">
                                       <label class="form-label black3 mb-0 me-3">Type</label>
                                       <div class="input-group">
-                                          <select class="form-select shadow-elevation-light-3 black3" id="statusInputGroup">
+                                          <select class="form-select shadow-elevation-light-3 black3" id="msg_type">
                                               <option value="1">General</option>
                                               <option value="2">Maintenance</option>
                                               <option value="3">Examination</option>
@@ -315,11 +285,11 @@ if(isset($_SESSION["user_category"])){
                                 </div>
                                 <div class="col-lg-3 d-flex align-items-center">
                                     <div class="input-group">
-                                        <select class="form-select shadow-elevation-light-3 black3" id="statusInputGroup">
-                                            <option value="1">All</option>
-                                            <option value="2">Instructors</option>
-                                            <option value="3">Students</option>
-                                            <option value="4">Staff</option>
+                                        <select class="form-select shadow-elevation-light-3 black3" id="audience_visible">
+                                            <option value="5">All</option>
+                                            <option value="3">Instructors</option>
+                                            <option value="4">Students</option>
+                                            <option value="2">Staff</option>
                                         </select>
                                     </div>
                                 </div>
@@ -327,30 +297,79 @@ if(isset($_SESSION["user_category"])){
                               <div class="row mb-2">
                                 <div class="col-lg-12 d-flex ">
                                     <label class="form-label black3 mb-0 me-3">Message</label>
-                                    <textarea rows="10" class="form-control black3 shadow-elevation-light-3" value="" name="toDate" id="to_date" required></textarea>
+                                    <textarea rows="10" class="form-control black3 shadow-elevation-light-3" value="" name="message" id="message-content" required></textarea>
                                 </div>
                               </div>
                               <div class="d-flex justify-content-end gap-1 mt-4">
-                                  <button type="submit" name="postClassBtn" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="post_class_btn">Post</button>
+                                  <button type="submit" name="postAnnounceBtn" class="btn green shadow-none border-none rounded-5 px-4 py-2" id="post_announce_btn">Post Announcement</button>
                               </div>
                           </div>
                       </form>
-                      <!-- <form action="includes/join-class.php" method="post" id="joinClassForm">
-                          <div class="row d-flex justify-content-center">
-                              <div class="col-10">
-                                  <div class="input-group mb-3">
-                                      <input type="text" class="form-control" value="Enter Class Code..." name="classCode" id="class_code" required>
-                                  </div>
-                              </div>
-                              <div class="col-auto">
-                                  <button type="submit" name="joinClassBtn" class="btn btn-primary green shadow-none rounded-5 px-5" id="join_class_btn">Join</button>
-                              </div>
-                          </div>
-                          <div class="join-class-msg"></div>
-                      </form> -->
+
                   </div>
               </div>                
       </div>
+  </div>
+
+       <!-- Announce modal -->
+       <div class="modal fade" id="announceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editProfLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">                       
+                <div class="modal-content rounded-4 px-0">
+                    <div class="container-fluid rounded-top-4 general" id="announcement-type"></div> <!-- change class naalng here general, exam or maintenance -->
+                    <div class="modal-body px-3 pb-3 mt-2">
+                        <form action="">
+                            <div class="container-fluid d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <div>
+                                        <i class='bi bi-megaphone-fill fs-1 green1 title p-0 m-0'></i>
+                                    </div>
+                                    <div class="lh-1">
+                                        <h1 class="title fs-1 h-font ms-3 m-0 p-0 green1 lh-1" id="className">Announcement</h1>
+                                        <p class="fw-light black3 ms-3 fs-6 d-flex m-0 lh-1" id="date-text">October 12, 2024</p>   
+                                    </div>
+                                </div>
+                                <!-- Close button -->
+                                <button type="button" class="btn-close" id="close_code" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="container-fluid mt-4 mb-4">
+                                <div class="container-fluid">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <p class="fw-bold black2 fs-6 d-flex m-0 lh-1" id="announcement-title">Announcement Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>   
+                                    </div>
+                                    <div class="container-fluid d-flex align-items-center justify-content-start mt-4">
+                                        <pre class="black2 fs-6" style="white-space: pre-wrap;" id="content">
+                                        <?php 
+                                        $text = <<<'ANNOUNCEMENT'
+                                                    Dear UCCians,
+
+                                                    We hope this message finds you safe and in good spirits. We would like to inform you of an important update concerning the academic schedule. Due to the incoming typhoon expected to affect our area, all classes and academic activities from October 11 to October 15 will be suspended. This decision has been made to prioritize the safety and well-being of our students, instructors, staff, and the entire UCC community.
+
+                                                    During this period, we advise everyone to take the necessary precautions to stay safe. The typhoon is predicted to bring heavy rains, strong winds, and possible flooding, and we urge you to follow updates from local authorities and weather agencies.
+                                                    Stay safe, UCCians!
+
+                                                    Warm regards,
+                                                    The UCC Admin Team
+                                                    University of Caloocan City
+                                                    ANNOUNCEMENT;
+
+                                        echo trim($text);
+                                        ?>
+                                        </pre> 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buttons positioned at the bottom -->
+                            <div class="modal-footer d-flex justify-content-end">
+                                <button id="next-btn" type="button" class="btn btn-primary me-2">Next</button>
+                                <button type="button" class="btn btn-secondary" id='close-announce' data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>      
+            </div>           
+        </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -496,7 +515,8 @@ if(isset($_SESSION["user_category"])){
       sidebar.classList.toggle('active');
     }
   </script>
+   <script src="scripts/announcement.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   </body>
 </html>

@@ -53,6 +53,8 @@ $(document).ready(function () {
                     text: 'Grade Submitted!',
                     icon: 'success'
                 });
+                $("#graded-text").empty();
+                $("#graded-text").text("(Graded)");
                 $(".point-temp").text(points);
                 $("#grading-container").empty();
                 $("#grading-container").append(`   <a href="#" id="edit-grade">
@@ -62,6 +64,7 @@ $(document).ready(function () {
                                                                 </div> 
                                                             </div>
                                                         </a>`);
+                        
             },
             error: function(xhr, status, error) {
               console.log("Status "+ status + " An error occured" + error)

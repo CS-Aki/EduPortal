@@ -1,37 +1,44 @@
 <!-- HEADER -->
-<nav class="navbar navbar-expand-lg bg-white shadow-lg px-lg-3 py-lg-3 z-3">
-    <div class="container-fluid">
-        <a class="navbar-brand h-font me-5 ms-3 fw-bold fs-3 pt-1" href="#"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
+<nav class="navbar navbar-expand-lg bg-white shadow-elevation-dark-1 px-lg-3 py-lg-3 z-3 sticky-top">
+    <div class="container-fluid bg-white">
+        <a class="navbar-brand h-font me-5 ms-3 fw-bold fs-3 pt-1" href="index.php"><img src="images/combined-fixed.png" class="logo" alt="logo"></a>
         <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="ms-auto d-flex">
-                <ul class="navbar-nav mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-4">
 
                     <li class="nav-item">
-                        <a class="nav-link green1 active me-2 h-font" aria-current="page" href="rooms.php">Contacts</a>
+                        <a class="nav-link green1 active me-2 h-font" aria-current="page" href="contacts.php">Contacts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link green1 active me-4 h-font" aria-current="page" href="facilities.php">About Us</a>
+                        <a class="nav-link green1 active me-4 h-font" aria-current="page" href="about.php">About Us</a>
+                    </li>
+                    <li class="nav-item signlink">
+                        <a class="nav-link green1 active me-4 h-font" href="google-oauth.php" aria-current="page" id="signUpBtn">Sign Up</a>
+                    </li>
+                    <li class="nav-item signlink">
+                        <a class="nav-link green1 active me-4 h-font" aria-current="page" data-bs-toggle="modal" data-bs-target="#signInModal" href="#">Sign in</a>
                     </li>
                 </ul>
                 <!-- <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signUpModal"> -->
-                <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" id="signUpBtn">
-                    Sign Up
-                </button>
-                
-                <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signInModal">
-                    Sign In
-                </button>
-
+                <div class="buttonMenu d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn green shadow-none me-lg-2 me-3 rounded-5 px-4" id="signUpBtn">
+                        <a href="google-oauth.php" class="fs-6">Sign Up</a>
+                    </button>
+                    
+                    <button type="button" class="btn  green shadow-none me-lg-2 me-3 rounded-5 px-4" data-bs-toggle="modal" data-bs-target="#signInModal">
+                        Sign In
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </nav>
 
 <!-- Sign Up Modal -->
-<div class="modal fade" id="signUpModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="signUpModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg w-70">
         <div class="modal-content rounded-pill p-2">
             <div class="modal-body">
@@ -45,13 +52,13 @@
                         <div class="row mb-1">
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0 ">First Name</label>
-                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" required value="<?php if (isset($_SESSION["givenName"])) {
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter First Name" name="firstName" id="first_name" value="<?php if (isset($_SESSION["givenName"])) {
                                                                                                                                                                                 echo $_SESSION["givenName"];
-                                                                                                                        } ?>">
+                                                                                                                        } ?>" required>
                             </div>
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0">Last Name</label>
-                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" required value ="<?php if(isset($_SESSION["familyName"])) echo $_SESSION["familyName"]; ?>">
+                                <input type="text" class="form-control black2 shadow-sm" placeholder="Enter Last Name" name="lastName" id="last_name" value ="<?php if(isset($_SESSION["familyName"])) echo $_SESSION["familyName"]; ?>" required>
                             </div>
                             <div class="col-lg-4">
                                 <label class="form-label black2 mb-0">Middle Name (optional)</label>
@@ -72,7 +79,7 @@
                             <div class="col-lg-3">
                                 <label class="form-label black2 mb-0">Gender</label>
                                 <select class="form-select shadow-elevation-light-3 black2" id="gender" required>
-                                    <option value="blank"></option>
+                                    <option value=""></option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     <option value="Rather not say">Rather not say</option>

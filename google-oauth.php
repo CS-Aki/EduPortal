@@ -6,6 +6,16 @@ require_once("log and reg backend/config/config.php");
 
 if(session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: admin/admin-dashboard.php"); break;
+        case 2: header("Location: staff/staff-dashboard.php"); break;
+        case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: student/student-dashboard.php"); break;
+    }
+}
+
 // Update the following variables
 $google_oauth_client_id = GOOGLE_CLIENT_ID;
 $google_oauth_client_secret = GOOGLE_CLIENT_SECRET;
@@ -81,12 +91,16 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
                 $id = $gmailControl->getId();
                 $userCategory = $gmailControl->getCategory();
                 $address = $gmailControl->getAddress();
-                echo var_dump($address);
-                echo "testing";
+                // echo var_dump($address);
+                // echo "testing";
                 $_SESSION["address"] =  $address[0]["address"];
-                echo "Session ". $_SESSION["address"];
-         
+                // echo "Session ". $_SESSION["address"];
+                $_SESSION["email"] =  $_SESSION['google_email'];
                 $_SESSION['user_id'] = $id[0]['user_id'];
+                $birth =  $gmailControl->getBirthDate();
+                $gend = $gmailControl->getGender();
+                $_SESSION["birthdate"] = $birth[0]["birthdate"];
+                $_SESSION["gender"] = $gend[0]["gender"];
                 $_SESSION["user_category"] =  $userCategory[0]["user_category"];
                 switch($_SESSION["user_category"]){
                     case 1:

@@ -10,87 +10,103 @@ $(document).ready(function () {
             <div class="question id" data-id="${questionCount}">
                  <div class="notSaved" hidden>not save</div>
 
-                <div class="input-group row mb-3">
-                    <div class="d-flex col-6">
-                        <span style="font-size: large;" class="question_count form-label col-3">Question ${questionCount}:</span>
-                        <div class="form-floating col-8">
-                            <textarea class="form-control rounded-2 question-text" placeholder="Enter question" required></textarea>
-                            <label for="floatingTextarea2" class="black3">Enter question</label>
+                <div class="row mb-3 d-flex align-items-center">
+                    <div class="d-flex col-lg-6 align-items-center px-0 m-0">
+                        <div class="row container-fluid m-0">
+                            <div class="col-lg-3 d-flex align-items-center m-0 p-0">
+                                <span class="question_count form-label fs-6 black3">Question ${questionCount}:</span>
+                            </div>
+                            <div class="col-lg-9 d-flex align-items-center container-fluid m-0 p-0">
+                                <textarea class="form-control question-text container-fluid black3 w-100" placeholder="Enter question" required></textarea>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="col-4">
-                        <span style="font-size: large;" class="ms-2 form-label">Question Type:</span>
-                        <select class="rounded-2 question-type">
-                            <option value="multiple-choice">Multiple Choice</option>
-                            <option value="short-text">Short Text</option>
-                            <option value="true-false">True/False</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex col-2">
-                        <span style="font-size: large;" class="ms-2 form-label">Point:</span>
-                        <div class="form-floating ms-2" style="flex: 1;">
-                            <input type="number" class="points rounded-2 ps-2" value="1" min="1" max="100" placeholder="Enter number" required>
+                    <div class="col-lg-4 d-flex align-items-center m-0 p-0">
+                        <div class="row container-fluid m-0">\
+                            <div class="col-lg-3 d-flex align-items-center m-0 p-0">
+                                <span class="form-label black3 fs-6 ">Question Type:</span>
+                            </div>
+                            <div class="col-lg-9 d-flex align-items-center container-fluid m-0 p-0">
+                                <select class="rounded-2 question-type fs-6 form-select shadow-elevation-light-3 black3">
+                                    <option value="multiple-choice">Multiple Choice</option>
+                                    <option value="short-text">Short Text</option>
+                                    <option value="true-false">True/False</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <div class="d-flex col-lg-2 align-items-center m-0 p-0">
+                        <div class="row d-flex align-items-center m-0 container-fluid">
+                            <div class="col-lg-4 container-fluid d-flex align-items-center px-0 m-0">
+                            <span class="form-label black3 fs-6" >Point:</span>
+                            </div>
+                       
+                            <div class="col-lg-8 shadow-elevation-light-3 black3 rounded-2 container-fluid d-flex align-items-center px-0 m-0">
+                            <input type="number" class="points rounded-4 container-fluid border-0 py-2 black3" value="1" min="1" max="100" placeholder="Enter number" required>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="options">
                     <label>CHOICES:</label>
                     <div class="option-container">
-                        <div class="option mt-1 col-7 d-flex align-items-center">
+                        <div class="option mt-1  col-lg-7 col-12 d-flex align-items-center">
                             <div class="form-floating col-8">
                                 <input type="text" class="optionText form-control rounded-2 remove_text" placeholder="Enter Choice" name="multiChoice[]" id="floatingText2" required>
                                 <label for="floatingText" class="black3">Enter Choice</label>
                             </div>
-                            <a href="#" class="remove-choice"><button class="btn btn-danger shadow-none mt-2 fw-medium fs-5 ms-2">X</button></a>
-                            <a href="#" class="select_ans_key"><button class="answ_key btn btn-success shadow-none mt-2 fw-medium fs-5 ms-2">Answer Key</button></a>
+                            <a href="#" class="remove-choice"><button class="delete btn btn-secondary shadow-none fw-medium fs-6 ms-2">X</button></a>
+                            <a href="#" class="select_ans_key"><button class="answ_key btn btn-success shadow-none fw-medium fs-6 ms-2">Answer Key</button></a>
                         </div>
 
-                        <div class="option mt-1 col-7 d-flex align-items-center">
+                        <div class="option mt-1  col-lg-7 col-12 d-flex align-items-center">
                             <div class="form-floating col-8">
                                 <input type="text" class="optionText form-control rounded-2 remove_text" placeholder="Enter Choice" name="multiChoice[]" id="floatingText1" required>
                                 <label for="floatingText" class="black3">Enter Choice</label>
                             </div>
-                            <a href="#" class="remove-choice"><button class="delete btn btn-danger shadow-none mt-2 fw-medium fs-5 ms-2">X</button></a>
-                            <a href="#" class="select_ans_key"><button class="answ_key btn btn-success shadow-none mt-2 fw-medium fs-5 ms-2">Answer Key</button></a>
+                            <a href="#" class="remove-choice"><button class="delete btn btn-secondary shadow-none fw-medium fs-6 ms-2">X</button></a>
+                            <a href="#" class="select_ans_key"><button class="answ_key btn btn-success shadow-none fw-medium fs-6 ms-2">Answer Key</button></a>
                         </div>
 
-                        <div class="ans-key-cont form-floating col-6 d-flex align-items-center">
+                        <div class="ans-key-cont form-floating col-lg-7 col-12 d-flex align-items-center mt-2">
                             <input type="text" class="answer_key form-control rounded-2 remove_text" placeholder="Answer Key" name="multiChoice[]" id="floatingText2" readonly>
                             <label for="floatingText" class="black3">Answer Key</label>
                         </div>
-                        <button type="button" class="btn btn-secondary add-choice">Add Choice</button>
-                         <button type="button" class="btn btn-danger remove-question ms-auto">Remove Question</button>
+                        <div class="d-flex align-items-center gap-1">
+                        <button type="button" class="btn btn-secondary add-choice green shadow-none mt-2 fw-medium fs-6">Add Choice</button>
+                         <button type="button" class="btn btn-danger remove-question redbtn shadow-none mt-2 fw-medium fs-6">Remove Question</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="true-false-select col-4" style="display: none;">
-                    <span style="font-size: large;" class="ms-2 form-label">Select Answer Key:</span>
-                    <select class="booleanSelect rounded-2">
+                    <span class="form-label black3 fs-6">Select Answer Key:</span>
+                    <select class="booleanSelect rounded-2 fs-6 form-select shadow-elevation-light-3 black3">
                         <option value="True">True</option>
                         <option value="False">False</option>
                     </select>
 
-                    <div class="mt-1 col-8 d-flex align-items-center">
-                        <div class="form-floating col-8">
-                            <input type="text" class="boolean_answer_key form-control rounded-2 remove_text" placeholder=">Answer Key" id="floatingText1a" readonly>
+                    <div class="mt-1 col-8 d-flex align-items-center" style="display: none !important;">
+                        <div class="form-floating col-8" style="display: none;">
+                            <input type="text" class="boolean_answer_key form-control rounded-2 remove_text" placeholder=">Answer Key" id="floatingText1a" hidden>
                             <label for="floatingText1a" class="black3">Answer Key</label>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-danger remove-question ms-auto">Remove Question</button>
+                    <button type="button" class="btn btn-danger remove-question ms-auto redbtn shadow-none mt-2 fw-medium fs-6">Remove Question</button>
                 </div>
             
                 <br>
                     <div class="short-text-select" style="display: none;">
-                    <div class="mt-1 col-7 d-flex align-items-center">
-                        <div class="form-floating col-8">
+                    <div class="mt-1  col-lg-7 col-12 d-flex align-items-center">
+                        <div class="form-floating col-lg-7 col-12">
                             <input type="text" class="short_ans_key form-control rounded-2 remove_text" placeholder=">Enter Answer Key" id="floatingText1a">
                             <label for="floatingText1a" class="black3">Enter Answer Key</label>
                         </div>
                      </div><br>
-                    <button type="button" class="btn btn-danger remove-question ms-auto">Remove Question</button>
+                    <button type="button" class="btn btn-danger remove-question ms-auto redbtn shadow-none mt-2 fw-medium fs-6">Remove Question</button>
               </div>
             </div>
             <hr>
@@ -121,16 +137,16 @@ $(document).ready(function () {
         isQuizSaved = false;
         // Find the last .option that is a direct child of .option-container (excluding .ans-key-cont)
         container.children('.option').last().after(`
-            <div class="option mt-1 col-7 d-flex align-items-center">
+            <div class="option mt-1  col-lg-7 col-12 d-flex align-items-center">
                 <div class="form-floating col-8">
                     <input type="text" class="optionText form-control rounded-2 remove_text" placeholder="Enter Choice" name="multiChoice[]" id="floatingText${Date.now()}" required>
                     <label for="floatingText${Date.now()}" class="black3">Enter Choice</label>
                 </div>
                 <a href="#" class="remove-choice">
-                    <button class="btn btn-danger shadow-none mt-2 fw-medium fs-5 ms-2">X</button>
+                    <button class="btn btn-secondary shadow-none fw-medium fs-6 ms-2">X</button>
                 </a>
                 <a href="#" class="select_ans_key">
-                    <button class="btn btn-success shadow-none mt-2 fw-medium fs-5 ms-2">Answer Key</button>
+                    <button class="answ_key btn btn-success shadow-none fw-medium fs-6 ms-2">Answer Key</button>
                 </a>
             </div>
         `);
@@ -451,6 +467,7 @@ $(document).ready(function () {
             const trueFalseSelect = $(this).find('.true-false-select');
             const shortText = $(this).find('.short-text-select');
             const answerKey = $(this).find('.answer_key');
+            console.log("Type" + type);
             // console.log(answerKey.val());
             if (type === 'multiple-choice') {
                 options.show();
@@ -460,7 +477,7 @@ $(document).ready(function () {
                 $(this).find('.optionText').prop('required', true);
                 options.find('.option').prop('required', true); // Make multiple-choice options required
                 answerKey.prop('readonly', true).show(); // Make answer key visible and readonly
-
+                console.log("Update multi choice");
             } else if (type === 'true-false') {
 
                 options.hide();
@@ -470,12 +487,14 @@ $(document).ready(function () {
                 trueFalseSelect.show();
                 shortText.hide();
                 answerKey.prop('readonly', true).show(); // Make answer key visible and readonly
+                console.log("Update true false");
 
                 const selectedValue = trueFalseSelect.find('.booleanSelect').val();
                 $(this).find(".boolean_answer_key").val(selectedValue);
                 answerKey.val(selectedValue);
 
             } else if (type === 'short-text') {
+                console.log("Update short text");
 
                 options.hide();
                 options.find('.option-container').hide();
@@ -697,7 +716,22 @@ $(document).ready(function () {
                 },
 
                 success: function (response) {
-                    alert("QUIZ SAVED SUCCESSFULLY");
+                    if($("#content-type").text() == "Exam"){
+                        Swal.fire({
+                            title: 'Exam Saved!',
+                            text: 'Your Exam has been Saved.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }else{
+                        Swal.fire({
+                            title: 'Quiz Saved!',
+                            text: 'Your Quiz has been Saved.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
                     isQuizSaved = true;
                     console.log(response);
                 },
@@ -706,7 +740,6 @@ $(document).ready(function () {
                 }
             });
         } else {
-            console.log("insideeeee");
             alert(listOfNoAns.substring(0, listOfNoAns.length - 2));
             noAnswerKey = false;
             options = [];

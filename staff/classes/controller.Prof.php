@@ -40,24 +40,32 @@ class InstructorController extends Instructor
         return $list;
     }
 
-    public function changeProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId){
-        if($this->invalidInput($instructorName)){
-            echo "Special Characters aren't allowed, please try again";
+   public function changeProfDetails($instructorName, $status, $email, $gender, $address, $oldName, $userId, $birthdate, $password = null) {
+        // Check for invalid inputs in the name
+        if ($this->invalidInput($instructorName)) {
+            echo "Special characters Or Numbers aren't allowed, please try again.";
             return;
         }
-
+    
+        // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email address.";
             return;
-        } 
-
-        $result = $this->updateProfDetails($instructorName, $status,  $email,  $gender, $address, $oldName, $birthdate, $userId);
-
-        if($result == false || $result == null){
-            // echo "Error changeProfDetails";
-            return;
         }
 
+        if ($this->isValidPassLen($password) == true){
+            echo "Password must be 4 characters or more!";
+            return;
+        }
+    
+        // Call the model's update method, including the password
+        $result = $this->updateProfDetails($instructorName, $status, $email, $gender, $address, $oldName, $userId, $birthdate, $password);
+    
+        if ($result === false || $result === null) {
+            echo "Error updating professor details.";
+            return;
+        }
+    
         return $result;
     }
 
@@ -72,5 +80,15 @@ class InstructorController extends Instructor
         }
 
         return false;
+    }
+    
+
+    private function isValidPassLen($password){
+          if(strlen($password) < 4){
+              return true;
+          }
+          
+          return false;
+          
     }
 }

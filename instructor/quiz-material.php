@@ -1,6 +1,18 @@
 <?php
 if (session_id() === "") session_start();
 
+if(isset($_SESSION["user_category"])){
+    $category = $_SESSION["user_category"];
+    switch($category){
+        case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
+        // case 3: header("Location: instructor/instructor-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); exit(); break;
+    }
+}else{
+    header("Location: ../");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +21,7 @@ if (session_id() === "") session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Quiz Material</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
@@ -189,7 +201,7 @@ if (session_id() === "") session_start();
 </head>
 
 <body>
-    <?php if (isset($_GET["class"])) {include("includes/view-quiz.php");
+    <?php if (isset($_GET["class"])) {include("includes/view-quiz.php"); 
     } ?>
     <?php require('inc/header.php');  ?>
 
@@ -211,6 +223,9 @@ if (session_id() === "") session_start();
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($postDetails[0]["class_code"]); ?>">List of Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="grades.php?class=<?php echo md5($details[0]["class_code"]); ?>">Grades</a>
                                 </li>
                             </ul>
                         </div>
@@ -282,19 +297,24 @@ if (session_id() === "") session_start();
                                                                 Total Points: <?php echo $totalScore; ?> <br> 
                                                                 Result: 
                                                                 <span class="badge rounded-pill text-bg-<?php echo ($grade >= 70) ? "success" : "danger"; ?>">
-                                                                    <?php echo ($grade >= 70) ? "Passed" : "Failed"; ?>
+                                                                    <?php if($postDetails[0]["content_type"] == "Exam") echo ($examGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                           else echo ($quizGrades[$j]["grade"] >= 70) ? "Passed" : "Failed"; 
+                                                                    ?>
                                                                 </span>
                                                             </td>
-                                                            <td><?php echo ceil($grade) . "%"; ?></td>
+                                                            <td><?php if($postDetails[0]["content_type"] == "Exam") echo ceil($examGrades[$j]["grade"]) . "%"; 
+                                                                      else echo ceil($quizGrades[$j]["grade"]) . "%" ?>
+                                                                    </td>
                                                             <td><?php 
                                                                 
                                                                  if($quizStatus != null && $quizStatus[$j]["status"] == "On Time"){
                                                                     echo '<span class="badge rounded-pill text-bg-success">Finished</span>';
-                                                                    $j++;
+                                                                
                                                                  }else{
                                                                     echo '<span class="badge rounded-pill text-bg-danger">Finished Late</span>';
+                                                          
                                                                  }
-                                                                
+                                                                 $j++;
                                                                 ?>
                                                             </td>
                                                             <td>

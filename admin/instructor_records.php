@@ -5,9 +5,9 @@ if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
         // case 1: header("Location: ../admin/admin-dashboard.php"); exit(); break;
-        // case 2: header("Location: ../instructor/instructor-dashboard.php"); break;
+        case 2: header("Location: ../staff/staff-dashboard.php"); break;
         case 3: header("Location: ../instructor/instructor-dashboard.php"); exit(); break;
-        case 4: header("Location: student/student-dashboard.php"); break;
+        case 4: header("Location: ../student/student-dashboard.php"); break;
     }
 }else{
     header("Location: ../");
@@ -30,6 +30,7 @@ if(isset($_SESSION["user_category"])){
         .table td {
             font-weight: semibold;
             color: #6B656B;
+            word-wrap: break-word;
         }
         
         .dataTables_info {
@@ -92,13 +93,13 @@ if(isset($_SESSION["user_category"])){
                     </div>
                 </nav>
 
-                <div class="container mt-2" style="width: 80%;">
+                <div class="container-fluid mt-2 p-0 p-lg-4" style="width: 100%;">
                     <div class="d-flex justify-content-end mb-3"> 
                         <button type="button" class="btn fs-5 green shadow-none white2 d-flex align-items-center justify-content-center py-0 px-4 rounded-5" data-bs-toggle="modal" data-bs-target="#signUpModal">
                             <i class="bi bi-plus-lg white2 me-1 fs-2"></i>Register New Instructor Account
                         </button>
                     </div>
-                    <table id="myTable" class="table table-bordered text-center align-middle">
+                    <table id="myTable" class="table table-bordered text-center align-middle" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th scope="col"></th> 
@@ -179,6 +180,16 @@ if(isset($_SESSION["user_category"])){
                                                 </div>
                                             </div>
                                             </div>
+                                            <div class="row mb-1">
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password">
+                                            </div>
+                                            <div class="col-lg-6 mb-1">
+                                                <label class="form-label black2 mb-0">Confirm Password</label>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass">
+                                            </div>
+                                        </div>
                                                 <label class="form-label black3 mb-0">Classes</label>
                                                 <table id="classTable" class="table table-bordered text-center align-middle" width="100%">
                                                     <thead>
@@ -273,7 +284,7 @@ if(isset($_SESSION["user_category"])){
                                             <div class="col-lg-3">
                                                 <label class="form-label black2 mb-0">Gender</label>
                                                 <select class="form-select shadow-elevation-light-3 black2" id="gender" name="gender" required>
-                                                    <option value="blank"></option>
+                                                    <option value=""></option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                     <option value="Rather not say">Rather not say</option>
@@ -289,11 +300,11 @@ if(isset($_SESSION["user_category"])){
                                         <div class="row mb-1">
                                             <div class="col-lg-6 mb-1">
                                                 <label class="form-label black2 mb-0">Password</label>
-                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password" required>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Enter Password" name="password" id="password1" required>
                                             </div>
                                             <div class="col-lg-6 mb-1">
                                                 <label class="form-label black2 mb-0">Confirm Password</label>
-                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass" id="repeat_pass" required>
+                                                <input type="password" class="form-control black2 shadow-sm" placeholder="Re-Enter Password" name="repeatPass1" id="repeat_pass1" required>
                                             </div>
                                         </div>
                                         <br>

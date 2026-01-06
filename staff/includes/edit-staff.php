@@ -6,12 +6,12 @@ if(isset($_POST["staffName"])){
     require_once("../classes/model.Staff.php");
     require_once("../classes/controller.Staff.php");
 
-    $staffName = $_POST["staffName"];
+    $staffName = trim($_POST["staffName"]);
     $status = $_POST["status"];
-    $email = $_POST["email"];
+    $email = trim($_POST["email"]);
     $gender = $_POST["gender"];
-    $address = $_POST["address"];
-    $oldName = $_POST["oldName"];
+    $address = trim($_POST["address"]);
+    $oldName = trim($_POST["oldName"]);
     $id = $_POST["id"];
     $birthdate = $_POST["birthdate"];
 

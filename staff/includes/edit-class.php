@@ -8,7 +8,7 @@ if (isset($_POST["className"])) {
 
     $classCode = $_POST['classCode'];
     // $_SESSION['num'] = $num -  $_SESSION["min"] - 1;
-    $className = $_POST["className"];
+    $className = trim($_POST["className"]);
     $userId = $_POST["classProfId"];
     $classSchedule = array(
         "day" => $_POST["daySched"],
@@ -19,9 +19,9 @@ if (isset($_POST["className"])) {
         "endingMin" => $_POST["endingMinSched"],
         "endTimePeriod" => $_POST["endTimePeriod"]
     );
-    $tempClassName = $_POST["tempClassName"];
+    $tempClassName = trim($_POST["tempClassName"]);
 
-    $classProf = $_POST["classProf"];
+    $classProf = trim($_POST["classProf"]);
     $status = $_POST["classStatus"];
     //echo $classCode . "<br>" . $classProf . "<br>" . $status;
 

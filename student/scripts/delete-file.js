@@ -21,7 +21,10 @@ $(document).ready(function () {
             cancelButtonText: "No, I want to keep my files",
         }).then((result) => {
             if (result.isConfirmed) {
-
+                
+                $(".act-status").empty();
+                console.log("removing dpost");
+                
                 Swal.fire({
                     title: 'Deleting...',
                     text: 'Please wait while we delete the file.',
@@ -40,6 +43,7 @@ $(document).ready(function () {
                 //     }
                 // });
 
+
                 $.ajax({
                     url: 'student backend/includes/delete-file.php',  // PHP script to handle form submission
                     type: 'POST',
@@ -54,8 +58,8 @@ $(document).ready(function () {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-
-                        console.log(response);
+                        
+                    //    console.log(response);
  
                     },
                     error: function(xhr, status, error) {

@@ -12,12 +12,16 @@ $(document).ready(function() {
             email : $("#prof_email").val(),
             gender :  $("#profGender").val(),
             address : $("#prof_address").val(),
-            birthdate : $("#date_of_birth1").val()
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
     $(document).on('hidden.bs.modal', '#editProfModal', function () {
         $("#profModalMsg").empty();
+        $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
     });
 
     $("#editInstructorForm").submit(function(event) {
@@ -29,7 +33,9 @@ $(document).ready(function() {
             email : $("#prof_email").val(),
             gender :  $("#profGender").val(),
             address : $("#prof_address").val(),
-            birthdate : $("#date_of_birth1").val()
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
         };
 
         let isChanged = false;
@@ -37,7 +43,7 @@ $(document).ready(function() {
             if (currentValues[key] !== window.initialFormValues[key]) {
                 isChanged = true;
                 // isChange = true;
-                console.log(`Field "${key}" has changed from "${window.initialFormValues[key]}" to "${currentValues[key]}"`);
+                // console.log(`Field "${key}" has changed from "${window.initialFormValues[key]}" to "${currentValues[key]}"`);
             }
         }
 
@@ -49,6 +55,20 @@ $(document).ready(function() {
         let address = $("#prof_address").val();
         let id =  $("#profCode").val();
         let birthdate = $("#date_of_birth1").val();
+        let password = currentValues.password;
+        let repeatPass = currentValues.repeatPass;
+
+        if (password !== "" || repeatPass !== "") {
+            if (password !== repeatPass) {
+                Swal.fire({
+                    title: 'Invalid!',
+                    text: "Password Does Not Match",
+                    icon: 'error'
+                });   
+               
+                return; 
+            }
+        }
 
         console.log(id);
         // console.log($("#title_name").text());
@@ -65,16 +85,25 @@ $(document).ready(function() {
                     gender : gender,
                     address, address,
                     userId : id,
-                    birthdate : birthdate
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
                     // console.log("inside");
                     console.table(response);     
                     if(response.includes("Update Success")){
-                        console.log("inside success");
-                        $("#profModalMsg").empty();
-                        $("#profModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
+                        
+                        Swal.fire({
+
+                            title: 'Success!',
+
+                            text: 'Profile Updated!',
+
+                            icon: 'success'
+
+                        });
+                        
                         $("#title_name").text(instructorName);
 
                         window.initialFormValues = {
@@ -82,7 +111,9 @@ $(document).ready(function() {
                             status : $("#instructor_status").val(),
                             email : $("#prof_email").val(),
                             gender :  $("#profGender").val(),
-                            address : $("#prof_address").val()
+                            address : $("#prof_address").val(),
+                             password: "",
+                            repeatPass: ""
                         };
 
                         var row = table.rows().every(function() {
@@ -99,14 +130,29 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        $("#profModalMsg").empty();
-                        $("#profModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                         Swal.fire({
+
+                            title: 'Invalid!',
+
+                            text: response,
+
+                            icon: 'error'
+
+                        });   
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log("error here");
-                    console.log(error);
+                   
+                   Swal.fire({
+
+                        title: 'Error Encountered!!',
+
+                        text: error,
+
+                        icon: 'error'
+
+                    });  
                 }
             });
         }else{
@@ -118,6 +164,8 @@ $(document).ready(function() {
     $(document).on('hidden.bs.modal', '#editStudentsModal', function () {
         // console.log('Modal is hidden');
         $("#studentModalMsg").empty();
+        $("#password").val("");      // Clear the password input
+        $("#repeat_pass").val("");  // Clear the confirm password input
     });
 
     $("#editStudentsModal").on("shown.bs.modal", function () {
@@ -131,7 +179,9 @@ $(document).ready(function() {
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
             address : $("#student_address").val(),
-            birthdate : $("#date_of_birth1").val()
+            birthdate : $("#date_of_birth1").val(),
+            password: "", // No password by default
+            repeatPass: "" // No confirm password by default
         };
     });
 
@@ -145,7 +195,9 @@ $(document).ready(function() {
             studentCode : $("#studentCode").val(),
             gender : $("#studentGender").val(),
             address : $("#student_address").val(),
-            birthdate : $("#date_of_birth1").val()
+            birthdate : $("#date_of_birth1").val(),
+            password: $("#password").val().trim(),
+            repeatPass: $("#repeat_pass").val().trim()
 
         };
 
@@ -165,7 +217,24 @@ $(document).ready(function() {
         let studentCode = $("#studentCode").val();
         let gender = $("#studentGender").val();
         let address = $("#student_address").val();
-        let birthdate = $("#date_of_birth1").val()
+        let birthdate = $("#date_of_birth1").val();
+        let password = currentValues.password;
+        let repeatPass = currentValues.repeatPass;
+
+        if (password !== "" || repeatPass !== "") {
+            if (password !== repeatPass) {
+                  Swal.fire({
+            
+                    title: 'Success!',
+            
+                    text: 'Profile Updated!',
+            
+                    icon: 'success'
+
+                 });
+                return; // Stop submission if passwords don't match
+            }
+        }
 
         studentCode = studentCode.trim();
         const match = studentCode.match(/2024(\d+)-S$/);
@@ -187,17 +256,23 @@ $(document).ready(function() {
                     gender : gender,
                     address, address,
                     id : studentCode,
-                    birthdate : birthdate
+                    birthdate : birthdate,
+                    password: password
                 },
                 
                 success: function(response) {
                     // console.log("inside");
                     console.table(response);     
                     if(response.includes("Update Success")){
-                        console.log("inside success");
-                        $("#studentModalMsg").empty();
-                        $("#studentModalMsg").append("<div class='alert alert-success' role='alert'><span>Update Success</span></div>");
-                    
+                          Swal.fire({
+
+                            title: 'Success!',
+
+                            text: 'Profile Updated!',
+
+                            icon: 'success'
+
+                        });
 
                         window.initialFormValues = {
                             oldName : $("#title_student").text(),
@@ -206,7 +281,9 @@ $(document).ready(function() {
                             email : $("#student_email").val(),
                             studentCode : $("#studentCode").val(),
                             gender : $("#studentGender").val(),
-                            address : $("#student_address").val()
+                            address : $("#student_address").val(),
+                            password: "",
+                            repeatPass: ""
                         };
 
                         $("#title_student").text(studentName);
@@ -226,14 +303,28 @@ $(document).ready(function() {
                         });
 
                     }else{
-                        $("#studentModalMsg").empty();
-                        $("#studentModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                         Swal.fire({
+
+                            title: 'Invalid!',
+
+                            text: response,
+
+                            icon: 'error'
+
+                        });  
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log("error here");
-                    console.log(error);
+                    Swal.fire({
+
+                        title: 'Error Encountered!!',
+
+                        text: error,
+
+                        icon: 'error'
+
+                    });  
                 }
             });
         }else{
@@ -241,6 +332,7 @@ $(document).ready(function() {
         }
 
     });
+
 
     $("#editStaffModal").on("shown.bs.modal", function () {
         // Capture the initial values of modal fields
@@ -356,14 +448,28 @@ $(document).ready(function() {
 
                     }else{
                         
-                        $("#staffModalMsg").empty();
-                        $("#staffModalMsg").append("<div class='alert alert-danger' role='alert'><span>"+ response +"</span></div>");
+                         Swal.fire({
+
+                            title: 'Invalid!',
+
+                            text: response,
+
+                            icon: 'error'
+
+                        });  
                         // console.log("Error");
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log("error here");
-                    console.log(error);
+                    Swal.fire({
+
+                        title: 'Error Encountered!!',
+
+                        text: error,
+
+                        icon: 'error'
+
+                    });  
                 }
             });
         }else{

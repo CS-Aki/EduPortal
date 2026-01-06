@@ -25,7 +25,7 @@ if(isset($_SESSION["user_category"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Class</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 
@@ -61,6 +61,7 @@ if(isset($_SESSION["user_category"])){
                                 <li class="nav-item">
                                     <a class="nav-link" href="list.php?class=<?php echo md5($details[0]["class_code"]); ?>">List of Students</a>
                                 </li>
+                              
                             </ul>
                         </div>
                     </div>
@@ -102,7 +103,8 @@ if(isset($_SESSION["user_category"])){
                                     if(isset($post[0]["content_type"])){
                                         for($i = 0 ; $i < count($post); $i++){
                                             $year = $post[$i]["month"][0] . "" . $post[$i]["month"][1] . $post[$i]["month"][2] . "" . $post[$i]["month"][3];
-                                            $month = $months[$post[0]["month"][5] . "" . $post[0]["month"][6] - 1];
+                                            $month = $months[(int)($post[$i]["month"][5] . $post[$i]["month"][6]) - 1];
+
                                             $day = $post[$i]["month"][8] . "" . $post[$i]["month"][9];
                                             if($post[$i]["content_type"] == "Material"){
                                                 ?>
@@ -152,7 +154,7 @@ if(isset($_SESSION["user_category"])){
                                             if($activity[$i]["content_type"] == "Activity"){
                                                 $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
                                                 $year = $activity[$i]["month"][0] . "" . $activity[$i]["month"][1] . $activity[$i]["month"][2] . "" . $activity[$i]["month"][3];
-                                                $month = $months[$activity[0]["month"][5] . "" . $activity[0]["month"][6] - 1];
+                                                $month = $months[(int)($activity[$i]["month"][5] . $activity[$i]["month"][6]) - 1];
                                                 $day = $activity[$i]["month"][8] . "" . $activity[$i]["month"][9];
                                                 ?>
                                                 <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($activity[$i]['post_id']); ?>'>             
@@ -180,15 +182,18 @@ if(isset($_SESSION["user_category"])){
                             <div class="line-h"></div>
                         </div>
                         <div id="quizContent">
-                        <?php
+                        <?php   
                                     if($quiz != null){
                                         for($i = 0 ; $i < count($quiz); $i++){
                                             if($quiz[$i]["content_type"] == "Quiz"){
                                                 ?>
                                                 <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($quiz[$i]['post_id']); ?>'>             
                                              <?php
+                                            $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
                                             $year = $quiz[$i]["month"][0] . "" . $quiz[$i]["month"][1] . $quiz[$i]["month"][2] . "" . $quiz[$i]["month"][3];
-                                            $month = $months[$quiz[0]["month"][5] . "" . $quiz[0]["month"][6] - 1];
+                                            $month = $months[(int)($quiz[$i]["month"][5] . $quiz[$i]["month"][6]) - 1];
+
                                             $day = $quiz[$i]["month"][8] . "" . $quiz[$i]["month"][9];
                                              echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
                                                     <div><i class='bi bi-question-circle-fill green1 fs-2 p-0 m-0'></i></div>
@@ -206,6 +211,120 @@ if(isset($_SESSION["user_category"])){
                             ?>
                         </div>
                     </div>
+
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Exams</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div id="examContent">
+                            
+                        <?php 
+                                        if($exam != null){
+                                            for($i = 0 ; $i < count($exam); $i++){
+                                                if($exam[$i]["content_type"] == "Exam"){
+                                                    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                                    $year = $exam[$i]["month"][0] . "" . $exam[$i]["month"][1] . $exam[$i]["month"][2] . "" . $exam[$i]["month"][3];
+                                                    $month = $months[(int)($exam[$i]["month"][5] . $exam[$i]["month"][6]) - 1];
+
+                                                    $day = $exam[$i]["month"][8] . "" . $exam[$i]["month"][9];
+                                                    ?>
+                                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($exam[$i]['post_id']); ?>'>             
+                                                <?php
+                                                echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
+                                                        <div><i class='bi bi-question-circle-fill green1 fs-2 p-0 m-0'></i></div>
+                                                        <div class='ms-3 mt-1'> 
+                                                            <p id='material-id' hidden>{$exam[$i]['post_id']}</p>
+                                                            <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$exam[$i]['title']}<br>
+                                                                <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>";
+                                                }
+                                            }
+                                        }
+                                    
+                            ?>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Seatworks</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div id="seatworksContent">
+                            
+                        <?php 
+                                        if($seatworks != null){
+                                            for($i = 0 ; $i < count($seatworks); $i++){
+                                                if($seatworks[$i]["content_type"] == "Seatwork"){
+                                                    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                                    $year = $seatworks[$i]["month"][0] . "" . $seatworks[$i]["month"][1] . $seatworks[$i]["month"][2] . "" . $seatworks[$i]["month"][3];
+                                                    $month = $months[(int)($seatworks[$i]["month"][5] . $seatworks[$i]["month"][6]) - 1];
+                                                    $day = $seatworks[$i]["month"][8] . "" . $seatworks[$i]["month"][9];
+                                                    
+                                                    ?>
+                                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($seatworks[$i]['post_id']); ?>'>             
+                                                <?php
+                                                echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
+                                                        <div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>
+                                                        <div class='ms-3 mt-1'> 
+                                                            <p id='material-id' hidden>{$seatworks[$i]['post_id']}</p>
+                                                            <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$seatworks[$i]['title']}<br>
+                                                                <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>";
+                                                }
+                                            }
+                                        }
+                                    
+                            ?>
+                        </div>
+                    </div>
+
+                    
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h1 class="h-font green1 me-2 sub-title">Assignments</h1>
+                            <div class="line-h"></div>
+                        </div>
+                        <div id="assignmentContent">
+                            
+                        <?php 
+                                        if($assignments != null){
+                                            for($i = 0 ; $i < count($assignments); $i++){
+                                                if($assignments[$i]["content_type"] == "Assignment"){
+                                                    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                                    $year = $assignments[$i]["month"][0] . "" . $assignments[$i]["month"][1] . $assignments[$i]["month"][2] . "" . $assignments[$i]["month"][3];
+                                                    $month = $months[(int)($assignments[$i]["month"][5] . $assignments[$i]["month"][6]) - 1];
+
+                                                    $day = $assignments[$i]["month"][8] . "" . $assignments[$i]["month"][9];
+                                                    ?>
+                                                    <a href='material.php?class=<?php echo md5($details[0]["class_code"]); ?>&post=<?php echo md5($assignments[$i]['post_id']); ?>'>             
+                                                <?php
+                                                echo" <div class='container-fluid bg-body-tertiary d-flex align-content-center rounded-3 px-4 py-2 mb-2 shadow-elevation-dark-1'>
+                                                        <div><i class='bi bi-bookmark-fill green1 fs-2 p-0 m-0'></i></div>
+                                                        <div class='ms-3 mt-1'> 
+                                                            <p id='material-id' hidden>{$assignments[$i]['post_id']}</p>
+                                                            <p class='green2 fw-bold lh-1 fs-5 mb-0 pb-0' id='material-title'>{$assignments[$i]['title']}<br>
+                                                                <span class='fs-6 fw-light green3' id='material-date'>{$month} {$day}, {$year}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>";
+                                                }
+                                            }
+                                        }
+                                    
+                            ?>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

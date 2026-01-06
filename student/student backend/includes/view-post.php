@@ -30,22 +30,29 @@ if(isset($_GET["post"])){
     // }
     // echo $classCode;
     $postDetails = $stdController->getPostDetails($postId, $classCode);
+    
+    // echo var_dump($postDetails);
     $comments = $stdController->getComments($postId, $classCode);
     $files = $stdController->getFiles($postId, $classCode);
     // echo var_dump($postDetails);
     $submissions = $stdController->getSubmittedFiles($postId, $classCode);
+
     // echo var_dump($postDetails);
     if($postDetails[0]["content_type"] == "Quiz"){
+        $listController = new ListController();
+        $quizGrades = $listController->getQuizGrades($_GET["post"], $_SESSION["user_id"]);
+
         $yourScore = array();
         $currentAttempt = 0;
         $quizContent = $stdController->getQuizContent($postId, $classCode);
         $quizStatus = $stdController->getQuizStatus($postId, $classCode, $_SESSION["id"]);
+       
         // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
         $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]);
         $totalScore = 0;
         $totalCorrectAnsCount = array();
         $j = 0;
-        // echo var_dump($submittedQuiz);
+        // echo var_dump($quizGrades);
         if($submittedQuiz != null){
             for ($i = 0; $i < count($submittedQuiz); $i++) {
                 // echo $currentAttempt;
@@ -76,7 +83,11 @@ if(isset($_GET["post"])){
                     }
                 }
             }
-            $totalItems = count($submittedQuiz) / count($yourScore);
+            // echo count($submittedQuiz);
+            $totalItem = $listController->getTotalItems($_GET["post"]);
+            // echo var_dump($totalItem);
+            // echo $totalItem[0]["total-items"];
+            $totalItems = ceil(count($submittedQuiz) / count($yourScore));
             $attemptNum = count($totalCorrectAnsCount);
             // echo "Attempt count " . count($totalCorrectAnsCount);
         }
@@ -86,11 +97,38 @@ if(isset($_GET["post"])){
         $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
         
     }
+
 // echo var_dump($submissions);
     if($postDetails[0]["content_type"] == "Activity"){
         // echo $postId . "<br>";
         // echo $classCode;
         $actDetails = $stdController->actContent($postId, $classCode); // For now it gets the points from the activity
+        $actDeadline = date("F j, Y g:i A", strtotime($actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"]));  
+        // echo $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"] . "<br>";
+        // $tempActDeadline = DateTime::createFromFormat('F d, Y h:i A', $actDeadline);
+        $outputDateString = $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"];
+
+        // echo var_dump($actDetails);
+        // echo var_dump($actDetails);
+    }
+
+    if($postDetails[0]["content_type"] == "Seatwork"){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $actDetails = $stdController->seatworkContent($postId, $classCode); // For now it gets the points from the activity
+        $actDeadline = date("F j, Y g:i A", strtotime($actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"]));  
+        // echo $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"] . "<br>";
+        // $tempActDeadline = DateTime::createFromFormat('F d, Y h:i A', $actDeadline);
+        $outputDateString = $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"];
+
+        // echo var_dump($actDetails);
+        // echo var_dump($actDetails);
+    }
+
+    if($postDetails[0]["content_type"] == "Assignment"){
+        // echo $postId . "<br>";
+        // echo $classCode;
+        $actDetails = $stdController->assignContent($postId, $classCode); // For now it gets the points from the activity
         $actDeadline = date("F j, Y g:i A", strtotime($actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"]));  
         // echo $actDetails[0]["deadline_date"] . " " . $actDetails[0]["deadline_time"] . "<br>";
         // $tempActDeadline = DateTime::createFromFormat('F d, Y h:i A', $actDeadline);
@@ -118,6 +156,78 @@ if(isset($_GET["post"])){
     }
 
     // echo var_dump($comments);
+}
+
+if(!isset($_POST["displayFiles"])){
+
+    if($postDetails != null){
+        if($postDetails[0]["content_type"] == "Exam"){
+            $listController = new ListController();
+            $examGrades = $listController->getExamGrades($_GET["post"], $_SESSION["user_id"]);
+            // echo var_dump($examGrades);
+            $yourScore = array();
+            $currentAttempt = 0;
+            $quizContent = $stdController->getExamContent($postId, $classCode);
+            $quizStatus = $stdController->getExamStatus($postId, $classCode, $_SESSION["id"]);
+            // $quizAttempt = $stdController->getQuizAttempt($postId, $_SESSION["id"]);
+            $submittedQuiz = $stdController->getExamResult($postId, $classCode, $_SESSION["id"]);
+            $totalScore = 0;
+            $totalCorrectAnsCount = array();
+            $j = 0;
+
+            // echo var_dump($submittedQuiz);
+
+            if($submittedQuiz != null){
+                for ($i = 0; $i < count($submittedQuiz); $i++) {
+                    // echo $currentAttempt;
+                    if ($submittedQuiz[$i]["attempt"] != $currentAttempt) {
+                        $totalScore = $submittedQuiz[$i]["score"];
+                        $currentAttempt = $submittedQuiz[$i]["attempt"];
+                        $yourScore[$currentAttempt] = 0;
+            
+                        // Initialize totalCorrectAnsCount for this attempt
+                        if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+                            $totalCorrectAnsCount[$currentAttempt] = 0;
+                        }
+            
+                        if ($submittedQuiz[$i]["status"] == 1) {
+                            $yourScore[$currentAttempt] = $submittedQuiz[$i]["score"];
+                            $totalCorrectAnsCount[$currentAttempt] = 1;
+                        }
+                    } else {
+                        $totalScore += $submittedQuiz[$i]["score"];
+                        $j++;
+                        if (!isset($totalCorrectAnsCount[$currentAttempt])) {
+                            $totalCorrectAnsCount[$currentAttempt] = 0;
+                        }
+            
+                        if ($submittedQuiz[$i]["status"] == 1) {
+                            $yourScore[$currentAttempt] += $submittedQuiz[$i]["score"];
+                            $totalCorrectAnsCount[$currentAttempt] += 1;
+                        }
+                    }
+                }
+                // echo count($submittedQuiz); 
+                // echo count($yourScore);
+                $totalItem = $listController->getTotalItems($_GET["post"]);
+
+                // $totalItems = $listController->getTotalItems($_GET["post"]);
+
+               // $totalItems = ceil(count($submittedQuiz) / count($yourScore));
+                $attemptNum = count($totalCorrectAnsCount);
+                // echo "Attempt count " . count($totalCorrectAnsCount);
+            }
+
+            // echo var_dump($totalCorrectAnsCount);
+            $startingDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["starting_date"] . " " . $quizContent[0]["starting_time"]));
+            $deadlineDateTime = date("F j, Y g:i A", strtotime($quizContent[0]["deadline_date"] . " " . $quizContent[0]["deadline_time"]));  
+            
+            $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+            $year = $postDetails[0]["month"][0] . "" . $postDetails[0]["month"][1] . $postDetails[0]["month"][2] . "" . $postDetails[0]["month"][3];
+            $month = $months[$postDetails[0]["month"][5] . "" . $postDetails[0]["month"][6] - 1];
+            $day = $postDetails[0]["month"][8] . "" . $postDetails[0]["month"][9];
+        }
+    }
 }
 
 

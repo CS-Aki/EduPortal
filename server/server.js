@@ -15,7 +15,7 @@ const expressServer = app.listen(PORT, () => {
 // Configure Socket.IO with CORS
 const io = socketio(expressServer, {
     cors: {
-        origin: process.env.FRONTEND_URL || "http://localhost:4000", // Set your frontend URL
+        origin: process.env.FRONTEND_URL || "https://eduportal.aki-dev.online.com/EduPortal", // Set your frontend URL
         methods: ["GET", "POST"]
     }
 });

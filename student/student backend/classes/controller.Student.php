@@ -143,6 +143,28 @@ class StudentController extends ClassRm{
         return $result;
     }
 
+    public function getSeatwork($classCode, $userId){
+        $result = $this->fetchSubmissionSw($classCode, $userId);
+        
+        if($result == null){
+ 
+            // return;
+        }
+
+        return $result;
+    }
+
+    public function getAssignment($classCode, $userId){
+        $result = $this->fetchSubmissionAssign($classCode, $userId);
+        
+        if($result == null){
+ 
+            // return;
+        }
+
+        return $result;
+    }
+
     public function getSubmittedFiles($postId, $classCode){
         if (session_id() === "") session_start();
         $result = $this->fetchSubmittedInPost($postId, $classCode, $_SESSION["id"]);
@@ -151,6 +173,16 @@ class StudentController extends ClassRm{
 
     public function getQuizDetails($postId, $classCode){
         $details = $this->fetchQuizDetails($postId, $classCode);
+        if($details == null){
+            echo "No Quiz Yet";
+        }
+
+        return $details;
+    }
+
+    
+    public function getQuizDetailsTemp($postId, $classCode){
+        $details = $this->fetchQuizDetailsTemp($postId, $classCode);
         if($details == null){
             echo "No Quiz Yet";
         }
@@ -208,8 +240,8 @@ class StudentController extends ClassRm{
         return $this->getTotalItemsInDb($postId);
     }
 
-    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status){
-        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status);
+    public function insertGrade($userId, $postId, $classCode, $contentType, $grade, $status, $type){
+        $result = $this->insertGradeInDb($userId, $postId, $classCode, $contentType, $grade, $status, $type);
         if($result == false){
             echo "ERROR INSERTING GRADE";
         }
@@ -235,6 +267,14 @@ class StudentController extends ClassRm{
     public function actContent($postId, $classCode){
         return $this->getActContent($postId, $classCode);
     }
+
+    public function seatworkContent($postId, $classCode){
+        return $this->getSeatworkContent($postId, $classCode);
+    }
+
+    public function assignContent($postId, $classCode){
+        return $this->getAssignContent($postId, $classCode);
+    }
     
     public function getUserCreateDate($userId){
         return $this->getUserCreateDateInDb($userId);
@@ -242,6 +282,72 @@ class StudentController extends ClassRm{
 
     public function getGradesAct($userId, $classCode){
         return $this->getGradesActInDb($userId, $classCode);
+    }
+
+    public function getGradesSw($userId, $classCode){
+        return $this->getGradesSwInDb($userId, $classCode);
+    }
+    
+    public function getGradesAssign($userId, $classCode){
+        return $this->getGradesAssignInDb($userId, $classCode);
+    }
+
+    public function listOfExams($classCode){
+        return $this->listOfExamsDb($classCode);
+    }
+
+    public function listOfSeatworks($classCode){
+        return $this->listOfSeatworkDb($classCode);
+    }
+
+    public function listOfAssignments($classCode){
+        return $this->listOfAssignmentDb($classCode);
+    }
+
+    public function listOfSeatwork($classCode){
+        return $this->listOfSeatworkDb($classCode);
+    }
+
+    public function listOfAssignment($classCode){
+        return $this->listOfAssignmentDb($classCode);
+    }
+
+    public function getExamContent($postId, $classCode){
+        return $this->getExam($postId, $classCode);
+    }
+
+    public function getExamStatus($postId, $classCode, $userId){
+        $result = $this->getExamStatusFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getExamResult($postId, $classCode, $userId){
+        $result = $this->getExamResultFromDb($postId, $classCode, $userId);
+        return $result;
+    }
+
+    public function getAnsweredExams($classCode, $userId){
+        $result = $this->getAnsweredExamsInDb($classCode, $userId);
+        // if($result == null){
+        //     // echo "ERROR FETCHING ANSWERED QUIZ";
+        // }
+        return $result;
+    }
+
+    public function getAnsweredSw($classCode, $userId){
+        $result = $this->getAnsweredSwInDb($classCode, $userId);
+        // if($result == null){
+        //     // echo "ERROR FETCHING ANSWERED QUIZ";
+        // }
+        return $result;
+    }
+
+    public function getAnsweredAssign($classCode, $userId){
+        $result = $this->getAnsweredAssignInDb($classCode, $userId);
+        // if($result == null){
+        //     // echo "ERROR FETCHING ANSWERED QUIZ";
+        // }
+        return $result;
     }
 }
 

@@ -3,6 +3,32 @@
 $(document).ready(function() {
     // console.log(io);
     console.log("test");
+    
+  
+    $('#attempt').on('input', function () {
+        let value = $(this).val(); // Get the current value of the input
+
+        if (value < 1) {
+            console.log("Negative or invalid value detected:", value);
+            $(this).val('1');
+        } else {
+            console.log("Input changed to:", value);
+        }
+    });
+    
+    $('#points').on('input', function () {
+        let value = $(this).val(); // Get the current value of the input
+
+        if (value < 1) {
+            console.log("Negative or invalid value detected:", value);
+            $(this).val('1');
+        } else {
+            console.log("Input changed to:", value);
+        }
+    });
+    
+    
+
 
     // let searchParams = new URLSearchParams(window.location.search);
     // let classUrl = searchParams.get('class');
@@ -12,7 +38,12 @@ $(document).ready(function() {
     console.log("This is the ", $("#token").val().length);
     // let hide = true;
       const socket = io("https://eduportal-wgrc.onrender.com", {
-        transports: ["websocket"] // Ensure WebSocket transport
+          transports: ["websocket"], // Ensure WebSocket transport
+          timeout: 10000,            // Maximum time (ms) to wait for a connection
+          reconnection: true,        // Enable auto-reconnection
+          reconnectionAttempts: 5,   // Maximum attempts before giving up
+          pingInterval: 25000,       // Send a ping every 25 seconds
+          pingTimeout: 5000          // Wait 5 seconds for a pong before disconnecting
       });
     
       socket.on('connect_error', (err) => {
@@ -28,6 +59,20 @@ $(document).ready(function() {
     //   console.log("Content : " + $('#contentType').val());
 
     if($('#contentType').val() == "quiz"){
+        console.log("inside");
+        $(".sub-title").text("Create Quiz");
+        $('#pointsContainer').removeAttr("hidden");
+        $("#dateContainer").removeAttr("hidden");
+        $("#timeContainer").removeAttr("hidden");
+        $("#dateContainer").show();
+        $("#timeContainer").show();
+        $(".quiz-list-container").removeAttr("hidden");
+        $(".quiz-list-container").show();
+        $('#pointsContainer').show();
+        $("#uploadContainer").hide();
+    }
+
+if($('#contentType').val() == "quiz"){
         console.log("inside");
         $(".sub-title").text("Create Quiz");
         $('#pointsContainer').removeAttr("hidden");
@@ -70,7 +115,6 @@ $(document).ready(function() {
             $("#uploadContainer").show();
             $(".quiz-list-container").hide();
             $("#attemptCont").hide();
-
         }else if(selectedValue == "quiz"){
             $(".sub-title").text("Create Quiz");
             $('#pointsContainer').removeAttr("hidden");
@@ -84,8 +128,7 @@ $(document).ready(function() {
             $("#uploadContainer").hide();
             $("#attemptCont").removeAttr("hidden");
             $("#attemptCont").show();
-
-        }else{
+        }else if(selectedValue == "activity"){
             $(".sub-title").text("Create Activity");
             $('#pointsContainer').removeAttr("hidden");
             $("#dateContainer").removeAttr("hidden");
@@ -96,7 +139,41 @@ $(document).ready(function() {
             $("#uploadContainer").show();
             $(".quiz-list-container").hide();
             $("#attemptCont").hide();
-
+        }else if(selectedValue == "exam"){
+            $(".sub-title").text("Create Exam");
+            $('#pointsContainer').removeAttr("hidden");
+            $("#dateContainer").removeAttr("hidden");
+            $("#timeContainer").removeAttr("hidden");
+            $("#dateContainer").show();
+            $("#timeContainer").show();
+            $(".quiz-list-container").removeAttr("hidden");
+            $(".quiz-list-container").show();
+            $('#pointsContainer').hide();
+            $("#uploadContainer").hide();
+            $("#attemptCont").removeAttr("hidden");
+            $("#attemptCont").show();
+        }else if(selectedValue == "seatwork"){
+            $(".sub-title").text("Create Seatwork");
+            $('#pointsContainer').removeAttr("hidden");
+            $("#dateContainer").removeAttr("hidden");
+            $("#timeContainer").removeAttr("hidden");
+            $("#dateContainer").show();
+            $("#timeContainer").show();
+            $('#pointsContainer').show();
+            $("#uploadContainer").show();
+            $(".quiz-list-container").hide();
+            $("#attemptCont").hide();
+        }else if(selectedValue == "assignment"){
+            $(".sub-title").text("Create Assignment");
+            $('#pointsContainer').removeAttr("hidden");
+            $("#dateContainer").removeAttr("hidden");
+            $("#timeContainer").removeAttr("hidden");
+            $("#dateContainer").show();
+            $("#timeContainer").show();
+            $('#pointsContainer').show();
+            $("#uploadContainer").show();
+            $(".quiz-list-container").hide();
+            $("#attemptCont").hide();
         }
     });
 
@@ -243,12 +320,13 @@ $(document).ready(function() {
                 // Append each file to the FormData object
                 formData.append("files[]", $("#fileInput")[0].files[i]); 
             }
-            Swal.fire({
+             Swal.fire({
                 title: 'Uploading...',
                 text: 'Please wait while we upload your file.',
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
+                allowOutsideClick: false
             });
         }
      
@@ -265,7 +343,6 @@ $(document).ready(function() {
 
         // Handles file transfer to gdrive and upload to db
         if($("#fileInput")[0].files.length > 0){
-            
             $.ajax({
                 method: "POST",
                 url: "includes/save-file-session.php",
@@ -333,8 +410,8 @@ $(document).ready(function() {
                             console.log( "Selected "+ selectedValue);
                             console.log("Title " + title);
                                     
-                            socket.emit("serverRcvPost", data);
-                            $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                            // socket.emit("serverRcvPost", data);
+                            // $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                             $('#title').val("");
                             $('#description').val("");
                             $('#fileInput').empty();
@@ -393,7 +470,7 @@ $(document).ready(function() {
     
                     socket.emit("serverRcvPost", data);
     
-                    $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
+                    // $(".form-message").append("<div class='alert alert-success' role='alert'><span>POST SUCCESS</span></div>");
                     $('#title').val("");
                     $('#description').val("");
                     $('#fileInput').val("");

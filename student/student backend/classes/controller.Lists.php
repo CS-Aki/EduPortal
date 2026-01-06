@@ -82,4 +82,28 @@ class ListController extends ClassRm
         return $this->getAllActsAndQuizInDb($userId);
     }
 
+    public function getAllGrades(){
+        return $this->getAllGradesDb();
+    }
+
+    public function totalActCount(){
+        return $this->totalActCountDb();
+    }
+    
+    public function getGradingSystem($userId){
+        return $this->getAllGradingSystemDB($userId);
+    }
+    
+    public function getExamGrades($postId, $userId){
+        return $this->getExamGradesDb($postId, $userId);
+    }
+    
+    public function getQuizGrades($postId, $userId){
+        return $this->getQuizGradesDb($postId, $userId);
+    }
+    
+    public function getTotalItems($postId){
+        return $this->getTotalItemsDb($postId);
+    }
+
 }

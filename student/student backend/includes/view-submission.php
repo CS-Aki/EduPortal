@@ -14,20 +14,34 @@ $classCode = $_GET["class"];
 $stdController = new StudentController();
 $details = $stdController->getClassDetails1($classCode);
 $submissions = $stdController->getSubmissions($classCode, $_SESSION["id"]);  // Checks Uploaded Files of Student (Activity)
+$swSubmission = $stdController->getSeatwork($classCode, $_SESSION["id"]); 
+$assignSubmission = $stdController->getAssignment($classCode, $_SESSION["id"]); 
+
 $post = $stdController->getClassDetails($details[0]["class_code"]);
 $actGrades = $stdController->getGradesAct($_SESSION["id"], $details[0]["class_code"]);
-// echo var_dump($actGrades);
+$swGrades = $stdController->getGradesSw($_SESSION["id"], $details[0]["class_code"]);
+$assignGrades = $stdController->getGradesAssign($_SESSION["id"], $details[0]["class_code"]);
+
 $quiz = $stdController->listOfQuiz($details[0]["class_code"]);
 $activity = $stdController->listOfActs($details[0]["class_code"]);
-
+$exams = $stdController->listOfExams($details[0]["class_code"]);
+$seatworks = $stdController->listOfSeatworks($details[0]["class_code"]);
+$assignments = $stdController->listOfAssignments($details[0]["class_code"]);
 // echo $_SESSION["id"];
+
 $answeredQuiz = $stdController->getAnsweredQuizzes($classCode, $_SESSION["id"]);
-// echo var_dump($quiz);
+$answeredExam = $stdController->getAnsweredExams($classCode, $_SESSION["id"]);
+// $answeredSeatworks = $stdController->getAnsweredSw($classCode, $_SESSION["id"]);
+// $answeredAssign = $stdController->getAnsweredAssign($classCode, $_SESSION["id"]);
 
 // $submittedQuiz = $stdController->getQuizResult($postId, $classCode, $_SESSION["id"]); 
 
-// echo var_dump($quiz);
-
+// echo var_dump($submissions);
+// echo '<pre>';
+// var_dump($assignments);
+// echo "SUBMISSION <br>";
+// var_dump($submissions);
+// echo '</pre>';
 
 if(isset($post[0]["content_type"])){
     $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
