@@ -31,15 +31,16 @@ jobs:
         run: |
           set -e
 
-          # Write SSH key to a file
           echo "$KEY" > key.pem
           chmod 600 key.pem
 
-          # Create target dir (must be writable by $USER)
-          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p /var/www/eduportal"
+          SSH_OPTS="-i key.pem -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -o ServerAliveCountMax=12 -o TCPKeepAlive=yes"
 
-          # Sync repo contents to /var/www/eduportal
-          rsync -az --delete \
+          ssh $SSH_OPTS $USER@$HOST "mkdir -p /var/www/eduportal"
+
+          rsync -a --delete \
             --exclude ".git/" \
-            -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            --partial --partial-dir=.rsync-partial \
+            --timeout=120 \
+            -e "ssh $SSH_OPTS" \
             ./ $USER@$HOST:/var/www/eduportal/
