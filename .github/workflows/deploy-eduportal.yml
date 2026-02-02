@@ -1,0 +1,51 @@
+name: Deploy EduPortal
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Wait for Tailscale
+        run: sleep 5
+
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Deploy files to server via rsync over SSH
+        env:
+          HOST: ${{ secrets.SERVER_HOST }}
+          USER: ${{ secrets.SERVER_USER }}
+          KEY: ${{ secrets.SERVER_SSH_KEY }}
+        run: |
+          set -e
+
+          # Write SSH key to a file
+          echo "$KEY" > key.pem
+          chmod 600 key.pem
+
+          # Create target dir (just in case) and set ownership to deploy user (Option A)
+          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sudo mkdir -p /var/www/eduportal && \
+            sudo chown -R $USER:$USER /var/www/eduportal \
+          "
+
+          # Sync repo contents to /var/www/eduportal
+          rsync -az --delete \
+            -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./ $USER@$HOST:/var/www/eduportal/
+
+          # Ensure ownership stays with deploy user (Option A)
+          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sudo chown -R $USER:$USER /var/www/eduportal \
+          "
