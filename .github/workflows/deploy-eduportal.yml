@@ -42,6 +42,7 @@ jobs:
 
           # Sync repo contents to /var/www/eduportal
           rsync -az --delete \
+            --exclude ".git/" \
             -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
             ./ $USER@$HOST:/var/www/eduportal/
 
