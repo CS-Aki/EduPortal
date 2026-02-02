@@ -1,6 +1,6 @@
 <?php 
 if (session_id() === "") session_start();
-
+// test
 if(isset($_SESSION["user_category"])){
     $category = $_SESSION["user_category"];
     switch($category){
