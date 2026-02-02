@@ -35,19 +35,11 @@ jobs:
           echo "$KEY" > key.pem
           chmod 600 key.pem
 
-          # Create target dir (just in case) and set ownership to deploy user
-          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
-            sudo mkdir -p /var/www/eduportal && \
-            sudo chown -R $USER:$USER /var/www/eduportal \
-          "
+          # Create target dir (must be writable by $USER)
+          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p /var/www/eduportal"
 
           # Sync repo contents to /var/www/eduportal
           rsync -az --delete \
             --exclude ".git/" \
             -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
             ./ $USER@$HOST:/var/www/eduportal/
-
-          # Ensure ownership stays with deploy user
-          ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
-            sudo chown -R $USER:$USER /var/www/eduportal \
-          "
