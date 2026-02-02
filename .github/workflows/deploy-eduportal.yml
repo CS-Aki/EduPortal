@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -34,7 +35,7 @@ jobs:
           echo "$KEY" > key.pem
           chmod 600 key.pem
 
-          # Create target dir (just in case) and set ownership to deploy user (Option A)
+          # Create target dir (just in case) and set ownership to deploy user
           ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
             sudo mkdir -p /var/www/eduportal && \
             sudo chown -R $USER:$USER /var/www/eduportal \
@@ -46,7 +47,7 @@ jobs:
             -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
             ./ $USER@$HOST:/var/www/eduportal/
 
-          # Ensure ownership stays with deploy user (Option A)
+          # Ensure ownership stays with deploy user
           ssh -i key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
             sudo chown -R $USER:$USER /var/www/eduportal \
           "
